@@ -18,6 +18,7 @@ public class RestServiceImpl implements IRestService {
         users.put(1, new User(1, "Alfred"));
         users.put(2, new User(2, "Bob"));
         users.put(3, new User(3, "Cliff"));
+        users.put(4, new User(4, "Daniel"));
     }
 
     @Override
