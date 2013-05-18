@@ -1,0 +1,71 @@
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'eclipse'
+apply plugin: 'tomcat'
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        resources {
+            srcDir 'src/main/java'
+        }
+    }
+    test {
+        java {
+            srcDir 'src/main/test'
+        }
+        resources {
+            srcDir 'src/main/test'
+        }
+    }
+}
+
+if (System.env.OUTPUT_ROOT) {
+    buildDir = file("$System.env.OUTPUT_ROOT/$project.name")
+}
+
+repositories {
+    mavenCentral()
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:' + rev_tomcat_plugin
+    }
+}
+
+tomcatRunWar { contextPath = 'RestService' }
+
+dependencies {
+        compile 'commons-collections:commons-collections:' + rev_common_collections
+        compile 'log4j:log4j:' + rev_log4j
+
+        // --------------------- CXF -----------------------------------------
+        compile 'org.apache.cxf:cxf-bundle-jaxrs:' + rev_cxf
+        compile 'org.codehaus.jettison:jettison:' + rev_jettison
+
+        // --------------------- SPRING --------------------------------------
+        compile 'org.springframework:spring-core:' + rev_spring
+        compile 'org.springframework:spring-beans:' + rev_spring
+        compile 'org.springframework:spring-context:' + rev_spring
+        compile 'org.springframework:spring-web:' + rev_spring
+        compile 'org.springframework:spring-test:' + rev_spring
+
+        // ===================== COMPILATION ONLY ============================
+        providedCompile 'javax:javaee-api:' + rev_j2eeapi
+
+        // ===================== TEST ========================================
+        testCompile 'junit:junit:' + rev_junit
+
+        // ===================== TOMCAT ======================================
+        tomcat 'org.apache.tomcat.embed:tomcat-embed-core:' + rev_tomcat,
+                'org.apache.tomcat.embed:tomcat-embed-logging-juli:' + rev_tomcat
+        tomcat('org.apache.tomcat.embed:tomcat-embed-jasper:' + rev_tomcat) {
+            exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
+        }
+}
