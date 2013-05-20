@@ -1,6 +1,6 @@
 package ru.forxy.service.impl;
 
-import ru.forxy.db.dto.User;
+import ru.forxy.service.pojo.User;
 import ru.forxy.service.IRestService;
 
 import javax.ws.rs.core.Response;

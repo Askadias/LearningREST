@@ -1,4 +1,4 @@
-package ru.forxy.db.dto;
+package ru.forxy.service.pojo;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
