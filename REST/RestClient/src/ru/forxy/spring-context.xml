@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:util="http://www.springframework.org/schema/util" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd"
+         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
        default-lazy-init="false">
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
@@ -15,21 +15,6 @@
     <bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
         <property name="namespaceMap" ref="jsonNamespaceMap"/>
     </bean>
-
-    <!--<jaxrs:client id="restClient"
-                  address="http://localhost:8080/RestService"
-                  serviceClass="ru.forxy.service.IUserService">
-        <jaxrs:headers>
-            <entry key="Accept" value="application/json"/>
-            <entry key="Content-Type" value="application/json"/>
-        </jaxrs:headers>
-    </jaxrs:client>
-
-    <bean id="myWebClient" class="org.apache.cxf.jaxrs.client.WebClient"
-          factory-method="create">
-        <constructor-arg type="java.lang.String" value="http://localhost:8080/RestService" />
-        <constructor-arg ref="jaxbProvider" />
-    </bean>-->
 
     <bean id="userServiceClientFactory"
           class="org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean">

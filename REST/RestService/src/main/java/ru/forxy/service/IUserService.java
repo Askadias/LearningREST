@@ -36,5 +36,5 @@ public interface IUserService {
 
     @DELETE
     @Path("/users/{id}")
-    Response deleteUser(@PathParam("id") Integer id);
+    void deleteUser(@PathParam("id") Integer id);
 }

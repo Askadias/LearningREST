@@ -61,8 +61,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public Response deleteUser(Integer id) {
+    public void deleteUser(Integer id) {
         users.remove(id);
-        return Response.ok().build();
     }
 }
