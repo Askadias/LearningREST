@@ -7,16 +7,17 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/UserService/")
-@Consumes("application/json")
-@Produces("application/json")
-public interface IRestService {
+public interface IUserService {
 
     @GET
     @Path("/users")
+    @Produces("application/json")
     List<User> getUsers();
 
     @GET
     @Path("/users/{id}")
+    @Consumes("application/json")
+    @Produces("application/json")
     User getUser(@PathParam("id") Integer id);
 
     @GET
@@ -25,9 +26,15 @@ public interface IRestService {
 
     @PUT
     @Path("/users")
+    @Consumes("application/json")
     void updateUser(User user);
 
     @POST
     @Path("/users")
+    @Consumes("application/json")
     void addUser(User user);
+
+    @DELETE
+    @Path("/users/{id}")
+    Response deleteUser(@PathParam("id") Integer id);
 }

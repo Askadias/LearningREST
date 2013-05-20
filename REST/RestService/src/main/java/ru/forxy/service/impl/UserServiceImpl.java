@@ -1,8 +1,9 @@
 package ru.forxy.service.impl;
 
 import ru.forxy.service.pojo.User;
-import ru.forxy.service.IRestService;
+import ru.forxy.service.IUserService;
 
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import javax.xml.ws.WebServiceException;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RestServiceImpl implements IRestService {
+public class UserServiceImpl implements IUserService {
 
     private static Map<Integer, User> users = new HashMap<Integer, User>(3);
 
@@ -57,5 +58,11 @@ public class RestServiceImpl implements IRestService {
         } else {
             throw new WebServiceException("User's id is null");
         }
+    }
+
+    @Override
+    public Response deleteUser(@PathParam("id") Integer id) {
+        users.remove(id);
+        return Response.ok().build();
     }
 }

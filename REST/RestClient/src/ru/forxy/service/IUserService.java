@@ -9,7 +9,7 @@ import java.util.List;
 @Path("/UserService/")
 @Consumes("application/json")
 @Produces("application/json")
-public interface IRestService {
+public interface IUserService {
 
     @GET
     @Path("/users")
@@ -30,4 +30,8 @@ public interface IRestService {
     @POST
     @Path("/users")
     void addUser(User user);
+
+    @DELETE
+    @Path("/users/{id}")
+    Response deleteUser(@PathParam("id") Integer id);
 }

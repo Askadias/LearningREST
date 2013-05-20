@@ -3,33 +3,28 @@
        xmlns:jaxrs="http://cxf.apache.org/jaxrs"
        xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
-       default-lazy-init="false">
+       http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
-    <!--<import resource="classpath:META-INF/cxf/cxf-extension-jaxrs-binding.xml"/>-->
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
 
     <util:map id="jsonNamespaceMap" map-class="java.util.Hashtable">
-        <entry key="http://www.example.org/users" value="u"/>
+        <entry key="http://www.forxy.ru/users" value="u"/>
     </util:map>
 
     <bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
         <property name="namespaceMap" ref="jsonNamespaceMap"/>
     </bean>
 
-    <jaxrs:server id="restService" address="/">
+    <jaxrs:server id="userService" address="/">
         <jaxrs:serviceBeans>
-            <ref bean="restServiceImpl"/>
+            <ref bean="userServiceImpl"/>
         </jaxrs:serviceBeans>
-        <jaxrs:extensionMappings>
-            <entry key="xml" value="application/xml"/>
-        </jaxrs:extensionMappings>
         <jaxrs:providers>
             <ref bean="jaxbProvider"/>
         </jaxrs:providers>
     </jaxrs:server>
 
-    <bean id="restServiceImpl" class="ru.forxy.service.impl.RestServiceImpl"/>
+    <bean id="userServiceImpl" class="ru.forxy.service.impl.UserServiceImpl"/>
 
 </beans>
