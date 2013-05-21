@@ -16,7 +16,7 @@
         <property name="namespaceMap" ref="jsonNamespaceMap"/>
     </bean>
 
-    <jaxrs:server id="userService" address="/">
+    <jaxrs:server name="userService" address="/">
         <jaxrs:serviceBeans>
             <ref bean="userServiceImpl"/>
         </jaxrs:serviceBeans>
@@ -25,6 +25,6 @@
         </jaxrs:providers>
     </jaxrs:server>
 
-    <bean id="userServiceImpl" class="ru.forxy.service.impl.UserServiceImpl"/>
+    <bean id="userServiceImpl" class="ru.forxy.service.UserServiceImpl"/>
 
 </beans>

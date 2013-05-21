@@ -1,14 +1,17 @@
 apply plugin: 'java'
+apply plugin: 'maven'
 apply plugin: 'eclipse'
 
+group = 'forxy'
+
 sourceSets {
+    main {
+        java { srcDir 'src' }
+        resources { srcDir 'src' }
+    }
     test {
-        java {
-            srcDir 'src'
-        }
-        resources {
-            srcDir 'src'
-        }
+        java { srcDir 'src' }
+        resources { srcDir 'src' }
     }
 }
 
@@ -18,9 +21,18 @@ if (System.env.OUTPUT_ROOT) {
 
 repositories {
     mavenCentral()
+    maven {
+        url "file://$System.env.OUTPUT_ROOT/deliverables/"
+    }
 }
 
 dependencies {
+        // --------------------- FORXY ---------------------------------------
+        compile ('forxy:ru.forxy.rest.api:' + rev_rest) {
+            transitive = true
+        }
+
+        // --------------------- COMMON --------------------------------------
         compile 'commons-collections:commons-collections:' + rev_common_collections
         compile 'log4j:log4j:' + rev_log4j
 
@@ -36,5 +48,13 @@ dependencies {
         compile 'org.springframework:spring-test:' + rev_spring
 
         // ===================== TEST ========================================
-        testCompile 'junit:junit:' + rev_junit
+        compile 'junit:junit:' + rev_junit
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "file://$System.env.OUTPUT_ROOT/deliverables/")
+        }
+    }
 }

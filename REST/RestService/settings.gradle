@@ -1,1 +1,13 @@
 rootProject.name=project_name
+
+def projects = [
+        ':api' : [name: 'ru.forxy.rest.api', path: 'api'],
+        ':service' : [name: 'ru.forxy.rest.service', path: 'service']
+]
+
+projects.each() { key, config ->
+    include key
+    def prj = project(key)
+    prj.name = config.name
+    prj.projectDir = file("$settingsDir/$config.path")
+}

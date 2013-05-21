@@ -3,14 +3,12 @@ package ru.forxy.service;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import ru.forxy.service.impl.UserServiceImpl;
-import ru.forxy.service.pojo.User;
+import ru.forxy.pojo.User;
 
 import java.util.List;
 
 public class UserServiceImplTest {
 
-    //@Autowired
     IUserService userService = new UserServiceImpl();
 
     @Test

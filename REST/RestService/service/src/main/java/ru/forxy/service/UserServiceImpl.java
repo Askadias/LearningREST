@@ -1,9 +1,8 @@
-package ru.forxy.service.impl;
+package ru.forxy.service;
 
-import ru.forxy.service.pojo.User;
+import ru.forxy.pojo.User;
 import ru.forxy.service.IUserService;
 
-import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import javax.xml.ws.WebServiceException;
 import java.util.ArrayList;
