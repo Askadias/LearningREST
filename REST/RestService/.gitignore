@@ -1,2 +1,5 @@
-/ru.forxy.rest.service.eml
-/ru.forxy.rest.service.iml
+*.eml
+
+*.iml
+.gradle/
+.settings/

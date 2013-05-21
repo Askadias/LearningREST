@@ -213,19 +213,14 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
-REST/RestClient/.gradle/1.6/taskArtifacts/cache.properties
-REST/RestClient/.gradle/1.6/taskArtifacts/cache.properties.lock
-REST/RestClient/.gradle/1.6/taskArtifacts/fileHashes.bin
-REST/RestClient/.gradle/1.6/taskArtifacts/fileSnapshots.bin
-REST/RestClient/.gradle/1.6/taskArtifacts/outputFileStates.bin
-REST/RestClient/.gradle/1.6/taskArtifacts/taskArtifacts.bin
-REST/RestClient/ru.forxy.RestClient.eml
-REST/RestClient/ru.forxy.RestClient.iml
-REST/RestService/.gradle/1.6/taskArtifacts/cache.properties
-REST/RestService/.gradle/1.6/taskArtifacts/cache.properties.lock
-REST/RestService/.gradle/1.6/taskArtifacts/fileHashes.bin
-REST/RestService/.gradle/1.6/taskArtifacts/fileSnapshots.bin
-REST/RestService/.gradle/1.6/taskArtifacts/outputFileStates.bin
-REST/RestService/.gradle/1.6/taskArtifacts/taskArtifacts.bin
-REST/RestService/ru.forxy.RestService.eml
-REST/RestService/ru.forxy.RestService.iml
+
+#############
+## Idea
+#############
+*.eml
+*.iml
+
+#############
+## Gradle
+#############
+.gradle/

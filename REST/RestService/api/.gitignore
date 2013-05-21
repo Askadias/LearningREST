@@ -1,2 +1,3 @@
-/ru.forxy.rest.api.eml
-/ru.forxy.rest.api.iml
+*.eml
+
+*.iml
