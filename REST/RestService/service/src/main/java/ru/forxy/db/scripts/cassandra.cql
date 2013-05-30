@@ -3,18 +3,28 @@ create keyspace REST
     and strategy_options = {replication_factor:1};
 
 use REST;
-create column family User
-with key_validation_class = 'UTF8Type'
-and comparator = 'UTF8Type'
-and default_validation_class = 'UTF8Type';
 
-update column family User with
-        column_metadata =
-        [
-        {column_name: first, validation_class: UTF8Type},
-        {column_name: last, validation_class: UTF8Type},
-        {column_name: age, validation_class: UTF8Type, index_type: KEYS}
-        ];
+CREATE COLUMN FAMILY user
+WITH comparator = UTF8Type
+AND key_validation_class = UTF8Type
+AND default_validation_class = UTF8Type;
+AND column_metadata = [
+{column_name: first_name, validation_class: UTF8Type}
+{column_name: last_name, validation_class: UTF8Type}
+{column_name: email, validation_class: UTF8Type, index_type: }
+{column_name: state, validation_class: UTF8Type}
+{column_name: gender, validation_class: UTF8Type}
+{column_name: birth_day, validation_class: LongType}
+];
+
+CREATE COLUMN FAMILY blog_entry
+WITH comparator = TimeUUIDType
+AND key_validation_class=UTF8Type
+AND default_validation_class = UTF8Type;
+
+CREATE COLUMN FAMILY page_view_counts
+WITH default_validation_class=CounterColumnType
+AND key_validation_class=UTF8Type AND comparator=UTF8Type;
 
 assume User keys as utf8;
 

@@ -1,7 +1,7 @@
 package ru.forxy.service;
 
 import ru.forxy.pojo.User;
-import ru.forxy.service.IUserService;
+import ru.forxy.util.Security;
 
 import javax.ws.rs.core.Response;
 import javax.xml.ws.WebServiceException;
@@ -12,14 +12,14 @@ import java.util.Map;
 
 public class UserServiceImpl implements IUserService {
 
-    private static Map<Integer, User> users = new HashMap<Integer, User>(3);
+    private static Map<String, User> users = new HashMap<String, User>(3);
 
     static {
-        users.put(1, new User(1, "Alfred"));
-        users.put(2, new User(2, "Bob"));
-        users.put(3, new User(3, "Cliff"));
-        users.put(4, new User(4, "Daniel"));
-        users.put(5, new User(5, "Eleanor"));
+        users.put("alfred@gmail.com", new User("alfred@gmail.com", Security.md5("alfred")));
+        users.put("bob@gmail.com", new User("bob@gmail.com", Security.md5("bob")));
+        users.put("cliff@gmail.com", new User("cliff@gmail.com", Security.md5("cliff")));
+        users.put("daniel@gmail.com", new User("daniel@gmail.com", Security.md5("daniel")));
+        users.put("eleanor@gmail.com", new User("eleanor@gmail.com", Security.md5("eleanor")));
     }
 
     @Override
@@ -28,8 +28,13 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public User getUser(Integer id) {
-        return users.get(id);
+    public User login(String email, String password) {
+        User user = users.get(email);
+        if (user.getPassword().equals(Security.md5(password))) {
+            return user;
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -39,28 +44,29 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void updateUser(User user) {
-        if (user.getId() != null) {
-            users.put(user.getId(), user);
+        if (user.getEmail() != null && user.getPassword() != null) {
+            user.setPassword(Security.md5(user.getPassword()));
+            users.put(user.getEmail(), user);
         } else {
-            throw new WebServiceException("User's id is null");
+            throw new WebServiceException("User's email is null");
         }
     }
 
     @Override
     public void addUser(User user) {
-        if (user.getId() != null) {
-            if (!users.containsKey(user.getId())) {
-                users.put(user.getId(), user);
+        if (user.getEmail() != null) {
+            if (!users.containsKey(user.getEmail())) {
+                users.put(user.getEmail(), user);
             } else {
-                throw new WebServiceException("User with id " + user.getId() + " already exist");
+                throw new WebServiceException("User with email " + user.getEmail() + " already exist");
             }
         } else {
-            throw new WebServiceException("User's id is null");
+            throw new WebServiceException("User's email is null");
         }
     }
 
     @Override
-    public void deleteUser(Integer id) {
-        users.remove(id);
+    public void deleteUser(String email) {
+        users.remove(email);
     }
 }

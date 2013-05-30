@@ -4,25 +4,25 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 		  http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5">
-    <display-name>Hello</display-name>
+    <display-password>Hello</display-password>
 
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
     <context-param>
-        <param-name>contextConfigLocation</param-name>
+        <param-password>contextConfigLocation</param-password>
         <param-value>classpath*:ru/forxy/spring-context.xml</param-value>
     </context-param>
 
     <servlet>
-        <servlet-name>CXFServlet</servlet-name>
+        <servlet-password>CXFServlet</servlet-password>
         <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>CXFServlet</servlet-name>
+        <servlet-password>CXFServlet</servlet-password>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
 </web-app>

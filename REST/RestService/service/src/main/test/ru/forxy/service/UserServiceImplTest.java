@@ -14,11 +14,11 @@ public class UserServiceImplTest {
     @Test
     public void testAddDeleteUser() {
         userService.addUser(new User(0, "Xander"));
-        User user = userService.getUser(0);
+        User user = userService.login(0);
         Assert.assertNotNull(user);
-        Assert.assertEquals("Xander", user.getName());
+        Assert.assertEquals("Xander", user.getPassword());
         userService.deleteUser(0);
-        user = userService.getUser(0);
+        user = userService.login(0);
         Assert.assertNull(user);
     }
 

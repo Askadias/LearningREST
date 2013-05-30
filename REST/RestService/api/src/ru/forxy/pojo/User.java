@@ -5,36 +5,36 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "user")
 public class User {
 
-    private Integer id;
+    private String email;
 
-    private String name;
+    private String password;
 
-    public User(){
+    public User() {
     }
 
-    public User(Integer id, String name) {
-        this.id = id;
-        this.name = name;
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
     }
 
-    public Integer getId() {
-        return id;
+    public String getEmail() {
+        return email;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getName() {
-        return name;
+    public String getPassword() {
+        return password;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
     public String toString() {
-        return String.format("{id=%s,name=%s}", id, name);
+        return String.format("{email=%s,password=%s}", email, password);
     }
 }

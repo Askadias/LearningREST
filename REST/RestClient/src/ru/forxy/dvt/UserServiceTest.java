@@ -34,7 +34,7 @@ public class UserServiceTest extends AbstractJUnit4SpringContextTests {
         User user = userService.getUser(0);
         Assert.assertNull(user);
         LOGGER.info("User(0) not yet exists: " + user);
-        User newUser = new User(0, "Xander");
+        User newUser = new User("xander@gmail.com", "xander");
         userService.addUser(newUser);
         user = userService.getUser(0);
         Assert.assertNotNull(user);

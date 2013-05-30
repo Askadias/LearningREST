@@ -15,14 +15,10 @@ public interface IUserService {
     List<User> getUsers();
 
     @GET
-    @Path("/users/{id}")
+    @Path("/users/{email}.{password}")
     @Consumes("application/json")
     @Produces("application/json")
-    User getUser(@PathParam("id") Integer id);
-
-    @GET
-    @Path("/bad")
-    Response getBadResponse();
+    User login(@PathParam("email") String email, @PathParam("password") String password);
 
     @PUT
     @Path("/users")
@@ -35,6 +31,6 @@ public interface IUserService {
     void addUser(User user);
 
     @DELETE
-    @Path("/users/{id}")
-    void deleteUser(@PathParam("id") Integer id);
+    @Path("/users/{email}")
+    void deleteUser(@PathParam("email") String email);
 }
