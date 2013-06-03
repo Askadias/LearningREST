@@ -30,16 +30,11 @@ public class UserServiceImpl implements IUserService {
     @Override
     public User login(String email, String password) {
         User user = users.get(email);
-        if (user.getPassword().equals(Security.md5(password))) {
+        if (user != null && user.getPassword().equals(Security.md5(password))) {
             return user;
         } else {
             return null;
         }
-    }
-
-    @Override
-    public Response getBadResponse() {
-        return Response.status(Response.Status.BAD_REQUEST).build();
     }
 
     @Override
@@ -56,6 +51,7 @@ public class UserServiceImpl implements IUserService {
     public void addUser(User user) {
         if (user.getEmail() != null) {
             if (!users.containsKey(user.getEmail())) {
+                user.setPassword(Security.md5(user.getPassword()));
                 users.put(user.getEmail(), user);
             } else {
                 throw new WebServiceException("User with email " + user.getEmail() + " already exist");

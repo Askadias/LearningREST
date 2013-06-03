@@ -31,16 +31,16 @@ public class UserServiceTest extends AbstractJUnit4SpringContextTests {
 
     @Test
     public void addUser() {
-        User user = userService.getUser(0);
+        User user = userService.login("xander@gmail.com", "xander");
         Assert.assertNull(user);
         LOGGER.info("User(0) not yet exists: " + user);
         User newUser = new User("xander@gmail.com", "xander");
         userService.addUser(newUser);
-        user = userService.getUser(0);
+        user = userService.login("xander@gmail.com", "xander");
         Assert.assertNotNull(user);
         LOGGER.info("User(0) successfully added: " + user);
-        userService.deleteUser(0);
-        user = userService.getUser(0);
+        userService.deleteUser("xander@gmail.com");
+        user = userService.login("xander@gmail.com", "xander");
         Assert.assertNull(user);
         LOGGER.info("User(0) successfully removed: " + user);
     }

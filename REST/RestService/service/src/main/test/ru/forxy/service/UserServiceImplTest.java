@@ -13,12 +13,12 @@ public class UserServiceImplTest {
 
     @Test
     public void testAddDeleteUser() {
-        userService.addUser(new User(0, "Xander"));
-        User user = userService.login(0);
+        userService.addUser(new User("xander@gmail.com", "xander"));
+        User user = userService.login("xander@gmail.com", "xander");
         Assert.assertNotNull(user);
-        Assert.assertEquals("Xander", user.getPassword());
-        userService.deleteUser(0);
-        user = userService.login(0);
+        Assert.assertEquals("xander@gmail.com", user.getEmail());
+        userService.deleteUser("xander@gmail.com");
+        user = userService.login("xander@gmail.com", "xander");
         Assert.assertNull(user);
     }
 
