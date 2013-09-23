@@ -219,6 +219,7 @@ pip-log.txt
 #############
 *.eml
 *.iml
+.idea/
 
 #############
 ## Gradle
