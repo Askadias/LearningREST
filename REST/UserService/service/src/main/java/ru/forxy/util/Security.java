@@ -6,8 +6,8 @@ import java.security.NoSuchAlgorithmException;
 
 public abstract class Security {
 
-    public static byte[] md5(String input) {
-        byte[] md5 = null;
+    public static String md5(String input) {
+        String md5 = null;
         if (null == input) return null;
         try {
             //Create MessageDigest object for MD5
@@ -17,7 +17,7 @@ public abstract class Security {
             digest.update(input.getBytes(), 0, input.length());
 
             //Converts message digest value in base 16 (hex)
-            md5 = new BigInteger(1, digest.digest()).toString(16).getBytes();
+            md5 = new BigInteger(1, digest.digest()).toString(16);
 
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
