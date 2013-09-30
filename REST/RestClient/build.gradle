@@ -28,27 +28,27 @@ repositories {
 
 dependencies {
         // --------------------- FORXY ---------------------------------------
-        compile ('forxy:ru.forxy.rest.api:' + rev_rest) {
+        compile ("forxy:ru.forxy.rest.api:${rev_rest}") {
             transitive = true
         }
 
         // --------------------- COMMON --------------------------------------
-        compile 'commons-collections:commons-collections:' + rev_common_collections
-        compile 'log4j:log4j:' + rev_log4j
+        compile "commons-collections:commons-collections:${rev_common_collections}"
+        compile "log4j:log4j:${rev_log4j}"
 
         // --------------------- CXF -----------------------------------------
         compile 'org.apache.cxf:cxf-bundle-jaxrs:' + rev_cxf
         compile 'org.codehaus.jettison:jettison:' + rev_jettison
 
         // --------------------- SPRING --------------------------------------
-        compile 'org.springframework:spring-core:' + rev_spring
-        compile 'org.springframework:spring-beans:' + rev_spring
-        compile 'org.springframework:spring-context:' + rev_spring
-        compile 'org.springframework:spring-web:' + rev_spring
-        compile 'org.springframework:spring-test:' + rev_spring
+        compile "org.springframework:spring-core:${rev_spring}"
+        compile "org.springframework:spring-beans:${rev_spring}"
+        compile "org.springframework:spring-context:${rev_spring}"
+        compile "org.springframework:spring-web:${rev_spring}"
+        compile "org.springframework:spring-test:${rev_spring}"
 
         // ===================== TEST ========================================
-        compile 'junit:junit:' + rev_junit
+        compile "junit:junit:${rev_junit}"
 }
 
 uploadArchives {

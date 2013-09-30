@@ -3,12 +3,12 @@ apply plugin: 'java'
 sourceSets {
     main {
         java { srcDir 'src' }
-        resources { srcDir 'src' }
+        //resources { srcDir 'src' }
     }
 }
 
 dependencies {
     // --------------------- CXF -----------------------------------------
-    compile 'org.apache.cxf:cxf-bundle-jaxrs:' + rev_cxf
-    compile 'org.codehaus.jettison:jettison:' + rev_jettison
+    compile "org.apache.cxf:cxf-bundle-jaxrs:${rev_cxf}"
+    compile "org.codehaus.jettison:jettison:${rev_jettison}"
 }
