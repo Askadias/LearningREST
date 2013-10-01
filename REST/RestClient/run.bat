@@ -1,1 +1,0 @@
-gradle clean assemble uploadArchives cleanEclipse eclipse

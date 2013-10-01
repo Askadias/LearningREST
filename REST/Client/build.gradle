@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
 
-group = 'forxy'
+group = "forxy"
 
 sourceSets {
     main {
@@ -28,7 +28,7 @@ repositories {
 
 dependencies {
         // --------------------- FORXY ---------------------------------------
-        compile ("forxy:${domain}.user.api:${rev_rest}") {
+        compile ("ru.forxy.user.api:${rev_user_api}") {
             transitive = true
         }
 
