@@ -25,11 +25,8 @@ repositories {
         url "file://$System.env.OUTPUT_ROOT/deliverables/"
         layout "pattern", {
             artifact "[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"
-            m2compatible = true
         }
     }
-    /*maven {
-        url "file://$System.env.OUTPUT_ROOT/deliverables/"
     
     uploadArchives {
         repositories {
@@ -38,18 +35,17 @@ repositories {
             }
         }
     }
-    /*uploadArchives {
-        repositories {
-            mavenDeployer {
-                repository(url: "file://$System.env.OUTPUT_ROOT/deliverables/")
-            }
-        }
-    }*/
 }
 
 dependencies {
         // --------------------- FORXY ---------------------------------------
+        compile ("forxy:ru.forxy.crypto.api:${rev_crypto_api}") {
+            transitive = true
+        }
         compile ("forxy:ru.forxy.user.api:${rev_user_api}") {
+            transitive = true
+        }
+        compile ("forxy:ru.forxy.photo.api:${rev_photo_api}") {
             transitive = true
         }
 
@@ -58,8 +54,8 @@ dependencies {
         compile "log4j:log4j:${rev_log4j}"
 
         // --------------------- CXF -----------------------------------------
-        compile 'org.apache.cxf:cxf-bundle-jaxrs:' + rev_cxf
-        compile 'org.codehaus.jettison:jettison:' + rev_jettison
+        compile "org.apache.cxf:cxf-bundle-jaxrs:${rev_cxf}"
+        compile "org.codehaus.jettison:jettison:${rev_jettison}"
 
         // --------------------- SPRING --------------------------------------
         compile "org.springframework:spring-core:${rev_spring}"

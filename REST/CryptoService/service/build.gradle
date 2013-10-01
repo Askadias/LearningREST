@@ -49,3 +49,7 @@ dependencies {
         exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
     }
 }
+
+eclipse {
+    project { name = 'ru.forxy.crypto.service' }
+}
