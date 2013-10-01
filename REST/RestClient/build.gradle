@@ -28,7 +28,7 @@ repositories {
 
 dependencies {
         // --------------------- FORXY ---------------------------------------
-        compile ("forxy:ru.forxy.rest.api:${rev_rest}") {
+        compile ("forxy:${domain}.user.api:${rev_rest}") {
             transitive = true
         }
 
