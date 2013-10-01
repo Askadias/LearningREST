@@ -8,31 +8,31 @@ allprojects {
 
     repositories {
         mavenCentral()
-        /*ivy {
+        ivy {
             url "file://$System.env.OUTPUT_ROOT/deliverables/"
             layout "pattern", {
                 artifact "[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"
                 m2compatible = true
             }
-        }*/
-        maven {
-            url "file://$System.env.OUTPUT_ROOT/deliverables/"
         }
+        /*maven {
+            url "file://$System.env.OUTPUT_ROOT/deliverables/"
+        }*/
 
-        /*uploadArchives {
+        uploadArchives {
             repositories {
                 ivy {
                     url "file://$System.env.OUTPUT_ROOT/deliverables/"
                 }
             }
-        }*/
-        uploadArchives {
+        }
+        /*uploadArchives {
             repositories {
                 mavenDeployer {
                     repository(url: "file://$System.env.OUTPUT_ROOT/deliverables/")
                 }
             }
-        }
+        }*/
     }
 
     if (System.env.OUTPUT_ROOT) {

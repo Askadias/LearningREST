@@ -1,8 +1,8 @@
 rootProject.name=project_name
 
 def projects = [
-        ':api' : [name: "${domain}.crypto.api", path: 'api'],
-        ':service' : [name: "${domain}.crypto.service", path: 'service']
+        ':api' : [name: "ru.forxy.crypto.api", path: 'api'],
+        ':service' : [name: "ru.forxy.crypto.service", path: 'service']
 ]
 
 projects.each() { key, config ->
