@@ -27,11 +27,11 @@
             <httpj:tlsServerParameters>
                 <sec:keyManagers keyPassword="password">
                     <sec:keyStore type="JKS" password="SomeNotSoMuchEncryptedPassword2013"
-                                  file="src/test/java/org/apache/cxf/systest/http/resources/Bethal.jks"/>
+                                  file="src/main/config/Public.jks"/>
                 </sec:keyManagers>
                 <sec:trustManagers>
-                    <sec:keyStore type="JKS" password="SomeVeryEncryptedPassword2013"
-                                  file="src/test/java/org/apache/cxf/systest/http/resources/Truststore.jks"/>
+                    <sec:keyStore type="JKS" password="SomeVeryEncryptedServicePassword2013"
+                                  file="src/main/config/ServiceKeystore.jks"/>
                 </sec:trustManagers>
                 <sec:cipherSuitesFilter>
                     <sec:include>.*_EXPORT_.*</sec:include>

@@ -1,4 +1,4 @@
-package ru.forxy.dvt;
+package main.java.ru.forxy.dvt;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
@@ -14,7 +14,7 @@ import ru.forxy.pojo.User;
 import java.util.List;
 
 @ContextConfiguration(locations =
-        {"classpath:ru/forxy/spring-context.xml"})
+        {"classpath:main/java/ru/forxy/spring-context.xml"})
 public class UserServiceTest extends AbstractJUnit4SpringContextTests {
     private static Logger LOGGER = Logger.getLogger(UserServiceTest.class);
 
