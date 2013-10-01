@@ -5,7 +5,7 @@ import ru.forxy.pojo.Photo;
 import javax.ws.rs.*;
 import java.util.List;
 
-@Path("/photoservice/")
+@Path("/")
 public interface IPhotoService {
 
     @GET

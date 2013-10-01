@@ -6,13 +6,13 @@ group = "forxy"
 
 sourceSets {
     main {
-        java { srcDir 'src' }
-        resources { srcDir 'src' }
-    }
-    test {
-        java { srcDir 'src' }
-        resources { srcDir 'src' }
-    }
+            java { srcDir 'src/main/test' }
+            resources { srcDir 'src/main/test' }
+        }
+        test {
+            java { srcDir 'src/main/test' }
+            resources { srcDir 'src/main/test' }
+        }
 }
 
 if (System.env.OUTPUT_ROOT) {
