@@ -1,4 +1,4 @@
-package main.java.ru.forxy.dvt;
+package ru.forxy.dvt;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;

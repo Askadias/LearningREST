@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:jaxrs="http://cxf.apache.org/jaxrs"
-       xmlns:util="http://www.springframework.org/schema/util"
        xmlns:httpj="http://cxf.apache.org/transports/http-jetty/configuration"
        xmlns:sec="http://cxf.apache.org/configuration/security"
        xsi:schemaLocation="
@@ -14,16 +13,16 @@
     <import resource="classpath:META-INF/cxf/cxf-extension-xml.xml"/>
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
 
-    <httpj:engine-factory id="port-9095-crypto-config">
+    <httpj:engine-factory id="port-9095-crypto-config" bus="cxf">
         <httpj:engine port="9095">
             <httpj:tlsServerParameters>
-                <sec:keyManagers keyPassword="encrypt10n">
+                <sec:keyManagers keyPassword="cerv1ce3ncrypt10n">
                     <sec:keyStore type="JKS" password="Pa55w0rd4CryprtoService"
                                   resource="cryptoServer.jks"/>
                 </sec:keyManagers>
                 <sec:trustManagers>
                     <sec:keyStore type="JKS" password="Pa55w0rd4CryprtoService"
-                                  resource="cryptoTrustStore.jks"/>
+                                  resource="cryptoServiceTrustStore.jks"/>
                 </sec:trustManagers>
                 <sec:cipherSuitesFilter>
                     <sec:include>.*_EXPORT_.*</sec:include>

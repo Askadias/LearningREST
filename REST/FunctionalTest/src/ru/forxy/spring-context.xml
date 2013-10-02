@@ -20,13 +20,13 @@
 
     <http:conduit name="{http://service.forxy.ru/}ICryptoService.http-conduit">
         <http:tlsClientParameters>
-            <sec:keyManagers keyPassword="MyCrypt0ClientPa55w0rd">
-                <sec:keyStore type="PKCS12" password="MyCrypt0ClientPa55w0rd"
-                              resource="cryptoClient.p12"/>
+            <sec:keyManagers keyPassword="c1ient3ncrypt10n">
+                <sec:keyStore type="JKS" password="MyCrypt0ClientPa55w0rd"
+                              resource="cryptoClient.jks"/>
             </sec:keyManagers>
             <sec:trustManagers>
-                <sec:keyStore type="JKS" password="Pa55w0rd4CryprtoService"
-                              resource="cryptoTrustStore.jks"/>
+                <sec:keyStore type="JKS" password="MyCrypt0ClientPa55w0rd"
+                              resource="cryptoClientTrustStore.jks"/>
             </sec:trustManagers>
             <sec:cipherSuitesFilter>
                 <sec:include>.*_EXPORT_.*</sec:include>
@@ -48,7 +48,6 @@
           class="org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean">
         <property name="serviceClass" value="ru.forxy.service.ICryptoService"/>
         <property name="address" value="https://localhost:8080/CryptoService"/>
-        <property name="provider" ref="jsonProvider"/>
     </bean>
 
     <bean id="cryptoServiceClient"
