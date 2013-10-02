@@ -1,0 +1,4 @@
+keytool -genkey -alias cryptoservice -keyalg RSA -keypass encrypt10n -validity 3650 -dname "CN=localhost, O=forxy, C=RU" -keystore cryptoServer.jks -storepass Pa55w0rd4CryprtoService -storetype JKS
+keytool -genkey -alias cryptoclient -keyalg RSA -keypass MyCrypt0ClientPa55w0rd -validity 3650 -dname "CN=localhost, O=forxy, C=RU" -keystore cryptoClient.p12 -storepass MyCrypt0ClientPa55w0rd -storetype PKCS12
+keytool -export -alias cryptoclient -keyalg RSA -keystore cryptoClient.p12 -storepass MyCrypt0ClientPa55w0rd -storetype PKCS12 -file cryptoClient.cer
+keytool -import -alias cryptoclient -keyalg RSA -file cryptoClient.cer -noprompt -keystore cryptoTrustStore.jks -storepass Pa55w0rd4CryprtoService -storetype JKS
