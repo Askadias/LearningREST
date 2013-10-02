@@ -26,7 +26,7 @@
             </sec:keyManagers>
             <sec:trustManagers>
                 <sec:keyStore type="JKS" password="MyCrypt0ClientPa55w0rd"
-                              resource="cryptoClientTrustStore.jks"/>
+                              resource="cryptoClient.jks"/>
             </sec:trustManagers>
             <sec:cipherSuitesFilter>
                 <sec:include>.*_EXPORT_.*</sec:include>
@@ -37,17 +37,13 @@
                 <sec:exclude>.*_DH_anon_.*</sec:exclude>
             </sec:cipherSuitesFilter>
         </http:tlsClientParameters>
-        <http:authorization>
-            <sec:UserName>FunctionalTest</sec:UserName>
-            <sec:Password>ThisIsMyVerySecureTestPassword</sec:Password>
-        </http:authorization>
         <http:client AutoRedirect="true" Connection="Keep-Alive"/>
     </http:conduit>
 
     <bean id="cryptoServiceClientFactory"
           class="org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean">
         <property name="serviceClass" value="ru.forxy.service.ICryptoService"/>
-        <property name="address" value="https://localhost:8080/CryptoService"/>
+        <property name="address" value="https://localhost:9095/CryptoService"/>
     </bean>
 
     <bean id="cryptoServiceClient"

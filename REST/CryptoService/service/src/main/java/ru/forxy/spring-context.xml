@@ -22,7 +22,7 @@
                 </sec:keyManagers>
                 <sec:trustManagers>
                     <sec:keyStore type="JKS" password="Pa55w0rd4CryprtoService"
-                                  resource="cryptoServiceTrustStore.jks"/>
+                                  resource="cryptoServer.jks"/>
                 </sec:trustManagers>
                 <sec:cipherSuitesFilter>
                     <sec:include>.*_EXPORT_.*</sec:include>
