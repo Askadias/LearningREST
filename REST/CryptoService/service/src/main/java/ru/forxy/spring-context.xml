@@ -5,33 +5,25 @@
        xmlns:httpj="http://cxf.apache.org/transports/http-jetty/configuration"
        xmlns:sec="http://cxf.apache.org/configuration/security"
        xsi:schemaLocation="
-       http://www.springframework.org/schema/beans                  http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://cxf.apache.org/jaxrs                                  http://cxf.apache.org/schemas/jaxrs.xsd
-       http://www.springframework.org/schema/util                   http://www.springframework.org/schema/util/spring-util.xsd
-       http://cxf.apache.org/transports/http-jetty/configuration    http://cxf.apache.org/schemas/configuration/http-jetty.xsd
-       http://cxf.apache.org/configuration/security                 http://cxf.apache.org/schemas/configuration/security.xsd">
+         http://www.springframework.org/schema/beans                http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://cxf.apache.org/jaxrs                                http://cxf.apache.org/schemas/jaxrs.xsd
+         http://cxf.apache.org/transports/http-jetty/configuration  http://cxf.apache.org/schemas/configuration/http-jetty.xsd
+         http://cxf.apache.org/configuration/security               http://cxf.apache.org/schemas/configuration/security.xsd">
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-extension-xml.xml"/>
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
-
-    <util:map id="jsonNamespaceMap" map-class="java.util.Hashtable">
-        <entry key="http://www.forxy.ru/photos" value="u"/>
-    </util:map>
-
-    <bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
-        <property name="namespaceMap" ref="jsonNamespaceMap"/>
-    </bean>
 
     <httpj:engine-factory id="port-9095-crypto-config">
         <httpj:engine port="9095">
             <httpj:tlsServerParameters>
-                <sec:keyManagers keyPassword="password">
-                    <sec:keyStore type="JKS" password="SomeNotSoMuchEncryptedPassword2013"
-                                  file="src/main/config/Public.jks"/>
+                <sec:keyManagers keyPassword="encrypt10n">
+                    <sec:keyStore type="JKS" password="Pa55w0rd4CryprtoService"
+                                  resource="cryptoServer.jks"/>
                 </sec:keyManagers>
                 <sec:trustManagers>
-                    <sec:keyStore type="JKS" password="SomeVeryEncryptedServicePassword2013"
-                                  file="src/main/config/ServiceKeystore.jks"/>
+                    <sec:keyStore type="JKS" password="Pa55w0rd4CryprtoService"
+                                  resource="cryptoTrustStore.jks"/>
                 </sec:trustManagers>
                 <sec:cipherSuitesFilter>
                     <sec:include>.*_EXPORT_.*</sec:include>
@@ -50,9 +42,6 @@
         <jaxrs:serviceBeans>
             <ref bean="cryptoServiceImpl"/>
         </jaxrs:serviceBeans>
-        <jaxrs:providers>
-            <ref bean="jaxbProvider"/>
-        </jaxrs:providers>
     </jaxrs:server>
 
     <bean id="cryptoServiceImpl" class="ru.forxy.service.CryptoServiceImpl"/>

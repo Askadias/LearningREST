@@ -4,7 +4,7 @@
        xmlns:http="http://cxf.apache.org/transports/http/configuration"
        xmlns:sec="http://cxf.apache.org/configuration/security"
        xsi:schemaLocation="
-       http://www.springframework.org/schema/beans              http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/beans            http://www.springframework.org/schema/beans/spring-beans.xsd
          http://www.springframework.org/schema/util             http://www.springframework.org/schema/util/spring-util.xsd
          http://cxf.apache.org/transports/http/configuration    http://cxf.apache.org/schemas/configuration/http-conf.xsd
          http://cxf.apache.org/configuration/security           http://cxf.apache.org/schemas/configuration/security.xsd"
@@ -16,17 +16,17 @@
 
     <!-- =======================================
           Crypto Service Client Configuration
-    -->  =======================================
+         =======================================  -->
 
-    <http:conduit name="{http://apache.org/CryptoService}CryptoService.http-conduit">
+    <http:conduit name="{http://service.forxy.ru/}ICryptoService.http-conduit">
         <http:tlsClientParameters>
-            <sec:keyManagers keyPassword="password">
-                <sec:keyStore type="JKS" password="SomeNotSoMuchEncryptedPassword2013"
-                              file="src/main/config/Public.jks"/>
+            <sec:keyManagers keyPassword="MyCrypt0ClientPa55w0rd">
+                <sec:keyStore type="PKCS12" password="MyCrypt0ClientPa55w0rd"
+                              resource="cryptoClient.p12"/>
             </sec:keyManagers>
             <sec:trustManagers>
-                <sec:keyStore type="JKS" password="SomeVerySecureClientPassword2013"
-                              file="src/main/config/ClientTruststore.jks"/>
+                <sec:keyStore type="JKS" password="Pa55w0rd4CryprtoService"
+                              resource="cryptoTrustStore.jks"/>
             </sec:trustManagers>
             <sec:cipherSuitesFilter>
                 <sec:include>.*_EXPORT_.*</sec:include>
@@ -47,7 +47,7 @@
     <bean id="cryptoServiceClientFactory"
           class="org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean">
         <property name="serviceClass" value="ru.forxy.service.ICryptoService"/>
-        <property name="address" value="http://localhost:8080/CryptoService"/>
+        <property name="address" value="https://localhost:8080/CryptoService"/>
         <property name="provider" ref="jsonProvider"/>
     </bean>
 
@@ -59,7 +59,7 @@
 
     <!-- =======================================
            User Service Client Configuration
-    -->  =======================================
+         ======================================= -->
 
     <util:map id="jsonNamespaceMap" map-class="java.util.Hashtable">
         <entry key="http://www.example.org/users" value="u"/>

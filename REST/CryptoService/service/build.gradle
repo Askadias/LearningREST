@@ -9,7 +9,7 @@ sourceSets {
     }
     test {
         java { srcDir 'src/main/test' }
-        resources { srcDir 'src/main/test' }
+        resources { srcDir 'src/main/java' }
     }
 }
 
