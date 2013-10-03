@@ -20,13 +20,13 @@
 
     <http:conduit name="{http://service.forxy.ru/}ICryptoService.http-conduit">
         <http:tlsClientParameters>
-            <sec:keyManagers keyPassword="c1ient3ncrypt10n">
+            <sec:keyManagers keyPassword="MyCrypt0ClientPa55w0rd">
                 <sec:keyStore type="JKS" password="MyCrypt0ClientPa55w0rd"
                               resource="cryptoClient.jks"/>
             </sec:keyManagers>
             <sec:trustManagers>
                 <sec:keyStore type="JKS" password="MyCrypt0ClientPa55w0rd"
-                              resource="cryptoClient.jks"/>
+                              resource="cryptoClientTrustStore.jks"/>
             </sec:trustManagers>
             <sec:cipherSuitesFilter>
                 <sec:include>.*_EXPORT_.*</sec:include>
