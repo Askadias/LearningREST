@@ -44,10 +44,6 @@
     </jaxrs:server>
 
     <bean id="cryptoServiceImpl" class="ru.forxy.service.CryptoServiceImpl">
-        <constructor-arg name="cryptoAlgorithm" value="AES/ECB/PKCS5Padding"/>
-        <constructor-arg name="keyAlgorithm" value="PBKDF2WithHmacSHA1"/>
-        <constructor-arg name="salt" value="this is very secure salt"/>
-        <constructor-arg name="iterations" value="10000"/>
         <constructor-arg name="password" value="Crypt0A1g0r1thmPa55w0rd"/>
     </bean>
 
