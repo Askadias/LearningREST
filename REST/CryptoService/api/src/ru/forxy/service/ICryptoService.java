@@ -1,16 +1,21 @@
 package ru.forxy.service;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
 @Path("/")
 public interface ICryptoService {
 
-    @POST
-    @Path("/crypto")
-    byte[] encrypt(String value);
+    @GET
+    @Path("/encrypt")
+    byte[] encrypt(String decrypted);
 
     @POST
-    @Path("/crypto")
-    String decrypt(byte[] value);
+    @Path("/decrypt")
+    String decrypt(byte[] encrypted);
+
+    @POST
+    @Path("/hash")
+    byte[] hash(String value);
 }
