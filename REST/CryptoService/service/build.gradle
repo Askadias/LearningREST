@@ -4,12 +4,12 @@ apply plugin: 'tomcat'
 
 sourceSets {
     main {
-        java { srcDir 'src/main/java' }
-        resources { srcDir 'src/main/java' }
+        java { srcDir 'src/main' }
+        resources { srcDir 'src/main' }
     }
     test {
-        java { srcDir 'src/main/test' }
-        resources { srcDir 'src/main/java' }
+        java { srcDir 'src/test' }
+        resources { srcDir 'src/java' }
     }
 }
 
@@ -30,7 +30,10 @@ dependencies {
 
     // --------------------- COMMON --------------------------------------
     compile "commons-collections:commons-collections:${rev_common_collections}"
-    compile "log4j:log4j:${rev_log4j}"
+    compile "ch.qos.logback:logback-core:${rev_logback}"
+    compile "ch.qos.logback:logback-classic:${rev_logback}"
+    compile "org.slf4j:slf4j-api:${rev_slf4j}"
+
 
     // --------------------- SPRING --------------------------------------
     compile "org.springframework:spring-core:${rev_spring}"

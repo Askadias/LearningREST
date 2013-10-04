@@ -1,8 +1,9 @@
 package ru.forxy.dvt;
 
-import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
@@ -14,9 +15,8 @@ import java.util.Arrays;
 @ContextConfiguration(locations =
         {"classpath:ru/forxy/spring-context.xml"})
 public class CryptoServiceTest extends AbstractJUnit4SpringContextTests {
-    private static Logger LOGGER = Logger.getLogger(CryptoServiceTest.class);
 
-    private static final byte[] ENCRYPTED_TEST_DATA = new byte[]{};
+    private static final Logger LOGGER = LoggerFactory.getLogger(CryptoServiceTest.class);
 
     @Autowired
     @Qualifier("cryptoServiceClient")
@@ -24,12 +24,12 @@ public class CryptoServiceTest extends AbstractJUnit4SpringContextTests {
 
     @Test
     public void testEncryption() {
-        String text = "some text for encription 1234567890 !@#$%^&*()";
+        String text = "some text for encryption 1234567890 !@#$%^&*()";
         byte[] encrypted = cryptoService.encrypt(text);
         Assert.assertNotNull(encrypted);
-        LOGGER.info("Information successfully encrypted: " + Arrays.toString(encrypted));
+        LOGGER.info("Information successfully encrypted: {}", Arrays.toString(encrypted));
         String decrypted = cryptoService.decrypt(encrypted);
-        LOGGER.info("Information successfully decrypted: " + decrypted);
+        LOGGER.info("Information successfully decrypted: {}", decrypted);
         Assert.assertEquals(text, decrypted);
     }
 
@@ -37,12 +37,12 @@ public class CryptoServiceTest extends AbstractJUnit4SpringContextTests {
     public void testHashing() {
         byte[] passwordHash = cryptoService.hash("password");
         Assert.assertNotNull(passwordHash);
-        LOGGER.info("'Password' successfully encrypted: " + Arrays.toString(passwordHash));
+        LOGGER.info("'Password' successfully encrypted: {}", Arrays.toString(passwordHash));
         byte[] passwordHash2 = cryptoService.hash("password");
         Assert.assertTrue(Arrays.equals(passwordHash, passwordHash2));
-        LOGGER.info("'Password' successfully encrypted: " + Arrays.toString(passwordHash2));
+        LOGGER.info("'Password' successfully encrypted: {}", Arrays.toString(passwordHash2));
         byte[] passwordHash3 = cryptoService.hash("different");
         Assert.assertFalse(Arrays.equals(passwordHash, passwordHash3));
-        LOGGER.info("'Different' successfully encrypted: " + Arrays.toString(passwordHash3));
+        LOGGER.info("'Different' successfully encrypted: {}", Arrays.toString(passwordHash3));
     }
 }

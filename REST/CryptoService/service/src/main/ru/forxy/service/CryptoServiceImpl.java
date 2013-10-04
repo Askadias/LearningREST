@@ -1,7 +1,10 @@
 package ru.forxy.service;
 
 
-import javax.crypto.*;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.*;
@@ -10,13 +13,14 @@ public class CryptoServiceImpl implements ICryptoService {
 
     private static final String CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
     private static final String DIGEST_ALGORITHM = "SHA-256";
-    private static final String SECRET_KEY_SPEC = "AES"; 
-    private MessageDigest digest;
+    private static final String SECRET_KEY_SPEC = "AES";
+
     private final Object cryptoSync = new Object();
     private final Object hashSync = new Object();
 
-    private IvParameterSpec ivSpec;
+    private MessageDigest digest;
     private Cipher cipher;
+    private IvParameterSpec ivSpec;
     private SecretKeySpec secretKey;
 
     public CryptoServiceImpl(String password) {
