@@ -1,6 +1,7 @@
 package ru.forxy.service;
 
-import ru.forxy.pojo.Photo;
+import ru.forxy.photo.IPhotoService;
+import ru.forxy.photo.pojo.Photo;
 
 import javax.xml.ws.WebServiceException;
 import java.util.ArrayList;

@@ -1,9 +1,9 @@
 package ru.forxy.service;
 
-import ru.forxy.pojo.User;
+import ru.forxy.user.pojo.User;
+import ru.forxy.user.IUserService;
 import ru.forxy.util.Security;
 
-import javax.ws.rs.core.Response;
 import javax.xml.ws.WebServiceException;
 import java.util.ArrayList;
 import java.util.HashMap;

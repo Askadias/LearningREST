@@ -2,6 +2,7 @@ package ru.forxy.dvt;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
-import ru.forxy.pojo.User;
-import ru.forxy.service.IUserService;
+import ru.forxy.user.IUserService;
+import ru.forxy.user.pojo.User;
 
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class UserServiceTest extends AbstractJUnit4SpringContextTests {
     }
 
     @Test
+    @Ignore
     public void addUser() {
         User user = userService.login("xander@gmail.com", "xander");
         Assert.assertNull(user);

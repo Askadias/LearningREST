@@ -1,9 +1,8 @@
-package ru.forxy.service;
+package ru.forxy.user;
 
-import ru.forxy.pojo.User;
+import ru.forxy.user.pojo.User;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/")

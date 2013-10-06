@@ -3,7 +3,8 @@ package ru.forxy.service;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import ru.forxy.pojo.User;
+import ru.forxy.user.pojo.User;
+import ru.forxy.user.IUserService;
 
 import java.util.List;
 

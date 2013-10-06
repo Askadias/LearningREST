@@ -22,7 +22,68 @@ buildscript {
     }
 }
 
+
+// ========= Tomcat Plugin ==============================================
+
 tomcatRunWar { contextPath = 'UserService' }
+
+
+// ========= Environment ================================================
+
+import org.apache.tools.ant.filters.ReplaceTokens
+
+if (project.hasProperty('env')) {
+    def env = project.getProperty("env")
+
+    task copyEnvConfigApp(type: Copy) {
+        from 'appconfig'
+        into "$System.env.TOMCAT_HOME/conf/appconfig"
+        include '**/*.properties'
+        exclude '**/*.bat'
+    }
+
+    task copyEnvConfigTomcat(type: Copy) {
+        from "appconfig/env/$env/setenv.bat"
+        into "$System.env.TOMCAT_HOME/bin"
+    }
+
+    task copyWebContextConfig(type: Copy) {
+        from "appconfig/UserService.xml"
+        into "$System.env.TOMCAT_HOME/conf/Catalina/localhost"
+        filter(ReplaceTokens, tokens: [war: war.archiveName])
+    }
+
+    task setupEnv {
+        dependsOn copyEnvConfigApp,copyEnvConfigTomcat,copyWebContextConfig
+    }
+}
+
+
+// ========== Deploy ====================================================
+
+task deploy(type: Copy) {
+    dependsOn war
+    if (project.hasProperty('env')) {
+        dependsOn setupEnv
+    }
+    from war
+    into "$System.env.TOMCAT_HOME/warfiles"
+}
+
+
+// ========== Clean Deployment Configuration ============================
+
+task cleanTomcat(type: Delete) {
+    FileTree tree = fileTree("$System.env.TOMCAT_HOME") {
+        include "conf/Catalina/localhost/UserService.xml",
+                "warfiles/ru.forxy.user*.war",
+                "conf/appconfig/**/ru.forxy.user*.properties"
+    }
+    delete tree
+}
+
+
+// ========== Dependencies ==============================================
 
 dependencies {
     // --------------------- PROJECTS ------------------------------------

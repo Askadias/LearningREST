@@ -15,6 +15,14 @@ sourceSets {
     }
 }
 
+test {
+    if (project.hasProperty('env')) {
+        systemProperty 'env', "${env}"
+    } else {
+        systemProperty 'env', "dev"
+    }
+}
+
 if (System.env.OUTPUT_ROOT) {
     buildDir = file("$System.env.OUTPUT_ROOT/$project.name")
 }

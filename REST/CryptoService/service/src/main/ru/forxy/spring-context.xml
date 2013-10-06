@@ -4,13 +4,17 @@
        xmlns:httpj="http://cxf.apache.org/transports/http-jetty/configuration"
        xmlns:sec="http://cxf.apache.org/configuration/security"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans                http://www.springframework.org/schema/beans/spring-beans.xsd
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/beans                http://www.springframework.org/schema/beans/spring-beans.xsd
          http://cxf.apache.org/jaxrs                                http://cxf.apache.org/schemas/jaxrs.xsd
          http://cxf.apache.org/transports/http-jetty/configuration  http://cxf.apache.org/schemas/configuration/http-jetty.xsd
-         http://cxf.apache.org/configuration/security               http://cxf.apache.org/schemas/configuration/security.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+         http://cxf.apache.org/configuration/security               http://cxf.apache.org/schemas/configuration/security.xsd
+         http://www.springframework.org/schema/context              http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="2" location="file:${CATALINA_HOME}/conf/appconfig/base/ru.forxy.crypto.properties" />
-    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="1" location="file:${CATALINA_HOME}/conf/appconfig/env/${ru.forxy.crypto.env}/ru.forxy.crypto.properties" />
+    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="2"
+                                  location="file:${CATALINA_HOME}/conf/appconfig/base/ru.forxy.crypto.properties"/>
+    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="1"
+                                  location="file:${CATALINA_HOME}/conf/appconfig/env/${env}/ru.forxy.crypto.properties"/>
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
 
@@ -19,11 +23,11 @@
             <httpj:tlsServerParameters>
                 <sec:keyManagers keyPassword="${ru.forxy.crypto.SSLConfig/keyStorePassword}">
                     <sec:keyStore type="JKS" password="${ru.forxy.crypto.SSLConfig/keyStorePassword}"
-                                  resource="${ru.forxy.crypto.SSLConfig/keyStoreFile}"/>
+                                  file="${ru.forxy.crypto.SSLConfig/keyStoreFile}"/>
                 </sec:keyManagers>
                 <sec:trustManagers>
-                    <sec:keyStore type="JKS" password="${ru.forxy.crypto.SSLConfig/trustStorePasswkrd}"
-                                  resource="${ru.forxy.crypto.SSLConfig/trustStoreFile}"/>
+                    <sec:keyStore type="JKS" password="${ru.forxy.crypto.SSLConfig/trustStorePassword}"
+                                  file="${ru.forxy.crypto.SSLConfig/trustStoreFile}"/>
                 </sec:trustManagers>
                 <sec:cipherSuitesFilter>
                     <sec:include>.*_EXPORT_.*</sec:include>

@@ -1,6 +1,6 @@
-package ru.forxy.service;
+package ru.forxy.photo;
 
-import ru.forxy.pojo.Photo;
+import ru.forxy.photo.pojo.Photo;
 
 import javax.ws.rs.*;
 import java.util.List;

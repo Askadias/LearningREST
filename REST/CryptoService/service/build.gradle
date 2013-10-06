@@ -76,8 +76,7 @@ task deploy(type: Copy) {
 
 task cleanTomcat(type: Delete) {
     FileTree tree = fileTree("$System.env.TOMCAT_HOME") {
-        include "bin/setenv.bat",
-                "conf/Catalina/localhost/CryptoService.xml",
+        include "conf/Catalina/localhost/CryptoService.xml",
                 "warfiles/ru.forxy.crypto*.war",
                 "conf/appconfig/**/ru.forxy.crypto*.properties",
                 "conf/appconfig/**/cryptoService*.jks"

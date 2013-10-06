@@ -2,8 +2,17 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:jaxrs="http://cxf.apache.org/jaxrs"
        xmlns:util="http://www.springframework.org/schema/util"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://cxf.apache.org/jaxrs                     http://cxf.apache.org/schemas/jaxrs.xsd
+        http://www.springframework.org/schema/util      http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/context   http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="2"
+                                  location="file:${CATALINA_HOME}/conf/appconfig/base/ru.forxy.user.properties"/>
+    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="1"
+                                  location="file:${CATALINA_HOME}/conf/appconfig/env/${env}/ru.forxy.user.properties"/>
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>

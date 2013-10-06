@@ -1,1 +1,1 @@
-gradle clean assemble uploadArchives cleanEclipse eclipse
+gradle clean build uploadArchives cleanEclipse eclipse -Penv=dev

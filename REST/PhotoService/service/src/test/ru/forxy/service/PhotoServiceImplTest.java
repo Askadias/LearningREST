@@ -3,7 +3,8 @@ package ru.forxy.service;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import ru.forxy.pojo.Photo;
+import ru.forxy.photo.IPhotoService;
+import ru.forxy.photo.pojo.Photo;
 
 import java.util.List;
 

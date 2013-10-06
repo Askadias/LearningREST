@@ -1,4 +1,4 @@
-package ru.forxy.pojo;
+package ru.forxy.user.pojo;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

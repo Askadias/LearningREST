@@ -3,12 +3,21 @@
        xmlns:util="http://www.springframework.org/schema/util"
        xmlns:http="http://cxf.apache.org/transports/http/configuration"
        xmlns:sec="http://cxf.apache.org/configuration/security"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="
          http://www.springframework.org/schema/beans            http://www.springframework.org/schema/beans/spring-beans.xsd
          http://www.springframework.org/schema/util             http://www.springframework.org/schema/util/spring-util.xsd
          http://cxf.apache.org/transports/http/configuration    http://cxf.apache.org/schemas/configuration/http-conf.xsd
-         http://cxf.apache.org/configuration/security           http://cxf.apache.org/schemas/configuration/security.xsd"
+         http://cxf.apache.org/configuration/security           http://cxf.apache.org/schemas/configuration/security.xsd
+         http://www.springframework.org/schema/context          http://www.springframework.org/schema/context/spring-context.xsd"
        default-lazy-init="false">
+
+    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="2"
+                                  location="classpath:appconfig/base/ru.forxy.test.properties"/>
+    <!--<context:property-placeholder local-override="true" ignore-resource-not-found="true" order="1"
+                                  location="classpath:appconfig/env/${env}/ru.forxy.test.properties"/>-->
+    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="1"
+                                  location="classpath:appconfig/env/${env}/ru.forxy.test.properties"/>
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
@@ -18,15 +27,15 @@
           Crypto Service Client Configuration
          =======================================  -->
 
-    <http:conduit name="{http://service.forxy.ru/}ICryptoService.http-conduit">
+    <http:conduit name="{http://crypto.forxy.ru/}ICryptoService.http-conduit">
         <http:tlsClientParameters>
-            <sec:keyManagers keyPassword="MyCrypt0ClientPa55w0rd">
-                <sec:keyStore type="JKS" password="MyCrypt0ClientPa55w0rd"
-                              resource="cryptoClient.jks"/>
+            <sec:keyManagers keyPassword="${ru.forxy.crypto.SSLConfig/keyStorePassword}">
+                <sec:keyStore type="JKS" password="${ru.forxy.crypto.SSLConfig/keyStorePassword}"
+                              resource="${ru.forxy.crypto.SSLConfig/keyStoreFile}"/>
             </sec:keyManagers>
             <sec:trustManagers>
-                <sec:keyStore type="JKS" password="MyCrypt0ClientPa55w0rd"
-                              resource="cryptoClientTrustStore.jks"/>
+                <sec:keyStore type="JKS" password="${ru.forxy.crypto.SSLConfig/trustStorePassword}"
+                              resource="${ru.forxy.crypto.SSLConfig/trustStoreFile}"/>
             </sec:trustManagers>
             <sec:cipherSuitesFilter>
                 <sec:include>.*_EXPORT_.*</sec:include>
@@ -42,12 +51,12 @@
 
     <bean id="cryptoServiceClientFactory"
           class="org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean">
-        <property name="serviceClass" value="ru.forxy.service.ICryptoService"/>
-        <property name="address" value="https://localhost:9095/CryptoService"/>
+        <property name="serviceClass" value="ru.forxy.crypto.ICryptoService"/>
+        <property name="address" value="${ru.forxy.crypto.ICryptoService/url}"/>
     </bean>
 
     <bean id="cryptoServiceClient"
-          class="ru.forxy.service.ICryptoService"
+          class="ru.forxy.crypto.ICryptoService"
           factory-bean="cryptoServiceClientFactory"
           factory-method="create"/>
 
@@ -66,13 +75,13 @@
 
     <bean id="userServiceClientFactory"
           class="org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean">
-        <property name="serviceClass" value="ru.forxy.service.IUserService"/>
-        <property name="address" value="http://localhost:8080/UserService"/>
+        <property name="serviceClass" value="ru.forxy.user.IUserService"/>
+        <property name="address" value="${ru.forxy.user.IUserService/url}"/>
         <property name="provider" ref="jsonProvider"/>
     </bean>
 
     <bean id="userServiceClient"
-          class="ru.forxy.service.IUserService"
+          class="ru.forxy.user.IUserService"
           factory-bean="userServiceClientFactory"
           factory-method="create"/>
 

@@ -1,4 +1,4 @@
-package ru.forxy.service;
+package ru.forxy.crypto;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;

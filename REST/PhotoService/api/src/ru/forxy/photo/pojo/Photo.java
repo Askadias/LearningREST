@@ -1,4 +1,4 @@
-package ru.forxy.pojo;
+package ru.forxy.photo.pojo;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

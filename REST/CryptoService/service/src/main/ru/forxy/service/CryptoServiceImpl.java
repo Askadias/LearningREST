@@ -3,6 +3,7 @@ package ru.forxy.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.forxy.crypto.ICryptoService;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
