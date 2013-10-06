@@ -3,26 +3,27 @@
        xmlns:jaxrs="http://cxf.apache.org/jaxrs"
        xmlns:httpj="http://cxf.apache.org/transports/http-jetty/configuration"
        xmlns:sec="http://cxf.apache.org/configuration/security"
-       xsi:schemaLocation="
-         http://www.springframework.org/schema/beans                http://www.springframework.org/schema/beans/spring-beans.xsd
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans                http://www.springframework.org/schema/beans/spring-beans.xsd
          http://cxf.apache.org/jaxrs                                http://cxf.apache.org/schemas/jaxrs.xsd
          http://cxf.apache.org/transports/http-jetty/configuration  http://cxf.apache.org/schemas/configuration/http-jetty.xsd
-         http://cxf.apache.org/configuration/security               http://cxf.apache.org/schemas/configuration/security.xsd">
+         http://cxf.apache.org/configuration/security               http://cxf.apache.org/schemas/configuration/security.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="2" location="file:${CATALINA_HOME}/conf/appconfig/base/ru.forxy.crypto.properties" />
+    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="1" location="file:${CATALINA_HOME}/conf/appconfig/env/${ru.forxy.crypto.env}/ru.forxy.crypto.properties" />
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
-    <import resource="classpath:META-INF/cxf/cxf-extension-xml.xml"/>
-    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
 
     <httpj:engine-factory id="port-9095-crypto-config" bus="cxf">
         <httpj:engine port="9095">
             <httpj:tlsServerParameters>
-                <sec:keyManagers keyPassword="Pa55w0rd4CryprtoService">
-                    <sec:keyStore type="JKS" password="Pa55w0rd4CryprtoService"
-                                  resource="cryptoService.jks"/>
+                <sec:keyManagers keyPassword="${ru.forxy.crypto.SSLConfig/keyStorePassword}">
+                    <sec:keyStore type="JKS" password="${ru.forxy.crypto.SSLConfig/keyStorePassword}"
+                                  resource="${ru.forxy.crypto.SSLConfig/keyStoreFile}"/>
                 </sec:keyManagers>
                 <sec:trustManagers>
-                    <sec:keyStore type="JKS" password="Pa55w0rd4CryprtoService"
-                                  resource="cryptoServiceTrustStore.jks"/>
+                    <sec:keyStore type="JKS" password="${ru.forxy.crypto.SSLConfig/trustStorePasswkrd}"
+                                  resource="${ru.forxy.crypto.SSLConfig/trustStoreFile}"/>
                 </sec:trustManagers>
                 <sec:cipherSuitesFilter>
                     <sec:include>.*_EXPORT_.*</sec:include>
@@ -44,7 +45,7 @@
     </jaxrs:server>
 
     <bean id="cryptoServiceImpl" class="ru.forxy.service.CryptoServiceImpl">
-        <constructor-arg name="password" value="Crypt0A1g0r1thmPa55w0rd"/>
+        <constructor-arg name="password" value="${ru.forxy.service.CryptoServiceImpl/password}"/>
     </bean>
 
 </beans>

@@ -1,6 +1,9 @@
 package ru.forxy.service;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -10,6 +13,8 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.*;
 
 public class CryptoServiceImpl implements ICryptoService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CryptoServiceImpl.class);
 
     private static final String CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
     private static final String DIGEST_ALGORITHM = "SHA-256";
@@ -41,9 +46,9 @@ public class CryptoServiceImpl implements ICryptoService {
             secretKey = new SecretKeySpec(key, SECRET_KEY_SPEC);
 
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            LOGGER.error("Algorithm not found: " + CIPHER_ALGORITHM, e);
         } catch (NoSuchPaddingException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            LOGGER.error("Invalid crypto algorithm was set in the CryptoService implementation: " + CIPHER_ALGORITHM, e);
         }
     }
 
@@ -54,13 +59,13 @@ public class CryptoServiceImpl implements ICryptoService {
                 cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
                 return cipher.doFinal(decrypted.getBytes());
             } catch (IllegalBlockSizeException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                LOGGER.error("Invalid data size", e);
             } catch (BadPaddingException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                LOGGER.error("Invalid cipher state", e);
             } catch (InvalidKeyException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                LOGGER.error("Invalid key", e);
             } catch (InvalidAlgorithmParameterException e) {
-                e.printStackTrace();
+                LOGGER.error("Invalid parameter", e);
             }
         }
         return null;
@@ -73,13 +78,13 @@ public class CryptoServiceImpl implements ICryptoService {
                 cipher.init(Cipher.DECRYPT_MODE, secretKey, ivSpec);
                 return new String(cipher.doFinal(encrypted));
             } catch (IllegalBlockSizeException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                LOGGER.error("Invalid data size", e);
             } catch (BadPaddingException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                LOGGER.error("Invalid cipher state", e);
             } catch (InvalidKeyException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                LOGGER.error("Invalid key", e);
             } catch (InvalidAlgorithmParameterException e) {
-                e.printStackTrace();
+                LOGGER.error("Invalid parameter", e);
             }
         }
         return null;

@@ -25,6 +25,7 @@ repositories {
         url "file://$System.env.OUTPUT_ROOT/deliverables/"
         layout "pattern", {
             artifact "[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"
+            m2compatible = true
         }
     }
 
@@ -57,8 +58,6 @@ dependencies {
 
     // --------------------- CXF -----------------------------------------
     compile "org.apache.cxf:cxf-bundle-jaxrs:${rev_cxf}"
-    compile "org.apache.cxf:cxf-rt-rs-security-xml:${rev_cxf}"
-    compile "org.codehaus.jettison:jettison:${rev_jettison}"
 
     // --------------------- SPRING --------------------------------------
     compile "org.springframework:spring-core:${rev_spring}"

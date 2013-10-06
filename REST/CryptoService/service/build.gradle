@@ -22,7 +22,71 @@ buildscript {
     }
 }
 
+
+// ========= Tomcat Plugin ==============================================
+
 tomcatRunWar { contextPath = 'CryptoService' }
+
+
+// ========= Environment ================================================
+
+import org.apache.tools.ant.filters.ReplaceTokens
+
+if (project.hasProperty('env')) {
+    def env = project.getProperty("env")
+
+    task copyEnvConfigApp(type: Copy) {
+        from 'appconfig'
+        into "$System.env.TOMCAT_HOME/conf/appconfig"
+        include '**/*.properties'
+        include '**/*.jks'
+        exclude '**/*.bat'
+    }
+
+    task copyEnvConfigTomcat(type: Copy) {
+        from "appconfig/env/$env/setenv.bat"
+        into "$System.env.TOMCAT_HOME/bin"
+    }
+
+    task copyWebContextConfig(type: Copy) {
+        from "appconfig/CryptoService.xml"
+        into "$System.env.TOMCAT_HOME/conf/Catalina/localhost"
+        filter(ReplaceTokens, tokens: [war: war.archiveName])
+    }
+
+    task setupEnv {
+        dependsOn copyEnvConfigApp,copyEnvConfigTomcat,copyWebContextConfig
+    }
+}
+
+
+// ========== Deploy ====================================================
+
+task deploy(type: Copy) {
+    dependsOn war
+    if (project.hasProperty('env')) {
+        dependsOn setupEnv
+    }
+    from war
+    into "$System.env.TOMCAT_HOME/warfiles"
+}
+
+
+// ========== Clean Deployment Configuration ============================
+
+task cleanTomcat(type: Delete) {
+    FileTree tree = fileTree("$System.env.TOMCAT_HOME") {
+        include "bin/setenv.bat",
+                "conf/Catalina/localhost/CryptoService.xml",
+                "warfiles/ru.forxy.crypto*.war",
+                "conf/appconfig/**/ru.forxy.crypto*.properties",
+                "conf/appconfig/**/cryptoService*.jks"
+    }
+    delete tree
+}
+
+
+// ========== Dependencies ==============================================
 
 dependencies {
     // --------------------- PROJECTS ------------------------------------
@@ -33,7 +97,6 @@ dependencies {
     compile "ch.qos.logback:logback-core:${rev_logback}"
     compile "ch.qos.logback:logback-classic:${rev_logback}"
     compile "org.slf4j:slf4j-api:${rev_slf4j}"
-
 
     // --------------------- SPRING --------------------------------------
     compile "org.springframework:spring-core:${rev_spring}"
