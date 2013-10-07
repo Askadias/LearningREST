@@ -1,6 +1,5 @@
 apply plugin: 'java'
 apply plugin: 'war'
-apply plugin: 'tomcat'
 
 sourceSets {
     main {
@@ -12,20 +11,6 @@ sourceSets {
         resources { srcDir 'src/java' }
     }
 }
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath "org.gradle.api.plugins:gradle-tomcat-plugin:${rev_tomcat_plugin}"
-    }
-}
-
-
-// ========= Tomcat Plugin ==============================================
-
-tomcatRunWar { contextPath = 'CryptoService' }
 
 
 // ========= Environment ================================================
@@ -106,13 +91,6 @@ dependencies {
 
     // ===================== TEST ========================================
     testCompile "junit:junit:${rev_junit}"
-
-    // ===================== TOMCAT ======================================
-    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${rev_tomcat}",
-            "org.apache.tomcat.embed:tomcat-embed-logging-juli:${rev_tomcat}"
-    tomcat("org.apache.tomcat.embed:tomcat-embed-jasper:${rev_tomcat}") {
-        exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
-    }
 }
 
 eclipse {

@@ -1,5 +1,9 @@
 apply plugin: 'java'
+apply plugin: 'maven'
 apply plugin: 'war'
+apply plugin: 'eclipse'
+
+group = "forxy"
 
 sourceSets {
     main {
@@ -9,6 +13,29 @@ sourceSets {
     test {
         java { srcDir 'src/test' }
         resources { srcDir 'src/test' }
+    }
+}
+
+if (System.env.OUTPUT_ROOT) {
+    buildDir = file("$System.env.OUTPUT_ROOT/$project.name")
+}
+
+repositories {
+    mavenCentral()
+    ivy {
+        url "file://$System.env.OUTPUT_ROOT/deliverables/"
+        layout "pattern", {
+            artifact "[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"
+            m2compatible = true
+        }
+    }
+
+    uploadArchives {
+        repositories {
+            ivy {
+                url "file://$System.env.OUTPUT_ROOT/deliverables/"
+            }
+        }
     }
 }
 
@@ -24,6 +51,7 @@ if (project.hasProperty('env')) {
         from 'appconfig'
         into "$System.env.TOMCAT_HOME/conf/appconfig"
         include '**/*.properties'
+        include '**/*.jks'
         exclude '**/*.bat'
     }
 
@@ -33,7 +61,7 @@ if (project.hasProperty('env')) {
     }
 
     task copyWebContextConfig(type: Copy) {
-        from "appconfig/UserService.xml"
+        from "appconfig/Web.xml"
         into "$System.env.TOMCAT_HOME/conf/Catalina/localhost"
         filter(ReplaceTokens, tokens: [war: war.archiveName])
     }
@@ -60,9 +88,11 @@ task deploy(type: Copy) {
 
 task cleanTomcat(type: Delete) {
     FileTree tree = fileTree("$System.env.TOMCAT_HOME") {
-        include "conf/Catalina/localhost/UserService.xml",
-                "warfiles/ru.forxy.user*.war",
-                "conf/appconfig/**/ru.forxy.user*.properties"
+        include "conf/Catalina/localhost/Web.xml",
+                "warfiles/ru.forxy.web*.war",
+                "conf/appconfig/**/ru.forxy.web*.properties",
+                "conf/appconfig/**/cryptoClient*.jks",
+                "conf/appconfig/**/web*.jks"
     }
     delete tree
 }
@@ -71,14 +101,25 @@ task cleanTomcat(type: Delete) {
 // ========== Dependencies ==============================================
 
 dependencies {
-    // --------------------- PROJECTS ------------------------------------
-    compile project(":ru.forxy.user.api")
+    // --------------------- FORXY ---------------------------------------
+    compile("forxy:ru.forxy.crypto.api:${rev_crypto_api}") {
+        transitive = true
+    }
+    compile("forxy:ru.forxy.user.api:${rev_user_api}") {
+        transitive = true
+    }
+    compile("forxy:ru.forxy.photo.api:${rev_photo_api}") {
+        transitive = true
+    }
 
     // --------------------- COMMON --------------------------------------
     compile "commons-collections:commons-collections:${rev_common_collections}"
     compile "ch.qos.logback:logback-core:${rev_logback}"
     compile "ch.qos.logback:logback-classic:${rev_logback}"
     compile "org.slf4j:slf4j-api:${rev_slf4j}"
+
+    // --------------------- CXF -----------------------------------------
+    compile "org.apache.cxf:cxf-bundle-jaxrs:${rev_cxf}"
 
     // --------------------- SPRING --------------------------------------
     compile "org.springframework:spring-core:${rev_spring}"
@@ -88,9 +129,5 @@ dependencies {
     compile "org.springframework:spring-test:${rev_spring}"
 
     // ===================== TEST ========================================
-    testCompile "junit:junit:${rev_junit}"
-}
-
-eclipse {
-    project { name = 'ru.forxy.user.service' }
+    compile "junit:junit:${rev_junit}"
 }

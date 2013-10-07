@@ -3,33 +3,31 @@ package ru.forxy.user;
 import ru.forxy.user.pojo.User;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @Path("/")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public interface IUserService {
 
     @GET
     @Path("/users")
-    @Produces("application/json")
     List<User> getUsers();
 
     @GET
-    @Path("/users/{email}.{password}")
-    @Consumes("application/json")
-    @Produces("application/json")
+    @Path("/user/{email}.{password}")
     User login(@PathParam("email") String email, @PathParam("password") String password);
 
     @PUT
-    @Path("/users")
-    @Consumes("application/json")
+    @Path("/user")
     void updateUser(User user);
 
     @POST
-    @Path("/users")
-    @Consumes("application/json")
+    @Path("/user")
     void addUser(User user);
 
     @DELETE
-    @Path("/users/{email}")
+    @Path("/user/{email}")
     void deleteUser(@PathParam("email") String email);
 }
