@@ -14,8 +14,6 @@
 
     <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="2"
                                   location="classpath:appconfig/base/ru.forxy.test.properties"/>
-    <!--<context:property-placeholder local-override="true" ignore-resource-not-found="true" order="1"
-                                  location="classpath:appconfig/env/${env}/ru.forxy.test.properties"/>-->
     <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="1"
                                   location="classpath:appconfig/env/${env}/ru.forxy.test.properties"/>
 
@@ -60,18 +58,23 @@
           factory-bean="cryptoServiceClientFactory"
           factory-method="create"/>
 
-
     <!-- =======================================
-           User Service Client Configuration
+          JSON Configuration
          ======================================= -->
 
     <util:map id="jsonNamespaceMap" map-class="java.util.Hashtable">
         <entry key="http://www.example.org/users" value="u"/>
+        <entry key="http://www.example.org/photos" value="p"/>
     </util:map>
 
     <bean id="jsonProvider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
         <property name="namespaceMap" ref="jsonNamespaceMap"/>
     </bean>
+
+
+    <!-- =======================================
+           User Service Client Configuration
+         ======================================= -->
 
     <bean id="userServiceClientFactory"
           class="org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean">
@@ -83,6 +86,23 @@
     <bean id="userServiceClient"
           class="ru.forxy.user.IUserService"
           factory-bean="userServiceClientFactory"
+          factory-method="create"/>
+
+
+    <!-- =======================================
+           Photo Service Client Configuration
+         ======================================= -->
+
+    <bean id="photoServiceClientFactory"
+          class="org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean">
+        <property name="serviceClass" value="ru.forxy.photo.IPhotoService"/>
+        <property name="address" value="${ru.forxy.photo.IPhotoService/url}"/>
+        <property name="provider" ref="jsonProvider"/>
+    </bean>
+
+    <bean id="photoServiceClient"
+          class="ru.forxy.photo.IPhotoService"
+          factory-bean="photoServiceClientFactory"
           factory-method="create"/>
 
 </beans>
