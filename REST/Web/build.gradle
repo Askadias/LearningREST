@@ -127,6 +127,8 @@ dependencies {
     compile "org.springframework:spring-context:${rev_spring}"
     compile "org.springframework:spring-web:${rev_spring}"
     compile "org.springframework:spring-test:${rev_spring}"
+    compile "org.springframework:spring-webmvc:${rev_spring}"
+
 
     // ===================== TEST ========================================
     compile "junit:junit:${rev_junit}"

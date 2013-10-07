@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:http="http://cxf.apache.org/transports/http/configuration"
+       xmlns:sec="http://cxf.apache.org/configuration/security"
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/beans            http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/util             http://www.springframework.org/schema/util/spring-util.xsd
+         http://cxf.apache.org/transports/http/configuration    http://cxf.apache.org/schemas/configuration/http-conf.xsd
+         http://cxf.apache.org/configuration/security           http://cxf.apache.org/schemas/configuration/security.xsd"
+       default-lazy-init="false">
+
+    <import resource="classpath:META-INF/cxf/cxf.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+
+
+    <!-- =======================================
+          Crypto Service Client Configuration
+         =======================================  -->
+
+    <http:conduit name="{http://crypto.forxy.ru/}ICryptoService.http-conduit">
+        <http:tlsClientParameters>
+            <sec:keyManagers keyPassword="${ru.forxy.crypto.SSLConfig/keyStorePassword}">
+                <sec:keyStore type="JKS" password="${ru.forxy.crypto.SSLConfig/keyStorePassword}"
+                              resource="${ru.forxy.crypto.SSLConfig/keyStoreFile}"/>
+            </sec:keyManagers>
+            <sec:trustManagers>
+                <sec:keyStore type="JKS" password="${ru.forxy.crypto.SSLConfig/trustStorePassword}"
+                              resource="${ru.forxy.crypto.SSLConfig/trustStoreFile}"/>
+            </sec:trustManagers>
+            <sec:cipherSuitesFilter>
+                <sec:include>.*_EXPORT_.*</sec:include>
+                <sec:include>.*_EXPORT1024_.*</sec:include>
+                <sec:include>.*_WITH_DES_.*</sec:include>
+                <sec:include>.*_WITH_AES_.*</sec:include>
+                <sec:include>.*_WITH_NULL_.*</sec:include>
+                <sec:exclude>.*_DH_anon_.*</sec:exclude>
+            </sec:cipherSuitesFilter>
+        </http:tlsClientParameters>
+        <http:client AutoRedirect="true" Connection="Keep-Alive"/>
+    </http:conduit>
+
+    <bean id="cryptoServiceClientFactory"
+          class="org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean">
+        <property name="serviceClass" value="ru.forxy.crypto.ICryptoService"/>
+        <property name="address" value="${ru.forxy.crypto.ICryptoService/url}"/>
+    </bean>
+
+    <bean id="cryptoServiceClient"
+          class="ru.forxy.crypto.ICryptoService"
+          factory-bean="cryptoServiceClientFactory"
+          factory-method="create"/>
+
+
+    <!-- =======================================
+           User Service Client Configuration
+         ======================================= -->
+
+    <util:map id="jsonNamespaceMap" map-class="java.util.Hashtable">
+        <entry key="http://www.example.org/users" value="u"/>
+    </util:map>
+
+    <bean id="jsonProvider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
+        <property name="namespaceMap" ref="jsonNamespaceMap"/>
+    </bean>
+
+    <bean id="userServiceClientFactory"
+          class="org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean">
+        <property name="serviceClass" value="ru.forxy.user.IUserService"/>
+        <property name="address" value="${ru.forxy.user.IUserService/url}"/>
+        <property name="provider" ref="jsonProvider"/>
+    </bean>
+
+    <bean id="userServiceClient"
+          class="ru.forxy.user.IUserService"
+          factory-bean="userServiceClientFactory"
+          factory-method="create"/>
+
+</beans>
