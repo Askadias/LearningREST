@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@RequestMapping("oauth")
 public class LoginController {
 
     @RequestMapping(value = "login", method = RequestMethod.GET)

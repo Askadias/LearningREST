@@ -1,0 +1,4 @@
+<Context 
+  docBase="${catalina.base}\warfiles\ru.forxy.web-1.0.0.war"
+  reloadable="true" 
+/>
