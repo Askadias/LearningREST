@@ -31,8 +31,10 @@
   <role rolename="role1"/>
   <role rolename="manager-gui"/>
   <role rolename="admin-gui"/>
+  <role rolename="crypto"/>
   <user username="tomcat" password="tomcat" roles="admin-gui,manager-gui,tomcat,role1"/>
   <user username="both" password="tomcat" roles="tomcat,role1"/>
   <user username="role1" password="tomcat" roles="role1"/>
+  <user username="CN=Crypto Client, OU=CryptoClient, O=Forxy, C=BY" password="null" roles="crypto"/>
 
 </tomcat-users>
