@@ -18,15 +18,15 @@
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
 
-    <httpj:engine-factory id="port-9095-crypto-config" bus="cxf">
-        <httpj:engine port="9095">
+    <httpj:engine-factory id="port-9090-crypto-config" bus="cxf">
+        <httpj:engine port="9090">
             <httpj:tlsServerParameters>
                 <sec:keyManagers keyPassword="${ru.forxy.crypto.SSLConfig/keyStorePassword}">
-                    <sec:keyStore type="JKS" password="${ru.forxy.crypto.SSLConfig/keyStorePassword}"
+                    <sec:keyStore type="${ru.forxy.crypto.SSLConfig/keyStoreType}" password="${ru.forxy.crypto.SSLConfig/keyStorePassword}"
                                   file="${ru.forxy.crypto.SSLConfig/keyStoreFile}"/>
                 </sec:keyManagers>
                 <sec:trustManagers>
-                    <sec:keyStore type="JKS" password="${ru.forxy.crypto.SSLConfig/trustStorePassword}"
+                    <sec:keyStore type="${ru.forxy.crypto.SSLConfig/trustStoreType}" password="${ru.forxy.crypto.SSLConfig/trustStorePassword}"
                                   file="${ru.forxy.crypto.SSLConfig/trustStoreFile}"/>
                 </sec:trustManagers>
                 <sec:cipherSuitesFilter>
@@ -42,7 +42,7 @@
         </httpj:engine>
     </httpj:engine-factory>
 
-    <jaxrs:server name="cryptoService" address="/" depends-on="port-9095-crypto-config">
+    <jaxrs:server name="cryptoService" address="/" depends-on="port-9090-crypto-config">
         <jaxrs:serviceBeans>
             <ref bean="cryptoServiceImpl"/>
         </jaxrs:serviceBeans>

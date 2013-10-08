@@ -28,11 +28,11 @@
     <http:conduit name="{http://crypto.forxy.ru/}ICryptoService.http-conduit">
         <http:tlsClientParameters>
             <sec:keyManagers keyPassword="${ru.forxy.crypto.SSLConfig/keyStorePassword}">
-                <sec:keyStore type="JKS" password="${ru.forxy.crypto.SSLConfig/keyStorePassword}"
+                <sec:keyStore type="${ru.forxy.crypto.SSLConfig/keyStoreType}" password="${ru.forxy.crypto.SSLConfig/keyStorePassword}"
                               resource="${ru.forxy.crypto.SSLConfig/keyStoreFile}"/>
             </sec:keyManagers>
             <sec:trustManagers>
-                <sec:keyStore type="JKS" password="${ru.forxy.crypto.SSLConfig/trustStorePassword}"
+                <sec:keyStore type="${ru.forxy.crypto.SSLConfig/trustStoreType}" password="${ru.forxy.crypto.SSLConfig/trustStorePassword}"
                               resource="${ru.forxy.crypto.SSLConfig/trustStoreFile}"/>
             </sec:trustManagers>
             <sec:cipherSuitesFilter>
