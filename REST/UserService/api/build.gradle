@@ -8,6 +8,10 @@ sourceSets {
 }
 
 dependencies {
+    // --------------------- FORXY ---------------------------------------
+    compile("forxy:ru.forxy.common.api:${rev_forxy_common}") {
+        transitive = true
+    }
     // --------------------- CXF -----------------------------------------
     compile "org.apache.cxf:cxf-bundle-jaxrs:${rev_cxf}"
     compile "org.codehaus.jettison:jettison:${rev_jettison}"

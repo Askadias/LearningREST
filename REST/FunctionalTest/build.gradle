@@ -48,13 +48,13 @@ repositories {
 
 dependencies {
     // --------------------- FORXY ---------------------------------------
-    compile("forxy:ru.forxy.crypto.api:${rev_crypto_api}") {
+    compile("forxy:ru.forxy.crypto.api:${rev_forxy_crypto}") {
         transitive = true
     }
-    compile("forxy:ru.forxy.user.api:${rev_user_api}") {
+    compile("forxy:ru.forxy.user.api:${rev_forxy_user}") {
         transitive = true
     }
-    compile("forxy:ru.forxy.photo.api:${rev_photo_api}") {
+    compile("forxy:ru.forxy.photo.api:${rev_forxy_photo}") {
         transitive = true
     }
 

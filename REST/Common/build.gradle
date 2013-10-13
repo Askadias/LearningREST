@@ -1,0 +1,31 @@
+apply plugin: 'eclipse'
+
+allprojects {
+    apply plugin: 'maven'
+    apply plugin: 'eclipse'
+
+    group = "forxy"
+
+    repositories {
+        mavenCentral()
+        ivy {
+            url "file://$System.env.OUTPUT_ROOT/deliverables/"
+            layout "pattern", {
+                artifact "[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"
+                m2compatible = true
+            }
+        }
+
+        uploadArchives {
+            repositories {
+                ivy {
+                    url "file://$System.env.OUTPUT_ROOT/deliverables/"
+                }
+            }
+        }
+    }
+
+    if (System.env.OUTPUT_ROOT) {
+        project.buildDir = file("$System.env.OUTPUT_ROOT/$project.name")
+    }
+}

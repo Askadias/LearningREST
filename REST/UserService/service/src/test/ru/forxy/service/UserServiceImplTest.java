@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import ru.forxy.user.pojo.User;
 import ru.forxy.user.IUserService;
+import ru.forxy.user.pojo.UserServiceResponse;
 
 import java.util.List;
 
@@ -14,19 +15,22 @@ public class UserServiceImplTest {
 
     @Test
     public void testAddDeleteUser() {
-        userService.addUser(new User("xander@gmail.com", "xander"));
-        User user = userService.login("xander@gmail.com", "xander");
-        Assert.assertNotNull(user);
-        Assert.assertEquals("xander@gmail.com", user.getEmail());
+        userService.createUser(new User("xander@gmail.com", new byte[]{}));
+        UserServiceResponse response = userService.login("xander@gmail.com", new byte[]{});
+        Assert.assertNotNull(response);
+        Assert.assertNotNull(response.getUsers());
+        Assert.assertTrue(CollectionUtils.isNotEmpty(response.getUsers()));
+        Assert.assertEquals("xander@gmail.com", response.getUsers().get(0).getEmail());
         userService.deleteUser("xander@gmail.com");
-        user = userService.login("xander@gmail.com", "xander");
-        Assert.assertNull(user);
+        response = userService.login("xander@gmail.com", new byte[]{});
+        Assert.assertNull(response.getUsers());
     }
 
     @Test
     public void testGetAllUsers() {
-        List<User> users = userService.getUsers();
-        Assert.assertNotNull(users);
-        Assert.assertTrue(CollectionUtils.isNotEmpty(users));
+        UserServiceResponse response = userService.getUsers();
+        Assert.assertNotNull(response);
+        Assert.assertNotNull(response.getUsers());
+        Assert.assertTrue(CollectionUtils.isNotEmpty(response.getUsers()));
     }
 }

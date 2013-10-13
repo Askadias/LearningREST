@@ -39,7 +39,6 @@ repositories {
     }
 }
 
-
 // ========= Environment ================================================
 
 import org.apache.tools.ant.filters.ReplaceTokens
@@ -67,12 +66,21 @@ if (project.hasProperty('env')) {
     }
 
     task setupEnv {
-        dependsOn copyEnvConfigApp,copyEnvConfigTomcat,copyWebContextConfig
+        dependsOn copyEnvConfigApp, copyEnvConfigTomcat, copyWebContextConfig
     }
 }
 
-
 // ========== Deploy ====================================================
+
+war {
+    manifest {
+        attributes(
+                'Product': rootProject.name,
+                'Version': version,
+                'Built-On': new Date().format('yyyy-mm-dd HH:MM:ss')
+        )
+    }
+}
 
 task deploy(type: Copy) {
     dependsOn war
@@ -82,7 +90,6 @@ task deploy(type: Copy) {
     from war
     into "$System.env.TOMCAT_HOME/warfiles"
 }
-
 
 // ========== Clean Deployment Configuration ============================
 
@@ -97,18 +104,20 @@ task cleanTomcat(type: Delete) {
     delete tree
 }
 
-
 // ========== Dependencies ==============================================
 
 dependencies {
     // --------------------- FORXY ---------------------------------------
-    compile("forxy:ru.forxy.crypto.api:${rev_crypto_api}") {
+    compile("forxy:ru.forxy.crypto.api:${rev_forxy_crypto}") {
         transitive = true
     }
-    compile("forxy:ru.forxy.user.api:${rev_user_api}") {
+    compile("forxy:ru.forxy.user.api:${rev_forxy_user}") {
         transitive = true
     }
-    compile("forxy:ru.forxy.photo.api:${rev_photo_api}") {
+    compile("forxy:ru.forxy.photo.api:${rev_forxy_photo}") {
+        transitive = true
+    }
+    compile("forxy:ru.forxy.common:${rev_forxy_common}") {
         transitive = true
     }
 
@@ -128,7 +137,6 @@ dependencies {
     compile "org.springframework:spring-web:${rev_spring}"
     compile "org.springframework:spring-test:${rev_spring}"
     compile "org.springframework:spring-webmvc:${rev_spring}"
-
 
     // ===================== TEST ========================================
     compile "junit:junit:${rev_junit}"

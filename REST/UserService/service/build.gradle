@@ -12,7 +12,6 @@ sourceSets {
     }
 }
 
-
 // ========= Environment ================================================
 
 import org.apache.tools.ant.filters.ReplaceTokens
@@ -39,12 +38,20 @@ if (project.hasProperty('env')) {
     }
 
     task setupEnv {
-        dependsOn copyEnvConfigApp,copyEnvConfigTomcat,copyWebContextConfig
+        dependsOn copyEnvConfigApp, copyEnvConfigTomcat, copyWebContextConfig
     }
 }
 
-
 // ========== Deploy ====================================================
+war {
+    manifest {
+        attributes(
+                'Product': rootProject.name,
+                'Version': version,
+                'Built-On': new Date().format('yyyy-mm-dd HH:MM:ss')
+        )
+    }
+}
 
 task deploy(type: Copy) {
     dependsOn war
@@ -54,7 +61,6 @@ task deploy(type: Copy) {
     from war
     into "$System.env.TOMCAT_HOME/warfiles"
 }
-
 
 // ========== Clean Deployment Configuration ============================
 
@@ -67,18 +73,21 @@ task cleanTomcat(type: Delete) {
     delete tree
 }
 
-
 // ========== Dependencies ==============================================
 
 dependencies {
-    // --------------------- PROJECTS ------------------------------------
+    // --------------------- FORXY ---------------------------------------
     compile project(":ru.forxy.user.api")
+    compile("forxy:ru.forxy.common:${rev_forxy_common}") {
+        transitive = true
+    }
 
     // --------------------- COMMON --------------------------------------
     compile "commons-collections:commons-collections:${rev_common_collections}"
     compile "ch.qos.logback:logback-core:${rev_logback}"
     compile "ch.qos.logback:logback-classic:${rev_logback}"
     compile "org.slf4j:slf4j-api:${rev_slf4j}"
+    compile "org.mongodb:mongo-java-driver:2.11.3"
 
     // --------------------- SPRING --------------------------------------
     compile "org.springframework:spring-core:${rev_spring}"

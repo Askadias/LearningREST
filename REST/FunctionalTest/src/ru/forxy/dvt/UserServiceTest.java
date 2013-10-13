@@ -12,7 +12,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import ru.forxy.user.IUserService;
 import ru.forxy.user.pojo.User;
+import ru.forxy.user.pojo.UserServiceResponse;
 
+import java.util.Arrays;
 import java.util.List;
 
 @ContextConfiguration(locations =
@@ -26,26 +28,27 @@ public class UserServiceTest extends AbstractJUnit4SpringContextTests {
     private IUserService userService;
 
     @Test
-    public void testGetAllUsers() {
-        List<User> users = userService.getUsers();
-        Assert.assertTrue(CollectionUtils.isNotEmpty(users));
-        LOGGER.info("Users successfully retrieved " + users);
+    @Ignore
+    public void testAddDeleteUser() {
+        userService.createUser(new User("xander@gmail.com", new byte[]{}));
+        UserServiceResponse response = userService.login("xander@gmail.com", new byte[]{});
+        Assert.assertNotNull(response);
+        Assert.assertNotNull(response.getUsers());
+        Assert.assertTrue(CollectionUtils.isNotEmpty(response.getUsers()));
+        LOGGER.info("User  has been successfully created: {}", response.getUsers().get(0));
+        Assert.assertEquals("xander@gmail.com", response.getUsers().get(0).getEmail());
+        userService.deleteUser("xander@gmail.com");
+        response = userService.login("xander@gmail.com", new byte[]{});
+        Assert.assertNull(response.getUsers());
+        LOGGER.info("User has been successfully removed");
     }
 
     @Test
-    @Ignore
-    public void addUser() {
-        User user = userService.login("xander@gmail.com", "xander");
-        Assert.assertNull(user);
-        LOGGER.info("User(0) not yet exists: {}", user);
-        User newUser = new User("xander@gmail.com", "xander");
-        userService.addUser(newUser);
-        user = userService.login("xander@gmail.com", "xander");
-        Assert.assertNotNull(user);
-        LOGGER.info("User(0) successfully added: {}", user);
-        userService.deleteUser("xander@gmail.com");
-        user = userService.login("xander@gmail.com", "xander");
-        Assert.assertNull(user);
-        LOGGER.info("User(0) successfully removed: {}", user);
+    public void testGetAllUsers() {
+        UserServiceResponse response = userService.getUsers();
+        Assert.assertNotNull(response);
+        Assert.assertNotNull(response.getUsers());
+        Assert.assertTrue(CollectionUtils.isNotEmpty(response.getUsers()));
+        LOGGER.info("Users retrieved");
     }
 }

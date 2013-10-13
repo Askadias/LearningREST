@@ -10,6 +10,10 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
+    <listener>
+        <listener-class>ru.forxy.common.SystemPropertiesSupportListener</listener-class>
+    </listener>
+
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath*:ru/forxy/spring-context.xml</param-value>
