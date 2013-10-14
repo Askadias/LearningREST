@@ -1,16 +1,24 @@
 package ru.forxy.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.forxy.common.pojo.ResponseMessage;
+import ru.forxy.db.dao.IUserDAO;
 import ru.forxy.user.IUserService;
 import ru.forxy.user.pojo.User;
 import ru.forxy.user.pojo.UserServiceResponse;
 
+import javax.ws.rs.NotFoundException;
 import javax.xml.ws.WebServiceException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class UserServiceImpl implements IUserService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+
+    @Autowired
+    IUserDAO userDAO;
 
     private static Map<String, User> users = new HashMap<String, User>(3);
 
@@ -24,32 +32,36 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public UserServiceResponse getUsers() {
-        return new UserServiceResponse(new ArrayList<User>(users.values()));
+        return new UserServiceResponse((List<User>) userDAO.findAll());
     }
 
     @Override
-    public UserServiceResponse login(String email, byte[] password) {
-        return new UserServiceResponse(users.get(email));
+    public UserServiceResponse login(User login) {
+        User user = userDAO.findOne(login.getEmail());
+        if (user != null && Arrays.equals(login.getPassword(), user.getPassword())) {
+            return new UserServiceResponse(user);
+        } else {
+            return new UserServiceResponse(new NotFoundException());
+        }
     }
 
     @Override
     public UserServiceResponse updateUser(User user) {
         if (user.getEmail() != null && user.getPassword() != null) {
-            user.setPassword(user.getPassword());
-            users.put(user.getEmail(), user);
+            userDAO.save(user);
             final UserServiceResponse response = new UserServiceResponse();
             response.addMessage(new ResponseMessage("User " + user.getEmail() + " successfully updated."));
             return response;
         } else {
-            return new UserServiceResponse(new WebServiceException("User's email is null"));
+            return new UserServiceResponse(new WebServiceException("User's email or password are empty"));
         }
     }
 
     @Override
     public UserServiceResponse createUser(User user) {
         if (user.getEmail() != null) {
-            if (!users.containsKey(user.getEmail())) {
-                users.put(user.getEmail(), user);
+            if (!userDAO.exists(user.getEmail())) {
+                userDAO.save(user);
                 final UserServiceResponse response = new UserServiceResponse();
                 response.addMessage(new ResponseMessage("User " + user.getEmail() + " successfully created."));
                 return response;
@@ -63,17 +75,9 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public UserServiceResponse deleteUser(String email) {
-        users.remove(email);
+        userDAO.delete(email);
         final UserServiceResponse response = new UserServiceResponse();
         response.addMessage(new ResponseMessage("User " + email + " successfully deleted."));
-        return response;
-    }
-
-    @Override
-    public UserServiceResponse deleteUser(User user) {
-        users.remove(user.getEmail());
-        final UserServiceResponse response = new UserServiceResponse();
-        response.addMessage(new ResponseMessage("User " + user.getEmail() + " successfully deleted."));
         return response;
     }
 }

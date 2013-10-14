@@ -28,17 +28,17 @@ public class UserServiceTest extends AbstractJUnit4SpringContextTests {
     private IUserService userService;
 
     @Test
-    @Ignore
     public void testAddDeleteUser() {
-        userService.createUser(new User("xander@gmail.com", new byte[]{}));
-        UserServiceResponse response = userService.login("xander@gmail.com", new byte[]{});
+        User xander = new User("xander@gmail.com", new byte[]{});
+        userService.createUser(xander);
+        UserServiceResponse response = userService.login(xander);
         Assert.assertNotNull(response);
         Assert.assertNotNull(response.getUsers());
         Assert.assertTrue(CollectionUtils.isNotEmpty(response.getUsers()));
         LOGGER.info("User  has been successfully created: {}", response.getUsers().get(0));
         Assert.assertEquals("xander@gmail.com", response.getUsers().get(0).getEmail());
-        userService.deleteUser("xander@gmail.com");
-        response = userService.login("xander@gmail.com", new byte[]{});
+        userService.deleteUser(xander.getEmail());
+        response = userService.login(xander);
         Assert.assertNull(response.getUsers());
         LOGGER.info("User has been successfully removed");
     }

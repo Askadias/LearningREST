@@ -83,6 +83,9 @@ dependencies {
         transitive = true
     }
 
+    // --------------------- OBJECT VALIDATION ---------------------------
+    compile "net.sf.oval:oval:${rev_oval}"
+
     // --------------------- COMMON --------------------------------------
     compile "commons-collections:commons-collections:${rev_common_collections}"
     compile "ch.qos.logback:logback-core:${rev_logback}"

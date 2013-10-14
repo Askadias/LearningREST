@@ -16,6 +16,7 @@
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+    <import resource="classpath:ru/forxy/dao-spring-context.xml"/>
 
     <util:map id="jsonNamespaceMap" map-class="java.util.Hashtable">
         <entry key="http://www.forxy.ru/users" value="u"/>

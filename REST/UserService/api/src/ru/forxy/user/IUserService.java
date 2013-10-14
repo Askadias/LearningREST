@@ -5,7 +5,6 @@ import ru.forxy.user.pojo.UserServiceResponse;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
 @Path("/")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -16,23 +15,19 @@ public interface IUserService {
     @Path("/users")
     UserServiceResponse getUsers();
 
-    @GET
-    @Path("/user/{email}/{password}")
-    UserServiceResponse login(@PathParam("email") String email, @PathParam("password") byte[] password);
+    @POST
+    @Path("/user/login")
+    UserServiceResponse login(User login);
 
-    @PUT
-    @Path("/user")
+    @POST
+    @Path("/user/update")
     UserServiceResponse updateUser(User user);
 
     @POST
-    @Path("/user")
+    @Path("/user/create")
     UserServiceResponse createUser(User user);
 
     @DELETE
-    @Path("/user/{email}")
+    @Path("/user/${email}/")
     UserServiceResponse deleteUser(@PathParam("email") String email);
-
-    @DELETE
-    @Path("/user")
-    UserServiceResponse deleteUser(User user);
 }
