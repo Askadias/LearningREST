@@ -8,13 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
+import ru.forxy.BaseSpringContextTest;
 import ru.forxy.crypto.ICryptoService;
 
 import java.util.Arrays;
 
-@ContextConfiguration(locations =
-        {"classpath:ru/forxy/spring-context.xml"})
-public class CryptoServiceTest extends AbstractJUnit4SpringContextTests {
+public class CryptoServiceTest extends BaseSpringContextTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CryptoServiceTest.class);
 

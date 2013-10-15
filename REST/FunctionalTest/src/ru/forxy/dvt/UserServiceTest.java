@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
+import ru.forxy.BaseSpringContextTest;
 import ru.forxy.user.IUserService;
 import ru.forxy.user.pojo.User;
 import ru.forxy.user.pojo.UserServiceResponse;
@@ -17,9 +18,7 @@ import ru.forxy.user.pojo.UserServiceResponse;
 import java.util.Arrays;
 import java.util.List;
 
-@ContextConfiguration(locations =
-        {"classpath:/ru/forxy/spring-context.xml"})
-public class UserServiceTest extends AbstractJUnit4SpringContextTests {
+public class UserServiceTest extends BaseSpringContextTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceTest.class);
 
@@ -44,6 +43,7 @@ public class UserServiceTest extends AbstractJUnit4SpringContextTests {
     }
 
     @Test
+    @Ignore
     public void testGetAllUsers() {
         UserServiceResponse response = userService.getUsers();
         Assert.assertNotNull(response);
