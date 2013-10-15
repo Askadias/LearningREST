@@ -27,7 +27,7 @@ public class DataGenerator extends BaseSpringContextTest {
     @Autowired
     IUserService userService;
 
-    private static final int MAX_USERS = 100000;
+    private static final int MAX_USERS = 10000;
 
     public static final long DAY = 86400000;
 
@@ -131,7 +131,6 @@ public class DataGenerator extends BaseSpringContextTest {
             "@yahoo.com"};
 
     @Test
-    @Ignore
     public void generateUsers() {
         final Thread[] threads = new Thread[100];
         for (int t = 0; t < threads.length; t++) {
@@ -149,6 +148,7 @@ public class DataGenerator extends BaseSpringContextTest {
                             byte[] encryptedPassword = cryptoService.encrypt(password);
 
                             user = new User(generateEMail(firstName, lastName), encryptedPassword);
+                            user.setLogin(firstName);
                             user.setFirstName(firstName);
                             user.setLastName(lastName);
                             user.setGender(isMale ? 'M' : 'F');

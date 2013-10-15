@@ -1,0 +1,27 @@
+apply plugin: 'java'
+
+sourceSets {
+    main {
+        java { srcDir 'src/main' }
+        resources { srcDir 'src/main' }
+    }
+    test {
+        java { srcDir 'src/test' }
+        resources { srcDir 'src/test' }
+    }
+}
+
+
+// ========== Dependencies ==============================================
+
+dependencies {
+    // ===================== TEST ========================================
+    testCompile "junit:junit:${rev_junit}"
+    testCompile "ch.qos.logback:logback-core:${rev_logback}"
+    testCompile "ch.qos.logback:logback-classic:${rev_logback}"
+    testCompile "org.slf4j:slf4j-api:${rev_slf4j}"
+}
+
+eclipse {
+    project { name = 'ru.forxy.common.concurrent' }
+}
