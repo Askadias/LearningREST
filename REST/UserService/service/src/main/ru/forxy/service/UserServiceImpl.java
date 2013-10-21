@@ -3,6 +3,7 @@ package ru.forxy.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import ru.forxy.common.pojo.ResponseMessage;
 import ru.forxy.db.dao.IUserDAO;
 import ru.forxy.user.IUserService;
@@ -11,24 +12,17 @@ import ru.forxy.user.pojo.UserServiceResponse;
 
 import javax.ws.rs.NotFoundException;
 import javax.xml.ws.WebServiceException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class UserServiceImpl implements IUserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
+    private static final int DEFAULT_PAGE_SIZE = 20;
+
     @Autowired
     IUserDAO userDAO;
-
-    private static Map<String, User> users = new HashMap<String, User>(3);
-
-    static {
-        users.put("alfred@gmail.com", new User("alfred@gmail.com", new byte[]{}));
-        users.put("bob@gmail.com", new User("bob@gmail.com", new byte[]{}));
-        users.put("cliff@gmail.com", new User("cliff@gmail.com", new byte[]{}));
-        users.put("daniel@gmail.com", new User("daniel@gmail.com", new byte[]{}));
-        users.put("eleanor@gmail.com", new User("eleanor@gmail.com", new byte[]{}));
-    }
 
     @Override
     public UserServiceResponse getUsers() {
@@ -36,9 +30,30 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserServiceResponse login(User login) {
-        User user = userDAO.findOne(login.getEmail());
-        if (user != null && Arrays.equals(login.getPassword(), user.getPassword())) {
+    public UserServiceResponse getUsers(Integer page) {
+        return new UserServiceResponse(userDAO.findAll(new PageRequest(page, DEFAULT_PAGE_SIZE)).getContent());
+    }
+
+    @Override
+    public UserServiceResponse getUsers(Integer page, Integer size) {
+        return new UserServiceResponse(userDAO.findAll(new PageRequest(page, size)).getContent());
+    }
+
+    @Override
+    public UserServiceResponse getUser(User queryUser) {
+        if (queryUser != null && queryUser.getEmail() != null) {
+            User user = userDAO.findOne(queryUser.getEmail());
+            if (user != null) {
+                return new UserServiceResponse(user);
+            }
+        }
+        return new UserServiceResponse(new NotFoundException());
+    }
+
+    @Override
+    public UserServiceResponse login(User loginUser) {
+        User user = userDAO.findOne(loginUser.getEmail());
+        if (user != null && Arrays.equals(loginUser.getPassword(), user.getPassword())) {
             return new UserServiceResponse(user);
         } else {
             return new UserServiceResponse(new NotFoundException());

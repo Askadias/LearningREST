@@ -95,7 +95,7 @@ dependencies {
     compile "org.mongodb:mongo-java-driver:${rev_mongo}"
     compile "org.springframework.data:spring-data-mongodb:${rev_spring_mongo}"
 
-    // --------------------- MONGO ---------------------------------------
+    // --------------------- CASSANDRA -----------------------------------
     compile "org.apache.cassandra:cassandra-all:${rev_cassandra}"
 
     // --------------------- SPRING --------------------------------------

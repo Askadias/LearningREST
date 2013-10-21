@@ -43,6 +43,23 @@ public class UserServiceTest extends BaseSpringContextTest {
     }
 
     @Test
+    public void testGetUserPage() {
+        UserServiceResponse response = userService.getUsers(1);
+        Assert.assertNotNull(response);
+        Assert.assertNotNull(response.getUsers());
+        Assert.assertTrue(CollectionUtils.isNotEmpty(response.getUsers()));
+    }
+
+    @Test
+    public void testGetUser() {
+        User user = new User("Rachel_Kingson@gmail.com", null);
+        UserServiceResponse response = userService.getUser(user);
+        Assert.assertNotNull(response);
+        Assert.assertNotNull(response.getUsers());
+        Assert.assertTrue(CollectionUtils.isNotEmpty(response.getUsers()));
+    }
+
+    @Test
     @Ignore
     public void testGetAllUsers() {
         UserServiceResponse response = userService.getUsers();

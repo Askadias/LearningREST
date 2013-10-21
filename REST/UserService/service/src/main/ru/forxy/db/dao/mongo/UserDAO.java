@@ -32,12 +32,14 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public Iterable<User> findAll(Sort sort) {
-        return mongoTemplate.find(Query.query(null).with(sort), User.class);
+        return mongoTemplate.find(Query.query(new Criteria()).with(sort), User.class);
     }
 
     @Override
     public Page<User> findAll(Pageable pageable) {
-        List<User> users = mongoTemplate.find(Query.query(null).limit(pageable.getPageSize()).skip(pageable.getOffset()), User.class);
+        int size = pageable.getPageSize();
+        int offset = pageable.getOffset();
+        List<User> users = mongoTemplate.find(Query.query(new Criteria()).limit(size).skip(offset), User.class);
         return new PageImpl<User>(users);
     }
 
