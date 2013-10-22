@@ -14,5 +14,4 @@ dependencies {
 
     // --------------------- Apache --------------------------------------
     compile "commons-lang:commons-lang:${rev_commons_lang}"
-
 }

@@ -117,7 +117,7 @@ dependencies {
     compile("forxy:ru.forxy.photo.api:${rev_forxy_photo}") {
         transitive = true
     }
-    compile("forxy:ru.forxy.common:${rev_forxy_common}") {
+    compile("forxy:ru.forxy.common.support:${rev_forxy_common}") {
         transitive = true
     }
 

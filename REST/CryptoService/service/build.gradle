@@ -81,7 +81,7 @@ task cleanTomcat(type: Delete) {
 dependencies {
     // --------------------- FORXY ---------------------------------------
     compile project(":ru.forxy.crypto.api")
-    compile("forxy:ru.forxy.common:${rev_forxy_common}") {
+    compile("forxy:ru.forxy.common.support:${rev_forxy_common}") {
         transitive = true
     }
 

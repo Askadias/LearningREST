@@ -21,7 +21,3 @@ dependencies {
     testCompile "ch.qos.logback:logback-classic:${rev_logback}"
     testCompile "org.slf4j:slf4j-api:${rev_slf4j}"
 }
-
-eclipse {
-    project { name = 'ru.forxy.common.concurrent' }
-}

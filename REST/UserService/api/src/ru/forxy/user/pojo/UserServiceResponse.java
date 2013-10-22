@@ -2,10 +2,13 @@ package ru.forxy.user.pojo;
 
 import ru.forxy.common.pojo.BaseResponse;
 
+import javax.ws.rs.MessageProcessingException;
+import javax.ws.rs.core.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.ws.WebServiceException;
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.annotation.Annotation;
+import java.net.URI;
+import java.util.*;
 
 @XmlRootElement(name = "response")
 public class UserServiceResponse extends BaseResponse {

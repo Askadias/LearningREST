@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import ru.forxy.BaseSpringContextTest;
+import ru.forxy.common.exceptions.ServiceException;
 import ru.forxy.user.IUserService;
 import ru.forxy.user.pojo.User;
 import ru.forxy.user.pojo.UserServiceResponse;
@@ -27,7 +28,7 @@ public class UserServiceTest extends BaseSpringContextTest {
     private IUserService userService;
 
     @Test
-    public void testAddDeleteUser() {
+    public void testAddDeleteUser() throws ServiceException {
         User xander = new User("xander@gmail.com", new byte[]{});
         userService.createUser(xander);
         UserServiceResponse response = userService.login(xander);
@@ -43,7 +44,7 @@ public class UserServiceTest extends BaseSpringContextTest {
     }
 
     @Test
-    public void testGetUserPage() {
+    public void testGetUserPage() throws ServiceException {
         UserServiceResponse response = userService.getUsers(1);
         Assert.assertNotNull(response);
         Assert.assertNotNull(response.getUsers());
@@ -51,7 +52,7 @@ public class UserServiceTest extends BaseSpringContextTest {
     }
 
     @Test
-    public void testGetUser() {
+    public void testGetUser() throws ServiceException {
         User user = new User("Rachel_Kingson@gmail.com", null);
         UserServiceResponse response = userService.getUser(user);
         Assert.assertNotNull(response);
@@ -61,7 +62,7 @@ public class UserServiceTest extends BaseSpringContextTest {
 
     @Test
     @Ignore
-    public void testGetAllUsers() {
+    public void testGetAllUsers() throws ServiceException {
         UserServiceResponse response = userService.getUsers();
         Assert.assertNotNull(response);
         Assert.assertNotNull(response.getUsers());

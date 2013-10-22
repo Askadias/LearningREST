@@ -32,6 +32,7 @@
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <ref bean="jaxbProvider"/>
+            <bean class="ru.forxy.exceptions.UserServiceExceptionHandler"/>
         </jaxrs:providers>
     </jaxrs:server>
 

@@ -26,7 +26,3 @@ dependencies {
     // ===================== TEST ========================================
     testCompile "junit:junit:${rev_junit}"
 }
-
-eclipse {
-    project { name = 'ru.forxy.common.impl' }
-}

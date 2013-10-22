@@ -2,6 +2,7 @@ package ru.forxy.common.pojo;
 
 import ru.forxy.common.SystemProperties;
 
+import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.lang.Integer;
 import java.lang.String;
@@ -16,7 +17,7 @@ public abstract class BaseResponse {
 
     protected Integer code;
 
-    protected ResponseStatus status;
+    protected Response.Status status;
 
     protected List<ResponseMessage> messages = new ArrayList<ResponseMessage>();
 
@@ -25,24 +26,24 @@ public abstract class BaseResponse {
     protected String version;
 
     public BaseResponse() {
-        this.code = 0;
-        this.status = ResponseStatus.SUCCESS;
+        this.status = Response.Status.OK;
+        this.code = status.getStatusCode();
         this.service = SystemProperties.getServiceName();
         this.version = SystemProperties.getServiceVersion();
     }
 
     public BaseResponse(Throwable exception) {
-        this.code = 1;
-        this.status = ResponseStatus.FAIL;
+        this.status = Response.Status.INTERNAL_SERVER_ERROR;
+        this.code = status.getStatusCode();
         this.addMessage(new ResponseMessage(exception));
     }
 
     public BaseResponse(Integer code) {
-        this.code = code;
-        this.status = ResponseStatus.SUCCESS;
+        this.code = status.getStatusCode();
+        this.status = Response.Status.fromStatusCode(code);
     }
 
-    public BaseResponse(Integer code, ResponseStatus status) {
+    public BaseResponse(Integer code, Response.Status status) {
         this.code = code;
         this.status = status;
     }
@@ -55,11 +56,11 @@ public abstract class BaseResponse {
         this.code = code;
     }
 
-    public ResponseStatus getStatus() {
+    public Response.Status getStatus() {
         return status;
     }
 
-    public void setStatus(ResponseStatus status) {
+    public void setStatus(Response.Status status) {
         this.status = status;
     }
 
