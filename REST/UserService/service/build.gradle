@@ -96,7 +96,18 @@ dependencies {
     compile "org.springframework.data:spring-data-mongodb:${rev_spring_mongo}"
 
     // --------------------- CASSANDRA -----------------------------------
-    compile "org.apache.cassandra:cassandra-all:${rev_cassandra}"
+    //compile "org.apache.cassandra:cassandra-all:${rev_cassandra}"
+    compile ("com.impetus.client:kundera-cassandra:${rev_kundera_cassandra}") {
+        exclude module: 'scale7-pelops'
+        exclude module: 'scale7-core'
+        exclude module: 'snappy'
+        exclude module: 'persistence-api'
+    }
+
+    compile "org.hibernate.javax.persistence:hibernate-jpa-2.0-api:${rev_persistance}"
+    compile "org.xerial.snappy:snappy-java:${rev_snappy}"
+    compile "com.github.stephenc.scale7:scale7-pelops:${rev_scale7_pelops}"
+    compile "com.github.stephenc.scale7:scale7-core:${rev_scale7_core}"
 
     // --------------------- SPRING --------------------------------------
     compile "org.springframework:spring-core:${rev_spring}"

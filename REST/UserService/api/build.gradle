@@ -15,4 +15,7 @@ dependencies {
     // --------------------- CXF -----------------------------------------
     compile "org.apache.cxf:cxf-bundle-jaxrs:${rev_cxf}"
     compile "org.codehaus.jettison:jettison:${rev_jettison}"
+
+    // --------------------- PERSISTANCE ---------------------------------
+    compile "org.hibernate.javax.persistence:hibernate-jpa-2.0-api:${rev_persistance}"
 }
