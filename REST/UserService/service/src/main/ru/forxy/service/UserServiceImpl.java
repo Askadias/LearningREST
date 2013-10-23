@@ -120,7 +120,7 @@ public class UserServiceImpl implements IUserService {
             }
         } catch (ServiceException use) {
             throw use;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             throw new UserServiceException(e);
         }
     }
