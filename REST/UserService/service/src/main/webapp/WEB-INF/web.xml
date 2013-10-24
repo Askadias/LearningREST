@@ -11,7 +11,7 @@
     </listener>
 
     <listener>
-        <listener-class>ru.forxy.common.SystemPropertiesSupportListener</listener-class>
+        <listener-class>ru.forxy.common.web.SystemPropertiesSupportListener</listener-class>
     </listener>
 
     <context-param>

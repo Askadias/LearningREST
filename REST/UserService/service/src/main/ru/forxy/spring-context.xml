@@ -26,16 +26,22 @@
         <property name="namespaceMap" ref="jsonNamespaceMap"/>
     </bean>
 
+    <bean id="ru.forxy.service.UserServiceImpl" class="ru.forxy.service.UserServiceImpl"/>
+
+    <bean id="ru.forxy.logic.SystemStatusFacade" class="ru.forxy.logic.SystemStatusFacade"/>
+
+    <bean id="ru.forxy.common.service.SystemStatusService" class="ru.forxy.common.service.SystemStatusService">
+        <property name="systemStatusFacade" ref="ru.forxy.logic.SystemStatusFacade"/>
+    </bean>
+
     <jaxrs:server name="userService" address="/">
         <jaxrs:serviceBeans>
-            <ref bean="userServiceImpl"/>
+            <ref bean="ru.forxy.service.UserServiceImpl"/>
+            <ref bean="ru.forxy.common.service.SystemStatusService"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <ref bean="jaxbProvider"/>
             <bean class="ru.forxy.exceptions.UserServiceExceptionMapper"/>
         </jaxrs:providers>
     </jaxrs:server>
-
-    <bean id="userServiceImpl" class="ru.forxy.service.UserServiceImpl"/>
-
 </beans>

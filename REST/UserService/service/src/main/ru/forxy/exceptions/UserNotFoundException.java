@@ -1,16 +1,18 @@
 package ru.forxy.exceptions;
 
+import ru.forxy.common.service.ErrorResponseBuilder;
 import ru.forxy.user.pojo.User;
 
-import javax.ws.rs.core.Response;
+import javax.ws.rs.NotFoundException;
+import static javax.ws.rs.core.Response.Status;
 
 /**
  * Throws if the specified user not found
  */
-public class UserNotFoundException extends UserServiceException {
+public class UserNotFoundException extends NotFoundException {
 
     public UserNotFoundException(User user) {
-        super(Response.Status.NOT_FOUND, buildMessage(user));
+        super (ErrorResponseBuilder.build(Status.NOT_FOUND, buildMessage(user)));
     }
 
     private static String buildMessage(User user) {

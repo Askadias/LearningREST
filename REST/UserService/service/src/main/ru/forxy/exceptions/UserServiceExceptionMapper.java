@@ -1,6 +1,6 @@
 package ru.forxy.exceptions;
 
-import ru.forxy.common.exceptions.ServiceException;
+import ru.forxy.common.service.ErrorResponseBuilder;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -8,10 +8,10 @@ import javax.ws.rs.ext.ExceptionMapper;
 /**
  * Custom user service exception mapper. Maps ServiceException to jax-rs response
  */
-public class UserServiceExceptionMapper implements ExceptionMapper<ServiceException> {
+public class UserServiceExceptionMapper implements ExceptionMapper<Throwable> {
 
     @Override
-    public Response toResponse(ServiceException exception) {
-        return Response.status(exception.getStatus()).build();
+    public Response toResponse(Throwable exception) {
+        return ErrorResponseBuilder.build(Response.Status.INTERNAL_SERVER_ERROR, exception);
     }
 }

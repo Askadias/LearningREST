@@ -1,16 +1,18 @@
 package ru.forxy.exceptions;
 
+import ru.forxy.common.service.ErrorResponseBuilder;
 import ru.forxy.user.pojo.User;
 
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.core.Response;
 
 /**
  * Throws if the specified user already exist
  */
-public class UserAlreadyExistException extends UserServiceException {
+public class UserAlreadyExistException extends BadRequestException {
 
     public UserAlreadyExistException(User user) {
-        super(Response.Status.BAD_REQUEST, buildMessage(user));
+        super(ErrorResponseBuilder.build(Response.Status.BAD_REQUEST, buildMessage(user)));
     }
 
     private static String buildMessage(User user) {

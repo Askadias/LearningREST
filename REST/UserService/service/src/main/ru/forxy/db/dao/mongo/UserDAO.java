@@ -1,5 +1,7 @@
 package ru.forxy.db.dao.mongo;
 
+import com.mongodb.CommandResult;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -9,9 +11,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import ru.forxy.common.pojo.status.ComponentStatus;
+import ru.forxy.common.pojo.status.StatusType;
 import ru.forxy.db.dao.IUserDAO;
 import ru.forxy.user.pojo.User;
 
+import java.util.Date;
 import java.util.List;
 
 public class UserDAO implements IUserDAO {
@@ -103,5 +108,41 @@ public class UserDAO implements IUserDAO {
 
     public void setMongoTemplate(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
+    }
+
+    @Override
+    public ComponentStatus getStatus() {
+        String location = null;
+        StatusType statusType = StatusType.GREEN;
+        long responseTime = Long.MAX_VALUE;
+        String exceptionMessage = null;
+        String exceptionDetails = null;
+        if (mongoTemplate != null && mongoTemplate.getDb() != null && mongoTemplate.getDb().getMongo() != null) {
+            location = mongoTemplate.getDb().getMongo().getConnectPoint();
+
+            long timeStart = new Date().getTime();
+            mongoTemplate.count(null, User.class);
+            responseTime = new Date().getTime() - timeStart;
+
+            CommandResult lastError = mongoTemplate.getDb().getLastError();
+            if (lastError != null) {
+                exceptionMessage = lastError.getErrorMessage();
+                exceptionDetails = ExceptionUtils.getStackTrace(lastError.getException());
+                statusType = StatusType.YELLOW;
+            }
+        } else {
+            statusType = StatusType.RED;
+        }
+        ComponentStatus status = new ComponentStatus(
+                "User DAO",
+                location,
+                statusType,
+                null,
+                ComponentStatus.ComponentType.DB,
+                responseTime,
+                null,
+                exceptionMessage,
+                exceptionDetails);
+        return status;
     }
 }

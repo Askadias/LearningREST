@@ -1,15 +1,23 @@
 package ru.forxy.service;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.cxf.jaxrs.impl.HttpHeadersImpl;
+import org.apache.cxf.jaxrs.impl.UriInfoImpl;
+import org.apache.cxf.message.Message;
+import org.apache.cxf.message.MessageImpl;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.forxy.common.exceptions.ServiceException;
 import ru.forxy.user.IUserService;
 import ru.forxy.user.pojo.User;
-import ru.forxy.user.pojo.UserServiceResponse;
+
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import java.util.List;
 
 public class UserServiceImplTest {
 
@@ -19,29 +27,36 @@ public class UserServiceImplTest {
 
     @Test
     @Ignore
-    public void testAddDeleteUser() throws ServiceException {
+    public void testAddDeleteUser() {
         User xander = new User("xander@gmail.com", new byte[]{});
-        userService.createUser(xander);
-        UserServiceResponse response = userService.login(xander);
+        Message m = new MessageImpl();
+        UriInfo uriInfo = new UriInfoImpl(m);
+        HttpHeaders headers = new HttpHeadersImpl(m);
+        userService.createUser(xander, uriInfo, headers);
+        Response response = userService.login(xander, uriInfo, headers);
         Assert.assertNotNull(response);
-        Assert.assertNotNull(response.getUsers());
-        Assert.assertTrue(CollectionUtils.isNotEmpty(response.getUsers()));
-        Assert.assertEquals("xander@gmail.com", response.getUsers().get(0).getEmail());
-        userService.deleteUser(xander.getEmail());
+        Assert.assertNotNull(response.getEntity());
+        User user = response.readEntity(User.class);
+        Assert.assertEquals("xander@gmail.com", user.getEmail());
+        userService.deleteUser(xander.getEmail(), uriInfo, headers);
         try {
-            userService.login(xander);
-        } catch (ServiceException e) {
-            Assert.assertEquals(e.getMessage(), "User with email 'xander@gmail.com' not found");
+            userService.login(xander, uriInfo, headers);
+            Assert.fail();
+        } catch (BadRequestException e) {
         }
-        Assert.fail();
     }
 
     @Test
     @Ignore
-    public void testGetAllUsers() throws ServiceException {
-        UserServiceResponse response = userService.getUsers();
+    public void testGetAllUsers() {
+        Message m = new MessageImpl();
+        UriInfo uriInfo = new UriInfoImpl(m);
+        HttpHeaders headers = new HttpHeadersImpl(m);
+        Response response = userService.getUsers(1, uriInfo, headers);
         Assert.assertNotNull(response);
-        Assert.assertNotNull(response.getUsers());
-        Assert.assertTrue(CollectionUtils.isNotEmpty(response.getUsers()));
+        Assert.assertNotNull(response.getEntity());
+
+        List<User> users = response.readEntity(List.class);
+        Assert.assertTrue(CollectionUtils.isNotEmpty(users));
     }
 }

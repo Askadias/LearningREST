@@ -1,4 +1,4 @@
-package ru.forxy.common;
+package ru.forxy.common.utils;
 
 import java.util.HashMap;
 

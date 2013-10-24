@@ -1,4 +1,4 @@
-package ru.forxy.common;
+package ru.forxy.common.web;
 
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.UriInfo;

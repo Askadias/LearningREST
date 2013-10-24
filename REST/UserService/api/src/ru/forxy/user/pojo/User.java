@@ -7,9 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.Arrays;
 import java.util.Date;
-
 
 @Entity
 @Table(name = "user", schema = Constants.SCHEMA_NAME + "@user")
@@ -104,6 +102,7 @@ public class User {
 
     @Override
     public String toString() {
-        return String.format("{email=%s,password=%s}", email, Arrays.toString(password));
+        return String.format("{email=%s, login=%s, firstName=%s, lastName=%s, gender=%c, birthDate=%s}",
+                email, login, firstName, lastName, gender, birthDate);
     }
 }

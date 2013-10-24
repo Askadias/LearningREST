@@ -1,13 +1,9 @@
 package ru.forxy.user;
 
-import ru.forxy.common.exceptions.ServiceException;
 import ru.forxy.user.pojo.User;
-import ru.forxy.user.pojo.UserServiceResponse;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.util.List;
+import javax.ws.rs.core.*;
 
 @Path("/")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -15,34 +11,42 @@ import java.util.List;
 public interface IUserService {
 
     @GET
-    @Path("/users")
-    List<User> getUsers() throws ServiceException;
+    @Path("/{page}/")
+    Response getUsers(@PathParam("page") Integer page,
+                      @Context final UriInfo uriInfo,
+                      @Context final HttpHeaders headers);
 
     @GET
-    @Path("/users/{page}/")
-    List<User> getUsers(@PathParam("page") Integer page) throws ServiceException;
+    @Path("/{page}/{size}/")
+    Response getUsers(@PathParam("page") Integer page,
+                      @PathParam("size") Integer size,
+                      @Context final UriInfo uriInfo,
+                      @Context final HttpHeaders headers);
 
     @GET
-    @Path("/users/{page}/{size}/")
-    List<User> getUsers(@PathParam("page") Integer page, @PathParam("size") Integer size) throws ServiceException;
-
-    @GET
-    @Path("/user")
-    User getUser(User login) throws ServiceException;
+    Response getUser(User user,
+                     @Context final UriInfo uriInfo,
+                     @Context final HttpHeaders headers);
 
     @POST
-    @Path("/user/login")
-    User login(User login) throws ServiceException;
+    @Path("/login")
+    Response login(User login,
+                   @Context final UriInfo uriInfo,
+                   @Context final HttpHeaders headers);
 
     @POST
-    @Path("/user/update")
-    Response updateUser(User user) throws ServiceException;
+    Response updateUser(User user,
+                        @Context final UriInfo uriInfo,
+                        @Context final HttpHeaders headers);
 
-    @POST
-    @Path("/user/create")
-    Response createUser(User user) throws ServiceException;
+    @PUT
+    Response createUser(User user,
+                        @Context final UriInfo uriInfo,
+                        @Context final HttpHeaders headers);
 
     @DELETE
-    @Path("/user/{email}/")
-    Response deleteUser(@PathParam("email") String email) throws ServiceException;
+    @Path("/{email}")
+    Response deleteUser(@PathParam("email") String email,
+                        @Context final UriInfo uriInfo,
+                        @Context final HttpHeaders headers);
 }
