@@ -1,5 +1,9 @@
 package ru.forxy.stuff;
 
+import org.apache.cxf.jaxrs.impl.HttpHeadersImpl;
+import org.apache.cxf.jaxrs.impl.UriInfoImpl;
+import org.apache.cxf.message.Message;
+import org.apache.cxf.message.MessageImpl;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -9,8 +13,10 @@ import ru.forxy.BaseSpringContextTest;
 import ru.forxy.crypto.ICryptoService;
 import ru.forxy.user.IUserService;
 import ru.forxy.user.pojo.User;
-import ru.forxy.user.pojo.UserServiceResponse;
 
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.util.Date;
 import java.util.Random;
 
@@ -131,7 +137,11 @@ public class DataGenerator extends BaseSpringContextTest {
             "@yahoo.com"};
 
     @Test
+    @Ignore
     public void generateUsers() {
+        Message m = new MessageImpl();
+        final UriInfo uriInfo = new UriInfoImpl(m);
+        final HttpHeaders headers = new HttpHeadersImpl(m);
         final Thread[] threads = new Thread[100];
         for (int t = 0; t < threads.length; t++) {
             threads[t] = new Thread(new Runnable() {
@@ -154,10 +164,10 @@ public class DataGenerator extends BaseSpringContextTest {
                             user.setGender(isMale ? 'M' : 'F');
                             user.setBirthDate(generatePastDate(365 * 10, 365 * 60));
 
-                            UserServiceResponse response = userService.login(user);
-                            exists = response.getUsers() != null;
+                            Response response = userService.login(user, uriInfo, headers);
+                            exists = response.hasEntity();
                         }
-                        userService.createUser(user);
+                        userService.createUser(user, uriInfo, headers);
                     }
                 }
             });

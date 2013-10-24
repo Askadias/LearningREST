@@ -1,22 +1,23 @@
 package ru.forxy.dvt;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.cxf.jaxrs.impl.HttpHeadersImpl;
+import org.apache.cxf.jaxrs.impl.UriInfoImpl;
+import org.apache.cxf.message.Message;
+import org.apache.cxf.message.MessageImpl;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import ru.forxy.BaseSpringContextTest;
-import ru.forxy.common.exceptions.ServiceException;
 import ru.forxy.user.IUserService;
 import ru.forxy.user.pojo.User;
-import ru.forxy.user.pojo.UserServiceResponse;
 
-import java.util.Arrays;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
 public class UserServiceTest extends BaseSpringContextTest {
@@ -28,45 +29,47 @@ public class UserServiceTest extends BaseSpringContextTest {
     private IUserService userService;
 
     @Test
-    public void testAddDeleteUser() throws ServiceException {
+    public void testAddDeleteUser() {
+        Message m = new MessageImpl();
+        UriInfo uriInfo = new UriInfoImpl(m);
+        HttpHeaders headers = new HttpHeadersImpl(m);
         User xander = new User("xander@gmail.com", new byte[]{});
-        userService.createUser(xander);
-        UserServiceResponse response = userService.login(xander);
+        userService.createUser(xander, uriInfo, headers);
+        Response response = userService.login(xander, uriInfo, headers);
         Assert.assertNotNull(response);
-        Assert.assertNotNull(response.getUsers());
-        Assert.assertTrue(CollectionUtils.isNotEmpty(response.getUsers()));
-        LOGGER.info("User  has been successfully created: {}", response.getUsers().get(0));
-        Assert.assertEquals("xander@gmail.com", response.getUsers().get(0).getEmail());
-        userService.deleteUser(xander.getEmail());
-        response = userService.login(xander);
-        Assert.assertNull(response.getUsers());
+        User user = response.readEntity(User.class);
+        Assert.assertNotNull(user);
+        LOGGER.info("User  has been successfully created: {}", user);
+        Assert.assertEquals("xander@gmail.com", user.getEmail());
+        userService.deleteUser(xander.getEmail(), uriInfo, headers);
+        response = userService.login(xander, uriInfo, headers);
+        Object entity = response.getEntity();
+        Assert.assertNotNull(entity);
+        Assert.assertEquals(response.getStatus(), 500);
         LOGGER.info("User has been successfully removed");
     }
 
     @Test
-    public void testGetUserPage() throws ServiceException {
-        UserServiceResponse response = userService.getUsers(1);
+    public void testGetUserPage() {
+        Message m = new MessageImpl();
+        UriInfo uriInfo = new UriInfoImpl(m);
+        HttpHeaders headers = new HttpHeadersImpl(m);
+        Response response = userService.getUsers(1, uriInfo, headers);
         Assert.assertNotNull(response);
-        Assert.assertNotNull(response.getUsers());
-        Assert.assertTrue(CollectionUtils.isNotEmpty(response.getUsers()));
+        List<User> users = response.readEntity(List.class);
+        Assert.assertNotNull(users);
+        Assert.assertTrue(CollectionUtils.isNotEmpty(users));
     }
 
     @Test
-    public void testGetUser() throws ServiceException {
+    public void testGetUser() {
+        Message m = new MessageImpl();
+        UriInfo uriInfo = new UriInfoImpl(m);
+        HttpHeaders headers = new HttpHeadersImpl(m);
         User user = new User("Rachel_Kingson@gmail.com", null);
-        UserServiceResponse response = userService.getUser(user);
+        Response response = userService.getUser(user, uriInfo, headers);
         Assert.assertNotNull(response);
-        Assert.assertNotNull(response.getUsers());
-        Assert.assertTrue(CollectionUtils.isNotEmpty(response.getUsers()));
-    }
-
-    @Test
-    @Ignore
-    public void testGetAllUsers() throws ServiceException {
-        UserServiceResponse response = userService.getUsers();
-        Assert.assertNotNull(response);
-        Assert.assertNotNull(response.getUsers());
-        Assert.assertTrue(CollectionUtils.isNotEmpty(response.getUsers()));
-        LOGGER.info("Users retrieved");
+        user = response.readEntity(User.class);
+        Assert.assertNotNull(user);
     }
 }
