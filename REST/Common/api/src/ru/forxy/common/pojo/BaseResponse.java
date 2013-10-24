@@ -3,11 +3,8 @@ package ru.forxy.common.pojo;
 import ru.forxy.common.SystemProperties;
 
 import javax.ws.rs.core.Response;
-import javax.xml.bind.annotation.XmlRootElement;
-import java.lang.Integer;
-import java.lang.String;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Base class for the all services Responses.

@@ -6,6 +6,8 @@ import ru.forxy.user.pojo.UserServiceResponse;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.List;
 
 @Path("/")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -14,33 +16,33 @@ public interface IUserService {
 
     @GET
     @Path("/users")
-    UserServiceResponse getUsers() throws ServiceException;
+    List<User> getUsers() throws ServiceException;
 
     @GET
     @Path("/users/{page}/")
-    UserServiceResponse getUsers(@PathParam("page") Integer page) throws ServiceException;
+    List<User> getUsers(@PathParam("page") Integer page) throws ServiceException;
 
     @GET
     @Path("/users/{page}/{size}/")
-    UserServiceResponse getUsers(@PathParam("page") Integer page, @PathParam("size") Integer size) throws ServiceException;
+    List<User> getUsers(@PathParam("page") Integer page, @PathParam("size") Integer size) throws ServiceException;
 
     @GET
     @Path("/user")
-    UserServiceResponse getUser(User login) throws ServiceException;
+    User getUser(User login) throws ServiceException;
 
     @POST
     @Path("/user/login")
-    UserServiceResponse login(User login) throws ServiceException;
+    User login(User login) throws ServiceException;
 
     @POST
     @Path("/user/update")
-    UserServiceResponse updateUser(User user) throws ServiceException;
+    Response updateUser(User user) throws ServiceException;
 
     @POST
     @Path("/user/create")
-    UserServiceResponse createUser(User user) throws ServiceException;
+    Response createUser(User user) throws ServiceException;
 
     @DELETE
     @Path("/user/{email}/")
-    UserServiceResponse deleteUser(@PathParam("email") String email) throws ServiceException;
+    Response deleteUser(@PathParam("email") String email) throws ServiceException;
 }
