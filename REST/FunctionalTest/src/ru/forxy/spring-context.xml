@@ -72,7 +72,7 @@
     </jaxrs:client>
 
     <jaxrs:client id="systemStatusClient"
-                  serviceClass="ru.forxy.common.service.SystemStatusServiceImpl"
+                  serviceClass="ru.forxy.common.service.ISystemStatusService"
                   address="${ru.forxy.user.IUserService/url}">
         <jaxrs:providers>
             <ref bean="jsonProvider"/>
