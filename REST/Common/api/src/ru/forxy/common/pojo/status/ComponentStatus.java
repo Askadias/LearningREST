@@ -8,7 +8,6 @@ import java.util.Map;
 /**
  * Includes the information about Component health status
  */
-@XmlRootElement(name = "component_status")
 public class ComponentStatus implements Serializable {
 
     public enum ComponentType {

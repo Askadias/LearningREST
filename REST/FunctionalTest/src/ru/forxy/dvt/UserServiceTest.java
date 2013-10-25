@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import ru.forxy.BaseSpringContextTest;
+import ru.forxy.common.pojo.ErrorMessage;
+import ru.forxy.common.service.ISystemStatusService;
 import ru.forxy.user.IUserService;
 import ru.forxy.user.pojo.User;
 
@@ -25,8 +27,10 @@ public class UserServiceTest extends BaseSpringContextTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceTest.class);
 
     @Autowired
-    @Qualifier("userServiceClient")
     private IUserService userService;
+
+    @Autowired
+    private ISystemStatusService systemStatusClient;
 
     @Test
     public void testAddDeleteUser() {
@@ -34,15 +38,17 @@ public class UserServiceTest extends BaseSpringContextTest {
         UriInfo uriInfo = new UriInfoImpl(m);
         HttpHeaders headers = new HttpHeadersImpl(m);
         User xander = new User("xander@gmail.com", new byte[]{});
-        userService.createUser(xander, uriInfo, headers);
-        Response response = userService.login(xander, uriInfo, headers);
+        Response response = userService.createUser(xander, uriInfo, headers);
+        Assert.assertNotNull(response);
+        response = userService.login(xander, uriInfo, headers);
         Assert.assertNotNull(response);
         User user = response.readEntity(User.class);
         Assert.assertNotNull(user);
         LOGGER.info("User  has been successfully created: {}", user);
         Assert.assertEquals("xander@gmail.com", user.getEmail());
-        userService.deleteUser(xander.getEmail(), uriInfo, headers);
-        response = userService.login(xander, uriInfo, headers);
+        response = userService.deleteUser(xander.getEmail(), uriInfo, headers);
+        Assert.assertNotNull(response);
+        response = userService.getUser(xander, uriInfo, headers);
         Object entity = response.getEntity();
         Assert.assertNotNull(entity);
         Assert.assertEquals(response.getStatus(), 500);
@@ -62,14 +68,12 @@ public class UserServiceTest extends BaseSpringContextTest {
     }
 
     @Test
-    public void testGetUser() {
+    public void testSystemStatus() {
         Message m = new MessageImpl();
         UriInfo uriInfo = new UriInfoImpl(m);
         HttpHeaders headers = new HttpHeadersImpl(m);
-        User user = new User("Rachel_Kingson@gmail.com", null);
-        Response response = userService.getUser(user, uriInfo, headers);
+        Response response = systemStatusClient.getSystemStatus(uriInfo, headers);
         Assert.assertNotNull(response);
-        user = response.readEntity(User.class);
-        Assert.assertNotNull(user);
+        Assert.assertEquals(response.getStatus(), Response.Status.OK.getStatusCode());
     }
 }

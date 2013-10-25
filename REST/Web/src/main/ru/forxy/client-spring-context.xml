@@ -2,12 +2,11 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:util="http://www.springframework.org/schema/util"
        xmlns:http="http://cxf.apache.org/transports/http/configuration"
-       xmlns:sec="http://cxf.apache.org/configuration/security"
-       xsi:schemaLocation="
-         http://www.springframework.org/schema/beans            http://www.springframework.org/schema/beans/spring-beans.xsd
+       xmlns:sec="http://cxf.apache.org/configuration/security" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans            http://www.springframework.org/schema/beans/spring-beans.xsd
          http://www.springframework.org/schema/util             http://www.springframework.org/schema/util/spring-util.xsd
          http://cxf.apache.org/transports/http/configuration    http://cxf.apache.org/schemas/configuration/http-conf.xsd
-         http://cxf.apache.org/configuration/security           http://cxf.apache.org/schemas/configuration/security.xsd"
+         http://cxf.apache.org/configuration/security           http://cxf.apache.org/schemas/configuration/security.xsd http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd"
        default-lazy-init="false">
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
@@ -51,18 +50,16 @@
           factory-bean="cryptoServiceClientFactory"
           factory-method="create"/>
 
+    <!-- =======================================
+          JSON Configuration
+         ======================================= -->
+
+    <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+
 
     <!-- =======================================
            User Service Client Configuration
          ======================================= -->
-
-    <util:map id="jsonNamespaceMap" map-class="java.util.Hashtable">
-        <entry key="http://www.example.org/users" value="u"/>
-    </util:map>
-
-    <bean id="jsonProvider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
-        <property name="namespaceMap" ref="jsonNamespaceMap"/>
-    </bean>
 
     <bean id="userServiceClientFactory"
           class="org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean">
@@ -74,6 +71,23 @@
     <bean id="userServiceClient"
           class="ru.forxy.user.IUserService"
           factory-bean="userServiceClientFactory"
+          factory-method="create"/>
+
+
+    <!-- =======================================
+           Photo Service Client Configuration
+         ======================================= -->
+
+    <bean id="photoServiceClientFactory"
+          class="org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean">
+        <property name="serviceClass" value="ru.forxy.photo.IPhotoService"/>
+        <property name="address" value="${ru.forxy.photo.IPhotoService/url}"/>
+        <property name="provider" ref="jsonProvider"/>
+    </bean>
+
+    <bean id="photoServiceClient"
+          class="ru.forxy.photo.IPhotoService"
+          factory-bean="photoServiceClientFactory"
           factory-method="create"/>
 
 </beans>

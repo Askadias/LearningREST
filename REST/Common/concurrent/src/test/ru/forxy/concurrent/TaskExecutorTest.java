@@ -4,8 +4,6 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.forxy.concurrent.impl.AbstractDependentTask;
 import ru.forxy.concurrent.impl.ExecutionContext;
 import ru.forxy.concurrent.impl.TaskExecutor;
@@ -18,8 +16,6 @@ import java.util.Random;
  * Unit test for TaskExecutor - custom implementation of concurrent ExecutorService
  */
 public class TaskExecutorTest {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(TaskExecutorTest.class);
 
     private static TaskExecutor s_taskExecutor = null;
 
@@ -37,9 +33,9 @@ public class TaskExecutorTest {
         protected void executeAfterDependencies(final IExecutionContext executionContext) {
             try {
                 Thread.sleep(new Random().nextInt(2000));
-            } catch (Exception e) //NOPMD
+            } catch (Exception ignored) //NOPMD
             {
-                LOGGER.error("Sleep interrupted", e);
+
             }
             if (m_shouldFail) {
                 throw new RuntimeException(getName() + "-fail");
@@ -90,9 +86,8 @@ public class TaskExecutorTest {
                     protected void executeAfterDependencies(final IExecutionContext executionContext) {
                         try {
                             Thread.sleep(new Random().nextInt(200 * fj));
-                        } catch (Exception e) //NOPMD
+                        } catch (Exception ignored) //NOPMD
                         {
-                            LOGGER.error("Sleep interrupted", e);
                         }
                         if (fj % 2 == 0) {
                             throw new RuntimeException(getName() + "-fail");
@@ -118,35 +113,27 @@ public class TaskExecutorTest {
     }
 
     @Test
-    public void testTaskExecution() throws Exception
-    {
+    public void testTaskExecution() throws Exception {
         final IExecutionContext executionContext = new ExecutionContext(s_taskExecutor);
         final List<ITaskStatus> statuses = new ArrayList<ITaskStatus>();
         final int taskCount = 5;
 
         ITaskStatusGroup group = s_taskExecutor.createTasksGroup();
-        for (int i = 0; i < taskCount; i++)
-        {
+        for (int i = 0; i < taskCount; i++) {
             final String taskName = "SimpleTask-" + i;
-            ITaskStatus status = s_taskExecutor.launch(new ITask()
-            {
+            ITaskStatus status = s_taskExecutor.launch(new ITask() {
                 @Override
-                public void execute(final IExecutionContext executionContext)
-                {
-                    try
-                    {
+                public void execute(final IExecutionContext executionContext) {
+                    try {
                         Thread.sleep(new Random().nextInt(2000));
-                    }
-                    catch (Exception e) //NOPMD
+                    } catch (Exception ignored) //NOPMD
                     {
-                        LOGGER.error("Sleep interrupted", e);
                     }
                     executionContext.setObject(getName(), getName());
                 }
 
                 @Override
-                public String getName()
-                {
+                public String getName() {
                     return taskName;
                 }
             }, executionContext, group);
@@ -155,8 +142,7 @@ public class TaskExecutorTest {
         group.waitAllTasksComplete();
 
         Assert.assertEquals("Completed tasks", taskCount, statuses.size());
-        for (ITaskStatus status : statuses)
-        {
+        for (ITaskStatus status : statuses) {
             Assert.assertNotNull(status);
             Assert.assertFalse(status.isRunning());
             //noinspection ThrowableResultOfMethodCallIgnored
@@ -166,30 +152,25 @@ public class TaskExecutorTest {
     }
 
     @Test
-    public void testTaskExecutionThrowException() throws Exception
-    {
+    public void testTaskExecutionThrowException() throws Exception {
         final IExecutionContext executionContext = new ExecutionContext(s_taskExecutor);
         final List<ITaskStatus> statuses = new ArrayList<ITaskStatus>();
         final int taskCount = 5;
 
         ITaskStatusGroup group = s_taskExecutor.createTasksGroup();
-        for (int i = 0; i < taskCount; i++)
-        {
+        for (int i = 0; i < taskCount; i++) {
             final int index = i;
-            ITaskStatus status = s_taskExecutor.launch(new ITask()
-            {
+            ITaskStatus status = s_taskExecutor.launch(new ITask() {
                 private final String m_name = "MyTask_" + index;
 
                 @SuppressWarnings("PMD.AvoidThrowingRawExceptionTypes")
                 @Override
-                public void execute(final IExecutionContext executionContext)
-                {
+                public void execute(final IExecutionContext executionContext) {
                     throw new RuntimeException(getName());
                 }
 
                 @Override
-                public String getName()
-                {
+                public String getName() {
                     return m_name;
                 }
             }, executionContext, group);
@@ -200,8 +181,7 @@ public class TaskExecutorTest {
 
         Assert.assertTrue("Exceptions empty", statuses.size() > 0);
         Assert.assertEquals("Completed futures size", taskCount, statuses.size());
-        for (ITaskStatus status : statuses)
-        {
+        for (ITaskStatus status : statuses) {
             Assert.assertFalse(status.isRunning());
             Assert.assertNotNull("Future last exception not null", status.getUnhandledThrowable());
         }

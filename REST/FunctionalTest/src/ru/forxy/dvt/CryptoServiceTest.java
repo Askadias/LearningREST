@@ -18,7 +18,6 @@ public class CryptoServiceTest extends BaseSpringContextTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(CryptoServiceTest.class);
 
     @Autowired
-    @Qualifier("cryptoServiceClient")
     private ICryptoService cryptoService;
 
     @Test

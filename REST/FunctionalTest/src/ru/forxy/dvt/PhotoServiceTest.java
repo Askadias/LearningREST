@@ -20,7 +20,6 @@ public class PhotoServiceTest extends BaseSpringContextTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(PhotoServiceTest.class);
 
     @Autowired
-    @Qualifier("photoServiceClient")
     private IPhotoService photoService;
 
     @Test

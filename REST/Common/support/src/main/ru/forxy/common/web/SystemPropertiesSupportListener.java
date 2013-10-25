@@ -1,7 +1,5 @@
 package ru.forxy.common.web;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.forxy.common.SystemProperties;
 
 import javax.servlet.ServletContext;
@@ -13,7 +11,6 @@ import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
 public class SystemPropertiesSupportListener implements ServletContextListener {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SystemPropertiesSupportListener.class);
     private static final String MANIFEST_PATH = "/META-INF/MANIFEST.MF";
     private static final String PRODUCT = "Product";
     private static final String VERSION = "Version";
@@ -60,6 +57,5 @@ public class SystemPropertiesSupportListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
-        LOGGER.info("Application context destroyed");
     }
 }

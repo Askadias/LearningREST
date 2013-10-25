@@ -125,7 +125,7 @@ public class UserDAO implements IUserDAO {
             responseTime = new Date().getTime() - timeStart;
 
             CommandResult lastError = mongoTemplate.getDb().getLastError();
-            if (lastError != null) {
+            if (lastError.getException() != null) {
                 exceptionMessage = lastError.getErrorMessage();
                 exceptionDetails = ExceptionUtils.getStackTrace(lastError.getException());
                 statusType = StatusType.YELLOW;

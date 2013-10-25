@@ -5,7 +5,7 @@ import ru.forxy.user.pojo.User;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
-@Path("/")
+@Path("/users/")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public interface IUserService {
@@ -24,7 +24,7 @@ public interface IUserService {
                       @Context final HttpHeaders headers);
 
     @GET
-    Response getUser(User user,
+    Response getUser(@QueryParam("") User user,
                      @Context final UriInfo uriInfo,
                      @Context final HttpHeaders headers);
 

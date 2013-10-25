@@ -33,7 +33,7 @@ public class DataGenerator extends BaseSpringContextTest {
     @Autowired
     IUserService userService;
 
-    private static final int MAX_USERS = 10000;
+    private static final int MAX_USERS = 1000;
 
     public static final long DAY = 86400000;
 
@@ -142,7 +142,7 @@ public class DataGenerator extends BaseSpringContextTest {
         Message m = new MessageImpl();
         final UriInfo uriInfo = new UriInfoImpl(m);
         final HttpHeaders headers = new HttpHeadersImpl(m);
-        final Thread[] threads = new Thread[100];
+        final Thread[] threads = new Thread[1];
         for (int t = 0; t < threads.length; t++) {
             threads[t] = new Thread(new Runnable() {
                 @Override
@@ -155,7 +155,7 @@ public class DataGenerator extends BaseSpringContextTest {
                             String firstName = generateFirstName(isMale);
                             String lastName = generateLastName();
                             String password = firstName + "Password";
-                            byte[] encryptedPassword = cryptoService.encrypt(password);
+                            byte[] encryptedPassword = cryptoService.hash(password);
 
                             user = new User(generateEMail(firstName, lastName), encryptedPassword);
                             user.setLogin(firstName);
@@ -165,7 +165,7 @@ public class DataGenerator extends BaseSpringContextTest {
                             user.setBirthDate(generatePastDate(365 * 10, 365 * 60));
 
                             Response response = userService.login(user, uriInfo, headers);
-                            exists = response.hasEntity();
+                            exists = response.getStatus() == Response.Status.OK.getStatusCode();
                         }
                         userService.createUser(user, uriInfo, headers);
                     }

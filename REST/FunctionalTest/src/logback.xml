@@ -16,7 +16,7 @@
 
     <logger name="com.base22" level="TRACE"/>
 
-    <root level="debug">
+    <root level="warn">
         <appender-ref ref="FILE"/>
         <appender-ref ref="STDOUT"/>
     </root>

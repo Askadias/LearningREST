@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:jaxrs="http://cxf.apache.org/jaxrs"
-       xmlns:util="http://www.springframework.org/schema/util"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="
         http://www.springframework.org/schema/beans     http://www.springframework.org/schema/beans/spring-beans.xsd
         http://cxf.apache.org/jaxrs                     http://cxf.apache.org/schemas/jaxrs.xsd
-        http://www.springframework.org/schema/util      http://www.springframework.org/schema/util/spring-util.xsd
         http://www.springframework.org/schema/context   http://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="2"
@@ -17,23 +15,13 @@
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
 
-    <util:map id="jsonNamespaceMap" map-class="java.util.Hashtable">
-        <entry key="http://www.forxy.ru/photos" value="u"/>
-    </util:map>
-
-    <bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
-        <property name="namespaceMap" ref="jsonNamespaceMap"/>
-    </bean>
-
-    <jaxrs:server name="userService" address="/">
+    <jaxrs:server address="/v1">
         <jaxrs:serviceBeans>
-            <ref bean="userServiceImpl"/>
+            <bean class="ru.forxy.service.PhotoServiceImpl"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
-            <ref bean="jaxbProvider"/>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
         </jaxrs:providers>
     </jaxrs:server>
-
-    <bean id="userServiceImpl" class="ru.forxy.service.PhotoServiceImpl"/>
 
 </beans>

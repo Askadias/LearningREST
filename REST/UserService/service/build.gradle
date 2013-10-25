@@ -102,6 +102,8 @@ dependencies {
         exclude module: 'scale7-core'
         exclude module: 'snappy'
         exclude module: 'persistence-api'
+        exclude module: 'slf4j-log4j12'
+        exclude module: 'log4j'
     }
 
     compile "org.hibernate.javax.persistence:hibernate-jpa-2.0-api:${rev_persistance}"

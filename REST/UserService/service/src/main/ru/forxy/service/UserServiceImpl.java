@@ -1,7 +1,5 @@
 package ru.forxy.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import ru.forxy.common.service.AbstractService;
@@ -22,12 +20,10 @@ import java.util.List;
 
 public class UserServiceImpl extends AbstractService implements IUserService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
-
     private static final int DEFAULT_PAGE_SIZE = 20;
 
     @Autowired
-    IUserDAO userDAO;
+    private IUserDAO userDAO;
 
     @Override
     public Response getUsers(Integer page, final UriInfo uriInfo, final HttpHeaders headers) {
