@@ -4,6 +4,7 @@ import org.apache.cxf.jaxrs.impl.HttpHeadersImpl;
 import org.apache.cxf.jaxrs.impl.UriInfoImpl;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.message.MessageImpl;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -136,7 +137,7 @@ public class DataGenerator extends BaseSpringContextTest {
             "@yahoo.com"};
 
     @Test
-    //@Ignore
+    @Ignore
     public void generateUsers() {
         Message m = new MessageImpl();
         final UriInfo uriInfo = new UriInfoImpl(m);

@@ -3,16 +3,14 @@ package ru.forxy.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import ru.forxy.common.exceptions.ServiceException;
 import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.common.service.AbstractService;
-import ru.forxy.common.service.ErrorResponseBuilder;
 import ru.forxy.db.dao.IUserDAO;
-import ru.forxy.exception.UserAlreadyExistException;
-import ru.forxy.exception.UserNotFoundException;
+import ru.forxy.exceptions.UserServiceExceptions;
 import ru.forxy.user.IUserService;
 import ru.forxy.user.pojo.User;
 
-import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
@@ -44,9 +42,12 @@ public class UserServiceImpl extends AbstractService implements IUserService {
     public Response getUser(User queryUser, final UriInfo uriInfo, final HttpHeaders headers) {
         if (queryUser != null && queryUser.getEmail() != null) {
             User user = userDAO.findOne(queryUser.getEmail());
+            if (user == null) {
+                throw new ServiceException(UserServiceExceptions.UserNotFound.getStatusTemplate(), queryUser.getEmail());
+            }
             return respondWith(user, uriInfo, headers).build();
         }
-        throw new UserNotFoundException(queryUser);
+        throw new ServiceException(UserServiceExceptions.EmailIsNullOrEmpty.getStatusTemplate());
     }
 
     @Override
@@ -65,8 +66,7 @@ public class UserServiceImpl extends AbstractService implements IUserService {
             userDAO.save(user);
             return Response.ok(user).build();
         } else {
-            throw new BadRequestException(
-                    ErrorResponseBuilder.build(Response.Status.BAD_REQUEST, "User's email or password are empty"));
+            throw new ServiceException(UserServiceExceptions.EmptyLoginEmailOrPassword.getStatusTemplate());
         }
     }
 
@@ -77,11 +77,10 @@ public class UserServiceImpl extends AbstractService implements IUserService {
                 userDAO.save(user);
                 return Response.ok(user).build();
             } else {
-                throw new UserAlreadyExistException(user);
+                throw new ServiceException(UserServiceExceptions.UserAlreadyExists.getStatusTemplate(), user.getEmail());
             }
         } else {
-            throw new BadRequestException(
-                    ErrorResponseBuilder.build(Response.Status.BAD_REQUEST, "User's email is null"));
+            throw new ServiceException(UserServiceExceptions.EmailIsNullOrEmpty.getStatusTemplate());
         }
     }
 
@@ -91,7 +90,7 @@ public class UserServiceImpl extends AbstractService implements IUserService {
             userDAO.delete(email);
             return Response.ok(email).build();
         } else {
-            throw new UserNotFoundException(new User(email, null));
+            throw new ServiceException(UserServiceExceptions.UserNotFound.getStatusTemplate(), email);
         }
     }
 }

@@ -183,7 +183,7 @@ public class TaskExecutorTest {
         Assert.assertEquals("Completed futures size", taskCount, statuses.size());
         for (ITaskStatus status : statuses) {
             Assert.assertFalse(status.isRunning());
-            Assert.assertNotNull("Future last exception not null", status.getUnhandledThrowable());
+            Assert.assertNotNull("Future last exceptions not null", status.getUnhandledThrowable());
         }
     }
 }

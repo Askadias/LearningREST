@@ -22,7 +22,7 @@ public interface ITaskExecutor extends ExecutorService
      * @param tasks - thread execution units contained base business logic
      * @param executionContext - data transfer object needs for dependent threads interaction
      * @return collection of execution futures to get access to execution results and context of every task execution
-     *         like thrown exception i.e.
+     *         like thrown exceptions i.e.
      */
     List<ITaskStatus> executeAll(List<? extends ITask> tasks, IExecutionContext executionContext);
 
@@ -31,7 +31,7 @@ public interface ITaskExecutor extends ExecutorService
      *
      * @param task - thread execution unit contained base business logic
      * @param executionContext - data transfer object needs for dependent threads interaction
-     * @return execution future to get access to execution result and context of task execution like thrown exception
+     * @return execution future to get access to execution result and context of task execution like thrown exceptions
      *         i.e.
      */
     ITaskStatus execute(ITask task, IExecutionContext executionContext) throws InterruptedException;
@@ -41,7 +41,7 @@ public interface ITaskExecutor extends ExecutorService
      *
      * @param task - thread execution unit contained base business logic
      * @param executionContext - data transfer object needs for dependent threads interaction
-     * @return execution future to get access to execution result and context of task execution like thrown exception
+     * @return execution future to get access to execution result and context of task execution like thrown exceptions
      *         i.e.
      */
     ITaskStatus launch(ITask task, IExecutionContext executionContext);
@@ -52,7 +52,7 @@ public interface ITaskExecutor extends ExecutorService
      * @param task - thread execution unit contained base business logic
      * @param executionContext - data transfer object needs for dependent threads interaction
      * @param completeGroup -
-     * @return execution future to get access to execution result and context of task execution like thrown exception
+     * @return execution future to get access to execution result and context of task execution like thrown exceptions
      *         i.e.
      */
     ITaskStatus launch(ITask task, IExecutionContext executionContext, ITaskStatusGroup completeGroup);

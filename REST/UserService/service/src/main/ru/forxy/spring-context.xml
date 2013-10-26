@@ -31,7 +31,7 @@
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
-            <bean class="ru.forxy.exception.UserServiceExceptionMapper"/>
+            <bean class="ru.forxy.common.exceptions.utils.ResponseStatusMapper"/>
         </jaxrs:providers>
         <jaxrs:extensionMappings>
             <entry key="json" value="application/json" />
