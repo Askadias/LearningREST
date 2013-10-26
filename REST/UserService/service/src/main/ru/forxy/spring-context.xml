@@ -9,9 +9,9 @@
         http://www.springframework.org/schema/context   http://www.springframework.org/schema/context/spring-context.xsd http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd">
 
     <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="2"
-                                  location="file:${CATALINA_HOME}/conf/appconfig/base/ru.forxy.user.properties"/>
+                                  location="file:${catalina.base}/conf/appconfig/base/ru.forxy.user.properties"/>
     <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="1"
-                                  location="file:${CATALINA_HOME}/conf/appconfig/env/${env}/ru.forxy.user.properties"/>
+                                  location="file:${catalina.base}/conf/appconfig/env/${env}/ru.forxy.user.properties"/>
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>

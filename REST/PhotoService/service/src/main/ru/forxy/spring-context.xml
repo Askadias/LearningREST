@@ -8,9 +8,9 @@
         http://www.springframework.org/schema/context   http://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="2"
-                                  location="file:${CATALINA_HOME}/conf/appconfig/base/ru.forxy.photo.properties"/>
+                                  location="file:${catalina.base}/conf/appconfig/base/ru.forxy.photo.properties"/>
     <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="1"
-                                  location="file:${CATALINA_HOME}/conf/appconfig/env/${env}/ru.forxy.photo.properties"/>
+                                  location="file:${catalina.base}/conf/appconfig/env/${env}/ru.forxy.photo.properties"/>
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>

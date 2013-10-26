@@ -24,11 +24,14 @@ if (project.hasProperty('env')) {
         into "$System.env.TOMCAT_HOME/conf/appconfig"
         include '**/*.properties'
         exclude '**/*.bat'
+        exclude '**/*.sh'
     }
 
     task copyEnvConfigTomcat(type: Copy) {
-        from "appconfig/env/$env/setenv.bat"
+        from "appconfig/env/$env"
         into "$System.env.TOMCAT_HOME/bin"
+        include '**/*.bat'
+        include '**/*.sh'
     }
 
     task copyWebContextConfig(type: Copy) {
