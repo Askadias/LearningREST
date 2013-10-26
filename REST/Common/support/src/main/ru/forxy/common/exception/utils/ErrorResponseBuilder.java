@@ -1,4 +1,4 @@
-package ru.forxy.common.service;
+package ru.forxy.common.exception.utils;
 
 import ru.forxy.common.pojo.ErrorMessage;
 

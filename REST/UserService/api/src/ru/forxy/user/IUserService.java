@@ -57,8 +57,7 @@ public interface IUserService {
                         @Context final HttpHeaders headers);
 
     @DELETE
-    @Path("/{email}")
-    Response deleteUser(@PathParam("email") String email,
+    Response deleteUser(@QueryParam("email") String email,
                         @Context final UriInfo uriInfo,
                         @Context final HttpHeaders headers);
 }
