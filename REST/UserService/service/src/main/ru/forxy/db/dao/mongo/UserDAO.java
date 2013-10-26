@@ -45,7 +45,7 @@ public class UserDAO implements IUserDAO {
         int size = pageable.getPageSize();
         int offset = pageable.getOffset();
         List<User> users = mongoTemplate.find(Query.query(new Criteria()).limit(size).skip(offset), User.class);
-        return new PageImpl<User>(users);
+        return new PageImpl<User>(users, pageable, count());
     }
 
     @Override
@@ -125,6 +125,7 @@ public class UserDAO implements IUserDAO {
             responseTime = new Date().getTime() - timeStart;
 
             CommandResult lastError = mongoTemplate.getDb().getLastError();
+            //noinspection ThrowableResultOfMethodCallIgnored
             if (lastError.getException() != null) {
                 exceptionMessage = lastError.getErrorMessage();
                 exceptionDetails = ExceptionUtils.getStackTrace(lastError.getException());
@@ -133,7 +134,7 @@ public class UserDAO implements IUserDAO {
         } else {
             statusType = StatusType.RED;
         }
-        ComponentStatus status = new ComponentStatus(
+        return new ComponentStatus(
                 "User DAO",
                 location,
                 statusType,
@@ -143,6 +144,5 @@ public class UserDAO implements IUserDAO {
                 null,
                 exceptionMessage,
                 exceptionDetails);
-        return status;
     }
 }

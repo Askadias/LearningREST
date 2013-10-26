@@ -78,9 +78,7 @@ task cleanTomcat(type: Delete) {
 dependencies {
     // --------------------- FORXY ---------------------------------------
     compile project(":ru.forxy.user.api")
-    compile("forxy:ru.forxy.common.support:${rev_forxy_common}") {
-        transitive = true
-    }
+    compile "forxy:ru.forxy.common.support:${rev_forxy_common}"
 
     // --------------------- OBJECT VALIDATION ---------------------------
     compile "net.sf.oval:oval:${rev_oval}"

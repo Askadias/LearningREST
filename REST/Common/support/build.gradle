@@ -18,11 +18,6 @@ dependencies {
     // --------------------- PROJECTS ------------------------------------
     compile project(":ru.forxy.common.api")
 
-    // --------------------- COMMON --------------------------------------
-    compile "ch.qos.logback:logback-core:${rev_logback}"
-    compile "ch.qos.logback:logback-classic:${rev_logback}"
-    compile "org.slf4j:slf4j-api:${rev_slf4j}"
-
     // ===================== TEST ========================================
     testCompile "junit:junit:${rev_junit}"
 }

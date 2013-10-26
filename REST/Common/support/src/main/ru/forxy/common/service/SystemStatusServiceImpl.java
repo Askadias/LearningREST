@@ -2,23 +2,19 @@ package ru.forxy.common.service;
 
 import ru.forxy.common.status.ISystemStatusFacade;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 /**
  * System status service endpoint implementation
  */
-@Path("/status/")
-@Produces(MediaType.APPLICATION_JSON)
 public class SystemStatusServiceImpl extends AbstractService implements ISystemStatusService {
 
     private ISystemStatusFacade systemStatusFacade;
 
-    @GET
     @Override
-    public Response getSystemStatus(@Context UriInfo uriInfo, @Context HttpHeaders headers) {
+    public Response getSystemStatus(UriInfo uriInfo, HttpHeaders headers) {
         return respondWith(systemStatusFacade.getStatus(), uriInfo, headers).build();
     }
 

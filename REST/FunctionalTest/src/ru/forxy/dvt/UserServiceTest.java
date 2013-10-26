@@ -10,26 +10,25 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import ru.forxy.BaseSpringContextTest;
-import ru.forxy.common.pojo.ErrorMessage;
+import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.common.service.ISystemStatusService;
 import ru.forxy.user.IUserService;
 import ru.forxy.user.pojo.User;
 
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.List;
 
 public class UserServiceTest extends BaseSpringContextTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceTest.class);
 
-    @Autowired
+    @Autowired(required = false)
     private IUserService userService;
 
-    @Autowired
+    @Autowired(required = false)
     private ISystemStatusService systemStatusClient;
 
     @Test
@@ -60,11 +59,12 @@ public class UserServiceTest extends BaseSpringContextTest {
         Message m = new MessageImpl();
         UriInfo uriInfo = new UriInfoImpl(m);
         HttpHeaders headers = new HttpHeadersImpl(m);
-        Response response = userService.getUsers(1, uriInfo, headers);
+        Response response = userService.getUsers(0, uriInfo, headers);
         Assert.assertNotNull(response);
-        List<User> users = response.readEntity(List.class);
-        Assert.assertNotNull(users);
-        Assert.assertTrue(CollectionUtils.isNotEmpty(users));
+        EntityPage<User> userPage = response.readEntity(new GenericType<EntityPage<User>>() {
+        });
+        Assert.assertNotNull(userPage);
+        Assert.assertTrue(CollectionUtils.isNotEmpty(userPage.getContent()));
     }
 
     @Test
@@ -75,5 +75,6 @@ public class UserServiceTest extends BaseSpringContextTest {
         Response response = systemStatusClient.getSystemStatus(uriInfo, headers);
         Assert.assertNotNull(response);
         Assert.assertEquals(response.getStatus(), Response.Status.OK.getStatusCode());
+
     }
 }

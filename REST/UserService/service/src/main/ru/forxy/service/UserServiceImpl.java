@@ -1,12 +1,14 @@
 package ru.forxy.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.common.service.AbstractService;
 import ru.forxy.common.service.ErrorResponseBuilder;
 import ru.forxy.db.dao.IUserDAO;
-import ru.forxy.exceptions.UserAlreadyExistException;
-import ru.forxy.exceptions.UserNotFoundException;
+import ru.forxy.exception.UserAlreadyExistException;
+import ru.forxy.exception.UserNotFoundException;
 import ru.forxy.user.IUserService;
 import ru.forxy.user.pojo.User;
 
@@ -16,7 +18,6 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.Arrays;
-import java.util.List;
 
 public class UserServiceImpl extends AbstractService implements IUserService {
 
@@ -27,14 +28,16 @@ public class UserServiceImpl extends AbstractService implements IUserService {
 
     @Override
     public Response getUsers(Integer page, final UriInfo uriInfo, final HttpHeaders headers) {
-        List<User> users = userDAO.findAll(new PageRequest(page, DEFAULT_PAGE_SIZE)).getContent();
-        return respondWith(users, uriInfo, headers).build();
+        Page<User> p = userDAO.findAll(new PageRequest(page, DEFAULT_PAGE_SIZE));
+        EntityPage<User> userPage = new EntityPage<User>(p.getContent(), p.getSize(), p.getNumber(), p.getTotalElements());
+        return respondWith(userPage, uriInfo, headers).build();
     }
 
     @Override
     public Response getUsers(Integer page, Integer size, final UriInfo uriInfo, final HttpHeaders headers) {
-        List<User> users = userDAO.findAll(new PageRequest(page, size)).getContent();
-        return respondWith(users, uriInfo, headers).build();
+        Page<User> p = userDAO.findAll(new PageRequest(page, size));
+        EntityPage<User> userPage = new EntityPage<User>(p.getContent(), p.getSize(), p.getNumber(), p.getTotalElements());
+        return respondWith(userPage, uriInfo, headers).build();
     }
 
     @Override

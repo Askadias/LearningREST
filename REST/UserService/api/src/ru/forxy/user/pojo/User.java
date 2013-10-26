@@ -1,6 +1,8 @@
 package ru.forxy.user.pojo;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import ru.forxy.common.Constants;
+import ru.forxy.common.pojo.SimpleJacksonDateSerializer;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,6 +35,7 @@ public class User {
     @Column(name = "gender")
     private Character gender;
 
+    @JsonSerialize(using = SimpleJacksonDateSerializer.class)
     @Column(name = "birth_date")
     private Date birthDate;
 

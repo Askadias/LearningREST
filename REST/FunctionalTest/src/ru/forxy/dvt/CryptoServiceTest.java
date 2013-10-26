@@ -5,9 +5,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import ru.forxy.BaseSpringContextTest;
 import ru.forxy.crypto.ICryptoService;
 
@@ -17,7 +14,7 @@ public class CryptoServiceTest extends BaseSpringContextTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CryptoServiceTest.class);
 
-    @Autowired
+    @Autowired(required = false)
     private ICryptoService cryptoService;
 
     @Test

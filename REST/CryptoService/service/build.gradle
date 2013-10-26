@@ -81,12 +81,9 @@ task cleanTomcat(type: Delete) {
 dependencies {
     // --------------------- FORXY ---------------------------------------
     compile project(":ru.forxy.crypto.api")
-    compile("forxy:ru.forxy.common.support:${rev_forxy_common}") {
-        transitive = true
-    }
+    compile "forxy:ru.forxy.common.support:${rev_forxy_common}"
 
     // --------------------- COMMON --------------------------------------
-    compile "commons-collections:commons-collections:${rev_common_collections}"
     compile "ch.qos.logback:logback-core:${rev_logback}"
     compile "ch.qos.logback:logback-classic:${rev_logback}"
     compile "org.slf4j:slf4j-api:${rev_slf4j}"

@@ -1,4 +1,4 @@
-package ru.forxy.exceptions;
+package ru.forxy.exception;
 
 import ru.forxy.common.service.ErrorResponseBuilder;
 import ru.forxy.user.pojo.User;

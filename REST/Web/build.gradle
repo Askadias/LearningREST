@@ -108,18 +108,10 @@ task cleanTomcat(type: Delete) {
 
 dependencies {
     // --------------------- FORXY ---------------------------------------
-    compile("forxy:ru.forxy.crypto.api:${rev_forxy_crypto}") {
-        transitive = true
-    }
-    compile("forxy:ru.forxy.user.api:${rev_forxy_user}") {
-        transitive = true
-    }
-    compile("forxy:ru.forxy.photo.api:${rev_forxy_photo}") {
-        transitive = true
-    }
-    compile("forxy:ru.forxy.common.support:${rev_forxy_common}") {
-        transitive = true
-    }
+    compile "forxy:ru.forxy.crypto.api:${rev_forxy_crypto}"
+    compile "forxy:ru.forxy.user.api:${rev_forxy_user}"
+    compile "forxy:ru.forxy.photo.api:${rev_forxy_photo}"
+    compile "forxy:ru.forxy.common.support:${rev_forxy_common}"
 
     // --------------------- COMMON --------------------------------------
     compile "commons-collections:commons-collections:${rev_common_collections}"

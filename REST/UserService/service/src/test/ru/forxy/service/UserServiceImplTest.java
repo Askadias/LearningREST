@@ -10,14 +10,15 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.user.IUserService;
 import ru.forxy.user.pojo.User;
 
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.List;
 
 public class UserServiceImplTest {
 
@@ -56,7 +57,8 @@ public class UserServiceImplTest {
         Assert.assertNotNull(response);
         Assert.assertNotNull(response.getEntity());
 
-        List<User> users = response.readEntity(List.class);
-        Assert.assertTrue(CollectionUtils.isNotEmpty(users));
+        EntityPage<User> userPage = response.readEntity(new GenericType<EntityPage<User>>() {
+        });
+        Assert.assertTrue(CollectionUtils.isNotEmpty(userPage.getContent()));
     }
 }
