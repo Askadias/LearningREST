@@ -18,6 +18,9 @@ dependencies {
     // --------------------- PROJECTS ------------------------------------
     compile project(":ru.forxy.common.api")
 
+    // --------------------- OBJECT VALIDATION ---------------------------
+    compile "net.sf.oval:oval:${rev_oval}"
+
     // ===================== TEST ========================================
     testCompile "junit:junit:${rev_junit}"
 }

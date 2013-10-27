@@ -17,6 +17,21 @@
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
     <import resource="classpath:ru/forxy/dao-spring-context.xml"/>
 
+    <bean id="ru.forxy.common.utils.Configuration" class="ru.forxy.common.utils.Configuration"
+            p:objectValidationEnabled="true"
+            p:payloadLoggingEnabled="true"/>
+
+    <bean id="ru.forxy.user.payload.Validator" class="net.sf.oval.Validator">
+        <constructor-arg>
+            <list>
+                <bean class="net.sf.oval.configuration.xml.XMLConfigurer">
+                    <constructor-arg type="java.io.InputStream"
+                        value="file:${catalina.base}/conf/appconfig/base/ru.forxy.user.validation.xml" />
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+
     <bean id="ru.forxy.service.UserServiceImpl" class="ru.forxy.service.UserServiceImpl"/>
 
     <bean id="ru.forxy.logic.SystemStatusFacade" class="ru.forxy.logic.SystemStatusFacade"/>
@@ -30,7 +45,9 @@
             <ref bean="ru.forxy.common.service.SystemStatusServiceImpl"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
-            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+            <bean class="ru.forxy.common.web.JSONValidationProvider"
+                    p:configuration-ref="ru.forxy.common.utils.Configuration"
+                    p:validator-ref="ru.forxy.user.payload.Validator"/>
             <bean class="ru.forxy.common.exceptions.utils.ResponseStatusMapper"/>
         </jaxrs:providers>
         <jaxrs:extensionMappings>

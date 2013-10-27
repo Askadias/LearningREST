@@ -23,6 +23,7 @@ if (project.hasProperty('env')) {
         from 'appconfig'
         into "$System.env.TOMCAT_HOME/conf/appconfig"
         include '**/*.properties'
+        include '**/*.xml'
         exclude '**/*.bat'
         exclude '**/*.sh'
     }
@@ -82,9 +83,6 @@ dependencies {
     // --------------------- FORXY ---------------------------------------
     compile project(":ru.forxy.user.api")
     compile "forxy:ru.forxy.common.support:${rev_forxy_common}"
-
-    // --------------------- OBJECT VALIDATION ---------------------------
-    compile "net.sf.oval:oval:${rev_oval}"
 
     // --------------------- COMMON --------------------------------------
     compile "commons-collections:commons-collections:${rev_common_collections}"
