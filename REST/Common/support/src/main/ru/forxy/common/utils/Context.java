@@ -2,9 +2,9 @@ package ru.forxy.common.utils;
 
 import java.util.HashMap;
 
-public class ExecutionContext {
+public class Context {
 
-    private static ThreadLocal<HashMap<String, Object>> context;
+    private static ThreadLocal<HashMap<String, Object>> context = new ThreadLocal<HashMap<String, Object>>();
 
     public static void put(String key, Object object) {
         HashMap<String, Object> storage = context.get();

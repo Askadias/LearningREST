@@ -1,4 +1,7 @@
-package ru.forxy.common.utils;
+package ru.forxy.common.log;
+
+import ru.forxy.common.utils.Configuration;
+import ru.forxy.common.utils.Context;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -9,18 +12,20 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Askadias
- * Date: 27.10.13
- * Time: 22:54
- * To change this template use File | Settings | File Templates.
+ * Request/Response logging filter
  */
 public class EndpointLoggingServletFilter implements Filter
 {
-	private Configuration configuration = new Configuration();
+	private Configuration configuration;
 
 	private ILogWriter requestWriter;
 
@@ -41,7 +46,7 @@ public class EndpointLoggingServletFilter implements Filter
 		final HttpServletRequest rq = (HttpServletRequest) request;
 		final HttpServletResponse rs = (HttpServletResponse) response;
 		final String url = getRequestUrl(rq);
-		if (configuration.getEnabled() && allowedUrl(url, configuration.getSkipUrls(), rq))
+		if (configuration.isPerformanceLoggingEnabled() && allowedUrl(url, configuration.getSkipUrls(), rq))
 		{
 			final long timestampStart = System.currentTimeMillis();
 			final long timestampStartNano = System.nanoTime();
@@ -219,23 +224,6 @@ public class EndpointLoggingServletFilter implements Filter
 		return url.toString();
 	}
 
-	private static boolean allowedUrl(String url, final String[] skip, final HttpServletRequest rq)
-	{
-		//for now we only filter GETs
-		if (skip != null && url != null && "GET".equals(rq.getMethod()))
-		{
-			url = url.toLowerCase(Locale.US);
-			for (final String item : skip)
-			{
-				if (url.contains(item.toLowerCase(Locale.US)))
-				{
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-
 	public void setConfiguration(final Configuration configuration)
 	{
 		this.configuration = configuration;
@@ -274,12 +262,10 @@ public class EndpointLoggingServletFilter implements Filter
 	@Override
 	public void init(final FilterConfig filterConfig) throws ServletException
 	{
-		//unused
 	}
 
 	@Override
 	public void destroy()
 	{
-		//unused
 	}
 }

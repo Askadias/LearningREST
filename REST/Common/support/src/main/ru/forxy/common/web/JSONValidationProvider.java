@@ -44,18 +44,6 @@ public class JSONValidationProvider extends JacksonJsonProvider {
     public Object readFrom(final Class<Object> type, final Type genericType, final Annotation[] annotations,
                            final MediaType mediaType, final MultivaluedMap<String, String> headers, final InputStream is)
             throws IOException {
-
-        if (null == configuration) {
-            throw new ServiceException(BaseServiceExceptions.NullReference.getStatusTemplate(),
-                    Configuration.class.getCanonicalName(),
-                    JSONValidationProvider.class.getCanonicalName());
-        }
-        if (null == validator) {
-            throw new ServiceException(BaseServiceExceptions.NullReference.getStatusTemplate(),
-                    IValidator.class.getCanonicalName(),
-                    JSONValidationProvider.class.getCanonicalName());
-        }
-
         final Object value;
         try {
             value = super.readFrom(type, genericType, annotations, mediaType, headers, is);

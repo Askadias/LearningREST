@@ -9,6 +9,8 @@ public class Configuration {
 
     private boolean isPayloadLoggingEnabled;
 
+    private boolean isPerformanceLoggingEnabled;
+
     public boolean isObjectValidationEnabled() {
         return isObjectValidationEnabled;
     }
@@ -23,5 +25,13 @@ public class Configuration {
 
     public void setPayloadLoggingEnabled(boolean payloadLoggingEnabled) {
         isPayloadLoggingEnabled = payloadLoggingEnabled;
+    }
+
+    public boolean isPerformanceLoggingEnabled() {
+        return isPerformanceLoggingEnabled;
+    }
+
+    public void setPerformanceLoggingEnabled(boolean performanceLoggingEnabled) {
+        isPerformanceLoggingEnabled = performanceLoggingEnabled;
     }
 }
