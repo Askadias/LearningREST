@@ -19,7 +19,7 @@ import java.util.Arrays;
 
 public class UserServiceImpl extends AbstractService implements IUserService {
 
-    private static final int DEFAULT_PAGE_SIZE = 20;
+    private static final int DEFAULT_PAGE_SIZE = 10;
 
     @Autowired
     private IUserDAO userDAO;
