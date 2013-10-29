@@ -11,6 +11,8 @@ public class Configuration {
 
     private boolean isPerformanceLoggingEnabled;
 
+    private boolean isHttpInfoLoggingEnabled;
+
     public boolean isObjectValidationEnabled() {
         return isObjectValidationEnabled;
     }
@@ -33,5 +35,13 @@ public class Configuration {
 
     public void setPerformanceLoggingEnabled(boolean performanceLoggingEnabled) {
         isPerformanceLoggingEnabled = performanceLoggingEnabled;
+    }
+
+    public boolean isHttpInfoLoggingEnabled() {
+        return isHttpInfoLoggingEnabled;
+    }
+
+    public void setHttpInfoLoggingEnabled(boolean httpInfoLoggingEnabled) {
+        isHttpInfoLoggingEnabled = httpInfoLoggingEnabled;
     }
 }

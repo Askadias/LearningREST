@@ -1,52 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns='http://www.springframework.org/schema/beans'
        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
        xsi:schemaLocation='
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd'>
 
-    <bean id="com.expedia.e3.es.payment.vault.service.performance.loggingFilter.rest"
-            class="com.expedia.e3.es.payment.common.performance.interceptor.endpoint.EndpointLoggingServletFilter">
-            <property name="configuration" ref="com.expedia.e3.es.payment.vault.service.performance.configuration.rest" />
-            <property name="requestWriter" ref="com.expedia.e3.es.payment.vault.service.performance.requestWriter.rest" />
-            <property name="responseWriter" ref="com.expedia.e3.es.payment.vault.service.performance.responseWriter.rest" />
-            <property name="requestFieldExtractors">
-                <bean class="com.expedia.e3.es.payment.common.performance.interceptor.metadata.SpelFieldExtractor">
-                    <property name="extractRules">
-                        <map>
-                            <entry key="Username" value="#request.getParameter('client_id')?:#requestHeaders['client-id']?:null" />
-                            <entry key="TransactionGUID" value="#request.getParameter('transaction_guid')?:#requestHeaders['transaction-guid']?:null" />
-                            <entry key="MessageGUID" value="#request.getParameter('message_guid')?:#requestHeaders['message-guid']?:null" />
-                            <entry key="OperationName" value="#request.requestURI.matches('.*/payment-instruments') and #request.getMethod().equals('POST') ? 'RegisterPaymentInstrument' :
-                                                              #request.requestURI.matches('.*/payment-instruments/.*') and #request.getMethod().equals('GET') ? 'RetrievePaymentInstrument' :
-                                                              #request.requestURI.matches('.*/payment-instruments/.*') and #request.getMethod().equals('POST') ? 'RetainReleasePaymentInstrument' :
-                                                              #request.requestURI.matches('.*/payment-instruments/.*') and #request.getMethod().equals('PUT') ? 'UpdatePaymentInstrument' :
-                                                              #request.requestURI.matches('.*/status') and #request.getMethod().equals('GET') ? 'GetSystemStatus' :
-                                                              null" />
-                        </map>
-                    </property>
-                </bean>
-            </property>
-            <property name="responseFieldExtractors">
-                <bean class="com.expedia.e3.es.payment.common.performance.interceptor.metadata.SpelFieldExtractor">
-                    <property name="extractRules">
-                        <map>
-                            <entry key="TransactionGUID" value="#responseHeaders['Transaction-GUID']" />
-                            <entry key="MessageGUID" value="#responseHeaders['Message-GUID']" />
-                            <entry key="PaymentInstrumentID">
-                                <value>#payload.indexOf('"payment_instrument_id"')>=0 ? #payload.replaceAll('.*?"payment_instrument_id":\s*?"([a-zA-Z0-9-]+)".*','$1') : null</value>
-                            </entry>
-                            <entry key="SensitiveInfoRecordID">
-                                <value>#payload.indexOf('"sensitive_info_record_id"')>=0 ? #payload.replaceAll('.*?"sensitive_info_record_id":\s*?"([a-zA-Z0-9-]+)".*','$1') : null</value>
-                            </entry>
-                            <entry key="StatusCode">
-                                <value>(#response.responseStatus==200 or #response.responseStatus==201 or #response.responseStatus==204) ? '0' :
-                                       #response.responseStatus==400 ? '-1' :
-                                       #response.responseStatus==500 ? #payload.replaceAll('.*?"code":\s*"?(\d+).*','$1') :
-                                       #response.responseStatus</value>
-                            </entry>
-                        </map>
-                    </property>
-                </bean>
-            </property>
-        </bean>
+    <bean id="ru.forxy.common.utils.Configuration.performance"
+          parent="ru.forxy.common.utils.Configuration"
+          p:payloadLoggingEnabled="true"
+          p:httpInfoLoggingEnabled="true"
+          p:performanceLoggingEnabled="true"/>
+
+    <bean id="ru.forxy.user.performance.logger.request"
+            class="ru.forxy.common.log.LogWriter" c:name="ru.forxy.user.performance.request"/>
+    <bean id="ru.forxy.user.performance.logger.response"
+                class="ru.forxy.common.log.LogWriter" c:name="ru.forxy.user.performance.response"/>
+
+
+    <bean id="ru.forxy.user.service.performance.loggingFilter.rest"
+          class="ru.forxy.common.log.EndpointLoggingServletFilter">
+        <property name="configuration" ref="ru.forxy.common.utils.Configuration.performance"/>
+        <property name="requestWriter" ref="ru.forxy.user.performance.logger.request"/>
+        <property name="responseWriter" ref="ru.forxy.user.performance.logger.response"/>
+        <!--<property name="requestFieldExtractors">
+            <bean class="com.expedia.e3.es.payment.common.performance.interceptor.metadata.SpelFieldExtractor">
+                <property name="extractRules">
+                    <map>
+                        <entry key="Username" value="#request.getParameter('client_id')?:#requestHeaders['client-id']?:null" />
+                        <entry key="TransactionGUID" value="#request.getParameter('transaction_guid')?:#requestHeaders['transaction-guid']?:null" />
+                        <entry key="MessageGUID" value="#request.getParameter('message_guid')?:#requestHeaders['message-guid']?:null" />
+                        <entry key="OperationName" value="#request.requestURI.matches('.*/payment-instruments') and #request.getMethod().equals('POST') ? 'RegisterPaymentInstrument' :
+                                                          #request.requestURI.matches('.*/payment-instruments/.*') and #request.getMethod().equals('GET') ? 'RetrievePaymentInstrument' :
+                                                          #request.requestURI.matches('.*/payment-instruments/.*') and #request.getMethod().equals('POST') ? 'RetainReleasePaymentInstrument' :
+                                                          #request.requestURI.matches('.*/payment-instruments/.*') and #request.getMethod().equals('PUT') ? 'UpdatePaymentInstrument' :
+                                                          #request.requestURI.matches('.*/status') and #request.getMethod().equals('GET') ? 'GetSystemStatus' :
+                                                          null" />
+                    </map>
+                </property>
+            </bean>
+        </property>
+        <property name="responseFieldExtractors">
+            <bean class="com.expedia.e3.es.payment.common.performance.interceptor.metadata.SpelFieldExtractor">
+                <property name="extractRules">
+                    <map>
+                        <entry key="TransactionGUID" value="#responseHeaders['Transaction-GUID']" />
+                        <entry key="MessageGUID" value="#responseHeaders['Message-GUID']" />
+                        <entry key="PaymentInstrumentID">
+                            <value>#payload.indexOf('"payment_instrument_id"')>=0 ? #payload.replaceAll('.*?"payment_instrument_id":\s*?"([a-zA-Z0-9-]+)".*','$1') : null</value>
+                        </entry>
+                        <entry key="SensitiveInfoRecordID">
+                            <value>#payload.indexOf('"sensitive_info_record_id"')>=0 ? #payload.replaceAll('.*?"sensitive_info_record_id":\s*?"([a-zA-Z0-9-]+)".*','$1') : null</value>
+                        </entry>
+                        <entry key="StatusCode">
+                            <value>(#response.responseStatus==200 or #response.responseStatus==201 or #response.responseStatus==204) ? '0' :
+                                   #response.responseStatus==400 ? '-1' :
+                                   #response.responseStatus==500 ? #payload.replaceAll('.*?"code":\s*"?(\d+).*','$1') :
+                                   #response.responseStatus</value>
+                        </entry>
+                    </map>
+                </property>
+            </bean>
+        </property>-->
+    </bean>
 </beans>

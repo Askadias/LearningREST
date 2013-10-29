@@ -3,10 +3,10 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns:jaxrs="http://cxf.apache.org/jaxrs"
-       xmlns:context="http://www.springframework.org/schema/context" xmlns:cxf="http://cxf.apache.org/core"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans     http://www.springframework.org/schema/beans/spring-beans.xsd
         http://cxf.apache.org/jaxrs                     http://cxf.apache.org/schemas/jaxrs.xsd
-        http://www.springframework.org/schema/context   http://www.springframework.org/schema/context/spring-context.xsd http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd">
+        http://www.springframework.org/schema/context   http://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="2"
                                   location="file:${catalina.base}/conf/appconfig/base/ru.forxy.user.properties"/>
@@ -16,17 +16,17 @@
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
     <import resource="classpath:ru/forxy/dao-spring-context.xml"/>
+    <import resource="classpath:ru/forxy/log-spring-context.xml"/>
 
     <bean id="ru.forxy.common.utils.Configuration" class="ru.forxy.common.utils.Configuration"
-            p:objectValidationEnabled="true"
-            p:payloadLoggingEnabled="true"/>
+          p:objectValidationEnabled="true"/>
 
     <bean id="ru.forxy.user.payload.Validator" class="net.sf.oval.Validator">
         <constructor-arg>
             <list>
                 <bean class="net.sf.oval.configuration.xml.XMLConfigurer">
                     <constructor-arg type="java.io.InputStream"
-                        value="file:${catalina.base}/conf/appconfig/base/ru.forxy.user.validation.xml" />
+                                     value="file:${catalina.base}/conf/appconfig/base/ru.forxy.user.validation.xml"/>
                 </bean>
             </list>
         </constructor-arg>
@@ -45,13 +45,14 @@
             <ref bean="ru.forxy.common.service.SystemStatusServiceImpl"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
-            <bean class="ru.forxy.common.web.JSONValidationProvider"
-                    p:configuration-ref="ru.forxy.common.utils.Configuration"
-                    p:validator-ref="ru.forxy.user.payload.Validator"/>
+            <bean class="ru.forxy.common.web.JSONValidationProvider">
+                <property name="configuration" ref="ru.forxy.common.utils.Configuration"/>
+                <property name="validator" ref="ru.forxy.user.payload.Validator"/>
+            </bean>
             <bean class="ru.forxy.common.exceptions.utils.ResponseStatusMapper"/>
         </jaxrs:providers>
         <jaxrs:extensionMappings>
-            <entry key="json" value="application/json" />
+            <entry key="json" value="application/json"/>
         </jaxrs:extensionMappings>
     </jaxrs:server>
 </beans>
