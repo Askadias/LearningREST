@@ -1,4 +1,4 @@
-package ru.forxy.service;
+package ru.forxy.test.service;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.cxf.jaxrs.impl.HttpHeadersImpl;
@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.forxy.common.pojo.EntityPage;
+import ru.forxy.service.UserServiceImpl;
 import ru.forxy.user.IUserService;
 import ru.forxy.user.pojo.User;
 
@@ -29,19 +30,19 @@ public class UserServiceImplTest {
     @Test
     @Ignore
     public void testAddDeleteUser() {
-        User xander = new User("xander@gmail.com", new byte[]{});
+        User testUser = new User("xander@gmail.com", new byte[]{});
         Message m = new MessageImpl();
         UriInfo uriInfo = new UriInfoImpl(m);
         HttpHeaders headers = new HttpHeadersImpl(m);
-        userService.createUser(xander, uriInfo, headers);
-        Response response = userService.login(xander, uriInfo, headers);
+        userService.createUser(testUser, uriInfo, headers);
+        Response response = userService.login(testUser, uriInfo, headers);
         Assert.assertNotNull(response);
         Assert.assertNotNull(response.getEntity());
         User user = response.readEntity(User.class);
         Assert.assertEquals("xander@gmail.com", user.getEmail());
-        userService.deleteUser(xander.getEmail(), uriInfo, headers);
+        userService.deleteUser(testUser.getEmail(), uriInfo, headers);
         try {
-            userService.login(xander, uriInfo, headers);
+            userService.login(testUser, uriInfo, headers);
             Assert.fail();
         } catch (BadRequestException e) {
         }

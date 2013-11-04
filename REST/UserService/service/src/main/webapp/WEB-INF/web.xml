@@ -6,20 +6,23 @@
          version="2.5">
     <display-name>UserService</display-name>
 
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
-
+    <!-- Loading Service properties from MANIFEST.MF-->
     <listener>
         <listener-class>ru.forxy.common.web.SystemPropertiesSupportListener</listener-class>
+    </listener>
+
+    <!-- Spring -->
+   <!-- <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath*:ru/forxy/spring-context.xml</param-value>
-    </context-param>
+    </context-param>-->
 
-    <servlet>
+    <!-- CXF -->
+    <!--<servlet>
         <servlet-name>CXFServlet</servlet-name>
         <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
         <init-param>
@@ -32,10 +35,46 @@
     <servlet-mapping>
         <servlet-name>CXFServlet</servlet-name>
         <url-pattern>/*</url-pattern>
+    </servlet-mapping>-->
+
+    <!-- Hello Servlet -->
+    <listener>
+        <listener-class>ru.forxy.servlet.MyContextAttributeListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>ru.forxy.servlet.MySessionAttributeListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>ru.forxy.servlet.MySessionListener</listener-class>
+    </listener>
+
+    <servlet>
+        <servlet-name>HelloServlet</servlet-name>
+        <servlet-class>ru.forxy.servlet.HelloWorldServlet</servlet-class>
+        <init-param>
+            <param-name>title</param-name>
+            <param-value>This Is Sparta!!!</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>HelloServlet</servlet-name>
+        <url-pattern>*.do</url-pattern>
     </servlet-mapping>
 
+    <error-page>
+        <error-code>404</error-code>
+        <location>/hello/error/error.jsp</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.IllegalStateException</exception-type>
+        <location>/hello/error/error.jsp</location>
+    </error-page>
+
     <!-- character encoding filter -->
-    <filter>
+    <!--<filter>
         <filter-name>ru.forxy.user.charset.encoding.filter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
         <init-param>
@@ -50,15 +89,15 @@
     <filter-mapping>
         <filter-name>ru.forxy.user.charset.encoding.filter</filter-name>
         <url-pattern>/*</url-pattern>
-    </filter-mapping>
+    </filter-mapping>-->
 
     <!-- logging filter -->
-    <filter>
+   <!-- <filter>
         <filter-name>ru.forxy.user.service.performance.loggingFilter.rest</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>ru.forxy.user.service.performance.loggingFilter.rest</filter-name>
         <url-pattern>/*</url-pattern>
-    </filter-mapping>
+    </filter-mapping>-->
 </web-app>

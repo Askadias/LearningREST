@@ -14,7 +14,8 @@
         </encoder>
     </appender>
 
-    <logger name="com.base22" level="TRACE"/>
+    <logger name="ru.forxy.test" level="TRACE"/>
+    <logger name="ru.forxy.servlet" level="INFO"/>
 
     <root level="warn">
         <appender-ref ref="FILE"/>
