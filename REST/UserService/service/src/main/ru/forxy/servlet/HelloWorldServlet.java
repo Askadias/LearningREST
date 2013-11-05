@@ -104,7 +104,6 @@ public class HelloWorldServlet extends HttpServlet {
 
     private void logout(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getSession().invalidate();
-        req.setAttribute("user", new User("Guest"));
         getServletContext().getRequestDispatcher("/hello/login.jsp").forward(req, resp);
     }
 
