@@ -72,6 +72,19 @@
         <exception-type>java.lang.IllegalStateException</exception-type>
         <location>/hello/error/error.jsp</location>
     </error-page>
+    
+    <welcome-file-list>
+        <welcome-file>/hello/hello.jsp</welcome-file>
+    </welcome-file-list>
+
+    <!--<login-config>
+        <auth-method>basic</auth-method>
+        <realm-name>kast</realm-name>
+        <form-login-config>
+            <form-login-page>/hello/login.jsp</form-login-page>
+            <form-error-page>/hello/error/error.jsp</form-error-page>
+        </form-login-config>
+    </login-config>-->
 
     <!-- character encoding filter -->
     <!--<filter>

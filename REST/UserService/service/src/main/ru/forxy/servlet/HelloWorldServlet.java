@@ -96,13 +96,13 @@ public class HelloWorldServlet extends HttpServlet {
             req.setAttribute("user", user);
             req.getSession().setAttribute("user", user);
         }
+        resp.encodeURL("JSESSIONID=" + req.getSession().getId());
         getServletContext().getRequestDispatcher("/hello/hello.jsp").forward(req, resp);
     }
 
     private void logout(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getSession().invalidate();
         req.setAttribute("user", new User("Guest"));
-        resp.encodeURL("JSESSIONID=" + req.getSession().getId());
         getServletContext().getRequestDispatcher("/hello/hello.jsp").forward(req, resp);
     }
 

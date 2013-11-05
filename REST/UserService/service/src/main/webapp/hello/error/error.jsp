@@ -1,16 +1,17 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Uladzislau_Prykhodzk
-  Date: 11/4/13
-  Time: 3:19 PM
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-<h1>Error occurred!</h1>
-</body>
-</html>
+<%@page contentType="text/html;charset=UTF-8" %>
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+
+<t:genericpage>
+    <jsp:body>
+        <jsp:useBean id="exception" scope="request" type="java.lang.Throwable"/>
+        <p>
+                ${exception.message} <br/>
+            Details:<br/>
+                ${exception.stackTrace}
+        </p>
+    </jsp:body>
+
+    <jsp:attribute name="footer">
+        <p id="copyright">Copyright 2013, Forxy.ru</p>
+    </jsp:attribute>
+</t:genericpage>

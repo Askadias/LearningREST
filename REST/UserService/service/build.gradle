@@ -84,6 +84,8 @@ dependencies {
     compile project(":ru.forxy.user.api")
     compile "forxy:ru.forxy.common.support:${rev_forxy_common}"
 
+    compile 'jstl:jstl:1.2'
+
     // --------------------- COMMON --------------------------------------
     compile "commons-collections:commons-collections:${rev_common_collections}"
     compile "ch.qos.logback:logback-core:${rev_logback}"

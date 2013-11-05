@@ -1,16 +1,7 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Uladzislau_Prykhodzk
-  Date: 11/4/13
-  Time: 4:44 PM
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Hello, ${user.name}</title>
-</head>
-<body>
-<h1>Hello, ${user.name}</h1>
-</body>
-</html>
+<%@page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+
+<jsp:useBean id="user" scope="request" type="ru.forxy.servlet.User"/>
+
+<t:userpage user="${user}">
+</t:userpage>
