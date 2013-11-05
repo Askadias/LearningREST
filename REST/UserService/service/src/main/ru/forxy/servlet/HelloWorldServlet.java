@@ -91,19 +91,21 @@ public class HelloWorldServlet extends HttpServlet {
 
         String userName = req.getParameter("user");
         User user = (User) req.getSession(true).getAttribute("user");
-        if (user == null) {
-            user = new User(userName != null && !"".equals(userName) ? userName : "Guest");
-            req.setAttribute("user", user);
-            req.getSession().setAttribute("user", user);
+        if ((user == null || user.getName() == null || "".equals(user.getName())) && userName != null) {
+            user = new User(userName);
         }
-        resp.encodeURL("JSESSIONID=" + req.getSession().getId());
-        getServletContext().getRequestDispatcher("/hello/hello.jsp").forward(req, resp);
+        if (user == null) {
+            getServletContext().getRequestDispatcher("/hello/login.jsp").forward(req, resp);
+        } else {
+            req.getSession(true).setAttribute("user", user);
+            getServletContext().getRequestDispatcher("/hello/hello.jsp").forward(req, resp);
+        }
     }
 
     private void logout(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getSession().invalidate();
         req.setAttribute("user", new User("Guest"));
-        getServletContext().getRequestDispatcher("/hello/hello.jsp").forward(req, resp);
+        getServletContext().getRequestDispatcher("/hello/login.jsp").forward(req, resp);
     }
 
     @Override

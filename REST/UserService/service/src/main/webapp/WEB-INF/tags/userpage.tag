@@ -3,7 +3,7 @@
 <%@attribute name="user" type="ru.forxy.servlet.User" required="false" %>
 <t:genericpage>
     <jsp:attribute name="header">
-        <h1>Welcome, ${user != null ? user.name : "Guest"}</h1>
+        <h1>Welcome, ${!empty user && !empty user.name ? user.name : "Guest"}</h1>
     </jsp:attribute>
 
     <jsp:attribute name="footer">

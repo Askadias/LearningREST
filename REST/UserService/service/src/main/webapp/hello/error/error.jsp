@@ -3,7 +3,7 @@
 
 <t:genericpage>
     <jsp:body>
-        <jsp:useBean id="exception" scope="request" type="java.lang.Throwable"/>
+        <jsp:useBean id="exception" scope="request" class="java.lang.Throwable"/>
         <p>
                 ${exception.message} <br/>
             Details:<br/>
