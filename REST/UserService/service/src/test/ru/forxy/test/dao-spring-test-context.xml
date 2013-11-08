@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns='http://www.springframework.org/schema/beans'
+       xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation='
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd'>
+
+    <bean id="ru.forxy.db.dao.mongo.UserDAO"
+          class="org.easymock.EasyMock"
+          factory-method="createNiceMock"
+          c:toMock="ru.forxy.db.dao.IUserDAO"/>
+
+</beans>

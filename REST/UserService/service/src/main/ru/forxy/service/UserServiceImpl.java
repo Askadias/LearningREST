@@ -1,6 +1,5 @@
 package ru.forxy.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import ru.forxy.common.exceptions.ServiceException;
@@ -21,7 +20,6 @@ public class UserServiceImpl extends AbstractService implements IUserService {
 
     private static final int DEFAULT_PAGE_SIZE = 10;
 
-    @Autowired
     private IUserDAO userDAO;
 
     @Override
@@ -92,5 +90,9 @@ public class UserServiceImpl extends AbstractService implements IUserService {
         } else {
             throw new ServiceException(UserServiceExceptions.UserNotFound.getStatusTemplate(), email);
         }
+    }
+
+    public void setUserDAO(IUserDAO userDAO) {
+        this.userDAO = userDAO;
     }
 }

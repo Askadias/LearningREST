@@ -115,10 +115,11 @@ dependencies {
     compile "org.springframework:spring-beans:${rev_spring}"
     compile "org.springframework:spring-context:${rev_spring}"
     compile "org.springframework:spring-web:${rev_spring}"
-    compile "org.springframework:spring-test:${rev_spring}"
 
     // ===================== TEST ========================================
+    testCompile "org.springframework:spring-test:${rev_spring}"
     testCompile "junit:junit:${rev_junit}"
+    testCompile "org.easymock:easymock:${rev_easymock}"
 }
 
 eclipse {
