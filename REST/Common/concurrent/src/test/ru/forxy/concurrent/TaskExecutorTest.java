@@ -28,6 +28,10 @@ public class TaskExecutorTest {
             m_shouldFail = shouldFail;
         }
 
+        @Override
+        protected void executeBeforeDependencies(IExecutionContext executionContext) {
+        }
+
         @SuppressWarnings("PMD.AvoidThrowingRawExceptionTypes")
         @Override
         protected void executeAfterDependencies(final IExecutionContext executionContext) {
@@ -79,6 +83,10 @@ public class TaskExecutorTest {
                     @Override
                     public String getName() {
                         return "DependentTask-" + fi + "-" + fj;
+                    }
+
+                    @Override
+                    protected void executeBeforeDependencies(IExecutionContext executionContext) {
                     }
 
                     @SuppressWarnings("PMD.AvoidThrowingRawExceptionTypes")

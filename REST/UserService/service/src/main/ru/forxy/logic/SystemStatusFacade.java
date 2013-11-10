@@ -1,10 +1,10 @@
 package ru.forxy.logic;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.forxy.common.SystemProperties;
-import ru.forxy.common.pojo.status.ComponentStatus;
-import ru.forxy.common.pojo.status.StatusType;
-import ru.forxy.common.pojo.status.SystemStatus;
+import ru.forxy.common.utils.SystemProperties;
+import ru.forxy.common.status.api.ComponentStatus;
+import ru.forxy.common.status.api.StatusType;
+import ru.forxy.common.status.api.SystemStatus;
 import ru.forxy.common.status.ISystemStatusFacade;
 import ru.forxy.db.dao.IUserDAO;
 

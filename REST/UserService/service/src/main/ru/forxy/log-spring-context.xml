@@ -12,13 +12,13 @@
           p:performanceLoggingEnabled="true"/>
 
     <bean id="ru.forxy.user.performance.logger.request"
-            class="ru.forxy.common.log.LogWriter" c:name="ru.forxy.user.performance.request"/>
+            class="ru.forxy.common.logging.LogWriter" c:name="ru.forxy.user.performance.request"/>
     <bean id="ru.forxy.user.performance.logger.response"
-                class="ru.forxy.common.log.LogWriter" c:name="ru.forxy.user.performance.response"/>
+                class="ru.forxy.common.logging.LogWriter" c:name="ru.forxy.user.performance.response"/>
 
 
     <bean id="ru.forxy.user.service.performance.loggingFilter.rest"
-          class="ru.forxy.common.log.EndpointLoggingServletFilter">
+          class="ru.forxy.common.logging.EndpointLoggingServletFilter">
         <property name="configuration" ref="ru.forxy.common.utils.Configuration.performance"/>
         <property name="requestWriter" ref="ru.forxy.user.performance.logger.request"/>
         <property name="responseWriter" ref="ru.forxy.user.performance.logger.response"/>

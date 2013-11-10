@@ -1,9 +1,12 @@
 rootProject.name=project_name
 
 def projects = [
-        ':api' : [name: "ru.forxy.common.api", path: 'api'],
         ':concurrent' : [name: "ru.forxy.common.concurrent", path: 'concurrent'],
-        ':support' : [name: "ru.forxy.common.support", path: 'support']
+        ':logging' : [name: "ru.forxy.common.logging", path: 'logging'],
+        ':status' : [name: "ru.forxy.common.status", path: 'status'],
+        ':utils' : [name: "ru.forxy.common.utils", path: 'utils'],
+        ':rest' : [name: "ru.forxy.common.rest", path: 'rest'],
+        ':rest:api' : [name: "ru.forxy.common.rest.api", path: 'rest/api']
 ]
 
 projects.each() { key, config ->

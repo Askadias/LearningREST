@@ -18,6 +18,7 @@ public abstract class AbstractDependentTask implements IDependentTask {
      */
     @Override
     public void execute(final IExecutionContext executionContext) {
+        executeBeforeDependencies(executionContext);
         List<ITask> dependencies = getDependencies();
         if (dependencies.size() > 0) {
             ITaskExecutor taskExecutor = executionContext.getExecutor();
@@ -34,6 +35,8 @@ public abstract class AbstractDependentTask implements IDependentTask {
         }
         executeAfterDependencies(executionContext);
     }
+
+    protected abstract void executeBeforeDependencies(IExecutionContext executionContext);
 
     protected abstract void executeAfterDependencies(IExecutionContext executionContext);
 

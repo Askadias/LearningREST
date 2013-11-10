@@ -1,7 +1,6 @@
 package ru.forxy.user.pojo;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import ru.forxy.common.Constants;
 import ru.forxy.common.pojo.SimpleJacksonDateSerializer;
 
 import javax.persistence.Column;
@@ -12,7 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
 @Entity
-@Table(name = "user", schema = Constants.SCHEMA_NAME + "@user")
+@Table(name = "user", schema = "forxy@user")
 @XmlRootElement(name = "user")
 public class User {
 

@@ -1,0 +1,26 @@
+apply plugin: 'java'
+
+sourceSets {
+    main {
+        java { srcDir 'src/main' }
+        resources { srcDir 'src/main' }
+    }
+    test {
+        java { srcDir 'src/test' }
+        resources { srcDir 'src/test' }
+    }
+}
+
+
+// ========== Dependencies ==============================================
+
+dependencies {
+    // --------------------- PROJECTS ------------------------------------
+    compile project(":ru.forxy.common.utils")
+    compile "javax.servlet:servlet-api:${rev_servlet_api}"
+    compile "org.slf4j:slf4j-api:${rev_slf4j}"
+
+
+    // ===================== TEST ========================================
+    testCompile "junit:junit:${rev_junit}"
+}

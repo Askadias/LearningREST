@@ -11,8 +11,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import ru.forxy.common.pojo.status.ComponentStatus;
-import ru.forxy.common.pojo.status.StatusType;
+import ru.forxy.common.status.api.ComponentStatus;
+import ru.forxy.common.status.api.StatusType;
 import ru.forxy.db.dao.IUserDAO;
 import ru.forxy.user.pojo.User;
 
