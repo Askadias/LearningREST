@@ -12,9 +12,9 @@
           p:performanceLoggingEnabled="true"/>
 
     <bean id="ru.forxy.user.performance.logger.request"
-            class="ru.forxy.common.logging.LogWriter" c:name="ru.forxy.user.performance.request"/>
+            class="ru.forxy.common.logging.LogWriter" c:name="user.performance.request"/>
     <bean id="ru.forxy.user.performance.logger.response"
-                class="ru.forxy.common.logging.LogWriter" c:name="ru.forxy.user.performance.response"/>
+                class="ru.forxy.common.logging.LogWriter" c:name="user.performance.response"/>
 
 
     <bean id="ru.forxy.user.service.performance.loggingFilter.rest"
@@ -23,7 +23,7 @@
         <property name="requestWriter" ref="ru.forxy.user.performance.logger.request"/>
         <property name="responseWriter" ref="ru.forxy.user.performance.logger.response"/>
         <!--<property name="requestFieldExtractors">
-            <bean class="com.expedia.e3.es.payment.common.performance.interceptor.metadata.SpelFieldExtractor">
+            <bean class="ru.forxy.common.performance.interceptor.metadata.SpelFieldExtractor">
                 <property name="extractRules">
                     <map>
                         <entry key="Username" value="#request.getParameter('client_id')?:#requestHeaders['client-id']?:null" />
@@ -40,7 +40,7 @@
             </bean>
         </property>
         <property name="responseFieldExtractors">
-            <bean class="com.expedia.e3.es.payment.common.performance.interceptor.metadata.SpelFieldExtractor">
+            <bean class="ru.forxy.common.performance.interceptor.metadata.SpelFieldExtractor">
                 <property name="extractRules">
                     <map>
                         <entry key="TransactionGUID" value="#responseHeaders['Transaction-GUID']" />
