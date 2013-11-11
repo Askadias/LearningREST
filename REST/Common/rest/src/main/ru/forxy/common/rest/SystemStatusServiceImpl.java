@@ -1,5 +1,6 @@
-package ru.forxy.common.service;
+package ru.forxy.common.rest;
 
+import ru.forxy.common.service.ISystemStatusService;
 import ru.forxy.common.status.ISystemStatusFacade;
 
 import javax.ws.rs.core.HttpHeaders;

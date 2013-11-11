@@ -1,4 +1,4 @@
-package ru.forxy.common.status.api;
+package ru.forxy.common.status.pojo;
 
 import java.io.Serializable;
 import java.util.Date;

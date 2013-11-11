@@ -1,4 +1,4 @@
-package ru.forxy.service;
+package ru.forxy.rest;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" targetNamespace="urn:ru:forxy:user:messages:v1"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:user="urn:ru:forxy:user:messages:v1"
+        xmlns:common="urn:ru:forxy:common:types:v1">
+
+    <xs:import namespace="urn:ru:forxy:common:types:v1" schemaLocation="ru.forxy.common.types.v1.xsd"/>
+
+    <xs:complexType name="UserType">
+        <xs:sequence>
+            <xs:element name="Email" type="common:EmailAddressType" minOccurs="1"/>
+            <xs:element name="Password" type="xs:base64Binary" minOccurs="0"/>
+            <xs:element name="Login" type="xs:string" minOccurs="0"/>
+            <xs:element name="LastName" type="xs:string" minOccurs="0"/>
+            <xs:element name="FirstName" type="xs:string" minOccurs="0"/>
+            <xs:element name="Gender" type="xs:unsignedShort" minOccurs="0"/>
+            <xs:element name="BirthDate" type="xs:dateTime" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="UserPageType">
+        <xs:complexContent>
+            <xs:extension base="common:PageType">
+                <xs:sequence>
+                    <xs:element name="User" type="user:UserType"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+
+    <xs:complexType name="GetUsersRQType">
+        <xs:complexContent>
+            <xs:extension base="common:RequestType">
+                <xs:sequence>
+                    <xs:element name="PageInfo" type="common:PageInfoType" minOccurs="1"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:element name="GetUsersRQ" type="user:GetUsersRQType"/>
+
+    <xs:complexType name="GetUsersRSType">
+        <xs:complexContent>
+            <xs:extension base="common:ResponseType">
+                <xs:sequence>
+                    <xs:element name="Page" type="user:UserPageType" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:element name="GetUsersRS" type="user:GetUsersRSType"/>
+
+    <xs:complexType name="GetUserRQType">
+        <xs:complexContent>
+            <xs:extension base="common:RequestType">
+                <xs:sequence>
+                    <xs:element name="User" type="user:UserType"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:element name="GetUserRQ" type="user:GetUserRQType"/>
+
+    <xs:complexType name="GetUserRSType">
+        <xs:complexContent>
+            <xs:extension base="common:ResponseType">
+                <xs:sequence>
+                    <xs:element name="User" type="user:UserType" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:element name="GetUserRS" type="user:GetUserRSType"/>
+
+    <xs:complexType name="DeleteUserRQType">
+        <xs:complexContent>
+            <xs:extension base="common:RequestType">
+                <xs:sequence>
+                    <xs:element name="Email" type="common:EmailAddressType"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:element name="DeleteUserRQ" type="user:DeleteUserRQType"/>
+
+    <xs:element name="DeleteUserRS" type="common:ResponseType"/>
+
+    <xs:element name="UserFault" type="common:FaultType"/>
+
+</xs:schema>
+

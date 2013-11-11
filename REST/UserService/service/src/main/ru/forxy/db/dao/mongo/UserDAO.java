@@ -11,10 +11,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import ru.forxy.common.status.api.ComponentStatus;
-import ru.forxy.common.status.api.StatusType;
+import ru.forxy.common.status.pojo.ComponentStatus;
+import ru.forxy.common.status.pojo.StatusType;
 import ru.forxy.db.dao.IUserDAO;
-import ru.forxy.user.pojo.User;
+import ru.forxy.user.rest.pojo.User;
 
 import java.util.Date;
 import java.util.List;

@@ -11,7 +11,8 @@
     <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="1"
                                   location="file:${catalina.base}/conf/appconfig/env/${env}/ru.forxy.user.properties"/>
 
-    <import resource="classpath:ru/forxy/service-spring-context.xml"/>
+    <import resource="classpath:ru/forxy/rest-spring-context.xml"/>
+    <import resource="classpath:ru/forxy/soap-spring-context.xml"/>
     <import resource="classpath:ru/forxy/impl-spring-context.xml"/>
     <import resource="classpath:ru/forxy/dao-spring-context.xml"/>
     <import resource="classpath:ru/forxy/log-spring-context.xml"/>

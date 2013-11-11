@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions targetNamespace="urn:ru:forxy:user:interface:v1"
+                  xmlns:tns="urn:ru:forxy:user:interface:v1"
+                  xmlns:user="urn:ru:forxy:user:messages:v1"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="
+        http://schemas.xmlsoap.org/wsdl/ http://schemas.xmlsoap.org/wsdl/
+        http://schemas.xmlsoap.org/wsdl/soap/ http://schemas.xmlsoap.org/wsdl/soap/">
+
+    <wsdl:types>
+        <xs:schema version="1.0">
+            <xs:import namespace="urn:ru:forxy:user:messages:v1"
+                       schemaLocation="ru.forxy.user.messages.v1.xsd"/>
+        </xs:schema>
+    </wsdl:types>
+
+    <wsdl:message name="MessageGetUsersRequest">
+        <wsdl:part name="getUsersRequest" element="user:GetUsersRQ"/>
+    </wsdl:message>
+
+    <wsdl:message name="MessageGetUsersResponse">
+        <wsdl:part name="getUsersResponse" element="user:GetUsersRS"/>
+    </wsdl:message>
+
+    <wsdl:message name="MessageGetUserRequest">
+        <wsdl:part name="getUserRequest" element="user:GetUserRQ"/>
+    </wsdl:message>
+
+    <wsdl:message name="MessageGetUserResponse">
+        <wsdl:part name="getUserResponse" element="user:GetUserRS"/>
+    </wsdl:message>
+
+    <wsdl:message name="MessageDeleteUserRequest">
+        <wsdl:part name="deleteUserRequest" element="user:DeleteUserRQ"/>
+    </wsdl:message>
+
+    <wsdl:message name="MessageDeleteUserResponse">
+        <wsdl:part name="deleteUserResponse" element="user:DeleteUserRS"/>
+    </wsdl:message>
+
+    <wsdl:message name="MessageUserServiceFault">
+        <wsdl:part name="userServiceFault" element="user:UserFault"/>
+    </wsdl:message>
+
+    <wsdl:portType name="UserServicePortType">
+        <wsdl:operation name="getUsers">
+            <wsdl:input name="getUsersRequest" message="tns:MessageGetUsersRequest"/>
+            <wsdl:output name="getUsersResponse" message="tns:MessageGetUsersResponse"/>
+            <wsdl:fault name="userServiceFault" message="tns:MessageUserServiceFault"/>
+        </wsdl:operation>
+        <wsdl:operation name="getUser">
+            <wsdl:input name="getUserRequest" message="tns:MessageGetUserRequest"/>
+            <wsdl:output name="getUserResponse" message="tns:MessageGetUserResponse"/>
+            <wsdl:fault name="userServiceFault" message="tns:MessageUserServiceFault"/>
+        </wsdl:operation>
+        <wsdl:operation name="deleteUser">
+            <wsdl:input name="deleteUserRequest" message="tns:MessageDeleteUserRequest"/>
+            <wsdl:output name="deleteUserResponse" message="tns:MessageDeleteUserResponse"/>
+            <wsdl:fault name="userServiceFault" message="tns:MessageUserServiceFault"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    
+    <wsdl:binding name="UserServiceSoap" type="tns:UserServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="getUsers">
+            <soap:operation soapAction="getUsers" style="document"/>
+            <wsdl:input name="getUsersRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="getUsersResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="userServiceFault">
+                <soap:fault name="userServiceFault" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getUser">
+            <soap:operation soapAction="getUser" style="document"/>
+            <wsdl:input name="getUserRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="getUserResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="userServiceFault">
+                <soap:fault name="userServiceFault" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="deleteUser">
+            <soap:operation soapAction="deleteUser" style="document"/>
+            <wsdl:input name="deleteUserRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="deleteUserResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="userServiceFault">
+                <soap:fault name="userServiceFault" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    
+    <wsdl:service name="UserWS">
+        <wsdl:port name="UserWSPort" binding="tns:UserServiceSoap">
+            <soap:address location="http://localhost:8080/UserService/soap/v1"/>
+        </wsdl:port>
+    </wsdl:service>
+
+</wsdl:definitions>

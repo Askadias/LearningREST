@@ -63,13 +63,13 @@
 
     <bean id="userServiceClientFactory"
           class="org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean">
-        <property name="serviceClass" value="ru.forxy.user.IUserService"/>
-        <property name="address" value="${ru.forxy.user.IUserService/url}"/>
+        <property name="serviceClass" value="ru.forxy.user.rest.IUserService"/>
+        <property name="address" value="${ru.forxy.user.rest.IUserService/url}"/>
         <property name="provider" ref="jsonProvider"/>
     </bean>
 
     <bean id="userServiceClient"
-          class="ru.forxy.user.IUserService"
+          class="ru.forxy.user.rest.IUserService"
           factory-bean="userServiceClientFactory"
           factory-method="create"/>
 

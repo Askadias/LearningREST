@@ -1,4 +1,4 @@
-package ru.forxy.common.service;
+package ru.forxy.common.rest;
 
 import ru.forxy.common.web.RequestHelper;
 import ru.forxy.common.utils.SystemProperties;

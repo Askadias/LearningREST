@@ -1,6 +1,6 @@
 package ru.forxy.common.status;
 
-import ru.forxy.common.status.api.ComponentStatus;
+import ru.forxy.common.status.pojo.ComponentStatus;
 
 /**
  * Implementing this interface you should return health status of the implementor

@@ -16,6 +16,8 @@ sourceSets {
     }
 }
 
+jar { from sourceSets.main.allJava }
+
 if (System.env.OUTPUT_ROOT) {
     buildDir = file("$System.env.OUTPUT_ROOT/$project.name")
 }

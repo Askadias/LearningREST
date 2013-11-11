@@ -1,6 +1,6 @@
 package ru.forxy.common.status;
 
-import ru.forxy.common.status.api.SystemStatus;
+import ru.forxy.common.status.pojo.SystemStatus;
 
 /**
  * Facade includes the business logic for service and its components health check

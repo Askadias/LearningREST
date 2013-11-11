@@ -48,7 +48,7 @@
         </jaxrs:serviceBeans>
     </jaxrs:server>
 
-    <bean id="cryptoServiceImpl" class="ru.forxy.service.CryptoServiceImpl">
+    <bean id="cryptoServiceImpl" class="ru.forxy.rest.CryptoServiceImpl">
         <constructor-arg name="password" value="${ru.forxy.service.CryptoServiceImpl/password}"/>
     </bean>
 

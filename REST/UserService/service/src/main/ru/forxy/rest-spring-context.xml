@@ -28,8 +28,8 @@
     <!--suppress UnparsedCustomBeanInspection -->
     <jaxrs:server id="userService" address="/v1">
         <jaxrs:serviceBeans>
-            <ref bean="ru.forxy.service.UserServiceImpl"/>
-            <ref bean="ru.forxy.common.service.SystemStatusServiceImpl"/>
+            <ref bean="ru.forxy.rest.UserServiceImpl"/>
+            <ref bean="ru.forxy.common.rest.SystemStatusServiceImpl"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <bean class="ru.forxy.common.web.JSONValidationProvider">

@@ -1,4 +1,4 @@
-package ru.forxy.service;
+package ru.forxy.rest;
 
 
 import org.slf4j.Logger;

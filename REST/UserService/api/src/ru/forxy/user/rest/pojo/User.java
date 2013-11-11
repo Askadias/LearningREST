@@ -1,4 +1,4 @@
-package ru.forxy.user.pojo;
+package ru.forxy.user.rest.pojo;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import ru.forxy.common.pojo.SimpleJacksonDateSerializer;

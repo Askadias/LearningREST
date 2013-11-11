@@ -1,6 +1,6 @@
-package ru.forxy.user;
+package ru.forxy.user.rest;
 
-import ru.forxy.user.pojo.User;
+import ru.forxy.user.rest.pojo.User;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -36,13 +36,13 @@ public interface IUserService {
                       @Context final HttpHeaders headers);
 
     @GET
-    Response getUser(@QueryParam("") User user,
+    Response getUser(@QueryParam("") User requestedUser,
                      @Context final UriInfo uriInfo,
                      @Context final HttpHeaders headers);
 
     @POST
     @Path("/login")
-    Response login(User login,
+    Response login(User loginUser,
                    @Context final UriInfo uriInfo,
                    @Context final HttpHeaders headers);
 
