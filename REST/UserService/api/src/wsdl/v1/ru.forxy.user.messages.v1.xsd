@@ -13,7 +13,7 @@
             <xs:element name="Login" type="xs:string" minOccurs="0"/>
             <xs:element name="LastName" type="xs:string" minOccurs="0"/>
             <xs:element name="FirstName" type="xs:string" minOccurs="0"/>
-            <xs:element name="Gender" type="xs:unsignedShort" minOccurs="0"/>
+            <xs:element name="Gender" type="common:Char" minOccurs="0"/>
             <xs:element name="BirthDate" type="xs:dateTime" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
@@ -22,7 +22,7 @@
         <xs:complexContent>
             <xs:extension base="common:PageType">
                 <xs:sequence>
-                    <xs:element name="User" type="user:UserType"/>
+                    <xs:element name="User" type="user:UserType" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>

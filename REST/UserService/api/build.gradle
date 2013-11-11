@@ -7,22 +7,87 @@ configurations {
 
 sourceSets {
     main {
-        java { srcDir 'src' }
+        java { srcDirs "src", "$buildDir/build" }
         resources { srcDir 'src' }
     }
 }
 
 jar { from sourceSets.main.allJava }
 
+task wsimport(type: Copy) {
+    ext.wsimportTargetDir = file("$buildDir/build")
+    ext.wsimportDir = file("$buildDir/build/wsdl")
+
+    from(configurations.xsd) {
+        include '*.wsdl'
+        include '*.xsd'
+        rename '^(.*)-(.*)\\.(.*)$$', '$1.$3'
+    }
+    into "$wsimportDir"
+
+    doLast {
+        wsimportTargetDir.mkdirs()
+        ant {
+            taskdef(name: 'wsimport', classname: 'com.sun.tools.ws.ant.WsImport', classpath: configurations.wsimport.asPath)
+            wsimport(
+                    keep: true, verbose: true, sourcedestdir: "$wsimportTargetDir", extension: true,
+                    wsdl: "$wsimportDir/ru.forxy.user.interface.v1.wsdl",
+                    wsdlLocation: 'wsdl/ru.forxy.user.interface.v1.wsdl',
+                    xnocompile: 'yes',
+                    package: 'ru.forxy.user.soap.gen.v1')
+                    {
+                        depends(dir: "$wsimportDir", includes: "*.xsd,*.wsdl")
+                        produces(dir: "$wsimportTargetDir/ru/forxy/user/soap/gen/v1")
+                    }
+        }
+    }
+}
+
+
+compileJava.dependsOn(wsimport)
+
+artifacts {
+    'default' file: file('src/wsdl/v1/ru.forxy.user.interface.v1.wsdl'), name: 'ru.forxy.user.interface.v1', type: 'wsdl'
+    'default' file: file('src/wsdl/v1/ru.forxy.user.messages.v1.xsd'), name: 'ru.forxy.user.messages.v1', type: 'xsd'
+}
+
 dependencies {
     // --------------------- FORXY ---------------------------------------
     compile "forxy:ru.forxy.common.rest.api:${rev_forxy_common}"
 
+    xsd files('src/wsdl/v1/ru.forxy.user.interface.v1.wsdl', 'src/wsdl/v1/ru.forxy.user.messages.v1.xsd')
     xsd "forxy:ru.forxy.common.soap.api:${rev_forxy_common}"
+
+    // --------------------- SOAP WS IMPORT-------------------------------
+    wsimport "org.jvnet.staxex:stax-ex:${rev_stax_ex}"
+    wsimport "com.sun.xml.stream.buffer:streambuffer:${rev_streambuffer}"
+    //wsimport "com.sun.xml.bind:jaxb-api:${rev_jaxb}"
+    wsimport "com.sun.xml.bind:jaxb-impl:${rev_jaxb}"
+    wsimport "com.sun.xml.bind:jaxb-xjc:${rev_jaxb}"
+    /*wsimport "javax.xml.ws:jaxws-api:${rev_jax_ws_api}"*/
+    wsimport "com.sun.xml.ws:jaxws-rt:${rev_jax_ws}"
+    wsimport "com.sun.xml.ws:jaxws-tools:${rev_jax_ws}"
 
     // --------------------- CXF -----------------------------------------
     compile "org.apache.cxf:cxf-bundle-jaxrs:${rev_cxf}"
 
     // --------------------- PERSISTANCE ---------------------------------
     compile "org.hibernate.javax.persistence:hibernate-jpa-2.0-api:${rev_persistance}"
+}
+
+eclipse {
+    project {
+        file {
+            whenMerged { project ->
+                project.linkedResources.clear()
+            }
+        }
+    }
+    classpath {
+        file {
+            whenMerged { classpath ->
+                classpath.entries.removeAll { entry -> entry.path.equals('build') }
+            }
+        }
+    }
 }

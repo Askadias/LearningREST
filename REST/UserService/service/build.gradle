@@ -84,10 +84,15 @@ task cleanTomcat(type: Delete) {
 dependencies {
     // --------------------- FORXY ---------------------------------------
     compile project(":ru.forxy.user.api")
+    compile "forxy:ru.forxy.user.api:${rev_forxy_common}"
     compile "forxy:ru.forxy.common.rest:${rev_forxy_common}"
     compile "forxy:ru.forxy.common.utils:${rev_forxy_common}"
     compile "forxy:ru.forxy.common.status:${rev_forxy_common}"
     compile "forxy:ru.forxy.common.logging:${rev_forxy_common}"
+
+    // --------------------- JAX-WS --------------------------------------
+    compile "org.apache.cxf:cxf-rt-frontend-jaxws:${rev_cxf}"
+    compile "org.apache.cxf:cxf-rt-transports-http:${rev_cxf}"
 
     // --------------------- COMMON --------------------------------------
     compile "commons-collections:commons-collections:${rev_common_collections}"

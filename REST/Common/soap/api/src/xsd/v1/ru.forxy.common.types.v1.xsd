@@ -3,6 +3,12 @@
            xmlns:common="urn:ru:forxy:common:types:v1"
            xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
+    <xs:simpleType name="Char">
+        <xs:restriction base="xs:string">
+            <xs:length value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+
     <xs:simpleType name="NonEmptyToken">
         <xs:restriction base="xs:token">
             <xs:minLength value="1"/>
@@ -26,14 +32,14 @@
     </xs:simpleType>
 
     <xs:complexType name="PageInfoType">
-        <xs:attribute name="Number" type="xs:nonNegativeInteger" use="required"/>
-        <xs:attribute name="Size" type="xs:positiveInteger"/>
+        <xs:attribute name="Number" type="xs:int" use="required"/>
+        <xs:attribute name="Size" type="xs:int"/>
     </xs:complexType>
 
     <xs:complexType name="PageType">
         <xs:complexContent>
             <xs:extension base="common:PageInfoType">
-                <xs:attribute name="Total" type="xs:nonNegativeInteger"/>
+                <xs:attribute name="Total" type="xs:long"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

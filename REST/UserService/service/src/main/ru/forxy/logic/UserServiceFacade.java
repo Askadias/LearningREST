@@ -19,13 +19,12 @@ public class UserServiceFacade implements IUserServiceFacade {
 
     @Override
     public EntityPage<User> getUsers(Integer page) {
-        Page<User> p = userDAO.findAll(new PageRequest(page, DEFAULT_PAGE_SIZE));
-        return new EntityPage<User>(p.getContent(), p.getSize(), p.getNumber(), p.getTotalElements());
+        return getUsers(page, null);
     }
 
     @Override
     public EntityPage<User> getUsers(Integer page, Integer size) {
-        Page<User> p = userDAO.findAll(new PageRequest(page, size));
+        Page<User> p = userDAO.findAll(new PageRequest(page, size == null ? DEFAULT_PAGE_SIZE : size));
         return new EntityPage<User>(p.getContent(), p.getSize(), p.getNumber(), p.getTotalElements());
     }
 

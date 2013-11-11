@@ -18,7 +18,7 @@ jar { from sourceSets.main.allJava }
 
 dependencies {
     // --------------------- PROJECTS ------------------------------------
-    compile project(":rest:ru.forxy.common.rest.api")
+    compile project(":ru.forxy.common.rest:ru.forxy.common.rest.api")
     compile project(":ru.forxy.common.utils")
     compile project(":ru.forxy.common.status")
 

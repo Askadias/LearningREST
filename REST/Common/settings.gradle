@@ -6,8 +6,8 @@ def projects = [
         ':status' : [name: "ru.forxy.common.status", path: 'status'],
         ':utils' : [name: "ru.forxy.common.utils", path: 'utils'],
         ':rest' : [name: "ru.forxy.common.rest", path: 'rest'],
-        ':rest:api' : [name: "ru.forxy.common.rest.api", path: 'rest/api'],
-        ':soap:api' : [name: "ru.forxy.common.soap.api", path: 'soap/api']
+        ':ru.forxy.common.rest:api' : [name: "ru.forxy.common.rest.api", path: 'rest/api'],
+        ':ru.forxy.common.soap:api' : [name: "ru.forxy.common.soap.api", path: 'soap/api']
 ]
 
 projects.each() { key, config ->

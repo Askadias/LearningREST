@@ -26,7 +26,7 @@
     </bean>
 
     <!--suppress UnparsedCustomBeanInspection -->
-    <jaxrs:server id="userService" address="/v1">
+    <jaxrs:server id="ru.forxy.UserService.rest" address="/rest">
         <jaxrs:serviceBeans>
             <ref bean="ru.forxy.rest.UserServiceImpl"/>
             <ref bean="ru.forxy.common.rest.SystemStatusServiceImpl"/>
