@@ -1,4 +1,4 @@
-package ru.forxy.common.logging;
+package ru.forxy.common.logging.wrapper;
 
 import ru.forxy.common.utils.EncodingHelper;
 

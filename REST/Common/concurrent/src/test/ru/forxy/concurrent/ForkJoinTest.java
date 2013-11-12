@@ -195,6 +195,15 @@ public class ForkJoinTest {
         }
     }
 
+    @Test
+    public void testString() {
+        String s = "{\"email\":\"askadias@forxy.ru\",\"password\":\"Dgkr2M87xdgd/cO7W+O78SmJSCGucfwwqXtHW22ve68=\",\"login\":\"Stacy\",\"firstName\":\"Stacy\",\"lastName\":\"Wrights\",\"gender\":\"F\",\"birthDate\":\"1983-03-18\"}";
+        if (s.indexOf("\"email\"") > 0) {
+            String value = s.replaceAll(".*?\"email\":\\s*?\"([a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(\\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*)\".*", "$1");
+            Assert.assertEquals("askadias@forxy.ru", value);
+        }
+    }
+
     private static <T> void shuffle(List<T> array) {
         Random rand = new Random(ForkJoinTest.class.hashCode());
         for (int i = 0; i < array.size() - 1; i++) {

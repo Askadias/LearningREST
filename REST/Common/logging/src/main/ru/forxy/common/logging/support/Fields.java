@@ -1,4 +1,4 @@
-package ru.forxy.common.logging;
+package ru.forxy.common.logging.support;
 
 /**
  * Fields to log

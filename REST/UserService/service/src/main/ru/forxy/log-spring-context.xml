@@ -12,45 +12,42 @@
           p:performanceLoggingEnabled="true"/>
 
     <bean id="ru.forxy.user.performance.logger.request"
-            class="ru.forxy.common.logging.LogWriter" c:name="user.performance.request"/>
+            class="ru.forxy.common.logging.writer.LogWriter" c:name="user.performance.request"/>
     <bean id="ru.forxy.user.performance.logger.response"
-                class="ru.forxy.common.logging.LogWriter" c:name="user.performance.response"/>
+                class="ru.forxy.common.logging.writer.LogWriter" c:name="user.performance.response"/>
 
 
-    <bean id="ru.forxy.user.service.performance.loggingFilter.rest"
-          class="ru.forxy.common.logging.EndpointLoggingServletFilter">
+    <bean id="ru.forxy.user.service.performance.loggingFilter"
+          class="ru.forxy.common.logging.HttpLoggingServletFilter">
         <property name="configuration" ref="ru.forxy.common.utils.Configuration.performance"/>
         <property name="requestWriter" ref="ru.forxy.user.performance.logger.request"/>
         <property name="responseWriter" ref="ru.forxy.user.performance.logger.response"/>
-        <!--<property name="requestFieldExtractors">
-            <bean class="ru.forxy.common.performance.interceptor.metadata.SpelFieldExtractor">
+        <property name="requestFieldExtractors">
+            <bean class="ru.forxy.common.logging.metadata.SpelFieldExtractor">
                 <property name="extractRules">
                     <map>
                         <entry key="Username" value="#request.getParameter('client_id')?:#requestHeaders['client-id']?:null" />
                         <entry key="TransactionGUID" value="#request.getParameter('transaction_guid')?:#requestHeaders['transaction-guid']?:null" />
                         <entry key="MessageGUID" value="#request.getParameter('message_guid')?:#requestHeaders['message-guid']?:null" />
-                        <entry key="OperationName" value="#request.requestURI.matches('.*/payment-instruments') and #request.getMethod().equals('POST') ? 'RegisterPaymentInstrument' :
-                                                          #request.requestURI.matches('.*/payment-instruments/.*') and #request.getMethod().equals('GET') ? 'RetrievePaymentInstrument' :
-                                                          #request.requestURI.matches('.*/payment-instruments/.*') and #request.getMethod().equals('POST') ? 'RetainReleasePaymentInstrument' :
-                                                          #request.requestURI.matches('.*/payment-instruments/.*') and #request.getMethod().equals('PUT') ? 'UpdatePaymentInstrument' :
-                                                          #request.requestURI.matches('.*/status') and #request.getMethod().equals('GET') ? 'GetSystemStatus' :
+                        <entry key="OperationName" value="#request.requestURI.matches('.*/users[/\d+]+') and #request.getMethod().equals('GET') ? 'GetUsersPage' :
+                                                          #request.requestURI.matches('.*/users/login/?') and #request.getMethod().equals('POST') ? 'Login' :
+                                                          #request.requestURI.matches('.*/users/?') and #request.getMethod().equals('GET') ? 'GetUser' :
+                                                          #request.requestURI.matches('.*/users/?') and #request.getMethod().equals('POST') ? 'UpdateUser' :
+                                                          #request.requestURI.matches('.*/users/?') and #request.getMethod().equals('DELETE') ? 'DeleteUser' :
+                                                          #request.requestURI.matches('.*/status/?') and #request.getMethod().equals('GET') ? 'SystemStatus' :
                                                           null" />
                     </map>
                 </property>
             </bean>
         </property>
         <property name="responseFieldExtractors">
-            <bean class="ru.forxy.common.performance.interceptor.metadata.SpelFieldExtractor">
+            <bean class="ru.forxy.common.logging.metadata.SpelFieldExtractor">
                 <property name="extractRules">
                     <map>
                         <entry key="TransactionGUID" value="#responseHeaders['Transaction-GUID']" />
                         <entry key="MessageGUID" value="#responseHeaders['Message-GUID']" />
-                        <entry key="PaymentInstrumentID">
-                            <value>#payload.indexOf('"payment_instrument_id"')>=0 ? #payload.replaceAll('.*?"payment_instrument_id":\s*?"([a-zA-Z0-9-]+)".*','$1') : null</value>
-                        </entry>
-                        <entry key="SensitiveInfoRecordID">
-                            <value>#payload.indexOf('"sensitive_info_record_id"')>=0 ? #payload.replaceAll('.*?"sensitive_info_record_id":\s*?"([a-zA-Z0-9-]+)".*','$1') : null</value>
-                        </entry>
+                        <entry key="UserEmail"
+                               value="#payload.indexOf('&quot;email&quot;')&gt;=0 ? #payload.replaceAll('.*?&quot;email&quot;:\s*?&quot;([a-zA-Z0-9!#$%&amp;''*+/=?^_`{|}~-]+(\.[a-zA-Z0-9!#$%&amp;''*+/=?^_`{|}~-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*)&quot;.*','$1') : null"/>
                         <entry key="StatusCode">
                             <value>(#response.responseStatus==200 or #response.responseStatus==201 or #response.responseStatus==204) ? '0' :
                                    #response.responseStatus==400 ? '-1' :
@@ -60,6 +57,6 @@
                     </map>
                 </property>
             </bean>
-        </property>-->
+        </property>
     </bean>
 </beans>

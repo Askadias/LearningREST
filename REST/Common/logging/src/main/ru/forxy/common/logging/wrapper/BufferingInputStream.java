@@ -1,4 +1,4 @@
-package ru.forxy.common.logging;
+package ru.forxy.common.logging.wrapper;
 
 import java.io.IOException;
 import java.io.InputStream;

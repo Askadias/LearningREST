@@ -8,7 +8,7 @@ import org.apache.log4j.helpers.ISO8601DateFormat;
 import org.apache.log4j.helpers.PatternConverter;
 import org.apache.log4j.helpers.PatternParser;
 import org.apache.log4j.spi.LoggingEvent;
-import ru.forxy.common.logging.Fields;
+import ru.forxy.common.logging.support.Fields;
 import ru.forxy.common.utils.Context;
 import ru.forxy.common.utils.EncodingHelper;
 import ru.forxy.common.utils.FormatHelper;

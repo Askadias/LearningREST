@@ -1,11 +1,11 @@
-package ru.forxy.common.logging;
+package ru.forxy.common.logging.writer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.forxy.common.utils.Context;
 
 /**
- * Slf4j log writer implementation
+ * Slf4j-based log writer implementation
  */
 public class LogWriter implements ILogWriter {
 
