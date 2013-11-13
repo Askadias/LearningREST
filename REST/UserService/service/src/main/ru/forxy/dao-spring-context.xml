@@ -41,8 +41,7 @@
         </aop:aspect>
     </aop:config>
 
-    <bean id="ru.forxy.db.dao.mongo.UserDAO.impl" class="ru.forxy.db.dao.mongo.UserDAO" autowire-candidate="false">
-        <property name="mongoTemplate" ref="mongoTemplate"/>
-    </bean>
+    <bean id="ru.forxy.db.dao.mongo.UserDAO.impl" class="ru.forxy.db.dao.mongo.UserDAO" autowire-candidate="false"
+          p:mongoTemplate-ref="mongoTemplate"/>
 
 </beans>

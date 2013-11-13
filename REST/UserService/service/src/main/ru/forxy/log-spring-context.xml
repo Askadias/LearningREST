@@ -12,12 +12,12 @@
           p:performanceLoggingEnabled="true">
         <constructor-arg>
             <map>
-                <entry key="ActivityName" value="endpoint"/>
+                <entry key="#{T(ru.forxy.common.logging.support.Fields).ActivityName}" value="endpoint"/>
             </map>
         </constructor-arg>
     </bean>
 
-    <!-- ================= SERVICE ======================================================================================== -->
+    <!-- ================= SERVICE ================================================================================= -->
 
     <bean id="ru.forxy.user.performance.logger.request"
           class="ru.forxy.common.logging.writer.LogWriter" c:name="user.performance.request"/>
@@ -72,7 +72,7 @@
         </property>
     </bean>
 
-    <!-- ================= DAO ============================================================================================ -->
+    <!-- ================= DAO ===================================================================================== -->
 
     <bean id="ru.forxy.user.performance.logger.dao"
           class="ru.forxy.common.logging.writer.LogWriter" c:name="user.performance.dao"/>
