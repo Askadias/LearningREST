@@ -21,6 +21,7 @@ public class ForkJoinTest {
 
     public class RecursiveSortingTask<T extends Comparable<T>> extends RecursiveTask<List<T>> {
 
+        private static final long serialVersionUID = 4377807349894860018L;
         private List<T> array;
         private int first;
         private int last;
@@ -36,7 +37,7 @@ public class ForkJoinTest {
             int i = first;
             int j = last;
             T middle = array.get((first + last) / 2);
-            while(i <= j) {
+            while (i <= j) {
                 while (array.get(i).compareTo(middle) < 0) i++;
                 while (array.get(j).compareTo(middle) > 0) j--;
                 if (i <= j) {
@@ -74,7 +75,7 @@ public class ForkJoinTest {
             int i = first;
             int j = last;
             T middle = array.get((first + last) / 2);
-            while(i <= j) {
+            while (i <= j) {
                 while (array.get(i).compareTo(middle) < 0) i++;
                 while (array.get(j).compareTo(middle) > 0) j--;
                 if (i <= j) {
@@ -107,7 +108,7 @@ public class ForkJoinTest {
         int i = first;
         int j = last;
         T middle = array.get((first + last) / 2);
-        while(i <= j) {
+        while (i <= j) {
             while (array.get(i).compareTo(middle) < 0) i++;
             while (array.get(j).compareTo(middle) > 0) j--;
             if (i <= j) {

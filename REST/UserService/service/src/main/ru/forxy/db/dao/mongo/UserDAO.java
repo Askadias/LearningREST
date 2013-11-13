@@ -21,8 +21,6 @@ import java.util.List;
 
 public class UserDAO implements IUserDAO {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserDAO.class);
-
     MongoTemplate mongoTemplate;
 
     @Override
@@ -121,16 +119,24 @@ public class UserDAO implements IUserDAO {
             location = mongoTemplate.getDb().getMongo().getConnectPoint();
 
             long timeStart = new Date().getTime();
-            mongoTemplate.count(null, User.class);
-            responseTime = new Date().getTime() - timeStart;
-
-            CommandResult lastError = mongoTemplate.getDb().getLastError();
-            //noinspection ThrowableResultOfMethodCallIgnored
-            if (lastError.getException() != null) {
-                exceptionMessage = lastError.getErrorMessage();
-                exceptionDetails = ExceptionUtils.getStackTrace(lastError.getException());
-                statusType = StatusType.YELLOW;
+            try {
+                mongoTemplate.count(null, User.class);
+                CommandResult lastError = mongoTemplate.getDb().getLastError();
+                //noinspection ThrowableResultOfMethodCallIgnored
+                if (lastError.getException() != null) {
+                    exceptionMessage = lastError.getErrorMessage();
+                    exceptionDetails = ExceptionUtils.getStackTrace(lastError.getException());
+                    statusType = StatusType.YELLOW;
+                }
+            } catch (Exception e) {
+                exceptionMessage = e.getMessage();
+                exceptionDetails = ExceptionUtils.getStackTrace(e);
+                statusType = StatusType.RED;
+            } finally {
+                responseTime = new Date().getTime() - timeStart;
             }
+
+
         } else {
             statusType = StatusType.RED;
         }
