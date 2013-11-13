@@ -9,20 +9,29 @@ import ru.forxy.common.utils.Configuration;
 import ru.forxy.common.utils.Context;
 import ru.forxy.common.utils.SystemProperties;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Request/Response logging filter
  */
-public class HttpLoggingServletFilter implements Filter {
+public class LoggingServletFilter implements Filter {
 
     private final static int DEFAULT_BUFFER_SIZE = 1024 * 4;
-
-    private String activityName;
 
     private Configuration configuration;
 
@@ -80,13 +89,13 @@ public class HttpLoggingServletFilter implements Filter {
     }
 
     private void handleRequest(final BufferedRequestWrapper rq, final long timestampStart, final String url) {
-        Context.addGlobal(Fields.ProductName, SystemProperties.getServiceName());//configuration.getProductName());
+        Context.addGlobal(Fields.ProductName, SystemProperties.getServiceName());
         Context.addGlobal(Fields.ActivityGUID, UUID.randomUUID().toString());
-        Context.addFrame(Fields.ActivityName, activityName);//configuration.getActivityName());
+        Context.addFrame(Fields.ActivityName, configuration.get(Fields.ActivityName));
         Context.addFrame(Fields.ActivityStep, Fields.Values.rq);
         Context.addFrame(Fields.TimestampStart, new Date(timestampStart));
         Context.addFrame(Fields.Timestamp, new Date(timestampStart));
-        Context.addFrame(Fields.HostLocal, SystemProperties.getHostAddress());//MetadataHelper.getLocalHostAddress());
+        Context.addFrame(Fields.HostLocal, SystemProperties.getHostAddress());
         Context.addFrame(Fields.HostRemote, rq.getRemoteAddr());
 
         if (requestFieldExtractors != null
@@ -216,10 +225,6 @@ public class HttpLoggingServletFilter implements Filter {
 
     public void setResponseFieldExtractors(final List<IHttpFieldExtractor> responseFieldExtractors) {
         this.responseFieldExtractors = responseFieldExtractors;
-    }
-
-    public void setActivityName(String activityName) {
-        this.activityName = activityName;
     }
 
     @Override

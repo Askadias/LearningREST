@@ -15,6 +15,5 @@
 
     <import resource="classpath:ru/forxy/impl-spring-context.xml"/>
     <import resource="classpath:ru/forxy/test/dao-spring-test-context.xml"/>
-    <import resource="classpath:ru/forxy/log-spring-context.xml"/>
 
 </beans>

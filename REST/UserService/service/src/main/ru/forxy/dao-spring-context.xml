@@ -2,6 +2,7 @@
 <beans xmlns='http://www.springframework.org/schema/beans'
        xmlns:context='http://www.springframework.org/schema/context'
        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+       xmlns:p="http://www.springframework.org/schema/p"
        xmlns:mongo='http://www.springframework.org/schema/data/mongo'
        xsi:schemaLocation='
         http://www.springframework.org/schema/beans         http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
@@ -9,7 +10,7 @@
         http://www.springframework.org/schema/context       http://www.springframework.org/schema/context/spring-context-3.2.xsd'>
 
     <context:annotation-config/>
-    <context:component-scan base-package='ru.forxy.user.pojo'/>
+    <context:component-scan base-package='ru.forxy.user.rest.pojo'/>
 
     <mongo:mongo id="mongo" host='${ru.forxy.user.MongoTemplate/host}' port='${ru.forxy.user.MongoTemplate/port}'>
         <mongo:options
@@ -21,10 +22,8 @@
                 write-fsync='${ru.forxy.user.MongoTemplate/writeFSync}'/>
     </mongo:mongo>
 
-    <!--suppress UnparsedCustomBeanInspection -->
     <mongo:db-factory dbname='user' mongo-ref='mongo'/>
 
-    <!--suppress UnparsedCustomBeanInspection -->
     <mongo:repositories base-package='ru.forxy.db.dao.mongo' />
 
     <bean id='mongoTemplate' class='org.springframework.data.mongodb.core.MongoTemplate'>
@@ -32,7 +31,7 @@
         <constructor-arg name='databaseName' value='user'/>
     </bean>
 
-    <bean id="ru.forxy.db.dao.mongo.UserDAO" class="ru.forxy.db.dao.mongo.UserDAO">
+    <bean id="ru.forxy.db.dao.mongo.UserDAO.impl" class="ru.forxy.db.dao.mongo.UserDAO" autowire-candidate="false">
         <property name="mongoTemplate" ref="mongoTemplate"/>
     </bean>
 

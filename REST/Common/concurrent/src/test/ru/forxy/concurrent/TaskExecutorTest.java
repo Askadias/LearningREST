@@ -93,7 +93,7 @@ public class TaskExecutorTest {
                     @Override
                     protected void executeAfterDependencies(final IExecutionContext executionContext) {
                         try {
-                            Thread.sleep(new Random().nextInt(200 * fj));
+                            Thread.sleep(new Random().nextInt(20 * fj));
                         } catch (Exception ignored) //NOPMD
                         {
                         }
@@ -133,7 +133,7 @@ public class TaskExecutorTest {
                 @Override
                 public void execute(final IExecutionContext executionContext) {
                     try {
-                        Thread.sleep(new Random().nextInt(2000));
+                        Thread.sleep(new Random().nextInt(200));
                     } catch (Exception ignored) //NOPMD
                     {
                     }

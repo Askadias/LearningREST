@@ -10,7 +10,6 @@
     <bean id="ru.forxy.soap.UserServiceImpl" class="ru.forxy.soap.UserServiceImpl"
           p:userServiceFacade-ref="ru.forxy.logic.UserServiceFacade"/>
 
-    <!--suppress UnparsedCustomBeanInspection -->
     <jaxws:endpoint id="ru.forxy.UserService.soap" address="/soap">
         <jaxws:implementor>
             <ref bean="ru.forxy.soap.UserServiceImpl"/>

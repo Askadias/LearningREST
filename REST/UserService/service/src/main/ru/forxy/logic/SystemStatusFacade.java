@@ -1,11 +1,10 @@
 package ru.forxy.logic;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import ru.forxy.common.utils.SystemProperties;
+import ru.forxy.common.status.ISystemStatusFacade;
 import ru.forxy.common.status.pojo.ComponentStatus;
 import ru.forxy.common.status.pojo.StatusType;
 import ru.forxy.common.status.pojo.SystemStatus;
-import ru.forxy.common.status.ISystemStatusFacade;
+import ru.forxy.common.utils.SystemProperties;
 import ru.forxy.db.dao.IUserDAO;
 
 import java.util.ArrayList;
@@ -16,7 +15,6 @@ import java.util.List;
  */
 public class SystemStatusFacade implements ISystemStatusFacade {
 
-    @Autowired
     IUserDAO userDAO;
 
     @Override
@@ -45,5 +43,9 @@ public class SystemStatusFacade implements ISystemStatusFacade {
             }
         }
         return theWorstStatus;
+    }
+
+    public void setUserDAO(IUserDAO userDAO) {
+        this.userDAO = userDAO;
     }
 }
