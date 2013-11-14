@@ -1,7 +1,7 @@
 package ru.forxy.common.rest;
 
 import ru.forxy.common.web.RequestHelper;
-import ru.forxy.common.utils.SystemProperties;
+import ru.forxy.common.support.SystemProperties;
 
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="ru.forxy.user.logic.SystemStatusFacade" class="ru.forxy.user.logic.SystemStatusFacade"
+            p:userDAO-ref="ru.forxy.user.db.dao.mongo.UserDAO"/>
+
+    <bean id="ru.forxy.common.rest.SystemStatusServiceImpl" class="ru.forxy.common.rest.SystemStatusServiceImpl"
+          p:systemStatusFacade-ref="ru.forxy.user.logic.SystemStatusFacade"/>
+
+    <bean id="ru.forxy.user.logic.UserServiceFacade.impl" class="ru.forxy.user.logic.UserServiceFacade" autowire-candidate="false"
+          p:userDAO-ref="ru.forxy.user.db.dao.mongo.UserDAO"/>
+
+    <bean id="ru.forxy.user.rest.UserServiceImpl" class="ru.forxy.user.rest.UserServiceImpl"
+          p:userServiceFacade-ref="ru.forxy.user.logic.UserServiceFacade"/>
+</beans>

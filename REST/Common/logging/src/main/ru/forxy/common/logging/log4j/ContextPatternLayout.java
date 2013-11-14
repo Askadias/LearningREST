@@ -1,25 +1,16 @@
 package ru.forxy.common.logging.log4j;
 
 import org.apache.log4j.PatternLayout;
-import org.apache.log4j.helpers.AbsoluteTimeDateFormat;
-import org.apache.log4j.helpers.DateTimeDateFormat;
-import org.apache.log4j.helpers.FormattingInfo;
-import org.apache.log4j.helpers.ISO8601DateFormat;
-import org.apache.log4j.helpers.PatternConverter;
-import org.apache.log4j.helpers.PatternParser;
+import org.apache.log4j.helpers.*;
 import org.apache.log4j.spi.LoggingEvent;
 import ru.forxy.common.logging.support.Fields;
-import ru.forxy.common.utils.Context;
+import ru.forxy.common.logging.support.FormatHelper;
+import ru.forxy.common.support.Context;
 import ru.forxy.common.utils.EncodingHelper;
-import ru.forxy.common.utils.FormatHelper;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Log4j PatternLayout able to print fields from execution context

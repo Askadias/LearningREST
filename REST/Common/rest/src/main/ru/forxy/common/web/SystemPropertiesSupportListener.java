@@ -1,6 +1,6 @@
 package ru.forxy.common.web;
 
-import ru.forxy.common.utils.SystemProperties;
+import ru.forxy.common.support.SystemProperties;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;

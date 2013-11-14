@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class EncodingHelper
+public abstract class EncodingHelper
 {
 	private static final Charset UTF8;
 	private static final Charset ISO88591;

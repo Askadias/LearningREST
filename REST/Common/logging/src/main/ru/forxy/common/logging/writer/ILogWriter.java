@@ -1,6 +1,6 @@
 package ru.forxy.common.logging.writer;
 
-import ru.forxy.common.utils.Context;
+import ru.forxy.common.support.Context;
 
 /**
  * Can log the ContextData

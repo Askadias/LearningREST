@@ -2,7 +2,7 @@ package ru.forxy.common.logging.writer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.forxy.common.utils.Context;
+import ru.forxy.common.support.Context;
 
 /**
  * Slf4j-based log writer implementation

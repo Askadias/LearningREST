@@ -19,7 +19,7 @@ public enum Fields
 	TimestampStart,
 	TimestampEnd,
 	Duration,         //duration in ms, derived from System.currentTimeMillis()
-	DurationN,        //duration in ms, derived from  System.nanoTime()
+    DurationNano,     //duration in ms, derived from  System.nanoTime()
 	StatusCode,       //status code
 
 	RequestURL,       //http request url
@@ -34,7 +34,7 @@ public enum Fields
 
 	ResponsePayload;  //response payload
 
-	public enum Values
+	public enum ActivitySteps
 	{
 		rq,
 		rs

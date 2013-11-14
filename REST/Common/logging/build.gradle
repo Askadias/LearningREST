@@ -30,6 +30,7 @@ dependencies {
 
     // --------------------- COMMONS -------------------------------------
     compile "commons-io:commons-io:${rev_commons_io}"
+    compile "commons-lang:commons-lang:${rev_commons_lang}"
 
     // --------------------- XML -----------------------------------------
     compile "xml-apis:xml-apis:${rev_xml_apis}"

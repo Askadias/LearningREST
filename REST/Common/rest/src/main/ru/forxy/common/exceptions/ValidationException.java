@@ -1,7 +1,7 @@
 package ru.forxy.common.exceptions;
 
 import net.sf.oval.exception.ValidationFailedException;
-import ru.forxy.common.exceptions.utils.ResponseBuilder;
+import ru.forxy.common.exceptions.support.ResponseBuilder;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.core.Response;

@@ -6,10 +6,8 @@ import net.sf.oval.exception.ValidationFailedException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.codehaus.jackson.map.JsonMappingException;
-import ru.forxy.common.exceptions.BaseServiceExceptions;
-import ru.forxy.common.exceptions.ServiceException;
 import ru.forxy.common.exceptions.ValidationException;
-import ru.forxy.common.utils.Configuration;
+import ru.forxy.common.support.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.HttpMethod;
@@ -27,12 +25,18 @@ import java.util.List;
  * Custom JSON provider with validation step
  */
 public class JSONValidationProvider extends JacksonJsonProvider {
+
+    public static enum Configs {
+        IsObjectValidationEnabled
+    }
+
     private final static String PROFILE_REGISTER = "create";
     private final static String PROFILE_DEFAULT = "default";
     private final static String PROFILE_UPDATE = "update";
 
     private IValidator validator;
-    private Configuration configuration;
+    private boolean isObjectValidationEnabled = false;
+
     @Context
     private HttpServletRequest servletRequest;
 
@@ -54,7 +58,7 @@ public class JSONValidationProvider extends JacksonJsonProvider {
         }
 
         // Apply validation
-        if (configuration.isObjectValidationEnabled()) {
+        if (isObjectValidationEnabled) {
             try {
                 List<ConstraintViolation> violations = null;
 
@@ -89,6 +93,8 @@ public class JSONValidationProvider extends JacksonJsonProvider {
     }
 
     public void setConfiguration(Configuration configuration) {
-        this.configuration = configuration;
+        if (configuration != null) {
+            isObjectValidationEnabled = configuration.getBoolean(Configs.IsObjectValidationEnabled);
+        }
     }
 }

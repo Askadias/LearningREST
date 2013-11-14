@@ -6,7 +6,7 @@
          version="2.5">
     <display-name>UserService</display-name>
 
-    <!-- Loading Service properties from MANIFEST.MF-->
+    <!-- Loading Service settings from MANIFEST.MF-->
     <listener>
         <listener-class>ru.forxy.common.web.SystemPropertiesSupportListener</listener-class>
     </listener>
@@ -18,7 +18,7 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath*:ru/forxy/spring-context.xml</param-value>
+        <param-value>classpath*:ru/forxy/user/spring-context.xml</param-value>
     </context-param>
 
     <!-- CXF -->
