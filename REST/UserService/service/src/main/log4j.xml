@@ -23,8 +23,8 @@
         <param name="Append" value="true"/>
         <param name="MaxFileSize" value="100MB"/>
         <param name="MaxBackupIndex" value="100"/>
-        <layout class="ru.forxy.common.logging.log4j.ContextPatternLayout">
-            <param name="ConversionPattern" value="%P{Timestamp:ISO8601} %P%n"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{ISO8601} %m%n"/>
         </layout>
     </appender>
 
@@ -35,13 +35,13 @@
 
     <logger name="user.performance" additivity="false">
         <level value="INFO"/>
-        <appender-ref ref="PERF"/>
+        <appender-ref ref="PERF_ASYNC"/>
     </logger>
 
 
     <root>
         <level value="WARN"/>
-        <appender-ref ref="FILE"/>
+        <appender-ref ref="FILE_ASYNC"/>
     </root>
 
 </log4j:configuration>

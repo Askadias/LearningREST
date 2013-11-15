@@ -2,6 +2,7 @@ package ru.forxy.common.logging.writer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.forxy.common.logging.support.LogHelper;
 import ru.forxy.common.support.Context;
 
 /**
@@ -21,6 +22,6 @@ public class LogWriter implements ILogWriter {
 
     @Override
     public void log(Context.ContextData data) {
-        logger.info(String.valueOf(data));
+        logger.info(LogHelper.contextDataToLogString(data));
     }
 }
