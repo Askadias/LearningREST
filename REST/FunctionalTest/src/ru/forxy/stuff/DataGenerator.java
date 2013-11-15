@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.forxy.BaseSpringContextTest;
 import ru.forxy.crypto.ICryptoService;
-import ru.forxy.user.IUserService;
-import ru.forxy.user.pojo.User;
+import ru.forxy.user.rest.IUserService;
+import ru.forxy.user.rest.pojo.User;
 
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;

@@ -26,11 +26,10 @@ import java.util.Map;
  * <p/>
  * <p/>
  * See http://static.springsource.org/spring/docs/3.0.x/reference/expressions.html
- * See SpelFieldExtractorTest for more samples
  * <p/>
  * Configuration sample:
  * <pre>
- *  <bean class="ru.forxy.common.logging.metadata.SpelFieldExtractor">
+ *  <bean class="ru.forxy.common.logging.metadata.SpringELFieldExtractor">
  *      <property name="extractRules">
  *          <map>
  *              <entry key="OperationName" value="#request.getRequestURI().replaceAll('.*\/(.+)/.*$', '$1')"/>
@@ -41,8 +40,8 @@ import java.util.Map;
  *  </bean>
  * </pre>
  */
-public class SpelFieldExtractor implements IHttpFieldExtractor, IFieldExtractor {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SpelFieldExtractor.class);
+public class SpringELFieldExtractor implements IHttpFieldExtractor, IFieldExtractor {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SpringELFieldExtractor.class);
 
     private static final ExpressionParser PARSER = new SpelExpressionParser();
 

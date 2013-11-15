@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:util="http://www.springframework.org/schema/util"
        xmlns:http="http://cxf.apache.org/transports/http/configuration"
-       xmlns:sec="http://cxf.apache.org/configuration/security" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans            http://www.springframework.org/schema/beans/spring-beans.xsd
-         http://www.springframework.org/schema/util             http://www.springframework.org/schema/util/spring-util.xsd
+       xmlns:sec="http://cxf.apache.org/configuration/security"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/beans            http://www.springframework.org/schema/beans/spring-beans.xsd
          http://cxf.apache.org/transports/http/configuration    http://cxf.apache.org/schemas/configuration/http-conf.xsd
-         http://cxf.apache.org/configuration/security           http://cxf.apache.org/schemas/configuration/security.xsd http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd"
+         http://cxf.apache.org/configuration/security           http://cxf.apache.org/schemas/configuration/security.xsd
+         http://www.springframework.org/schema/util             http://www.springframework.org/schema/util/spring-util.xsd"
        default-lazy-init="false">
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
@@ -20,11 +23,13 @@
     <http:conduit name="{http://crypto.forxy.ru/}ICryptoService.http-conduit">
         <http:tlsClientParameters>
             <sec:keyManagers keyPassword="${ru.forxy.crypto.SSLConfig/keyStorePassword}">
-                <sec:keyStore type="${ru.forxy.crypto.SSLConfig/keyStoreType}" password="${ru.forxy.crypto.SSLConfig/keyStorePassword}"
+                <sec:keyStore type="${ru.forxy.crypto.SSLConfig/keyStoreType}"
+                              password="${ru.forxy.crypto.SSLConfig/keyStorePassword}"
                               file="${ru.forxy.crypto.SSLConfig/keyStoreFile}"/>
             </sec:keyManagers>
             <sec:trustManagers>
-                <sec:keyStore type="${ru.forxy.crypto.SSLConfig/trustStoreType}" password="${ru.forxy.crypto.SSLConfig/trustStorePassword}"
+                <sec:keyStore type="${ru.forxy.crypto.SSLConfig/trustStoreType}"
+                              password="${ru.forxy.crypto.SSLConfig/trustStorePassword}"
                               file="${ru.forxy.crypto.SSLConfig/trustStoreFile}"/>
             </sec:trustManagers>
             <sec:cipherSuitesFilter>
@@ -40,10 +45,9 @@
     </http:conduit>
 
     <bean id="cryptoServiceClientFactory"
-          class="org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean">
-        <property name="serviceClass" value="ru.forxy.crypto.ICryptoService"/>
-        <property name="address" value="${ru.forxy.crypto.ICryptoService/url}"/>
-    </bean>
+          class="org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean"
+          p:serviceClass="ru.forxy.crypto.ICryptoService"
+          p:address="${ru.forxy.crypto.ICryptoService/url}"/>
 
     <bean id="cryptoServiceClient"
           class="ru.forxy.crypto.ICryptoService"
@@ -56,10 +60,34 @@
 
     <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
 
+    <bean id="jsonVaidationProvider" class="ru.forxy.common.web.JSONValidationProvider"/>
+
+    <util:list id="jsonProviders">
+        <idref bean="jsonVaidationProvider"/>
+    </util:list>
 
     <!-- =======================================
            User Service Client Configuration
          ======================================= -->
+
+    <!-- jaxrs:client id="sampleClient" address="https://localhost:8443/" serviceClass="com.kole.ws.cxf.Addition">
+    </jaxrs:client-->
+
+    <!--<bean id="userServiceClient" class="org.apache.cxf.jaxrs.client.JAXRSClientFactory"
+          factory-method="create" scope="prototype"
+            c:baseAddress="${ru.forxy.user.rest.IUserService/url}"
+            c:cls="ru.forxy.user.rest.IUserService"
+            c:providers-ref="jsonProviders"/>
+
+    <bean id="userServiceConnectionPool" class="org.springframework.aop.target.CommonsPoolTargetSource"
+          p:targetBeanName="userServiceClient"
+          p:maxSize="3"
+          p:maxWait="0"
+          p:whenExhaustedActionName="WHEN_EXHAUSTED_FAIL"/>
+
+    <bean id="userService" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:targetSource-ref="userServiceConnectionPool"
+          p:proxyInterfaces="ru.forxy.user.rest.IUserService"/>-->
 
     <bean id="userServiceClientFactory"
           class="org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean">
@@ -79,11 +107,10 @@
          ======================================= -->
 
     <bean id="photoServiceClientFactory"
-          class="org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean">
-        <property name="serviceClass" value="ru.forxy.photo.IPhotoService"/>
-        <property name="address" value="${ru.forxy.photo.IPhotoService/url}"/>
-        <property name="provider" ref="jsonProvider"/>
-    </bean>
+          class="org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean"
+          p:serviceClass="ru.forxy.photo.IPhotoService"
+          p:address="${ru.forxy.photo.IPhotoService/url}"
+          p:provider-ref="jsonProvider"/>
 
     <bean id="photoServiceClient"
           class="ru.forxy.photo.IPhotoService"

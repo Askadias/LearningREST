@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ru.forxy.BaseSpringContextTest;
 import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.common.service.ISystemStatusService;
-import ru.forxy.user.IUserService;
-import ru.forxy.user.pojo.User;
+import ru.forxy.user.rest.IUserService;
+import ru.forxy.user.rest.pojo.User;
 
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.HttpHeaders;

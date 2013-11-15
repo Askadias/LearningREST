@@ -40,7 +40,7 @@
           p:requestWriter-ref="ru.forxy.user.performance.logger.request"
           p:responseWriter-ref="ru.forxy.user.performance.logger.response">
         <property name="requestFieldExtractors">
-            <bean class="ru.forxy.common.logging.metadata.SpelFieldExtractor">
+            <bean class="ru.forxy.common.logging.metadata.SpringELFieldExtractor">
                 <property name="extractRules">
                     <map>
                         <entry key="Username"
@@ -61,7 +61,7 @@
             </bean>
         </property>
         <property name="responseFieldExtractors">
-            <bean class="ru.forxy.common.logging.metadata.SpelFieldExtractor">
+            <bean class="ru.forxy.common.logging.metadata.SpringELFieldExtractor">
                 <property name="extractRules">
                     <map>
                         <entry key="TransactionGUID" value="#responseHeaders['Transaction-GUID']"/>
