@@ -8,11 +8,22 @@ import ru.forxy.common.logging.wrapper.BufferedResponseWrapper;
 import ru.forxy.common.support.Context;
 import ru.forxy.common.support.SystemProperties;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Request/Response logging filter
@@ -157,8 +168,10 @@ public class LoggingServletFilter extends AbstractPerformanceLogger implements F
             result = new LinkedHashMap<String, List<String>>();
             while (names.hasMoreElements()) {
                 final String name = (String) names.nextElement();
-                //noinspection unchecked
+
+                @SuppressWarnings("unchecked")
                 final Enumeration<String> values = rq.getHeaders(name);
+
                 if (values != null) {
                     result.put(name, Collections.list(values));
                 }

@@ -1,8 +1,11 @@
 package ru.forxy.user.rest;
 
+import net.sf.oval.exception.ValidationFailedException;
 import ru.forxy.common.exceptions.ServiceException;
+import ru.forxy.common.exceptions.ValidationException;
 import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.common.rest.AbstractService;
+import ru.forxy.common.support.Constants;
 import ru.forxy.user.exceptions.UserServiceExceptions;
 import ru.forxy.user.logic.IUserServiceFacade;
 import ru.forxy.user.rest.pojo.User;
@@ -12,10 +15,12 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 public class UserServiceImpl extends AbstractService implements IUserService {
 
     IUserServiceFacade userServiceFacade;
+    private static Pattern emailRegex = Pattern.compile(Constants.EMAIL_REGEX);
 
     @Override
     public Response getUsers(Integer page, final UriInfo uriInfo, final HttpHeaders headers) {
@@ -31,6 +36,7 @@ public class UserServiceImpl extends AbstractService implements IUserService {
 
     @Override
     public Response getUser(User requestedUser, final UriInfo uriInfo, final HttpHeaders headers) {
+        validateEmail(requestedUser.getEmail());
         User user = userServiceFacade.getUser(requestedUser);
         if (user == null) {
             throw new ServiceException(UserServiceExceptions.UserNotFound.getStatusTemplate(), requestedUser.getEmail());
@@ -60,8 +66,17 @@ public class UserServiceImpl extends AbstractService implements IUserService {
 
     @Override
     public Response deleteUser(String email, final UriInfo uriInfo, final HttpHeaders headers) {
+        validateEmail(email);
         userServiceFacade.deleteUser(email);
         return Response.ok().build();
+    }
+
+    private static void validateEmail(String email) {
+        if (email == null || "".equals(email)) {
+            throw ValidationException.build(new ValidationFailedException("email cannot be null or empty"));
+        } else if (!emailRegex.matcher(email).matches()) {
+            throw ValidationException.build(new ValidationFailedException("email '" + email + "' is not valid"));
+        }
     }
 
     public void setUserServiceFacade(IUserServiceFacade userServiceFacade) {

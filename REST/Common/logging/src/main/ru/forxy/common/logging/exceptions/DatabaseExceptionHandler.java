@@ -1,9 +1,9 @@
-package ru.forxy.common.logging.support;
+package ru.forxy.common.logging.exceptions;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import ru.forxy.common.exceptions.CommonExceptions;
 import ru.forxy.common.exceptions.ServiceException;
-import ru.forxy.common.support.Context;
+import ru.forxy.common.logging.support.IExceptionHandler;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
@@ -29,7 +29,7 @@ public class DatabaseExceptionHandler implements IExceptionHandler {
                     host, cause.getMessage());
         } else {
             throw new ServiceException(CommonExceptions.UnknownDataBaseException.getStatusTemplate(),
-                    cause == null ? "N/A" : cause.getMessage());
+                    cause != null ? cause.getMessage() : t != null ? t.getMessage() : "N/A");
         }
     }
 
