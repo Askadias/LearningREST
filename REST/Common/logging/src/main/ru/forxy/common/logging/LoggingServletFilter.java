@@ -48,8 +48,6 @@ public class LoggingServletFilter extends AbstractPerformanceLogger implements F
         if (isPerformanceLoggingEnabled) {
             final long timestampStart = System.currentTimeMillis();
             final long timestampStartNano = System.nanoTime();
-//            final HttpServletRequestWrapper rqw = new HttpServletRequestWrapper(rq);
-//            final HttpServletResponseWrapper rsw = new HttpServletResponseWrapper(rs);
             final BufferedRequestWrapper brq = new BufferedRequestWrapper(rq,
                     bufferSize);
             final BufferedResponseWrapper brs = new BufferedResponseWrapper(rs,

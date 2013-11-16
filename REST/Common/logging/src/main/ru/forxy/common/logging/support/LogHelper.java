@@ -62,7 +62,7 @@ public abstract class LogHelper {
 
     private static String convertBytes(final byte[] bytes) {
         String result = EncodingHelper.toUTFString(bytes);
-        result = FormatHelper.prettyBreak(FormatHelper.compactFormat(result), 9900, "\n");
-        return result;
+        return FormatHelper.compactFormat(result);
+        //return FormatHelper.prettyBreak(FormatHelper.compactFormat(result), 9900, "\n");
     }
 }

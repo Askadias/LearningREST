@@ -1,5 +1,7 @@
 package ru.forxy.common.logging.wrapper;
 
+import org.apache.commons.io.IOUtils;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -53,8 +55,8 @@ public class BufferingInputStream extends InputStream
 	{
 		if (maxBytesToBuffer == null || maxBytesToBuffer == -1)
 		{
-			//TODO return IOUtils.toByteArray(input);
-            return new byte[0];
+            return IOUtils.toByteArray(input);
+            //return EMPTY_BYTE_ARRAY;
 		}
 		if (maxBytesToBuffer == 0)
 		{
