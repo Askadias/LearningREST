@@ -31,13 +31,10 @@ import java.util.UUID;
 public class LoggingServletFilter extends AbstractPerformanceLogger implements Filter {
 
     public static enum Configs {
-        IsHttpInfoLoggingEnabled,
-        BufferSize
+        IsHttpInfoLoggingEnabled
     }
 
     private boolean isHttpInfoLoggingEnabled = false;
-
-    private int bufferSize;
 
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
@@ -48,10 +45,8 @@ public class LoggingServletFilter extends AbstractPerformanceLogger implements F
         if (isPerformanceLoggingEnabled) {
             final long timestampStart = System.currentTimeMillis();
             final long timestampStartNano = System.nanoTime();
-            final BufferedRequestWrapper brq = new BufferedRequestWrapper(rq,
-                    bufferSize);
-            final BufferedResponseWrapper brs = new BufferedResponseWrapper(rs,
-                    bufferSize);
+            final BufferedRequestWrapper brq = new BufferedRequestWrapper(rq, -1);
+            final BufferedResponseWrapper brs = new BufferedResponseWrapper(rs, -1);
 
             Context.push();
             try {
@@ -198,7 +193,6 @@ public class LoggingServletFilter extends AbstractPerformanceLogger implements F
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
         if (configuration != null) {
-            bufferSize = configuration.getInt(Configs.BufferSize, 1024 * 4);
             isHttpInfoLoggingEnabled = configuration.getBoolean(Configs.IsHttpInfoLoggingEnabled);
         }
     }
