@@ -1,7 +1,7 @@
 package ru.forxy.common.logging.support;
 
 /**
- * Created by Uladzislau_Prykhodzk on 11/14/13.
+ * Exception handler for safe errors processing
  */
 public interface IExceptionHandler {
 

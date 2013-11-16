@@ -13,33 +13,33 @@ public class BufferingInputStream extends InputStream
 {
 	private static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
 
-	private final InputStream m_delegate;
-	private final byte[] m_buffer;
+	private final InputStream delegate;
+	private final byte[] buffer;
 
 	private int m_pos = 0;
 
 	public BufferingInputStream(final InputStream delegate, final Integer maxBytesToBuffer) throws IOException
 	{
-		m_delegate = delegate;
-		m_buffer = fillBuffer(delegate, maxBytesToBuffer);
+		this.delegate = delegate;
+		buffer = fillBuffer(delegate, maxBytesToBuffer);
 	}
 
 	@Override
 	public int read() throws IOException
 	{
-		if (m_pos < m_buffer.length)
+		if (m_pos < buffer.length)
 		{
-			return m_buffer[m_pos++];
+			return buffer[m_pos++];
 		}
 		else
 		{
-			return m_delegate.read();
+			return delegate.read();
 		}
 	}
 
 	public byte[] getBuffer()
 	{
-		return m_buffer; //NOPMD
+		return buffer; //NOPMD
 	}
 
 	/**

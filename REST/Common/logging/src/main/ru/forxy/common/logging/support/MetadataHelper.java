@@ -8,8 +8,8 @@ import org.springframework.cglib.proxy.Proxy;
  * Helper class for metadata extraction
  */
 public class MetadataHelper {
-    private static String s_localHost;
-    private static String s_localHostAddress;
+    private static String localHost;
+    private static String localHostAddress;
 
     private MetadataHelper() {
     }
@@ -20,7 +20,7 @@ public class MetadataHelper {
      * @return local host name
      */
     public static String getLocalHost() {
-        return s_localHost;
+        return localHost;
     }
 
     /**
@@ -29,7 +29,7 @@ public class MetadataHelper {
      * @return local host ip address
      */
     public static String getLocalHostAddress() {
-        return s_localHostAddress;
+        return localHostAddress;
     }
 
     /**

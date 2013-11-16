@@ -22,57 +22,57 @@ public class BufferedRequestWrapper extends HttpServletRequestWrapper
 {
 	private static final String HTTP_POST = "POST";
 
-	private final BufferingInputStream m_bis;
+	private final BufferingInputStream bis;
 
-	private ServletInputStream m_sis;
-	private BufferedReader m_br;
-	private Map<String, String[]> m_parameters;
+	private ServletInputStream sis;
+	private BufferedReader br;
+	private Map<String, String[]> parameters;
 
 	public BufferedRequestWrapper(final HttpServletRequest req, final Integer maxBytesToBuffer) throws IOException
 	{
 		super(req);
-		m_bis = new BufferingInputStream(super.getInputStream(), maxBytesToBuffer);
+		bis = new BufferingInputStream(super.getInputStream(), maxBytesToBuffer);
 	}
 
 	@Override
 	public BufferedReader getReader() throws IOException
 	{
-		if (m_br == null)
+		if (br == null)
 		{
-			if (m_sis != null)
+			if (sis != null)
 			{
 				throw new IllegalStateException("getInputStream() has already been called for this request");
 			}
 			final Charset charset = EncodingHelper.getCharsetByAlias(getCharacterEncoding());
-			m_br = new BufferedReader(new InputStreamReader(m_bis, charset));
+			br = new BufferedReader(new InputStreamReader(bis, charset));
 		}
-		return m_br;
+		return br;
 	}
 
 	@Override
 	public ServletInputStream getInputStream() throws IOException
 	{
-		if (m_sis == null)
+		if (sis == null)
 		{
-			if (m_br != null)
+			if (br != null)
 			{
 				throw new IllegalStateException("getReader() has already been called for this request");
 			}
-			m_sis = new ServletInputStream()
+			sis = new ServletInputStream()
 			{
 				@Override
 				public int read() throws IOException
 				{
-					return m_bis.read();
+					return bis.read();
 				}
 			};
 		}
-		return m_sis;
+		return sis;
 	}
 
 	public byte[] getRequestBody()
 	{
-		byte[] result = m_bis.getBuffer();
+		byte[] result = bis.getBuffer();
 		result = result.length > 0 ? result : null;
 		return result;
 	}
@@ -82,7 +82,7 @@ public class BufferedRequestWrapper extends HttpServletRequestWrapper
 	{
 		if (parseParameters())
 		{
-			return m_parameters;
+			return parameters;
 		}
 		else
 		{
@@ -96,7 +96,7 @@ public class BufferedRequestWrapper extends HttpServletRequestWrapper
 		if (parseParameters())
 		{
 
-			return Collections.enumeration(m_parameters.keySet());
+			return Collections.enumeration(parameters.keySet());
 		}
 		else
 		{
@@ -123,7 +123,7 @@ public class BufferedRequestWrapper extends HttpServletRequestWrapper
 	{
 		if (parseParameters())
 		{
-			return m_parameters.get(name);
+			return parameters.get(name);
 		}
 		else
 		{
@@ -142,7 +142,7 @@ public class BufferedRequestWrapper extends HttpServletRequestWrapper
 	private boolean parseParameters()
 	{
 		final boolean useParsed = HTTP_POST.equals(getMethod());
-		if (useParsed && m_parameters == null)
+		if (useParsed && parameters == null)
 		{
 			final Map<String, List<String>> parameters = new HashMap<String, List<String>>();
 			final byte[] bodyBytes = getRequestBody();
@@ -172,7 +172,7 @@ public class BufferedRequestWrapper extends HttpServletRequestWrapper
 				}
 			}
 			//fill in param cache & merge with super.params()
-			m_parameters = new HashMap<String, String[]>();
+			this.parameters = new HashMap<String, String[]>();
 			final Map<String, String[]> superParameters = super.getParameterMap();
 			for (final Map.Entry<String, List<String>> kv : parameters.entrySet())
 			{
@@ -183,7 +183,7 @@ public class BufferedRequestWrapper extends HttpServletRequestWrapper
 				{
 					values.addAll(Arrays.asList(superValues));
 				}
-				m_parameters.put(key, values.toArray(new String[values.size()]));
+				this.parameters.put(key, values.toArray(new String[values.size()]));
 			}
 		}
 		return useParsed;

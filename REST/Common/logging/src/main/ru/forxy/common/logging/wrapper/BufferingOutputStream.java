@@ -10,27 +10,27 @@ import java.io.OutputStream;
  */
 public class BufferingOutputStream extends OutputStream
 {
-    private final Integer m_maxBytesToBuffer;
+    private final Integer maxBytesToBuffer;
 
-    private final ByteArrayOutputStream m_bos = new ByteArrayOutputStream(4096);
-    private int m_pos = 0;
+    private final ByteArrayOutputStream bos = new ByteArrayOutputStream(4096);
+    private int pos = 0;
 
     public BufferingOutputStream(final Integer maxBytesToBuffer)
     {
-        m_maxBytesToBuffer = maxBytesToBuffer;
+        this.maxBytesToBuffer = maxBytesToBuffer;
     }
 
     @Override
     public void write(final int b) throws IOException
     {
-        if (m_maxBytesToBuffer == null || m_maxBytesToBuffer == -1 || m_pos++ < m_maxBytesToBuffer)
+        if (maxBytesToBuffer == null || maxBytesToBuffer == -1 || pos++ < maxBytesToBuffer)
         {
-            m_bos.write(b);
+            bos.write(b);
         }
     }
 
     public byte[] getBuffer()
     {
-        return m_bos.toByteArray();
+        return bos.toByteArray();
     }
 }

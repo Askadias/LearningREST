@@ -45,8 +45,8 @@ public class SpringELFieldExtractor implements IHttpFieldExtractor, IFieldExtrac
 
     private static final ExpressionParser PARSER = new SpelExpressionParser();
 
-    private Map<String, Expression> m_extractRules;
-    private BeanResolver m_beanResolver;
+    private Map<String, Expression> extractRules;
+    private BeanResolver beanResolver;
 
     @Override
     public Map<String, Object> extract(final byte[] payload, final Map<String, Object> frame) {
@@ -71,14 +71,14 @@ public class SpringELFieldExtractor implements IHttpFieldExtractor, IFieldExtrac
         final Map<String, Object> result = new LinkedHashMap<String, Object>();
         try {
             final StandardEvaluationContext context = new StandardEvaluationContext();
-            context.setBeanResolver(m_beanResolver);
+            context.setBeanResolver(beanResolver);
             context.setVariable("payload", EncodingHelper.toUTFString(payload));
             context.setVariable("frame", frame);
             context.setVariable("request", request);
             context.setVariable("response", response);
             context.setVariable("requestHeaders", requestHeaders);
             context.setVariable("responseHeaders", responseHeaders);
-            for (final Map.Entry<String, Expression> kv : m_extractRules.entrySet()) {
+            for (final Map.Entry<String, Expression> kv : extractRules.entrySet()) {
                 final String field = kv.getKey();
                 final Expression expression = kv.getValue();
                 try {
@@ -116,10 +116,10 @@ public class SpringELFieldExtractor implements IHttpFieldExtractor, IFieldExtrac
      * @param extractRules key - new field name, value - el rule
      */
     public void setExtractRules(final Map<String, String> extractRules) {
-        m_extractRules = new LinkedHashMap<String, Expression>();
+        this.extractRules = new LinkedHashMap<String, Expression>();
         if (extractRules != null) {
             for (final Map.Entry<String, String> kv : extractRules.entrySet()) {
-                m_extractRules.put(kv.getKey(), PARSER.parseExpression(kv.getValue()));
+                this.extractRules.put(kv.getKey(), PARSER.parseExpression(kv.getValue()));
             }
         }
     }
@@ -130,6 +130,6 @@ public class SpringELFieldExtractor implements IHttpFieldExtractor, IFieldExtrac
      * @param beanResolver impl
      */
     public void setBeanResolver(final BeanResolver beanResolver) {
-        m_beanResolver = beanResolver;
+        this.beanResolver = beanResolver;
     }
 }

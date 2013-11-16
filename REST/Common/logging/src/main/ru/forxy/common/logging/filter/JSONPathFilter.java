@@ -3,9 +3,9 @@ package ru.forxy.common.logging.filter;
 import ru.forxy.common.support.Context;
 
 /**
- * Filter based on Spring expression language
+ * Filter based on JSON path
  */
-public class SpringELFilter implements IFilter {
+public class JSONPathFilter implements IFilter {
 
     @Override
     public Context.ContextData doFilter(Context.ContextData data) {
