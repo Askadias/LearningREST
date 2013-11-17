@@ -10,7 +10,7 @@
     <bean id="ru.forxy.user.soap.UserServiceImpl" class="ru.forxy.user.soap.UserServiceImpl"
           p:userServiceFacade-ref="ru.forxy.user.logic.UserServiceFacade"/>
 
-    <jaxws:endpoint id="ru.forxy.UserService.soap" address="/soap">
+    <jaxws:endpoint id="ru.forxy.UserService.soap" address="/soap/v1">
         <jaxws:implementor>
             <ref bean="ru.forxy.user.soap.UserServiceImpl"/>
         </jaxws:implementor>

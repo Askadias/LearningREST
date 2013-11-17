@@ -11,7 +11,7 @@ jar { from sourceSets.main.allJava }
 
 dependencies {
     // --------------------- FORXY ---------------------------------------
-    compile "forxy:ru.forxy.common.api:${rev_forxy_common}"
+    compile "forxy:ru.forxy.common.rest.api:${rev_forxy_common}"
 
     // --------------------- CXF -----------------------------------------
     compile "org.apache.cxf:cxf-bundle-jaxrs:${rev_cxf}"

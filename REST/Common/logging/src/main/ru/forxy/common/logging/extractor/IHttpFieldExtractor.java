@@ -1,4 +1,4 @@
-package ru.forxy.common.logging.metadata;
+package ru.forxy.common.logging.extractor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

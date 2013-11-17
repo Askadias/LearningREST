@@ -1,10 +1,10 @@
 package ru.forxy.common.logging;
 
 import ru.forxy.common.exceptions.ServiceException;
-import ru.forxy.common.logging.metadata.IHttpFieldExtractor;
+import ru.forxy.common.logging.extractor.IHttpFieldExtractor;
 import ru.forxy.common.logging.support.Fields;
-import ru.forxy.common.logging.wrapper.BufferedRequestWrapper;
-import ru.forxy.common.logging.wrapper.BufferedResponseWrapper;
+import ru.forxy.common.logging.wrapper.HttpRequestWrapper;
+import ru.forxy.common.logging.wrapper.HttpResponseWrapper;
 import ru.forxy.common.support.Context;
 import ru.forxy.common.support.SystemProperties;
 
@@ -45,8 +45,8 @@ public class LoggingServletFilter extends AbstractPerformanceLogger implements F
         if (isPerformanceLoggingEnabled) {
             final long timestampStart = System.currentTimeMillis();
             final long timestampStartNano = System.nanoTime();
-            final BufferedRequestWrapper brq = new BufferedRequestWrapper(rq, -1);
-            final BufferedResponseWrapper brs = new BufferedResponseWrapper(rs, -1);
+            final HttpRequestWrapper brq = new HttpRequestWrapper(rq);
+            final HttpResponseWrapper brs = new HttpResponseWrapper(rs);
 
             Context.push();
             try {
@@ -80,7 +80,7 @@ public class LoggingServletFilter extends AbstractPerformanceLogger implements F
         }
     }
 
-    private void handleRequest(final BufferedRequestWrapper rq, final long timestampStart, final String url) {
+    private void handleRequest(final HttpRequestWrapper rq, final long timestampStart, final String url) {
         Context.addGlobal(Fields.ProductName, SystemProperties.getServiceName());
         Context.addGlobal(Fields.ActivityGUID, UUID.randomUUID().toString());
         Context.addFrame(Fields.ActivityName, activityName);
@@ -119,7 +119,7 @@ public class LoggingServletFilter extends AbstractPerformanceLogger implements F
         writeFrame(requestWriter);
     }
 
-    private void handleResponse(final BufferedRequestWrapper rq, final BufferedResponseWrapper rs,
+    private void handleResponse(final HttpRequestWrapper rq, final HttpResponseWrapper rs,
                                 final long timestampStart, final long timestampStartNano) {
         final long timestampEnd = System.currentTimeMillis();
         final long timestampEndNano = System.nanoTime();

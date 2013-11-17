@@ -5,6 +5,7 @@ import org.apache.commons.io.output.TeeOutputStream;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -14,8 +15,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BufferedResponseWrapper extends HttpServletResponseWrapper {
-    private final BufferingOutputStream bos;
+public class HttpResponseWrapper extends HttpServletResponseWrapper {
+    private final ByteArrayOutputStream bos = new ByteArrayOutputStream(4096);
 
     private PrintWriter pw;
     private ServletOutputStream sos;
@@ -24,9 +25,8 @@ public class BufferedResponseWrapper extends HttpServletResponseWrapper {
     private String responseRedirectURL;
     private final Map<String, List<String>> responseHeaders = new LinkedHashMap<String, List<String>>();
 
-    public BufferedResponseWrapper(final HttpServletResponse response, final Integer maxBytesToBuffer) {
+    public HttpResponseWrapper(final HttpServletResponse response) {
         super(response);
-        bos = new BufferingOutputStream(maxBytesToBuffer);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class BufferedResponseWrapper extends HttpServletResponseWrapper {
     }
 
     public byte[] getResponseBody() {
-        byte[] result = bos.getBuffer();
+        byte[] result = bos.toByteArray();
         result = result.length > 0 ? result : null;
         return result;
     }

@@ -1,4 +1,4 @@
-package ru.forxy.common.logging.metadata;
+package ru.forxy.common.logging.extractor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ import java.util.Map;
  * <p/>
  * Configuration sample:
  * <pre>
- *  <bean class="ru.forxy.common.logging.metadata.SpringELFieldExtractor">
+ *  <bean class="SpringELFieldExtractor">
  *      <property name="extractRules">
  *          <map>
  *              <entry key="OperationName" value="#request.getRequestURI().replaceAll('.*\/(.+)/.*$', '$1')"/>

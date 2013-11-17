@@ -86,7 +86,8 @@ task cleanTomcat(type: Delete) {
 dependencies {
     // --------------------- FORXY ---------------------------------------
     compile project(":ru.forxy.crypto.api")
-    compile "forxy:ru.forxy.common.support:${rev_forxy_common}"
+    compile "forxy:ru.forxy.common.rest:${rev_forxy_common}"
+    compile "forxy:ru.forxy.common.utils:${rev_forxy_common}"
 
     // --------------------- COMMON --------------------------------------
     compile "ch.qos.logback:logback-core:${rev_logback}"

@@ -1,4 +1,4 @@
-package ru.forxy.common.logging.metadata;
+package ru.forxy.common.logging.extractor;
 
 /**
  * Created by Uladzislau_Prykhodzk on 11/12/13.

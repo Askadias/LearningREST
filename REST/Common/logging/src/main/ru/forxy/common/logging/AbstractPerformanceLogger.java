@@ -1,7 +1,7 @@
 package ru.forxy.common.logging;
 
 import org.springframework.beans.factory.InitializingBean;
-import ru.forxy.common.logging.metadata.IHttpFieldExtractor;
+import ru.forxy.common.logging.extractor.IHttpFieldExtractor;
 import ru.forxy.common.logging.support.Fields;
 import ru.forxy.common.logging.support.IExceptionHandler;
 import ru.forxy.common.logging.support.MetadataHelper;

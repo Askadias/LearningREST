@@ -58,6 +58,7 @@ dependencies {
     compile "org.codehaus.jackson:jackson-jaxrs:${rev_jackson}"
     compile "org.codehaus.jackson:jackson-core-asl:${rev_jackson}"
 
+
     // --------------------- COMMON --------------------------------------
     compile "commons-collections:commons-collections:${rev_common_collections}"
     compile "ch.qos.logback:logback-core:${rev_logback}"

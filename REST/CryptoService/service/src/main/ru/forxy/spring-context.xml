@@ -42,7 +42,7 @@
         </httpj:engine>
     </httpj:engine-factory>
 
-    <jaxrs:server address="/v1" depends-on="port-9090-crypto-config">
+    <jaxrs:server address="/rest/v1" depends-on="port-9090-crypto-config">
         <jaxrs:serviceBeans>
             <ref bean="cryptoServiceImpl"/>
         </jaxrs:serviceBeans>

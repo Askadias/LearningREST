@@ -50,7 +50,7 @@ public class UserServiceTest extends BaseSpringContextTest {
         response = userService.getUser(xander, uriInfo, headers);
         Object entity = response.getEntity();
         Assert.assertNotNull(entity);
-        Assert.assertEquals(500, response.getStatus());
+        Assert.assertEquals(404, response.getStatus());
         LOGGER.info("User has been successfully removed");
     }
 
