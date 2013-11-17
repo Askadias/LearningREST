@@ -1,24 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>../logs/ru.forxy.photo.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>../logs/ru.forxy.photo.%i.log.zip</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>10</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>50MB</maxFileSize>
+        </triggeringPolicy>
         <encoder>
-            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+            <Pattern>%d{ISO8601} [%t] [%cn] %-5p %c{1} - %m%n</Pattern>
         </encoder>
     </appender>
 
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>../logs/ru.forxy.photo.service.log</file>
+    <appender name="PERF" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>../logs/ru.forxy.photo-perf.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>../logs/ru.forxy.photo-perf.%i.log.zip</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>10</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>50MB</maxFileSize>
+        </triggeringPolicy>
         <encoder>
-            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</Pattern>
+            <Pattern>%d{ISO8601} %m%n</Pattern>
         </encoder>
     </appender>
 
-    <logger name="com.base22" level="TRACE"/>
+    <appender name="PERF_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="PERF"/>
+    </appender>
 
-    <root level="warn">
-        <appender-ref ref="FILE"/>
-        <appender-ref ref="STDOUT"/>
-    </root>
+    <logger name="photo.performance" level="INFO">
+        <appender-ref ref="PERF_ASYNC"/>
+    </logger>
+
+    <logger name="ru.forxy.photo.test" level="TRACE"/>
+
+    <root level="warn"/>
 
 </configuration>
