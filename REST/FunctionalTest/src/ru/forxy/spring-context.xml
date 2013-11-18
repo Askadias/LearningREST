@@ -2,12 +2,15 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:http="http://cxf.apache.org/transports/http/configuration"
        xmlns:sec="http://cxf.apache.org/configuration/security"
-       xmlns:context="http://www.springframework.org/schema/context" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
-       xsi:schemaLocation="
-         http://www.springframework.org/schema/beans            http://www.springframework.org/schema/beans/spring-beans.xsd
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans            http://www.springframework.org/schema/beans/spring-beans.xsd
          http://cxf.apache.org/transports/http/configuration    http://cxf.apache.org/schemas/configuration/http-conf.xsd
          http://cxf.apache.org/configuration/security           http://cxf.apache.org/schemas/configuration/security.xsd
-         http://www.springframework.org/schema/context          http://www.springframework.org/schema/context/spring-context.xsd http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd"
+         http://www.springframework.org/schema/context          http://www.springframework.org/schema/context/spring-context.xsd http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
        default-lazy-init="false">
 
     <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="2"
@@ -58,32 +61,56 @@
 
     <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
 
+    <util:list id="jsonProviders">
+        <ref bean="jsonProvider"/>
+    </util:list>
+
 
     <!-- =======================================
            User Service Client Configuration
          ======================================= -->
 
-    <jaxrs:client id="userServiceClient"
-                  serviceClass="ru.forxy.user.rest.IUserService"
-                  address="${ru.forxy.user.rest.IUserService/url}">
-        <jaxrs:providers>
-            <ref bean="jsonProvider"/>
-        </jaxrs:providers>
-        <jaxrs:headers>
-            <entry key="Accept" value="application/json"/>
-        </jaxrs:headers>
-    </jaxrs:client>
+    <bean id="userServiceStressTestConfig" class="ru.forxy.common.support.Configuration">
+        <constructor-arg name="settings">
+            <map>
+                <entry key="#{T(ru.forxy.stress.UserServiceStressTest$Config).ThreadsCount}" value="${threads}"/>
+                <entry key="#{T(ru.forxy.stress.UserServiceStressTest$Config).IterationsCount}" value="${iterations}"/>
+            </map>
+        </constructor-arg>
+    </bean>
 
-    <jaxrs:client id="systemStatusClient"
-                  serviceClass="ru.forxy.common.service.ISystemStatusService"
-                  address="${ru.forxy.user.rest.IUserService/url}">
-        <jaxrs:providers>
-            <ref bean="jsonProvider"/>
-        </jaxrs:providers>
-        <jaxrs:headers>
-            <entry key="Accept" value="application/json"/>
-        </jaxrs:headers>
-    </jaxrs:client>
+    <bean id="userServiceClient" class="org.apache.cxf.jaxrs.client.JAXRSClientFactory"
+          factory-method="create" scope="prototype"
+          c:baseAddress="${ru.forxy.user.rest.IUserService/url}"
+          c:cls="ru.forxy.user.rest.IUserService"
+          c:providers-ref="jsonProviders"/>
+
+    <bean id="userServiceConnectionPool" class="org.springframework.aop.target.CommonsPoolTargetSource"
+          p:targetBeanName="userServiceClient"
+          p:maxSize="${threads}"
+          p:maxWait="0"
+          p:whenExhaustedActionName="WHEN_EXHAUSTED_GROW"/>
+
+    <bean id="userService" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:targetSource-ref="userServiceConnectionPool"
+          p:proxyInterfaces="ru.forxy.user.rest.IUserService"/>
+
+
+    <bean id="userSystemStatusClient" class="org.apache.cxf.jaxrs.client.JAXRSClientFactory"
+          factory-method="create" scope="prototype"
+          c:baseAddress="${ru.forxy.user.rest.IUserService/url}"
+          c:cls="ru.forxy.common.service.ISystemStatusService"
+          c:providers-ref="jsonProviders"/>
+
+    <bean id="userSystemStatusConnectionPool" class="org.springframework.aop.target.CommonsPoolTargetSource"
+          p:targetBeanName="userSystemStatusClient"
+          p:maxSize="${threads}"
+          p:maxWait="0"
+          p:whenExhaustedActionName="WHEN_EXHAUSTED_GROW"/>
+
+    <bean id="userSystemStatus" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:targetSource-ref="userSystemStatusConnectionPool"
+          p:proxyInterfaces="ru.forxy.common.service.ISystemStatusService"/>
 
 
     <!-- =======================================

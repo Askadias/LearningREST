@@ -60,10 +60,8 @@
 
     <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
 
-    <bean id="jsonVaidationProvider" class="ru.forxy.common.web.JSONValidationProvider"/>
-
     <util:list id="jsonProviders">
-        <idref bean="jsonVaidationProvider"/>
+        <idref bean="jsonProvider"/>
     </util:list>
 
     <!-- =======================================

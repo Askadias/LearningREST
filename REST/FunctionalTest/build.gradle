@@ -18,11 +18,39 @@ sourceSets {
 jar { from sourceSets.main.allJava }
 
 test {
+    reports.html.enabled = true
+    maxParallelForks = 5
+    maxHeapSize = "1024m"
+    jvmArgs '-XX:MaxPermSize=256m', '-XX:+HeapDumpOnOutOfMemoryError'
     if (project.hasProperty('env')) {
         systemProperty 'env', "${env}"
     } else {
         systemProperty 'env', "dev"
     }
+    if (project.hasProperty('threads')) {
+        systemProperty 'threads', "${threads}"
+    } else {
+        systemProperty 'threads', "4"
+    }
+    if (project.hasProperty('iterations')) {
+        systemProperty 'iterations', "${iterations}"
+    } else {
+        systemProperty 'iterations', "1000"
+    }
+}
+
+task includeDVTTests() << {
+    project.tasks.test.scanForTestClasses = false
+    project.tasks.test.includes = [
+            '**/dvt/*Test.class'
+    ]
+}
+
+task includeStressTests() << {
+    project.tasks.test.scanForTestClasses = false
+    project.tasks.test.includes = [
+            '**/stress/*Test.class'
+    ]
 }
 
 if (System.env.OUTPUT_ROOT) {
@@ -53,6 +81,7 @@ dependencies {
     compile "forxy:ru.forxy.crypto.api:${rev_forxy_crypto}"
     compile "forxy:ru.forxy.user.api:${rev_forxy_user}"
     compile "forxy:ru.forxy.photo.api:${rev_forxy_photo}"
+    compile "forxy:ru.forxy.common.utils:${rev_forxy_common}"
 
     // --------------------- JSON ----------------------------------------
     compile "org.codehaus.jackson:jackson-jaxrs:${rev_jackson}"
@@ -60,7 +89,9 @@ dependencies {
 
 
     // --------------------- COMMON --------------------------------------
-    compile "commons-collections:commons-collections:${rev_common_collections}"
+    compile "commons-collections:commons-collections:${rev_commons_collections}"
+    compile "commons-pool:commons-pool:${rev_commons_pool}"
+
     compile "ch.qos.logback:logback-core:${rev_logback}"
     compile "ch.qos.logback:logback-classic:${rev_logback}"
     compile "org.slf4j:slf4j-api:${rev_slf4j}"

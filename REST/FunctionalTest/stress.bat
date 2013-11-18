@@ -1,0 +1,1 @@
+gradle clean includeStressTests test -Penv=dev -Pthreads=4 -Piterations=1000

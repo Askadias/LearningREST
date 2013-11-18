@@ -62,7 +62,7 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public boolean exists(String email) {
-        return mongoTemplate.exists(Query.query(Criteria.where("email").is(email)), User.class);
+        return mongoTemplate.findOne(Query.query(Criteria.where("email").is(email)), User.class) != null;
     }
 
     @Override

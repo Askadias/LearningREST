@@ -25,11 +25,11 @@ public class UserServiceTest extends BaseSpringContextTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceTest.class);
 
-    @Autowired(required = false)
+    @Autowired
     private IUserService userService;
 
-    @Autowired(required = false)
-    private ISystemStatusService systemStatusClient;
+    @Autowired
+    private ISystemStatusService userSystemStatus;
 
     @Test
     public void testAddDeleteUser() {
@@ -72,7 +72,7 @@ public class UserServiceTest extends BaseSpringContextTest {
         Message m = new MessageImpl();
         UriInfo uriInfo = new UriInfoImpl(m);
         HttpHeaders headers = new HttpHeadersImpl(m);
-        Response response = systemStatusClient.getSystemStatus(uriInfo, headers);
+        Response response = userSystemStatus.getSystemStatus(uriInfo, headers);
         Assert.assertNotNull(response);
         Assert.assertEquals(response.getStatus(), Response.Status.OK.getStatusCode());
 
