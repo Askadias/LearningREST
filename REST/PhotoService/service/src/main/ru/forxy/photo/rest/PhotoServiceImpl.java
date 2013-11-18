@@ -1,4 +1,4 @@
-package ru.forxy.rest;
+package ru.forxy.photo.rest;
 
 import ru.forxy.photo.IPhotoService;
 import ru.forxy.photo.pojo.Photo;

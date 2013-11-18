@@ -17,7 +17,7 @@
 
     <jaxrs:server address="/rest/v1">
         <jaxrs:serviceBeans>
-            <bean class="ru.forxy.rest.PhotoServiceImpl"/>
+            <bean class="ru.forxy.photo.rest.PhotoServiceImpl"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>

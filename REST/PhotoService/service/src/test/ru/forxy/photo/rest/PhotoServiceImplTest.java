@@ -1,4 +1,4 @@
-package ru.forxy.rest;
+package ru.forxy.photo.rest;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
