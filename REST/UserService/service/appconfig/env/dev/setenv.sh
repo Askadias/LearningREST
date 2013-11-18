@@ -21,4 +21,5 @@ export JAVA_OPTS="$JAVA_OPTS
 -XX:ParallelGCThreads=8 
 -XX:+UseParNewGC 
 -XX:MaxGCPauseMillis=2000 
--XX:GCTimeRatio=10"
+-XX:GCTimeRatio=10
+-javaagent:/usr/local/appdynamics/javaagent/javaagent.jar"
