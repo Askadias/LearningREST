@@ -19,7 +19,7 @@ jar { from sourceSets.main.allJava }
 
 test {
     reports.html.enabled = true
-    maxParallelForks = 5
+    maxParallelForks = 8
     maxHeapSize = "1024m"
     jvmArgs '-XX:MaxPermSize=256m', '-XX:+HeapDumpOnOutOfMemoryError'
     if (project.hasProperty('env')) {

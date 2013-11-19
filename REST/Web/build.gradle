@@ -109,6 +109,13 @@ task cleanTomcat(type: Delete) {
     delete tree
 }
 
+// ========== Tests =====================================================
+
+test {
+    reports.html.enabled = true
+    maxParallelForks = 8
+}
+
 // ========== Dependencies ==============================================
 
 dependencies {
