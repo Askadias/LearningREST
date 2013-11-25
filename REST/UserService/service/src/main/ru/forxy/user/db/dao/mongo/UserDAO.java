@@ -17,6 +17,9 @@ import ru.forxy.user.rest.pojo.User;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Mongo DB based data source for users
+ */
 public class UserDAO implements IUserDAO {
 
     MongoTemplate mongoTemplate;

@@ -9,6 +9,9 @@
         http://www.springframework.org/schema/data/mongo    http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
         http://www.springframework.org/schema/context       http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
+    <!-- =========================================================================================
+                                   Mongo Data Source
+    ========================================================================================== -->
     <context:annotation-config/>
     <context:component-scan base-package='ru.forxy.user.rest.pojo'/>
 
@@ -31,8 +34,23 @@
         <constructor-arg name='databaseName' value='user'/>
     </bean>
 
+
+    <!-- =========================================================================================
+                                   Cassandra Data Source
+    ========================================================================================== -->
     <bean id="ru.forxy.user.db.dao.mongo.UserDAO.impl" class="ru.forxy.user.db.dao.mongo.UserDAO"
           autowire-candidate="false"
           p:mongoTemplate-ref="mongoTemplate"/>
+
+    <bean id="entityManagerFactory" class="javax.persistence.Persistence"
+          factory-method="createEntityManagerFactory">
+        <constructor-arg name="persistenceUnitName" value="forxy"/>
+          </bean>
+
+    <bean id="entityManager" factory-bean="entityManagerFactory" factory-method="createEntityManager"/>
+
+    <bean id="ru.forxy.user.db.dao.cassandra.UserDAO.impl" class="ru.forxy.user.db.dao.cassandra.UserDAO"
+          autowire-candidate="false"
+          p:entityManager-ref="entityManager"/>
 
 </beans>

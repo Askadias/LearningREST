@@ -31,12 +31,12 @@
         </encoder>
     </appender>
 
-    <appender name="PERF_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+    <!--<appender name="PERF_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
         <appender-ref ref="PERF"/>
-    </appender>
+    </appender>-->
 
     <logger name="crypto.performance" level="INFO">
-        <appender-ref ref="PERF_ASYNC"/>
+        <appender-ref ref="PERF"/>
     </logger>
 
     <logger name="ru.forxy.crypto.test" level="TRACE"/>

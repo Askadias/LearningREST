@@ -1,0 +1,21 @@
+create keyspace Forxy
+    with placement_strategy = 'org.apache.cassandra.locator.SimpleStrategy'
+    and strategy_options = {replication_factor:1};
+
+use Forxy;
+
+CREATE COLUMN FAMILY user
+WITH comparator = UTF8Type
+AND key_validation_class = UTF8Type
+AND default_validation_class = UTF8Type;
+AND column_metadata = [
+{column_name: email, validation_class: UTF8Type, index_type: }
+{column_name: password}
+{column_name: login, validation_class: UTF8Type}
+{column_name: first_name, validation_class: UTF8Type}
+{column_name: last_name, validation_class: UTF8Type}
+{column_name: gender, validation_class: UTF8Type}
+{column_name: birth_day, validation_class: LongType}
+];
+
+assume User keys as utf8;
