@@ -38,7 +38,7 @@ public class UserServiceImplTest extends BaseUserServiceTest {
     IUserService userService;
 
     @Autowired
-    @Qualifier("ru.forxy.user.db.dao.mongo.UserDAO")
+    @Qualifier("ru.forxy.user.db.dao.cassandra.UserDAO")
     IUserDAO userDAOMock;
 
     @Test

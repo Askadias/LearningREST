@@ -10,8 +10,8 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
-@Entity
-@Table(name = "user", schema = "forxy@user")
+@Entity(name = "User")
+@Table(name = "user", schema = "forxy@user_pu")
 @XmlRootElement(name = "user")
 public class User {
 

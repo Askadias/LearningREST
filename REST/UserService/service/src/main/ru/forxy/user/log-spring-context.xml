@@ -110,6 +110,16 @@
         </property>
     </bean>
 
+    <bean id="ru.forxy.user.db.dao.cassandra.UserDAO" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:proxyInterfaces="ru.forxy.user.db.dao.IUserDAO"
+          p:target-ref="ru.forxy.user.db.dao.cassandra.UserDAO.impl">
+        <property name="interceptorNames">
+            <list>
+                <idref bean="payment.scoring.performance.dao.loggingInterceptor"/>
+            </list>
+        </property>
+    </bean>
+
     <!-- ================= IMPLEMENTATION ========================================================================== -->
 
     <bean id="ru.forxy.common.support.Configuration.performance.impl" class="ru.forxy.common.support.Configuration"

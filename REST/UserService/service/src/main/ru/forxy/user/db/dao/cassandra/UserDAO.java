@@ -1,13 +1,16 @@
 package ru.forxy.user.db.dao.cassandra;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import ru.forxy.common.status.pojo.ComponentStatus;
+import ru.forxy.common.status.pojo.StatusType;
 import ru.forxy.user.db.dao.IUserDAO;
 import ru.forxy.user.rest.pojo.User;
 
 import javax.persistence.EntityManager;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,23 +35,19 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
-    public ComponentStatus getStatus() {
-        return null;
-    }
-
-    @Override
     public Iterable<User> findAll(Sort sort) {
-        return entityManager.createQuery("select User from User").getResultList();
+        return entityManager.createQuery("select u from User u").getResultList();
     }
 
     @Override
     public Page<User> findAll(Pageable pageable) {
-        return null;
+        return new PageImpl<User>(entityManager.createQuery("select u from User u").getResultList());
     }
 
     @Override
     public <T extends User> T save(T entity) {
-        return null;
+        entityManager.persist(entity);
+        return entity;
     }
 
     @Override
@@ -58,37 +57,37 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public User findOne(String s) {
-        return null;
+        return entityManager.find(User.class, s);
     }
 
     @Override
     public boolean exists(String s) {
-        return false;
+        return entityManager.contains(new User(s, null));
     }
 
     @Override
     public Iterable<User> findAll() {
-        return null;
+        return entityManager.createQuery("select u from User u").getResultList();
     }
 
     @Override
     public Iterable<User> findAll(Iterable<String> strings) {
-        return null;
+        return entityManager.createQuery("select u from User u").getResultList();
     }
 
     @Override
     public long count() {
-        return 0;
+        return (Long) entityManager.createQuery("select count(u) from User u").getSingleResult();
     }
 
     @Override
     public void delete(String s) {
-
+        entityManager.createQuery("delete from User u where u.email = " + s).executeUpdate();
     }
 
     @Override
     public void delete(User entity) {
-
+        entityManager.detach(entity);
     }
 
     @Override
@@ -99,5 +98,10 @@ public class UserDAO implements IUserDAO {
     @Override
     public void deleteAll() {
 
+    }
+
+    @Override
+    public ComponentStatus getStatus() {
+        return new ComponentStatus("Cassandra", "localhost", StatusType.YELLOW, null, ComponentStatus.ComponentType.DB, 0, new Date(), null, null);
     }
 }

@@ -1,5 +1,7 @@
 apply plugin: 'eclipse'
 
+
+
 allprojects {
     apply plugin: 'maven'
     apply plugin: 'eclipse'
@@ -15,6 +17,7 @@ allprojects {
                 m2compatible = true
             }
         }
+
 
         uploadArchives {
             repositories {

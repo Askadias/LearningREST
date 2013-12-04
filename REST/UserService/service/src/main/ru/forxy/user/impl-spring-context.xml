@@ -11,7 +11,7 @@
           p:systemStatusFacade-ref="ru.forxy.user.logic.SystemStatusFacade"/>
 
     <bean id="ru.forxy.user.logic.UserServiceFacade.impl" class="ru.forxy.user.logic.UserServiceFacade" autowire-candidate="false"
-          p:userDAO-ref="ru.forxy.user.db.dao.mongo.UserDAO"/>
+          p:userDAO-ref="ru.forxy.user.db.dao.cassandra.UserDAO"/>
 
     <bean id="ru.forxy.user.rest.UserServiceImpl" class="ru.forxy.user.rest.UserServiceImpl"
           p:userServiceFacade-ref="ru.forxy.user.logic.UserServiceFacade"/>
