@@ -34,7 +34,7 @@ public class EntityPage<T> implements Serializable {
      * @param number  the page number
      * @param total   the total amount of items available
      */
-    public EntityPage(List<T> content, final int size, final int number, long total) {
+    public EntityPage(final List<T> content, final int size, final int number, final long total) {
         if (null != content) {
             this.content.addAll(content);
         }
@@ -49,7 +49,7 @@ public class EntityPage<T> implements Serializable {
      *
      * @param content must not be {@literal null}.
      */
-    public EntityPage(List<T> content) {
+    public EntityPage(final List<T> content) {
         this(content, null == content ? 0 : content.size(), 0, null == content ? 0 : content.size());
     }
 
@@ -62,7 +62,7 @@ public class EntityPage<T> implements Serializable {
         return size;
     }
 
-    public void setSize(int size) {
+    public void setSize(final int size) {
         this.size = size;
     }
 
@@ -75,7 +75,7 @@ public class EntityPage<T> implements Serializable {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(final int number) {
         this.number = number;
     }
 
@@ -197,7 +197,7 @@ public class EntityPage<T> implements Serializable {
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
 
         if (this == obj) {
             return true;

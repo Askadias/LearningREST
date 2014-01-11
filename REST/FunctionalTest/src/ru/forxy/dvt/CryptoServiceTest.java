@@ -19,8 +19,8 @@ public class CryptoServiceTest extends BaseSpringContextTest {
 
     @Test
     public void testEncryption() {
-        String text = "some text for encryption 1234567890 !@#$%^&*()";
-        byte[] encrypted = cryptoService.encrypt(text);
+        final String text = "some text for encryption 1234567890 !@#$%^&*()";
+        final byte[] encrypted = cryptoService.encrypt(text);
         Assert.assertNotNull(encrypted);
         LOGGER.info("Information successfully encrypted: {}", Arrays.toString(encrypted));
         String decrypted = cryptoService.decrypt(encrypted);
@@ -30,13 +30,13 @@ public class CryptoServiceTest extends BaseSpringContextTest {
 
     @Test
     public void testHashing() {
-        byte[] passwordHash = cryptoService.hash("password");
+        final byte[] passwordHash = cryptoService.hash("password");
         Assert.assertNotNull(passwordHash);
         LOGGER.info("'Password' successfully encrypted: {}", Arrays.toString(passwordHash));
-        byte[] passwordHash2 = cryptoService.hash("password");
+        final byte[] passwordHash2 = cryptoService.hash("password");
         Assert.assertTrue(Arrays.equals(passwordHash, passwordHash2));
         LOGGER.info("'Password' successfully encrypted: {}", Arrays.toString(passwordHash2));
-        byte[] passwordHash3 = cryptoService.hash("different");
+        final byte[] passwordHash3 = cryptoService.hash("different");
         Assert.assertFalse(Arrays.equals(passwordHash, passwordHash3));
         LOGGER.info("'Different' successfully encrypted: {}", Arrays.toString(passwordHash3));
     }

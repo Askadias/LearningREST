@@ -16,19 +16,19 @@ public class ErrorMessage implements Serializable {
     public ErrorMessage() {
     }
 
-    public ErrorMessage(String code, String message) {
+    public ErrorMessage(final String code, final String message) {
         this.code = code;
         this.messages = Collections.singletonList(message);
     }
 
-    public ErrorMessage(String code, List<String> messages) {
+    public ErrorMessage(final String code, final List<String> messages) {
         this.code = code;
-        this.messages =  messages;
+        this.messages = messages;
     }
 
-    public ErrorMessage(String code, Throwable cause) {
+    public ErrorMessage(final String code, final Throwable cause) {
         this.code = code;
-        this.messages =  Collections.singletonList(cause.getMessage());
+        this.messages = Collections.singletonList(cause.getMessage());
     }
 
     public String getCode() {

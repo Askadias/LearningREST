@@ -11,24 +11,24 @@ import java.util.Map;
 
 public class PhotoServiceImpl implements IPhotoService {
 
-    private static Map<String, Photo> users = new HashMap<String, Photo>(3);
+    private static Map<String, Photo> photos = new HashMap<String, Photo>(3);
 
     static {
-        users.put("alfred@gmail.com", new Photo("alfred@gmail.com"));
-        users.put("bob@gmail.com", new Photo("bob@gmail.com"));
-        users.put("cliff@gmail.com", new Photo("cliff@gmail.com"));
-        users.put("daniel@gmail.com", new Photo("daniel@gmail.com"));
-        users.put("eleanor@gmail.com", new Photo("eleanor@gmail.com"));
+        photos.put("alfred@gmail.com", new Photo("alfred@gmail.com"));
+        photos.put("bob@gmail.com", new Photo("bob@gmail.com"));
+        photos.put("cliff@gmail.com", new Photo("cliff@gmail.com"));
+        photos.put("daniel@gmail.com", new Photo("daniel@gmail.com"));
+        photos.put("eleanor@gmail.com", new Photo("eleanor@gmail.com"));
     }
 
     @Override
     public List<Photo> getPhotos() {
-        return new ArrayList<Photo>(users.values());
+        return new ArrayList<Photo>(photos.values());
     }
 
     @Override
-    public Photo addPhoto(String url) {
-        Photo photo = users.get(url);
+    public Photo addPhoto(final String url) {
+        Photo photo = photos.get(url);
         if (photo != null) {
             return photo;
         } else {
@@ -37,10 +37,10 @@ public class PhotoServiceImpl implements IPhotoService {
     }
 
     @Override
-    public void addPhoto(Photo photo) {
+    public void addPhoto(final Photo photo) {
         if (photo.getUrl() != null) {
-            if (!users.containsKey(photo.getUrl())) {
-                users.put(photo.getUrl(), photo);
+            if (!photos.containsKey(photo.getUrl())) {
+                photos.put(photo.getUrl(), photo);
             } else {
                 throw new WebServiceException("Photo with url " + photo.getUrl() + " already exist");
             }
@@ -50,7 +50,7 @@ public class PhotoServiceImpl implements IPhotoService {
     }
 
     @Override
-    public void deletePhoto(String url) {
-        users.remove(url);
+    public void deletePhoto(final String url) {
+        photos.remove(url);
     }
 }

@@ -93,8 +93,7 @@ public class UserServiceImplTest extends BaseUserServiceTest {
         Assert.assertNotNull(response);
         Assert.assertNotNull(response.getEntity());
 
-        EntityPage<User> userPage = response.readEntity(new GenericType<EntityPage<User>>() {
-        });
+        EntityPage<User> userPage = response.readEntity(new GenericType<EntityPage<User>>() {});
         Assert.assertTrue(CollectionUtils.isNotEmpty(userPage.getContent()));
     }
 }

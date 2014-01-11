@@ -1,14 +1,14 @@
-rootProject.name=project_name
+rootProject.name = project_name
 
 def projects = [
-        ':concurrent' : [name: "ru.forxy.common.concurrent", path: 'concurrent'],
-        ':logging' : [name: "ru.forxy.common.logging", path: 'logging'],
-        ':status' : [name: "ru.forxy.common.status", path: 'status'],
-        ':utils' : [name: "ru.forxy.common.utils", path: 'utils'],
-        ':rest' : [name: "ru.forxy.common.rest", path: 'rest'],
-        ':ru.forxy.common.rest:api' : [name: "ru.forxy.common.rest.api", path: 'rest/api'],
-        ':soap' : [name: "ru.forxy.common.soap", path: 'soap'],
-        ':ru.forxy.common.soap:api' : [name: "ru.forxy.common.soap.api", path: 'soap/api']
+        ':concurrent': [name: "ru.forxy.common.concurrent", path: 'concurrent'],
+        ':logging': [name: "ru.forxy.common.logging", path: 'logging'],
+        ':status': [name: "ru.forxy.common.status", path: 'status'],
+        ':utils': [name: "ru.forxy.common.utils", path: 'utils'],
+        ':rest': [name: "ru.forxy.common.rest", path: 'rest'],
+        ':ru.forxy.common.rest:api': [name: "ru.forxy.common.rest.api", path: 'rest/api'],
+        ':soap': [name: "ru.forxy.common.soap", path: 'soap'],
+        ':ru.forxy.common.soap:api': [name: "ru.forxy.common.soap.api", path: 'soap/api']
 ]
 
 projects.each() { key, config ->

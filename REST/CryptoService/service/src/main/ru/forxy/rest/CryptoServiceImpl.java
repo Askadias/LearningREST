@@ -11,7 +11,11 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.*;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
 public class CryptoServiceImpl implements ICryptoService {
 
@@ -29,32 +33,33 @@ public class CryptoServiceImpl implements ICryptoService {
     private IvParameterSpec ivSpec;
     private SecretKeySpec secretKey;
 
-    public CryptoServiceImpl(String password) {
+    public CryptoServiceImpl(final String password) {
         try {
             cipher = Cipher.getInstance(CIPHER_ALGORITHM);
             digest = MessageDigest.getInstance(DIGEST_ALGORITHM);
 
             // setup an IV (initialization vector)
-            byte[] iv = new byte[cipher.getBlockSize()];
+            final byte[] iv = new byte[cipher.getBlockSize()];
             new SecureRandom().nextBytes(iv);
 
             ivSpec = new IvParameterSpec(iv);
 
             // hash keyString with SHA-256 and crop the output to 128-bit for key
             digest.update(password.getBytes());
-            byte[] key = new byte[16];
+            final byte[] key = new byte[16];
             System.arraycopy(digest.digest(), 0, key, 0, key.length);
             secretKey = new SecretKeySpec(key, SECRET_KEY_SPEC);
 
         } catch (NoSuchAlgorithmException e) {
             LOGGER.error("Algorithm not found: " + CIPHER_ALGORITHM, e);
         } catch (NoSuchPaddingException e) {
-            LOGGER.error("Invalid crypto algorithm was set in the CryptoService implementation: " + CIPHER_ALGORITHM, e);
+            LOGGER.error("Invalid crypto algorithm was set in the CryptoService implementation: " + CIPHER_ALGORITHM,
+                    e);
         }
     }
 
     @Override
-    public byte[] encrypt(String decrypted) {
+    public byte[] encrypt(final String decrypted) {
         synchronized (cryptoSync) {
             try {
                 cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
@@ -73,7 +78,7 @@ public class CryptoServiceImpl implements ICryptoService {
     }
 
     @Override
-    public String decrypt(byte[] encrypted) {
+    public String decrypt(final byte[] encrypted) {
         synchronized (cryptoSync) {
             try {
                 cipher.init(Cipher.DECRYPT_MODE, secretKey, ivSpec);
@@ -92,7 +97,7 @@ public class CryptoServiceImpl implements ICryptoService {
     }
 
     @Override
-    public byte[] hash(String value) {
+    public byte[] hash(final String value) {
         synchronized (hashSync) {
             return digest.digest(value.getBytes());
         }

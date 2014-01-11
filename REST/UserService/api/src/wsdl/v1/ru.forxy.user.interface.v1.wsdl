@@ -62,7 +62,7 @@
             <wsdl:fault name="userServiceFault" message="tns:MessageUserServiceFault"/>
         </wsdl:operation>
     </wsdl:portType>
-    
+
     <wsdl:binding name="UserServiceSoap" type="tns:UserServicePortType">
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
         <wsdl:operation name="getUsers">
@@ -102,7 +102,7 @@
             </wsdl:fault>
         </wsdl:operation>
     </wsdl:binding>
-    
+
     <wsdl:service name="UserWS">
         <wsdl:port name="UserWSPort" binding="tns:UserServiceSoap">
             <soap:address location="http://localhost:8080/UserService/soap/v1"/>

@@ -1,10 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'war'
 
-    repositories {
-        maven {url "https://github.com/s7/mvnrepo/raw/master"}
-    }
-
+repositories { maven { url "https://github.com/s7/mvnrepo/raw/master" } }
 
 sourceSets {
     main {
@@ -96,7 +93,7 @@ test {
 dependencies {
     // --------------------- FORXY ---------------------------------------
     compile project(":ru.forxy.user.api")
-    compile "forxy:ru.forxy.user.api:${rev_forxy_common}"
+    compile "forxy:ru.forxy.user.api"
     compile "forxy:ru.forxy.common.rest:${rev_forxy_common}"
     compile "forxy:ru.forxy.common.utils:${rev_forxy_common}"
     compile "forxy:ru.forxy.common.status:${rev_forxy_common}"
@@ -117,10 +114,13 @@ dependencies {
     compile "org.springframework.data:spring-data-mongodb:${rev_spring_mongo}"
 
     // --------------------- CASSANDRA -----------------------------------
-    compile ("com.impetus.core:kundera-core:${rev_kundera_cassandra}") {
+    //compile "org.apache-extras.cassandra-jdbc:cassandra-jdbc:${rev_cassandra_jdbc}"
+    //compile "org.apache.cassandra:cassandra-all:${rev_cassandra_apache}"
+    compile "com.datastax.cassandra:cassandra-driver-core:${rev_cassandra_datastax}"
+    compile("com.impetus.core:kundera-core:${rev_cassandra_kundera}") {
         exclude module: 'persistence-api'
     }
-    compile ("com.impetus.client:kundera-cassandra:${rev_kundera_cassandra}") {
+    compile("com.impetus.client:kundera-cassandra:${rev_cassandra_kundera}") {
         exclude module: 'snappy'
         exclude module: 'persistence-api'
     }

@@ -1,4 +1,4 @@
-<Context 
-  docBase="${catalina.base}/warfiles/@war@"
-  reloadable="true" 
-/>
+<Context
+        docBase="${catalina.base}/warfiles/@war@"
+        reloadable="true"
+        />

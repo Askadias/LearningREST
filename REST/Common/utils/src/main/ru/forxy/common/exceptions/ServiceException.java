@@ -7,24 +7,24 @@ import ru.forxy.common.exceptions.support.StatusTemplate;
  */
 public class ServiceException extends RuntimeException {
 
-    private String statusCode;
+    private final String statusCode;
 
-    public ServiceException(StatusTemplate statusTemplate, Object... args) {
+    public ServiceException(final StatusTemplate statusTemplate, final Object... args) {
         super(String.format(statusTemplate.getTemplate(), args));
         statusCode = statusTemplate.getStatusCode();
     }
 
-    public ServiceException(Throwable cause, String statusCode) {
+    public ServiceException(final Throwable cause, final String statusCode) {
         super(cause);
         this.statusCode = statusCode;
     }
 
-    public ServiceException(String message, Throwable cause, String statusCode) {
+    public ServiceException(final String message, final Throwable cause, final String statusCode) {
         super(message, cause);
         this.statusCode = statusCode;
     }
 
-    public ServiceException(String message, String statusCode) {
+    public ServiceException(final String message, final String statusCode) {
         super(message);
         this.statusCode = statusCode;
     }

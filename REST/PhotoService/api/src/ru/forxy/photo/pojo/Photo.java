@@ -10,7 +10,7 @@ public class Photo {
     public Photo() {
     }
 
-    public Photo(String url) {
+    public Photo(final String url) {
         this.url = url;
     }
 
@@ -18,7 +18,7 @@ public class Photo {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(final String url) {
         this.url = url;
     }
 

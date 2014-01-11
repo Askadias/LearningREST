@@ -1,8 +1,8 @@
-rootProject.name=project_name
+rootProject.name = project_name
 
 def projects = [
-        ':api' : [name: "ru.forxy.photo.api", path: 'api'],
-        ':service' : [name: project_name, path: 'service']
+        ':api': [name: "ru.forxy.photo.api", path: 'api'],
+        ':service': [name: project_name, path: 'service']
 ]
 
 projects.each() { key, config ->

@@ -21,5 +21,6 @@ set JAVA_OPTS=%JAVA_OPTS% ^
 -XX:ParallelGCThreads=8 ^
 -XX:+UseParNewGC ^
 -XX:MaxGCPauseMillis=2000 ^
--XX:GCTimeRatio=10 ^
--javaagent:c:/appdynamics/javaagent/javaagent.jar
+-XX:GCTimeRatio=10
+:: ^
+:: -javaagent:c:/appdynamics/javaagent/javaagent.jar

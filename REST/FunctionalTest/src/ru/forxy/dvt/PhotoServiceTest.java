@@ -21,7 +21,7 @@ public class PhotoServiceTest extends BaseSpringContextTest {
 
     @Test
     public void testGetAllUsers() {
-        List<Photo> photos = photoService.getPhotos();
+        final List<Photo> photos = photoService.getPhotos();
         Assert.assertTrue(CollectionUtils.isNotEmpty(photos));
         LOGGER.info("Photos successfully retrieved " + photos);
     }

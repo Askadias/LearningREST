@@ -10,5 +10,4 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
  */
 @Ignore
 @ContextConfiguration(locations = {"classpath:/ru/forxy/user/test/spring-test-context.xml"})
-public abstract class BaseUserServiceTest extends AbstractJUnit4SpringContextTests {
-}
+public abstract class BaseUserServiceTest extends AbstractJUnit4SpringContextTests {}

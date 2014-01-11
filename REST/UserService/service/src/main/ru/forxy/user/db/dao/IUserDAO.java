@@ -11,8 +11,8 @@ import java.util.List;
  */
 public interface IUserDAO extends PagingAndSortingRepository<User, String>, ISystemStatusComponent {
 
-    List<User> findByLastName(String LastName);
+    List<User> findByLastName(final String LastName);
 
-    List<User> findByFirstName(String firstName);
+    List<User> findByFirstName(final String firstName);
 }
 

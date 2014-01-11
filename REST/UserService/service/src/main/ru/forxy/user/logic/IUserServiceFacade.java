@@ -8,15 +8,15 @@ import ru.forxy.user.rest.pojo.User;
  */
 public interface IUserServiceFacade {
 
-    EntityPage<User> getUsers(Integer page);
+    EntityPage<User> getUsers(final Integer page);
 
-    EntityPage<User> getUsers(Integer page, Integer size);
+    EntityPage<User> getUsers(final Integer page, final Integer size);
 
-    User getUser(User user);
+    User getUser(final User user);
 
-    User updateUser(User user);
+    User updateUser(final User user);
 
-    User createUser(User user);
+    User createUser(final User user);
 
-    void deleteUser(String email);
+    void deleteUser(final String email);
 }

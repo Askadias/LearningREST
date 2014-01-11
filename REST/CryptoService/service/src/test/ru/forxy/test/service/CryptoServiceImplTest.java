@@ -23,8 +23,8 @@ public class CryptoServiceImplTest {
 
     @Test
     public void testEncrypt() {
-        String text = "some text for encryption 1234567890 !@#$%^&*()";
-        byte[] encrypted = cryptoService.encrypt(text);
+        final String text = "some text for encryption 1234567890 !@#$%^&*()";
+        final byte[] encrypted = cryptoService.encrypt(text);
         Assert.assertNotNull(encrypted);
         LOGGER.trace("Information successfully encrypted {}", Arrays.toString(encrypted));
         String decrypted = cryptoService.decrypt(encrypted);
@@ -35,22 +35,22 @@ public class CryptoServiceImplTest {
 
     @Test
     public void testHash() {
-        byte[] passwordHash = cryptoService.hash("password");
+        final byte[] passwordHash = cryptoService.hash("password");
         Assert.assertNotNull(passwordHash);
         LOGGER.trace("'Password' successfully encrypted: {}", Arrays.toString(passwordHash));
-        byte[] passwordHash2 = cryptoService.hash("password");
+        final byte[] passwordHash2 = cryptoService.hash("password");
         Assert.assertTrue(Arrays.equals(passwordHash, passwordHash2));
         LOGGER.trace("'Password' successfully encrypted: {}", Arrays.toString(passwordHash2));
-        byte[] passwordHash3 = cryptoService.hash("different");
+        final byte[] passwordHash3 = cryptoService.hash("different");
         Assert.assertFalse(Arrays.equals(passwordHash, passwordHash3));
         LOGGER.trace("'Different' successfully encrypted: {}", Arrays.toString(passwordHash3));
     }
 
     @Test
     public void testPerformance() {
-        long start = new Date().getTime();
+        final long start = new Date().getTime();
         final Phaser phaser = new Phaser(THREADS_COUNT);
-        Executor executor = Executors.newFixedThreadPool(THREADS_COUNT);
+        final Executor executor = Executors.newFixedThreadPool(THREADS_COUNT);
         for (int i = 0; i < THREADS_COUNT; i++) {
             executor.execute(new Runnable() {
                 @Override

@@ -10,8 +10,7 @@ import java.util.Map;
  * Interface to support field extraction extension in client requests.
  * Logging library will apply specified list of field extractors on each Request and Response payload.
  */
-public interface IFieldExtractor
-{
+public interface IFieldExtractor {
     /**
      * Extract fields, library will add them to Context frame after extraction.
      *

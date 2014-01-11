@@ -10,7 +10,7 @@ import java.util.List;
 
 public class PhotoServiceImplTest {
 
-    IPhotoService photoService = new PhotoServiceImpl();
+    private final IPhotoService photoService = new PhotoServiceImpl();
 
     @Test
     public void testAddDeletePhoto() {
@@ -19,7 +19,7 @@ public class PhotoServiceImplTest {
 
     @Test
     public void testGetAllPhotos() {
-        List<Photo> photos = photoService.getPhotos();
+        final List<Photo> photos = photoService.getPhotos();
         Assert.assertNotNull(photos);
         Assert.assertTrue(CollectionUtils.isNotEmpty(photos));
     }

@@ -12,7 +12,7 @@ public abstract class Context {
         private final Map<String, Object> global;
         private final LinkedBlockingDeque<Map<String, Object>> frame;
 
-        protected ContextData(final Map<String, Object> global, LinkedBlockingDeque<Map<String, Object>> frame) {
+        protected ContextData(final Map<String, Object> global, final LinkedBlockingDeque<Map<String, Object>> frame) {
             this.global = global;
             this.frame = frame;
         }

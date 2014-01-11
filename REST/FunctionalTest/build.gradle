@@ -87,7 +87,6 @@ dependencies {
     compile "org.codehaus.jackson:jackson-jaxrs:${rev_jackson}"
     compile "org.codehaus.jackson:jackson-core-asl:${rev_jackson}"
 
-
     // --------------------- COMMON --------------------------------------
     compile "commons-collections:commons-collections:${rev_commons_collections}"
     compile "commons-pool:commons-pool:${rev_commons_pool}"
@@ -106,7 +105,6 @@ dependencies {
     compile "org.springframework:spring-web:${rev_spring}"
     compile "org.springframework:spring-test:${rev_spring}"
     compile "org.springframework.data:spring-data-commons:${rev_spring_data}"
-
 
     // ===================== TEST ========================================
     compile "junit:junit:${rev_junit}"

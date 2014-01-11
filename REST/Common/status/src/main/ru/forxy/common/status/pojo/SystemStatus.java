@@ -24,11 +24,8 @@ public class SystemStatus implements Serializable {
     public SystemStatus() {
     }
 
-    public SystemStatus(String name,
-                        String location,
-                        String version,
-                        StatusType status,
-                        List<ComponentStatus> componentStatuses) {
+    public SystemStatus(final String name, final String location, final String version, final StatusType status,
+                        final List<ComponentStatus> componentStatuses) {
         this.name = name;
         this.location = location;
         this.version = version;
@@ -40,7 +37,7 @@ public class SystemStatus implements Serializable {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -48,7 +45,7 @@ public class SystemStatus implements Serializable {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(final String location) {
         this.location = location;
     }
 
@@ -56,7 +53,7 @@ public class SystemStatus implements Serializable {
         return version;
     }
 
-    public void setVersion(String version) {
+    public void setVersion(final String version) {
         this.version = version;
     }
 
@@ -64,7 +61,7 @@ public class SystemStatus implements Serializable {
         return status;
     }
 
-    public void setStatus(StatusType status) {
+    public void setStatus(final StatusType status) {
         this.status = status;
     }
 
@@ -72,11 +69,11 @@ public class SystemStatus implements Serializable {
         return componentStatuses;
     }
 
-    public void setComponentStatuses(List<ComponentStatus> componentStatuses) {
+    public void setComponentStatuses(final List<ComponentStatus> componentStatuses) {
         this.componentStatuses = componentStatuses;
     }
 
-    public void addComponentStatuses(ComponentStatus componentStatus) {
+    public void addComponentStatuses(final ComponentStatus componentStatus) {
         if (componentStatuses == null) {
             componentStatuses = new ArrayList<ComponentStatus>();
         }

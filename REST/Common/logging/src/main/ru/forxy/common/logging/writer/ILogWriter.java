@@ -7,5 +7,5 @@ import ru.forxy.common.support.Context;
  */
 public interface ILogWriter {
 
-    void log(Context.ContextData data);
+    void log(final Context.ContextData data);
 }

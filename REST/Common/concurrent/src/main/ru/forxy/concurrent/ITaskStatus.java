@@ -3,10 +3,10 @@ package ru.forxy.concurrent;
 /**
  * Task execution status
  */
-public interface ITaskStatus
-{
+public interface ITaskStatus {
     /**
      * Returns task this status corresponds to
+     *
      * @return task
      */
     ITask getTask();

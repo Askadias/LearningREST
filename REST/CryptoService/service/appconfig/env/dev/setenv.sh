@@ -1,4 +1,5 @@
-export JAVA_OPTS="$JAVA_OPTS 
+#!/bin/sh
+export JAVA_OPTS="$JAVA_OPTS
 -Denv=dev 
 -Xdebug 
 -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8084 
@@ -21,5 +22,5 @@ export JAVA_OPTS="$JAVA_OPTS
 -XX:ParallelGCThreads=8 
 -XX:+UseParNewGC 
 -XX:MaxGCPauseMillis=2000 
--XX:GCTimeRatio=10
--javaagent:/usr/local/appdynamics/javaagent/javaagent.jar"
+-XX:GCTimeRatio=10"
+# -javaagent:/usr/local/appdynamics/javaagent/javaagent.jar"

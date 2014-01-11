@@ -3,45 +3,31 @@ package ru.forxy.user.rest.pojo;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import ru.forxy.common.pojo.SimpleJacksonDateSerializer;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
-@Entity(name = "User")
-@Table(name = "user", schema = "forxy@user_pu")
 @XmlRootElement(name = "user")
 public class User {
 
-    @Id
-    @Column(name = "email")
     private String email;
 
-    @Column(name = "password")
     private byte[] password;
 
-    @Column(name = "login")
     private String login;
 
-    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "first_name")
     private String lastName;
 
-    @Column(name = "gender")
     private Character gender;
 
     @JsonSerialize(using = SimpleJacksonDateSerializer.class)
-    @Column(name = "birth_date")
     private Date birthDate;
 
     public User() {
     }
 
-    public User(String email, byte[] password) {
+    public User(final String email, final byte[] password) {
         this.email = email;
         this.password = password;
     }
@@ -104,7 +90,7 @@ public class User {
 
     @Override
     public String toString() {
-        return String.format("{email=%s, login=%s, firstName=%s, lastName=%s, gender=%c, birthDate=%s}",
-                email, login, firstName, lastName, gender, birthDate);
+        return String.format("{email=%s, login=%s, firstName=%s, lastName=%s, gender=%c, birthDate=%s}", email, login,
+                firstName, lastName, gender, birthDate);
     }
 }

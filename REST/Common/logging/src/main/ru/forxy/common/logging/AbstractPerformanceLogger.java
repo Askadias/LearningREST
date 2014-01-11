@@ -45,7 +45,7 @@ public abstract class AbstractPerformanceLogger implements InitializingBean {
         this.configuration = configuration;
     }
 
-    public void setExceptionHandler(IExceptionHandler exceptionHandler) {
+    public void setExceptionHandler(final IExceptionHandler exceptionHandler) {
         this.exceptionHandler = exceptionHandler;
     }
 

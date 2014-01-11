@@ -90,9 +90,7 @@ public class LoggingServletFilter extends AbstractPerformanceLogger implements F
         Context.addFrame(Fields.HostLocal, SystemProperties.getHostAddress());
         Context.addFrame(Fields.HostRemote, rq.getRemoteAddr());
 
-        if (requestFieldExtractors != null
-                || isHttpInfoLoggingEnabled
-                || isPayloadLoggingEnabled) {
+        if (requestFieldExtractors != null || isHttpInfoLoggingEnabled || isPayloadLoggingEnabled) {
             final Map<String, List<String>> rqHeaders = getHeaderMap(rq);
             //capture request http details
             if (isHttpInfoLoggingEnabled) {
@@ -119,8 +117,8 @@ public class LoggingServletFilter extends AbstractPerformanceLogger implements F
         writeFrame(requestWriter);
     }
 
-    private void handleResponse(final HttpRequestWrapper rq, final HttpResponseWrapper rs,
-                                final long timestampStart, final long timestampStartNano) {
+    private void handleResponse(final HttpRequestWrapper rq, final HttpResponseWrapper rs, final long timestampStart,
+                                final long timestampStartNano) {
         final long timestampEnd = System.currentTimeMillis();
         final long timestampEndNano = System.nanoTime();
         Context.addFrame(Fields.ActivityStep, Fields.ActivitySteps.rs);
@@ -140,8 +138,8 @@ public class LoggingServletFilter extends AbstractPerformanceLogger implements F
             if (responseFieldExtractors != null) {
                 for (final IHttpFieldExtractor fe : responseFieldExtractors) {
                     final Map<String, Object> frame = Context.peek().getFrame();
-                    final Map<String, Object> extracted = fe.extract(payload, frame,
-                            rq, rs, getHeaderMap(rq), rs.getResponseHeaders());
+                    final Map<String, Object> extracted =
+                            fe.extract(payload, frame, rq, rs, getHeaderMap(rq), rs.getResponseHeaders());
                     frame.putAll(extracted);
                 }
             }

@@ -7,9 +7,9 @@ import org.springframework.data.domain.Sort;
 import ru.forxy.common.status.pojo.ComponentStatus;
 import ru.forxy.common.status.pojo.StatusType;
 import ru.forxy.user.db.dao.IUserDAO;
+import ru.forxy.user.db.dao.cassandra.client.ICassandraClient;
 import ru.forxy.user.rest.pojo.User;
 
-import javax.persistence.EntityManager;
 import java.util.Date;
 import java.util.List;
 
@@ -18,80 +18,79 @@ import java.util.List;
  */
 public class UserDAO implements IUserDAO {
 
-    EntityManager entityManager;
-
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
+    private ICassandraClient<User> cassandraClient;
 
     @Override
-    public List<User> findByLastName(String LastName) {
+    public List<User> findByLastName(final String LastName) {
         return null;
     }
 
     @Override
-    public List<User> findByFirstName(String firstName) {
+    public List<User> findByFirstName(final String firstName) {
         return null;
     }
 
     @Override
-    public Iterable<User> findAll(Sort sort) {
-        return entityManager.createQuery("select u from User u").getResultList();
+    public Iterable<User> findAll(final Sort sort) {
+        return cassandraClient.getAll();
     }
 
     @Override
-    public Page<User> findAll(Pageable pageable) {
-        return new PageImpl<User>(entityManager.createQuery("select u from User u").getResultList());
+    public Page<User> findAll(final Pageable pageable) {
+        return new PageImpl<User>(cassandraClient.getAll());
     }
 
     @Override
-    public <T extends User> T save(T entity) {
-        entityManager.persist(entity);
-        return entity;
+    public <T extends User> T save(final T user) {
+        cassandraClient.add(user);
+        return user;
     }
 
     @Override
-    public <T extends User> Iterable<T> save(Iterable<T> entities) {
-        return null;
+    public <T extends User> Iterable<T> save(final Iterable<T> entities) {
+        for (final User user : entities) {
+            cassandraClient.add(user);
+        }
+        return entities;
     }
 
     @Override
-    public User findOne(String s) {
-        return entityManager.find(User.class, s);
+    public User findOne(final String s) {
+        return cassandraClient.getByKey(s);
     }
 
     @Override
-    public boolean exists(String s) {
-        return entityManager.contains(new User(s, null));
+    public boolean exists(final String s) {
+        return cassandraClient.existsKey(s);
     }
 
     @Override
     public Iterable<User> findAll() {
-        return entityManager.createQuery("select u from User u").getResultList();
+        return cassandraClient.getAll();
     }
 
     @Override
-    public Iterable<User> findAll(Iterable<String> strings) {
-        return entityManager.createQuery("select u from User u").getResultList();
+    public Iterable<User> findAll(final Iterable<String> strings) {
+        return cassandraClient.getAll();
     }
 
     @Override
     public long count() {
-        return (Long) entityManager.createQuery("select count(u) from User u").getSingleResult();
+        return cassandraClient.count();
     }
 
     @Override
-    public void delete(String s) {
-        entityManager.createQuery("delete from User u where u.email = " + s).executeUpdate();
+    public void delete(final String s) {
+        cassandraClient.deleteByKey(s);
     }
 
     @Override
-    public void delete(User entity) {
-        entityManager.detach(entity);
+    public void delete(final User user) {
+        cassandraClient.delete(user);
     }
 
     @Override
-    public void delete(Iterable<? extends User> entities) {
+    public void delete(final Iterable<? extends User> entities) {
 
     }
 
@@ -102,6 +101,11 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public ComponentStatus getStatus() {
-        return new ComponentStatus("Cassandra", "localhost", StatusType.YELLOW, null, ComponentStatus.ComponentType.DB, 0, new Date(), null, null);
+        return new ComponentStatus("Cassandra", "localhost", StatusType.YELLOW, null, ComponentStatus.ComponentType.DB,
+                0, new Date(), null, null);
+    }
+
+    public void setCassandraClient(final ICassandraClient<User> cassandraClient) {
+        this.cassandraClient = cassandraClient;
     }
 }

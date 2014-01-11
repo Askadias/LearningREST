@@ -3,11 +3,11 @@
        xmlns:context='http://www.springframework.org/schema/context'
        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
        xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
        xmlns:mongo='http://www.springframework.org/schema/data/mongo'
-       xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans         http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
         http://www.springframework.org/schema/data/mongo    http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
-        http://www.springframework.org/schema/context       http://www.springframework.org/schema/context/spring-context-3.2.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+        http://www.springframework.org/schema/context       http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
     <!-- =========================================================================================
                                    Mongo Data Source
@@ -42,54 +42,21 @@
     <!-- =========================================================================================
                                    Cassandra Data Source
     ========================================================================================== -->
+    <bean id="cassandraClusterBuilder" class="com.datastax.driver.core.Cluster" factory-method="builder"/>
+    <bean id="cassandraClusterBuilder.withHost" factory-bean="cassandraClusterBuilder" factory-method="addContactPoint"
+          c:address="localhost"/>
 
-    <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+    <bean id="cassandraCluster" factory-bean="cassandraClusterBuilder.withHost" factory-method="build"/>
 
-    <bean id="entityManagerFactory"
-          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="persistenceUnitName" value="user_pu" />
-        <property name="jpaProperties">
-            <props>
-                <prop key="kundera.nodes">${nosql.nodes}</prop>
-                <prop key="kundera.port">${nosql.port}</prop>
-                <prop key="kundera.keyspace">${nosql.keyspace}</prop>
-                <prop key="kundera.dialect">${nosql.dialect}</prop>
-                <!--<prop key="kundera.client.lookup.class">com.impetus.client.cassandra.thrift.ThriftClientFactory</prop>-->
-                <prop key="kundera.client.lookup.class">com.impetus.client.cassandra.pelops.PelopsClientFactory</prop>
-                <!--<prop key="kundera.client.property">cassandra-loadbalancer.xml</prop>-->
-                <prop key="kundera.pool.maxwait">${nosql.pool.maxwait}</prop>
-                <prop key="kundera.pool.sotimeout">${nosql.pool.sotimeout}</prop>
-                <prop key="kundera.pool.retryInterval">${nosql.pool.retryInterval}</prop>
-                <prop key="kundera.pool.initialSize">${nosql.pool.initialSize}</prop>
-                <prop key="kundera.pool.maxSize">${nosql.pool.maxSize}</prop>
-                <prop key="kundera.pool.testOnConnect">${nosql.pool.testOnConnect}</prop>
-                <prop key="kundera.pool.testOnBorrow">${nosql.pool.testOnBorrow}</prop>
-                <prop key="kundera.pool.testOnReturn">${nosql.pool.testOnReturn}</prop>
-                <prop key="kundera.pool.testWhileIdle">${nosql.pool.testWhileIdle}</prop>
-                <prop key="kundera.pool.nodeCheckInterval">${nosql.pool.nodeCheckInterval}</prop>
-                <!--
-                Validator disabled in due to error in kundera #245
-                <prop key="kundera.ddl.auto.prepare">${nosql.ddl.auto.prepare}</prop>
-                -->
-            </props>
-        </property>
-    </bean>
+    <bean id="cassandraSession" factory-bean="cassandraCluster" factory-method="connect"
+          c:keyspace="forxy"/>
 
-    <!--<bean id="entityManagerFactory" class="javax.persistence.Persistence"
-          factory-method="createEntityManagerFactory">
-        <constructor-arg name="persistenceUnitName" value="user"/>
-    </bean>-->
-
-    <bean id="entityManager" factory-bean="entityManagerFactory" factory-method="createEntityManager"/>
-
-    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="entityManagerFactory" />
-    </bean>
-
-    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+    <bean id="ru.forxy.user.db.dao.cassandra.client.CassandraUserClient"
+          class="ru.forxy.user.db.dao.cassandra.client.CassandraUserClient"
+          p:session-ref="cassandraSession"/>
 
     <bean id="ru.forxy.user.db.dao.cassandra.UserDAO.impl" class="ru.forxy.user.db.dao.cassandra.UserDAO"
           autowire-candidate="false"
-          p:entityManager-ref="entityManager"/>
+          p:cassandraClient-ref="ru.forxy.user.db.dao.cassandra.client.CassandraUserClient"/>
 
 </beans>

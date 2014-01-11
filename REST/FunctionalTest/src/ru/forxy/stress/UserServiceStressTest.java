@@ -64,20 +64,25 @@ public class UserServiceStressTest extends BaseSpringContextTest {
                 @Override
                 public void run() {
                     for (int j = 0; j < iterationsCount; j++) {
-                        Message m = new MessageImpl();
-                        UriInfo uriInfo = new UriInfoImpl(m);
-                        HttpHeaders headers = new HttpHeadersImpl(m);
-                        User xander = new User(userEmail, new byte[]{});
+                        final Message m = new MessageImpl();
+                        final UriInfo uriInfo = new UriInfoImpl(m);
+                        final HttpHeaders headers = new HttpHeadersImpl(m);
+
+                        final User xander = new User(userEmail, new byte[]{});
+
                         Response response = userService.createUser(xander, uriInfo, headers);
                         Assert.assertNotNull(response);
+
                         response = userService.login(xander, uriInfo, headers);
                         Assert.assertNotNull(response);
-                        User user = response.readEntity(User.class);
+                        final User user = response.readEntity(User.class);
                         Assert.assertNotNull(user);
                         LOGGER.info("User  has been successfully created: {}", user);
                         Assert.assertEquals(userEmail, user.getEmail());
+
                         response = userService.deleteUser(xander.getEmail(), uriInfo, headers);
                         Assert.assertNotNull(response);
+
                         response = userService.getUser(xander, uriInfo, headers);
                         Object entity = response.getEntity();
                         Assert.assertNotNull(entity);
@@ -87,12 +92,12 @@ public class UserServiceStressTest extends BaseSpringContextTest {
                 }
             });
         }
-        ExecutorService executor = Executors.newFixedThreadPool(threadsCount);
-        List<Future<?>> futures = new ArrayList<Future<?>>();
-        for (Runnable task : userServiceCallTaskList) {
+        final ExecutorService executor = Executors.newFixedThreadPool(threadsCount);
+        final List<Future<?>> futures = new ArrayList<Future<?>>();
+        for (final Runnable task : userServiceCallTaskList) {
             futures.add(executor.submit(task));
         }
-        for (Future<?> future : futures) {
+        for (final Future<?> future : futures) {
             future.get();
         }
     }
@@ -106,27 +111,26 @@ public class UserServiceStressTest extends BaseSpringContextTest {
             userServiceCallTaskList.add(new Runnable() {
                 @Override
                 public void run() {
-                    Random random = new Random();
-                    Message m = new MessageImpl();
-                    UriInfo uriInfo = new UriInfoImpl(m);
-                    HttpHeaders headers = new HttpHeadersImpl(m);
+                    final Random random = new Random();
+                    final Message m = new MessageImpl();
+                    final UriInfo uriInfo = new UriInfoImpl(m);
+                    final HttpHeaders headers = new HttpHeadersImpl(m);
                     for (int j = 0; j < iterationsCount; j++) {
-                        Response response = userService.getUsers(random.nextInt(threadsCount), uriInfo, headers);
+                        final Response response = userService.getUsers(random.nextInt(threadsCount), uriInfo, headers);
                         Assert.assertNotNull(response);
-                        EntityPage<User> userPage = response.readEntity(new GenericType<EntityPage<User>>() {
-                        });
+                        final EntityPage<User> userPage = response.readEntity(new GenericType<EntityPage<User>>() {});
                         Assert.assertNotNull(userPage);
                         Assert.assertTrue(CollectionUtils.isNotEmpty(userPage.getContent()));
                     }
                 }
             });
         }
-        ExecutorService executor = Executors.newFixedThreadPool(threadsCount);
-        List<Future<?>> futures = new ArrayList<Future<?>>();
-        for (Runnable task : userServiceCallTaskList) {
+        final ExecutorService executor = Executors.newFixedThreadPool(threadsCount);
+        final List<Future<?>> futures = new ArrayList<Future<?>>();
+        for (final Runnable task : userServiceCallTaskList) {
             futures.add(executor.submit(task));
         }
-        for (Future<?> future : futures) {
+        for (final Future<?> future : futures) {
             future.get();
         }
     }
@@ -135,28 +139,28 @@ public class UserServiceStressTest extends BaseSpringContextTest {
     public void testSystemStatus() throws InterruptedException, ExecutionException {
         final int threadsCount = configuration.getInt(Config.ThreadsCount, DEFAULT_THREADS_COUNT);
         final int iterationsCount = configuration.getInt(Config.IterationsCount, DEFAULT_ITERATIONS_COUNT);
-        List<Runnable> userServiceCallTaskList = new ArrayList<Runnable>();
+        final List<Runnable> userServiceCallTaskList = new ArrayList<Runnable>();
         for (int i = 0; i < threadsCount; i++) {
             userServiceCallTaskList.add(new Runnable() {
                 @Override
                 public void run() {
-                    Message m = new MessageImpl();
-                    UriInfo uriInfo = new UriInfoImpl(m);
-                    HttpHeaders headers = new HttpHeadersImpl(m);
+                    final Message m = new MessageImpl();
+                    final UriInfo uriInfo = new UriInfoImpl(m);
+                    final HttpHeaders headers = new HttpHeadersImpl(m);
                     for (int j = 0; j < iterationsCount; j++) {
-                        Response response = userSystemStatus.getSystemStatus(uriInfo, headers);
+                        final Response response = userSystemStatus.getSystemStatus(uriInfo, headers);
                         Assert.assertNotNull(response);
                         Assert.assertEquals(response.getStatus(), Response.Status.OK.getStatusCode());
                     }
                 }
             });
         }
-        ExecutorService executor = Executors.newFixedThreadPool(threadsCount);
-        List<Future<?>> futures = new ArrayList<Future<?>>();
-        for (Runnable task : userServiceCallTaskList) {
+        final ExecutorService executor = Executors.newFixedThreadPool(threadsCount);
+        final List<Future<?>> futures = new ArrayList<Future<?>>();
+        for (final Runnable task : userServiceCallTaskList) {
             futures.add(executor.submit(task));
         }
-        for (Future<?> future : futures) {
+        for (final Future<?> future : futures) {
             future.get();
         }
     }

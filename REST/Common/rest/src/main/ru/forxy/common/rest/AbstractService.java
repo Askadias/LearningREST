@@ -1,7 +1,7 @@
 package ru.forxy.common.rest;
 
-import ru.forxy.common.web.RequestHelper;
 import ru.forxy.common.support.SystemProperties;
+import ru.forxy.common.web.RequestHelper;
 
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
@@ -69,8 +69,8 @@ public abstract class AbstractService {
      * @param headers         HTTP Headers provided by the JAX-RS infrastructure
      * @return Response builder created
      */
-    protected <RS> ResponseBuilder respondWith(final RS response, final String transactionGUID,
-                                               final UriInfo uriInfo, final HttpHeaders headers) {
+    protected <RS> ResponseBuilder respondWith(final RS response, final String transactionGUID, final UriInfo uriInfo,
+                                               final HttpHeaders headers) {
         final ResponseBuilder builder = Response.ok(response);
         return populateHeaders(builder, transactionGUID, uriInfo, headers);
     }
@@ -85,8 +85,8 @@ public abstract class AbstractService {
      * @param headers         HTTP Headers provided by the JAX-RS infrastructure
      * @return Response builder created
      */
-    protected ResponseBuilder respondWith(final Status status, final String transactionGUID,
-                                          final UriInfo uriInfo, final HttpHeaders headers) {
+    protected ResponseBuilder respondWith(final Status status, final String transactionGUID, final UriInfo uriInfo,
+                                          final HttpHeaders headers) {
         final ResponseBuilder builder = Response.status(status);
         return populateHeaders(builder, transactionGUID, uriInfo, headers);
     }

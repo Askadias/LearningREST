@@ -16,12 +16,12 @@ public class LogWriter implements ILogWriter {
         logger = LoggerFactory.getLogger(LogWriter.class);
     }
 
-    public LogWriter(String name) {
+    public LogWriter(final String name) {
         logger = LoggerFactory.getLogger(name);
     }
 
     @Override
-    public void log(Context.ContextData data) {
+    public void log(final Context.ContextData data) {
         logger.info(LogHelper.contextDataToLogString(data));
     }
 }

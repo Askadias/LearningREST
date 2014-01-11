@@ -24,40 +24,29 @@ public interface IUserService {
 
     @GET
     @Path("/{page}/")
-    Response getUsers(@PathParam("page") Integer page,
-                      @Context final UriInfo uriInfo,
+    Response getUsers(@PathParam("page") final Integer page, @Context final UriInfo uriInfo,
                       @Context final HttpHeaders headers);
 
     @GET
     @Path("/{page}/{size}/")
-    Response getUsers(@PathParam("page") Integer page,
-                      @PathParam("size") Integer size,
-                      @Context final UriInfo uriInfo,
-                      @Context final HttpHeaders headers);
+    Response getUsers(@PathParam("page") final Integer page, @PathParam("size") final Integer size,
+                      @Context final UriInfo uriInfo, @Context final HttpHeaders headers);
 
     @GET
-    Response getUser(@QueryParam("") User requestedUser,
-                     @Context final UriInfo uriInfo,
+    Response getUser(@QueryParam("") final User requestedUser, @Context final UriInfo uriInfo,
                      @Context final HttpHeaders headers);
 
     @POST
     @Path("/login")
-    Response login(User loginUser,
-                   @Context final UriInfo uriInfo,
-                   @Context final HttpHeaders headers);
+    Response login(final User loginUser, @Context final UriInfo uriInfo, @Context final HttpHeaders headers);
 
     @POST
-    Response updateUser(User user,
-                        @Context final UriInfo uriInfo,
-                        @Context final HttpHeaders headers);
+    Response updateUser(final User user, @Context final UriInfo uriInfo, @Context final HttpHeaders headers);
 
     @PUT
-    Response createUser(User user,
-                        @Context final UriInfo uriInfo,
-                        @Context final HttpHeaders headers);
+    Response createUser(final User user, @Context final UriInfo uriInfo, @Context final HttpHeaders headers);
 
     @DELETE
-    Response deleteUser(@QueryParam("email") String email,
-                        @Context final UriInfo uriInfo,
+    Response deleteUser(@QueryParam("email") final String email, @Context final UriInfo uriInfo,
                         @Context final HttpHeaders headers);
 }

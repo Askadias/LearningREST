@@ -46,8 +46,8 @@ public class JSONValidationProvider extends JacksonJsonProvider {
 
     @Override
     public Object readFrom(final Class<Object> type, final Type genericType, final Annotation[] annotations,
-                           final MediaType mediaType, final MultivaluedMap<String, String> headers, final InputStream is)
-            throws IOException {
+                           final MediaType mediaType, final MultivaluedMap<String, String> headers,
+                           final InputStream is) throws IOException {
         final Object value;
         try {
             value = super.readFrom(type, genericType, annotations, mediaType, headers, is);
@@ -92,7 +92,7 @@ public class JSONValidationProvider extends JacksonJsonProvider {
         this.validator = validator;
     }
 
-    public void setConfiguration(Configuration configuration) {
+    public void setConfiguration(final Configuration configuration) {
         if (configuration != null) {
             isObjectValidationEnabled = configuration.getBoolean(Configs.IsObjectValidationEnabled);
         }

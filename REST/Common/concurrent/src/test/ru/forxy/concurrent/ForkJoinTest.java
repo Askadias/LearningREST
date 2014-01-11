@@ -38,8 +38,12 @@ public class ForkJoinTest {
             int j = last;
             T middle = array.get((first + last) / 2);
             while (i <= j) {
-                while (array.get(i).compareTo(middle) < 0) i++;
-                while (array.get(j).compareTo(middle) > 0) j--;
+                while (array.get(i).compareTo(middle) < 0) {
+                    i++;
+                }
+                while (array.get(j).compareTo(middle) > 0) {
+                    j--;
+                }
                 if (i <= j) {
                     T itemToSwap = array.get(i);
                     array.set(i, array.get(j));
@@ -48,11 +52,13 @@ public class ForkJoinTest {
                     j--;
                 }
             }
-            List<RecursiveSortingTask<T>> tasks = new ArrayList<RecursiveSortingTask<T>>(2);
-            if (first < j)
+            final List<RecursiveSortingTask<T>> tasks = new ArrayList<RecursiveSortingTask<T>>(2);
+            if (first < j) {
                 tasks.add(new RecursiveSortingTask<T>(array, first, j));
-            if (i < last)
+            }
+            if (i < last) {
                 tasks.add(new RecursiveSortingTask<T>(array, i, last));
+            }
             invokeAll(tasks);
             return array;
         }
@@ -60,24 +66,28 @@ public class ForkJoinTest {
 
     public class DependentSortingTask<T extends Comparable<T>> extends AbstractDependentTask {
 
-        private List<T> array;
-        private int first;
-        private int last;
+        private final List<T> array;
+        private final int first;
+        private final int last;
 
-        public DependentSortingTask(List<T> array, int first, int last) {
+        public DependentSortingTask(final List<T> array, final int first, final int last) {
             this.array = array;
             this.first = first;
             this.last = last;
         }
 
         @Override
-        protected void executeBeforeDependencies(IExecutionContext executionContext) {
+        protected void executeBeforeDependencies(final IExecutionContext executionContext) {
             int i = first;
             int j = last;
             T middle = array.get((first + last) / 2);
             while (i <= j) {
-                while (array.get(i).compareTo(middle) < 0) i++;
-                while (array.get(j).compareTo(middle) > 0) j--;
+                while (array.get(i).compareTo(middle) < 0) {
+                    i++;
+                }
+                while (array.get(j).compareTo(middle) > 0) {
+                    j--;
+                }
                 if (i <= j) {
                     T itemToSwap = array.get(i);
                     array.set(i, array.get(j));
@@ -87,10 +97,12 @@ public class ForkJoinTest {
                 }
             }
             List<DependentSortingTask<T>> tasks = new ArrayList<DependentSortingTask<T>>(2);
-            if (first < j)
+            if (first < j) {
                 tasks.add(new DependentSortingTask<T>(array, first, j));
-            if (i < last)
+            }
+            if (i < last) {
                 tasks.add(new DependentSortingTask<T>(array, i, last));
+            }
             getDependencies().addAll(tasks);
         }
 
@@ -104,13 +116,17 @@ public class ForkJoinTest {
         }
     }
 
-    private static <T extends Comparable<T>> void qsort(List<T> array, int first, int last) {
+    private static <T extends Comparable<T>> void qsort(final List<T> array, final int first, final int last) {
         int i = first;
         int j = last;
         T middle = array.get((first + last) / 2);
         while (i <= j) {
-            while (array.get(i).compareTo(middle) < 0) i++;
-            while (array.get(j).compareTo(middle) > 0) j--;
+            while (array.get(i).compareTo(middle) < 0) {
+                i++;
+            }
+            while (array.get(j).compareTo(middle) > 0) {
+                j--;
+            }
             if (i <= j) {
                 T itemToSwap = array.get(i);
                 array.set(i, array.get(j));
@@ -119,16 +135,18 @@ public class ForkJoinTest {
                 j--;
             }
         }
-        if (first < j)
+        if (first < j) {
             qsort(array, first, j);
-        if (i < last)
+        }
+        if (i < last) {
             qsort(array, i, last);
+        }
     }
 
     @Test
     public void testForkJoin() {
-        ForkJoinPool fjp = new ForkJoinPool(128);
-        List<Integer> array = new ArrayList<Integer>(ARRAY_SIZE);
+        final ForkJoinPool fjp = new ForkJoinPool(128);
+        final List<Integer> array = new ArrayList<Integer>(ARRAY_SIZE);
         for (int i = 0; i < ARRAY_SIZE; i++) {
             array.add(i);
         }
@@ -149,11 +167,11 @@ public class ForkJoinTest {
 
     @Test
     public void testCustomExecutor() {
-        TaskExecutor taskExecutor = new TaskExecutor(15, 30, 0L);
-        IExecutionContext executionContext = new ExecutionContext(taskExecutor);
-        ITaskStatusGroup group = taskExecutor.createTasksGroup();
+        final TaskExecutor taskExecutor = new TaskExecutor(15, 30, 0L);
+        final IExecutionContext executionContext = new ExecutionContext(taskExecutor);
+        final ITaskStatusGroup group = taskExecutor.createTasksGroup();
 
-        List<Integer> array = new ArrayList<Integer>(ARRAY_SIZE);
+        final List<Integer> array = new ArrayList<Integer>(ARRAY_SIZE);
         for (int i = 0; i < ARRAY_SIZE; i++) {
             array.add(i);
         }
@@ -177,7 +195,7 @@ public class ForkJoinTest {
 
     @Test
     public void testSynchronously() {
-        List<Integer> array = new ArrayList<Integer>(ARRAY_SIZE);
+        final List<Integer> array = new ArrayList<Integer>(ARRAY_SIZE);
         for (int i = 0; i < ARRAY_SIZE; i++) {
             array.add(i);
         }
@@ -198,15 +216,18 @@ public class ForkJoinTest {
 
     @Test
     public void testString() {
-        String s = "{\"email\":\"askadias@forxy.ru\",\"password\":\"Dgkr2M87xdgd/cO7W+O78SmJSCGucfwwqXtHW22ve68=\",\"login\":\"Stacy\",\"firstName\":\"Stacy\",\"lastName\":\"Wrights\",\"gender\":\"F\",\"birthDate\":\"1983-03-18\"}";
+        final String s =
+                "{\"email\":\"askadias@forxy.ru\",\"password\":\"Dgkr2M87xdgd/cO7W+O78SmJSCGucfwwqXtHW22ve68=\",\"login\":\"Stacy\",\"firstName\":\"Stacy\",\"lastName\":\"Wrights\",\"gender\":\"F\",\"birthDate\":\"1983-03-18\"}";
         if (s.indexOf("\"email\"") > 0) {
-            String value = s.replaceAll(".*?\"email\":\\s*?\"([a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(\\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*)\".*", "$1");
+            String value = s.replaceAll(
+                    ".*?\"email\":\\s*?\"([a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(\\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*)\".*",
+                    "$1");
             Assert.assertEquals("askadias@forxy.ru", value);
         }
     }
 
-    private static <T> void shuffle(List<T> array) {
-        Random rand = new Random(ForkJoinTest.class.hashCode());
+    private static <T> void shuffle(final List<T> array) {
+        final Random rand = new Random(ForkJoinTest.class.hashCode());
         for (int i = 0; i < array.size() - 1; i++) {
             int j = rand.nextInt(array.size() - i - 1);
             T itemToSwap = array.get(i + j);

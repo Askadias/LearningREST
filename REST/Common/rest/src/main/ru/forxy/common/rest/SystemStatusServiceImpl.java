@@ -15,11 +15,11 @@ public class SystemStatusServiceImpl extends AbstractService implements ISystemS
     private ISystemStatusFacade systemStatusFacade;
 
     @Override
-    public Response getSystemStatus(UriInfo uriInfo, HttpHeaders headers) {
+    public Response getSystemStatus(final UriInfo uriInfo, final HttpHeaders headers) {
         return respondWith(systemStatusFacade.getStatus(), uriInfo, headers).build();
     }
 
-    public void setSystemStatusFacade(ISystemStatusFacade systemStatusFacade) {
+    public void setSystemStatusFacade(final ISystemStatusFacade systemStatusFacade) {
         this.systemStatusFacade = systemStatusFacade;
     }
 }

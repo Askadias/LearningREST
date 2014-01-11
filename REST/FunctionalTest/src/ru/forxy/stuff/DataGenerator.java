@@ -4,7 +4,6 @@ import org.apache.cxf.jaxrs.impl.HttpHeadersImpl;
 import org.apache.cxf.jaxrs.impl.UriInfoImpl;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.message.MessageImpl;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +38,7 @@ public class DataGenerator extends BaseSpringContextTest {
 
     final Random rand = new Random();
 
+    // @formatter:off
     private final String[] firstNamesMale = {
             "Adam",
             "Steve",
@@ -135,9 +135,10 @@ public class DataGenerator extends BaseSpringContextTest {
             "@tut.by",
             "@hotmail.com",
             "@yahoo.com"};
+    // @formatter:on
 
     @Test
-    @Ignore
+    //@Ignore
     public void generateUsers() {
         Message m = new MessageImpl();
         final UriInfo uriInfo = new UriInfoImpl(m);

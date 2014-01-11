@@ -3,8 +3,7 @@ package ru.forxy.concurrent;
 /**
  * Basic thread execution unit
  */
-public interface ITask
-{
+public interface ITask {
     /**
      * @return task name to simplify orientation within concurrent execution
      */
@@ -15,5 +14,5 @@ public interface ITask
      *
      * @param executionContext - data transfer object needs for threads interaction
      */
-    void execute(IExecutionContext executionContext);
+    void execute(final IExecutionContext executionContext);
 }

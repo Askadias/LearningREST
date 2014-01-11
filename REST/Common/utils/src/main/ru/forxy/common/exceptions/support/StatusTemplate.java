@@ -9,7 +9,7 @@ public class StatusTemplate {
 
     private String template;
 
-    public StatusTemplate(String statusCode, String template) {
+    public StatusTemplate(final String statusCode, final String template) {
         this.statusCode = statusCode;
         this.template = template;
     }

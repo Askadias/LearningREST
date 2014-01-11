@@ -1,6 +1,10 @@
 package ru.forxy.concurrent.impl;
 
-import ru.forxy.concurrent.*;
+import ru.forxy.concurrent.IDependentTask;
+import ru.forxy.concurrent.IExecutionContext;
+import ru.forxy.concurrent.ITask;
+import ru.forxy.concurrent.ITaskExecutor;
+import ru.forxy.concurrent.ITaskStatusGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +40,9 @@ public abstract class AbstractDependentTask implements IDependentTask {
         executeAfterDependencies(executionContext);
     }
 
-    protected abstract void executeBeforeDependencies(IExecutionContext executionContext);
+    protected abstract void executeBeforeDependencies(final IExecutionContext executionContext);
 
-    protected abstract void executeAfterDependencies(IExecutionContext executionContext);
+    protected abstract void executeAfterDependencies(final IExecutionContext executionContext);
 
     @Override
     public List<ITask> getDependencies() {

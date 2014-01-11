@@ -1,19 +1,23 @@
-use user;
+DROP KEYSPACE IF EXISTS forxy;
+CREATE KEYSPACE forxy WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 1};
 
-create table user(
-	email varchar PRIMARY KEY,
-	login varchar,
-	password blob,
-	first_name varchar,
-	last_name varchar,
-	gender varchar,
-	birth_date timestamp,
-	favorites set
+USE forxy;
+
+CREATE TABLE user (
+    email TEXT,
+    login TEXT,
+    password BLOB,
+    first_name TEXT,
+    last_name TEXT,
+    gender TEXT,
+    birth_date TIMESTAMP,
+    favorites SET<TEXT>,
+    PRIMARY KEY (email)
 );
 
-CREATE INDEX tokens_login_idx ON tokens(login);
-CREATE INDEX tokens_password_idx ON tokens(password);
-CREATE INDEX tokens_first_name_idx ON tokens(first_name);
-CREATE INDEX tokens_last_name_idx ON tokens(last_name);
-CREATE INDEX tokens_gender_idx ON tokens(gender);
-CREATE INDEX tokens_birth_date_idx ON tokens(birth_date);
+CREATE INDEX login_idx ON user(login);
+CREATE INDEX password_idx ON user(password);
+CREATE INDEX first_name_idx ON user(first_name);
+CREATE INDEX last_name_idx ON user(last_name);
+CREATE INDEX gender_idx ON user(gender);
+CREATE INDEX birth_date_idx ON user(birth_date);

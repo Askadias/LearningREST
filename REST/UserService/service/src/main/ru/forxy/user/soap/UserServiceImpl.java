@@ -5,7 +5,6 @@ import ru.forxy.common.exceptions.ServiceException;
 import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.common.support.SystemProperties;
 import ru.forxy.user.logic.IUserServiceFacade;
-import ru.forxy.user.soap.mapper.UserMapper;
 import ru.forxy.user.rest.pojo.User;
 import ru.forxy.user.soap.gen.v1.DeleteUserRQType;
 import ru.forxy.user.soap.gen.v1.ErrorListType;
@@ -23,6 +22,7 @@ import ru.forxy.user.soap.gen.v1.ResponseStatusType;
 import ru.forxy.user.soap.gen.v1.ResponseType;
 import ru.forxy.user.soap.gen.v1.UserServicePortType;
 import ru.forxy.user.soap.gen.v1.UserType;
+import ru.forxy.user.soap.mapper.UserMapper;
 
 import javax.jws.WebParam;
 
@@ -44,19 +44,21 @@ public class UserServiceImpl implements UserServicePortType {
         FAIL.setStatusMessage("FAIL");
     }
 
-    IUserServiceFacade userServiceFacade;
+    private IUserServiceFacade userServiceFacade;
 
     @Override
-    public GetUsersRSType getUsers(
-            @WebParam(name = "GetUsersRQ",
-                    targetNamespace = "urn:ru:forxy:user:messages:v1",
-                    partName = "getUsersRequest")
-            GetUsersRQType getUsersRequest) throws MessageUserServiceFault {
-        PageInfoType pageInfo = getUsersRequest.getPageInfo();
-        GetUsersRSType response = buildResponse(new GetUsersRSType(), getUsersRequest);
+    public GetUsersRSType getUsers(@WebParam(name = "GetUsersRQ",
+            targetNamespace = "urn:ru:forxy:user:messages:v1",
+            partName = "getUsersRequest") final GetUsersRQType getUsersRequest) throws MessageUserServiceFault {
+
+        final PageInfoType pageInfo = getUsersRequest.getPageInfo();
+        final GetUsersRSType response = buildResponse(new GetUsersRSType(), getUsersRequest);
+
         try {
-            EntityPage<User> page = userServiceFacade.getUsers(pageInfo.getNumber(), pageInfo.getSize());
+
+            final EntityPage<User> page = userServiceFacade.getUsers(pageInfo.getNumber(), pageInfo.getSize());
             response.setPage(UserMapper.fromUserPage(page));
+
         } catch (ServiceException e) {
             throw new MessageUserServiceFault("Could not find user", buildFault(e), e);
         }
@@ -64,15 +66,18 @@ public class UserServiceImpl implements UserServicePortType {
     }
 
     @Override
-    public GetUserRSType getUser(
-            @WebParam(name = "GetUserRQ",
-                    targetNamespace = "urn:ru:forxy:user:messages:v1",
-                    partName = "getUserRequest") GetUserRQType getUserRequest) throws MessageUserServiceFault {
-        UserType userType = getUserRequest.getUser();
-        GetUserRSType response = buildResponse(new GetUserRSType(), getUserRequest);
+    public GetUserRSType getUser(@WebParam(name = "GetUserRQ",
+            targetNamespace = "urn:ru:forxy:user:messages:v1",
+            partName = "getUserRequest") final GetUserRQType getUserRequest) throws MessageUserServiceFault {
+
+        final UserType userType = getUserRequest.getUser();
+        final GetUserRSType response = buildResponse(new GetUserRSType(), getUserRequest);
+
         try {
+
             User user = userServiceFacade.getUser(new User(userType.getEmail(), userType.getPassword()));
             response.setUser(UserMapper.fromUser(user));
+
         } catch (ServiceException e) {
             throw new MessageUserServiceFault("Could not find user", buildFault(e), e);
         }
@@ -80,21 +85,23 @@ public class UserServiceImpl implements UserServicePortType {
     }
 
     @Override
-    public ResponseType deleteUser(
-            @WebParam(name = "DeleteUserRQ",
-                    targetNamespace = "urn:ru:forxy:user:messages:v1",
-                    partName = "deleteUserRequest")
-            DeleteUserRQType deleteUserRequest) throws MessageUserServiceFault {
-        String email = deleteUserRequest.getEmail();
+    public ResponseType deleteUser(@WebParam(name = "DeleteUserRQ",
+            targetNamespace = "urn:ru:forxy:user:messages:v1",
+            partName = "deleteUserRequest") final DeleteUserRQType deleteUserRequest) throws MessageUserServiceFault {
+
+        final String email = deleteUserRequest.getEmail();
+
         try {
+
             userServiceFacade.deleteUser(email);
+
         } catch (ServiceException e) {
             throw new MessageUserServiceFault("Could not delete user with email = " + email, buildFault(e), e);
         }
         return buildResponse(new ResponseType(), deleteUserRequest);
     }
 
-    private static <T extends ResponseType> T buildResponse(T response, RequestType request) {
+    private static <T extends ResponseType> T buildResponse(final T response, final RequestType request) {
         if (request == null || response == null) {
             return null;
         }
@@ -105,16 +112,17 @@ public class UserServiceImpl implements UserServicePortType {
         return response;
     }
 
-    private static <T extends ResponseType> T  buildResponse(T response, RequestType request, ResponseStatusType status) {
+    private static <T extends ResponseType> T buildResponse(T response, final RequestType request,
+                                                            final ResponseStatusType status) {
         response = buildResponse(response, request);
         response.getResponseInfo().setResponseStatus(status);
         return response;
     }
 
-    private static FaultType buildFault(Throwable t) {
-        FaultType fault = new FaultType();
+    private static FaultType buildFault(final Throwable t) {
+        final FaultType fault = new FaultType();
         fault.setErrorList(new ErrorListType());
-        ErrorType error = new ErrorType();
+        final ErrorType error = new ErrorType();
         error.setErrorMessage(t.getMessage());
         error.setErrorType("InternalError");
         error.setStackTrace(ExceptionUtils.getFullStackTrace(t));
@@ -122,7 +130,7 @@ public class UserServiceImpl implements UserServicePortType {
         return fault;
     }
 
-    public void setUserServiceFacade(IUserServiceFacade userServiceFacade) {
+    public void setUserServiceFacade(final IUserServiceFacade userServiceFacade) {
         this.userServiceFacade = userServiceFacade;
     }
 }

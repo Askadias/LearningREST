@@ -11,6 +11,7 @@ import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
 public class SystemPropertiesSupportListener implements ServletContextListener {
+
     private static final String MANIFEST_PATH = "/META-INF/MANIFEST.MF";
     private static final String PRODUCT = "Product";
     private static final String VERSION = "Version";
@@ -51,11 +52,11 @@ public class SystemPropertiesSupportListener implements ServletContextListener {
     }
 
     @Override
-    public void contextInitialized(ServletContextEvent servletContextEvent) {
+    public void contextInitialized(final ServletContextEvent servletContextEvent) {
         readApplicationInfo(servletContextEvent.getServletContext());
     }
 
     @Override
-    public void contextDestroyed(ServletContextEvent servletContextEvent) {
+    public void contextDestroyed(final ServletContextEvent servletContextEvent) {
     }
 }

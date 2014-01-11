@@ -12,11 +12,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.util.Map;
 
 public class HttpRequestWrapper extends HttpServletRequestWrapper {
     private BufferedReader br;
-    private Map<String, String[]> parameters;
 
     private byte[] requestBody;
     private final ServletInputStream sis;
@@ -27,6 +25,7 @@ public class HttpRequestWrapper extends HttpServletRequestWrapper {
 
         sis = new ServletInputStream() {
             final InputStream is = new ByteArrayInputStream(requestBody);
+
             @Override
             public int read() throws IOException {
                 return is.read();

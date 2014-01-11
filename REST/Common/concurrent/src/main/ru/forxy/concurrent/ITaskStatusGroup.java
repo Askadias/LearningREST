@@ -4,8 +4,7 @@ package ru.forxy.concurrent;
  * @author v-srabukha
  * @author v-dchabrovsky
  */
-public interface ITaskStatusGroup
-{
+public interface ITaskStatusGroup {
     /**
      * This method will return when all the operations that have been associated
      * with this group have completed.
@@ -15,12 +14,13 @@ public interface ITaskStatusGroup
     /**
      * This method will return when all the operations that have been associated
      * with this group have completed.
+     *
      * @param timeout The number of milliseconds to wait for all operations to
      *                complete.  If the operations have not all completed within
      *                this time, this method returns false.
      * @return True if all operations complete before the timeout, false otherwise.
      */
-    boolean waitAllTasksComplete(long timeout);
+    boolean waitAllTasksComplete(final long timeout);
 
     /**
      * This method will return when any operation associated with this status group
@@ -49,5 +49,5 @@ public interface ITaskStatusGroup
      *                this time, this method returns false.
      * @return True if an operation completed before the timeout, false otherwise.
      */
-    boolean waitAnyOperationCompletes(long timeout);
+    boolean waitAnyOperationCompletes(final long timeout);
 }

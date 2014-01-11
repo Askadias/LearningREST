@@ -29,7 +29,7 @@ public class TaskExecutorTest {
         }
 
         @Override
-        protected void executeBeforeDependencies(IExecutionContext executionContext) {
+        protected void executeBeforeDependencies(final IExecutionContext executionContext) {
         }
 
         @SuppressWarnings("PMD.AvoidThrowingRawExceptionTypes")
@@ -86,7 +86,7 @@ public class TaskExecutorTest {
                     }
 
                     @Override
-                    protected void executeBeforeDependencies(IExecutionContext executionContext) {
+                    protected void executeBeforeDependencies(final IExecutionContext executionContext) {
                     }
 
                     @SuppressWarnings("PMD.AvoidThrowingRawExceptionTypes")
@@ -168,7 +168,7 @@ public class TaskExecutorTest {
         ITaskStatusGroup group = s_taskExecutor.createTasksGroup();
         for (int i = 0; i < taskCount; i++) {
             final int index = i;
-            ITaskStatus status = s_taskExecutor.launch(new ITask() {
+            final ITaskStatus status = s_taskExecutor.launch(new ITask() {
                 private final String m_name = "MyTask_" + index;
 
                 @SuppressWarnings("PMD.AvoidThrowingRawExceptionTypes")
@@ -189,7 +189,7 @@ public class TaskExecutorTest {
 
         Assert.assertTrue("Exceptions empty", statuses.size() > 0);
         Assert.assertEquals("Completed futures size", taskCount, statuses.size());
-        for (ITaskStatus status : statuses) {
+        for (final ITaskStatus status : statuses) {
             Assert.assertFalse(status.isRunning());
             Assert.assertNotNull("Future last exceptions not null", status.getUnhandledThrowable());
         }

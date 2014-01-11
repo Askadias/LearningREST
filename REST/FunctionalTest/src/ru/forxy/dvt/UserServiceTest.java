@@ -33,22 +33,27 @@ public class UserServiceTest extends BaseSpringContextTest {
 
     @Test
     public void testAddDeleteUser() {
-        Message m = new MessageImpl();
-        UriInfo uriInfo = new UriInfoImpl(m);
-        HttpHeaders headers = new HttpHeadersImpl(m);
-        User xander = new User("xander@gmail.com", new byte[]{});
+        final Message m = new MessageImpl();
+        final UriInfo uriInfo = new UriInfoImpl(m);
+        final HttpHeaders headers = new HttpHeadersImpl(m);
+
+        final User xander = new User("xander@gmail.com", new byte[]{});
+
         Response response = userService.createUser(xander, uriInfo, headers);
         Assert.assertNotNull(response);
+
         response = userService.login(xander, uriInfo, headers);
         Assert.assertNotNull(response);
-        User user = response.readEntity(User.class);
+        final User user = response.readEntity(User.class);
         Assert.assertNotNull(user);
         LOGGER.info("User  has been successfully created: {}", user);
         Assert.assertEquals("xander@gmail.com", user.getEmail());
+
         response = userService.deleteUser(xander.getEmail(), uriInfo, headers);
         Assert.assertNotNull(response);
+
         response = userService.getUser(xander, uriInfo, headers);
-        Object entity = response.getEntity();
+        final Object entity = response.getEntity();
         Assert.assertNotNull(entity);
         Assert.assertEquals(404, response.getStatus());
         LOGGER.info("User has been successfully removed");
@@ -56,23 +61,24 @@ public class UserServiceTest extends BaseSpringContextTest {
 
     @Test
     public void testGetUserPage() {
-        Message m = new MessageImpl();
-        UriInfo uriInfo = new UriInfoImpl(m);
-        HttpHeaders headers = new HttpHeadersImpl(m);
-        Response response = userService.getUsers(0, uriInfo, headers);
+        final Message m = new MessageImpl();
+        final UriInfo uriInfo = new UriInfoImpl(m);
+        final HttpHeaders headers = new HttpHeadersImpl(m);
+
+        final Response response = userService.getUsers(0, uriInfo, headers);
         Assert.assertNotNull(response);
-        EntityPage<User> userPage = response.readEntity(new GenericType<EntityPage<User>>() {
-        });
+        final EntityPage<User> userPage = response.readEntity(new GenericType<EntityPage<User>>() {});
         Assert.assertNotNull(userPage);
         Assert.assertTrue(CollectionUtils.isNotEmpty(userPage.getContent()));
     }
 
     @Test
     public void testSystemStatus() {
-        Message m = new MessageImpl();
-        UriInfo uriInfo = new UriInfoImpl(m);
-        HttpHeaders headers = new HttpHeadersImpl(m);
-        Response response = userSystemStatus.getSystemStatus(uriInfo, headers);
+        final Message m = new MessageImpl();
+        final UriInfo uriInfo = new UriInfoImpl(m);
+        final HttpHeaders headers = new HttpHeadersImpl(m);
+
+        final Response response = userSystemStatus.getSystemStatus(uriInfo, headers);
         Assert.assertNotNull(response);
         Assert.assertEquals(response.getStatus(), Response.Status.OK.getStatusCode());
 

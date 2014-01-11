@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <xs:schema version="1.0" targetNamespace="urn:ru:forxy:user:messages:v1"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
-        xmlns:user="urn:ru:forxy:user:messages:v1"
-        xmlns:common="urn:ru:forxy:common:types:v1">
+           xmlns:user="urn:ru:forxy:user:messages:v1"
+           xmlns:common="urn:ru:forxy:common:types:v1">
 
     <xs:import namespace="urn:ru:forxy:common:types:v1" schemaLocation="ru.forxy.common.types.v1.xsd"/>
 

@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class SystemStatusFacade implements ISystemStatusFacade {
 
-    IUserDAO userDAO;
+    private IUserDAO userDAO;
 
     @Override
     public SystemStatus getStatus() {
@@ -27,15 +27,17 @@ public class SystemStatusFacade implements ISystemStatusFacade {
             systemStatusType = StatusType.RED;
         }
 
+        // @formatter:off
         return new SystemStatus(
                 SystemProperties.getServiceName(),
                 SystemProperties.getHostAddress(),
                 SystemProperties.getServiceVersion(),
                 systemStatusType != null ? systemStatusType : getTheWorstStatus(componentStatuses),
                 componentStatuses);
+        // @formatter:on
     }
 
-    private StatusType getTheWorstStatus(List<ComponentStatus> componentStatuses) {
+    private StatusType getTheWorstStatus(final List<ComponentStatus> componentStatuses) {
         StatusType theWorstStatus = StatusType.GREEN;
         for (ComponentStatus componentStatus : componentStatuses) {
             if (componentStatus.getStatus().ordinal() > theWorstStatus.ordinal()) {
@@ -45,7 +47,7 @@ public class SystemStatusFacade implements ISystemStatusFacade {
         return theWorstStatus;
     }
 
-    public void setUserDAO(IUserDAO userDAO) {
+    public void setUserDAO(final IUserDAO userDAO) {
         this.userDAO = userDAO;
     }
 }

@@ -13,7 +13,6 @@ sourceSets {
 
 jar { from sourceSets.main.allJava }
 
-
 // ========== Dependencies ==============================================
 
 dependencies {

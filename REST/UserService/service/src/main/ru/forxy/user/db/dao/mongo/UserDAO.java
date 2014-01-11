@@ -25,22 +25,22 @@ public class UserDAO implements IUserDAO {
     MongoTemplate mongoTemplate;
 
     @Override
-    public List<User> findByLastName(String lastName) {
+    public List<User> findByLastName(final String lastName) {
         return mongoTemplate.find(Query.query(Criteria.where("lastName").is(lastName)), User.class);
     }
 
     @Override
-    public List<User> findByFirstName(String firstName) {
+    public List<User> findByFirstName(final String firstName) {
         return mongoTemplate.find(Query.query(Criteria.where("firstName").is(firstName)), User.class);
     }
 
     @Override
-    public Iterable<User> findAll(Sort sort) {
+    public Iterable<User> findAll(final Sort sort) {
         return mongoTemplate.find(Query.query(new Criteria()).with(sort), User.class);
     }
 
     @Override
-    public Page<User> findAll(Pageable pageable) {
+    public Page<User> findAll(final Pageable pageable) {
         int size = pageable.getPageSize();
         int offset = pageable.getOffset();
         List<User> users = mongoTemplate.find(Query.query(new Criteria()).limit(size).skip(offset), User.class);
@@ -48,23 +48,23 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
-    public <S extends User> S save(S user) {
+    public <S extends User> S save(final S user) {
         mongoTemplate.save(user);
         return user;
     }
 
     @Override
-    public <S extends User> Iterable<S> save(Iterable<S> users) {
+    public <S extends User> Iterable<S> save(final Iterable<S> users) {
         throw null;
     }
 
     @Override
-    public User findOne(String email) {
+    public User findOne(final String email) {
         return mongoTemplate.findOne(Query.query(Criteria.where("email").is(email)), User.class);
     }
 
     @Override
-    public boolean exists(String email) {
+    public boolean exists(final String email) {
         return mongoTemplate.findOne(Query.query(Criteria.where("email").is(email)), User.class) != null;
     }
 
@@ -74,7 +74,7 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
-    public Iterable<User> findAll(Iterable<String> emails) {
+    public Iterable<User> findAll(final Iterable<String> emails) {
         return mongoTemplate.find(Query.query(Criteria.where("email").in(emails)), User.class);
     }
 
@@ -84,17 +84,17 @@ public class UserDAO implements IUserDAO {
     }
 
     @Override
-    public void delete(String email) {
+    public void delete(final String email) {
         mongoTemplate.remove(Query.query(Criteria.where("email").is(email)), User.class);
     }
 
     @Override
-    public void delete(User user) {
+    public void delete(final User user) {
         mongoTemplate.remove(user);
     }
 
     @Override
-    public void delete(Iterable<? extends User> users) {
+    public void delete(final Iterable<? extends User> users) {
         for (User user : users) {
             mongoTemplate.remove(user);
         }
@@ -105,7 +105,7 @@ public class UserDAO implements IUserDAO {
         mongoTemplate.remove(null, User.class);
     }
 
-    public void setMongoTemplate(MongoTemplate mongoTemplate) {
+    public void setMongoTemplate(final MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
     }
 
@@ -129,7 +129,7 @@ public class UserDAO implements IUserDAO {
                     exceptionDetails = ExceptionUtils.getStackTrace(lastError.getException());
                     statusType = StatusType.YELLOW;
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 exceptionMessage = e.getMessage();
                 exceptionDetails = ExceptionUtils.getStackTrace(e);
                 statusType = StatusType.RED;
@@ -141,15 +141,7 @@ public class UserDAO implements IUserDAO {
         } else {
             statusType = StatusType.RED;
         }
-        return new ComponentStatus(
-                "User DAO",
-                location,
-                statusType,
-                null,
-                ComponentStatus.ComponentType.DB,
-                responseTime,
-                null,
-                exceptionMessage,
-                exceptionDetails);
+        return new ComponentStatus("User DAO", location, statusType, null, ComponentStatus.ComponentType.DB,
+                responseTime, null, exceptionMessage, exceptionDetails);
     }
 }

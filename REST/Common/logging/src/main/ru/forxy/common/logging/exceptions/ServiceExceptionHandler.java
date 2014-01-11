@@ -22,11 +22,10 @@ public class ServiceExceptionHandler implements IExceptionHandler {
         //noinspection ThrowableResultOfMethodCallIgnored
         Throwable cause = ExceptionUtils.getRootCause(t);
         if (cause instanceof ConnectException) {
-            throw new ServiceException(CommonExceptions.ServiceIsNotAvailable.getStatusTemplate(),
-                    host, cause.getMessage());
+            throw new ServiceException(CommonExceptions.ServiceIsNotAvailable.getStatusTemplate(), host,
+                    cause.getMessage());
         } else if (cause instanceof SocketTimeoutException) {
-            throw new ServiceException(CommonExceptions.ServiceTimeout.getStatusTemplate(),
-                    host, cause.getMessage());
+            throw new ServiceException(CommonExceptions.ServiceTimeout.getStatusTemplate(), host, cause.getMessage());
         } else {
             throw new ServiceException(CommonExceptions.UnknownServiceException.getStatusTemplate(),
                     cause != null ? cause.getMessage() : t != null ? t.getMessage() : "N/A");

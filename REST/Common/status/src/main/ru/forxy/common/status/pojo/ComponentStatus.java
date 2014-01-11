@@ -34,15 +34,10 @@ public class ComponentStatus implements Serializable {
     public ComponentStatus() {
     }
 
-    public ComponentStatus(String name,
-                           String location,
-                           StatusType status,
-                           Map<String, String> componentConfiguration,
-                           ComponentType componentType,
-                           long responseTime,
-                           Date lastUpdated,
-                           String exceptionMessage,
-                           String exceptionDetails) {
+    public ComponentStatus(final String name, final String location, final StatusType status,
+                           final Map<String, String> componentConfiguration, final ComponentType componentType,
+                           final long responseTime, final Date lastUpdated, final String exceptionMessage,
+                           final String exceptionDetails) {
         this.name = name;
         this.location = location;
         this.status = status;
@@ -58,7 +53,7 @@ public class ComponentStatus implements Serializable {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -66,7 +61,7 @@ public class ComponentStatus implements Serializable {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(final String location) {
         this.location = location;
     }
 
@@ -74,7 +69,7 @@ public class ComponentStatus implements Serializable {
         return status;
     }
 
-    public void setStatus(StatusType status) {
+    public void setStatus(final StatusType status) {
         this.status = status;
     }
 
@@ -82,7 +77,7 @@ public class ComponentStatus implements Serializable {
         return componentConfiguration;
     }
 
-    public void setComponentConfiguration(Map<String, String> componentConfiguration) {
+    public void setComponentConfiguration(final Map<String, String> componentConfiguration) {
         this.componentConfiguration = componentConfiguration;
     }
 
@@ -90,7 +85,7 @@ public class ComponentStatus implements Serializable {
         return componentType;
     }
 
-    public void setComponentType(ComponentType componentType) {
+    public void setComponentType(final ComponentType componentType) {
         this.componentType = componentType;
     }
 
@@ -98,7 +93,7 @@ public class ComponentStatus implements Serializable {
         return responseTime;
     }
 
-    public void setResponseTime(long responseTime) {
+    public void setResponseTime(final long responseTime) {
         this.responseTime = responseTime;
     }
 
@@ -106,7 +101,7 @@ public class ComponentStatus implements Serializable {
         return lastUpdated;
     }
 
-    public void setLastUpdated(Date lastUpdated) {
+    public void setLastUpdated(final Date lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 
@@ -114,7 +109,7 @@ public class ComponentStatus implements Serializable {
         return exceptionMessage;
     }
 
-    public void setExceptionMessage(String exceptionMessage) {
+    public void setExceptionMessage(final String exceptionMessage) {
         this.exceptionMessage = exceptionMessage;
     }
 
@@ -122,7 +117,7 @@ public class ComponentStatus implements Serializable {
         return exceptionDetails;
     }
 
-    public void setExceptionDetails(String exceptionDetails) {
+    public void setExceptionDetails(final String exceptionDetails) {
         this.exceptionDetails = exceptionDetails;
     }
 }

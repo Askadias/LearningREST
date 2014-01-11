@@ -14,7 +14,8 @@ import java.util.Date;
 public class SimpleJacksonDateSerializer extends JsonSerializer<Date> {
 
     @Override
-    public void serialize(Date value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+    public void serialize(final Date value, final JsonGenerator jgen, final SerializerProvider provider)
+            throws IOException {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String formattedDate = formatter.format(value);
         jgen.writeString(formattedDate);

@@ -11,9 +11,11 @@
          http://cxf.apache.org/configuration/security               http://cxf.apache.org/schemas/configuration/security.xsd
          http://www.springframework.org/schema/context              http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="2" system-properties-mode="OVERRIDE"
+    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="2"
+                                  system-properties-mode="OVERRIDE"
                                   location="file:${catalina.base}/conf/appconfig/base/ru.forxy.crypto.properties"/>
-    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="1" system-properties-mode="OVERRIDE"
+    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="1"
+                                  system-properties-mode="OVERRIDE"
                                   location="file:${catalina.base}/conf/appconfig/env/${env}/ru.forxy.crypto.properties"/>
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
@@ -22,11 +24,13 @@
         <httpj:engine port="9090">
             <httpj:tlsServerParameters>
                 <sec:keyManagers keyPassword="${ru.forxy.crypto.SSLConfig/keyStorePassword}">
-                    <sec:keyStore type="${ru.forxy.crypto.SSLConfig/keyStoreType}" password="${ru.forxy.crypto.SSLConfig/keyStorePassword}"
+                    <sec:keyStore type="${ru.forxy.crypto.SSLConfig/keyStoreType}"
+                                  password="${ru.forxy.crypto.SSLConfig/keyStorePassword}"
                                   file="${ru.forxy.crypto.SSLConfig/keyStoreFile}"/>
                 </sec:keyManagers>
                 <sec:trustManagers>
-                    <sec:keyStore type="${ru.forxy.crypto.SSLConfig/trustStoreType}" password="${ru.forxy.crypto.SSLConfig/trustStorePassword}"
+                    <sec:keyStore type="${ru.forxy.crypto.SSLConfig/trustStoreType}"
+                                  password="${ru.forxy.crypto.SSLConfig/trustStorePassword}"
                                   file="${ru.forxy.crypto.SSLConfig/trustStoreFile}"/>
                 </sec:trustManagers>
                 <sec:cipherSuitesFilter>

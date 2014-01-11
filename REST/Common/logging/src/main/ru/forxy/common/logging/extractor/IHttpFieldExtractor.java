@@ -9,8 +9,7 @@ import java.util.Map;
  * Interface to support field extraction extension in endpoint requests.
  * Logging library will apply specified list of field extractors on each Request and Response payload.
  */
-public interface IHttpFieldExtractor
-{
+public interface IHttpFieldExtractor {
     /**
      * Extract fields, library will add them to Context frame after extraction.
      *
@@ -22,9 +21,7 @@ public interface IHttpFieldExtractor
      * @param responseHeaders http response headers
      * @return key value map with extracted fields, it will be added to Context frame
      */
-    Map<String, Object> extract(byte[] payload, Map<String, Object> frame,
-                                HttpServletRequest request,
-                                HttpServletResponse response,
-                                Map<String, List<String>> requestHeaders,
+    Map<String, Object> extract(byte[] payload, Map<String, Object> frame, HttpServletRequest request,
+                                HttpServletResponse response, Map<String, List<String>> requestHeaders,
                                 Map<String, List<String>> responseHeaders);
 }

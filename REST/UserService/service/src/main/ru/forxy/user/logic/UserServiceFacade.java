@@ -18,18 +18,18 @@ public class UserServiceFacade implements IUserServiceFacade {
     private IUserDAO userDAO;
 
     @Override
-    public EntityPage<User> getUsers(Integer page) {
+    public EntityPage<User> getUsers(final Integer page) {
         return getUsers(page, null);
     }
 
     @Override
-    public EntityPage<User> getUsers(Integer page, Integer size) {
-        Page<User> p = userDAO.findAll(new PageRequest(page, size == null ? DEFAULT_PAGE_SIZE : size));
+    public EntityPage<User> getUsers(final Integer page, final Integer size) {
+        final Page<User> p = userDAO.findAll(new PageRequest(page, size == null ? DEFAULT_PAGE_SIZE : size));
         return new EntityPage<User>(p.getContent(), p.getSize(), p.getNumber(), p.getTotalElements());
     }
 
     @Override
-    public User getUser(User user) {
+    public User getUser(final User user) {
         if (user != null && user.getEmail() != null) {
             return userDAO.findOne(user.getEmail());
         }
@@ -37,7 +37,7 @@ public class UserServiceFacade implements IUserServiceFacade {
     }
 
     @Override
-    public User updateUser(User user) {
+    public User updateUser(final User user) {
         if (user.getEmail() != null && user.getPassword() != null) {
             userDAO.save(user);
             return user;
@@ -47,13 +47,14 @@ public class UserServiceFacade implements IUserServiceFacade {
     }
 
     @Override
-    public User createUser(User user) {
+    public User createUser(final User user) {
         if (user.getEmail() != null) {
             if (!userDAO.exists(user.getEmail())) {
                 userDAO.save(user);
                 return user;
             } else {
-                throw new ServiceException(UserServiceExceptions.UserAlreadyExists.getStatusTemplate(), user.getEmail());
+                throw new ServiceException(UserServiceExceptions.UserAlreadyExists.getStatusTemplate(),
+                        user.getEmail());
             }
         } else {
             throw new ServiceException(UserServiceExceptions.EmailIsNullOrEmpty.getStatusTemplate());
@@ -61,7 +62,7 @@ public class UserServiceFacade implements IUserServiceFacade {
     }
 
     @Override
-    public void deleteUser(String email) {
+    public void deleteUser(final String email) {
         if (userDAO.exists(email)) {
             userDAO.delete(email);
         } else {
@@ -69,7 +70,7 @@ public class UserServiceFacade implements IUserServiceFacade {
         }
     }
 
-    public void setUserDAO(IUserDAO userDAO) {
+    public void setUserDAO(final IUserDAO userDAO) {
         this.userDAO = userDAO;
     }
 }

@@ -8,13 +8,13 @@ public interface ICryptoService {
 
     @POST
     @Path("/encrypt")
-    byte[] encrypt(String decrypted);
+    byte[] encrypt(final String decrypted);
 
     @POST
     @Path("/decrypt")
-    String decrypt(byte[] encrypted);
+    String decrypt(final byte[] encrypted);
 
     @POST
     @Path("/hash")
-    byte[] hash(String value);
+    byte[] hash(final String value);
 }

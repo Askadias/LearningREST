@@ -29,8 +29,8 @@ public class LoggingInterceptor extends AbstractPerformanceLogger implements Met
                 if (!Context.contains(Fields.ActivityGUID)) {
                     Context.addGlobal(Fields.ActivityGUID, UUID.randomUUID().toString());
                 }
-                Context.addFrame(Fields.ActivityName, activityName != null ? activityName
-                        : MetadataHelper.getRealClassName(invocation.getThis()));
+                Context.addFrame(Fields.ActivityName,
+                        activityName != null ? activityName : MetadataHelper.getRealClassName(invocation.getThis()));
                 Context.addFrame(Fields.ActivityStep, Fields.ActivitySteps.rq);
                 Context.addFrame(Fields.TimestampStart, new Date(timestampStart));
                 Context.addFrame(Fields.Timestamp, new Date(timestampStart));

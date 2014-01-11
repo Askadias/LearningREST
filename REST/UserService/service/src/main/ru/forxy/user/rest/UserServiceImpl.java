@@ -19,18 +19,18 @@ import java.util.regex.Pattern;
 
 public class UserServiceImpl extends AbstractService implements IUserService {
 
-    IUserServiceFacade userServiceFacade;
-    private static Pattern emailRegex = Pattern.compile(Constants.EMAIL_REGEX);
+    private IUserServiceFacade userServiceFacade;
+    private static final Pattern emailRegex = Pattern.compile(Constants.EMAIL_REGEX);
 
     @Override
-    public Response getUsers(Integer page, final UriInfo uriInfo, final HttpHeaders headers) {
-        EntityPage<User> userPage = userServiceFacade.getUsers(page);
+    public Response getUsers(final Integer page, final UriInfo uriInfo, final HttpHeaders headers) {
+        final EntityPage<User> userPage = userServiceFacade.getUsers(page);
         return respondWith(userPage, uriInfo, headers).build();
     }
 
     @Override
-    public Response getUsers(Integer page, Integer size, final UriInfo uriInfo, final HttpHeaders headers) {
-        EntityPage<User> userPage = userServiceFacade.getUsers(page, size);
+    public Response getUsers(final Integer page, final Integer size, final UriInfo uriInfo, final HttpHeaders headers) {
+        final EntityPage<User> userPage = userServiceFacade.getUsers(page, size);
         return respondWith(userPage, uriInfo, headers).build();
     }
 
@@ -39,13 +39,14 @@ public class UserServiceImpl extends AbstractService implements IUserService {
         validateEmail(requestedUser.getEmail());
         User user = userServiceFacade.getUser(requestedUser);
         if (user == null) {
-            throw new ServiceException(UserServiceExceptions.UserNotFound.getStatusTemplate(), requestedUser.getEmail());
+            throw new ServiceException(UserServiceExceptions.UserNotFound.getStatusTemplate(),
+                    requestedUser.getEmail());
         }
         return respondWith(user, uriInfo, headers).build();
     }
 
     @Override
-    public Response login(User loginUser, final UriInfo uriInfo, final HttpHeaders headers) {
+    public Response login(final User loginUser, final UriInfo uriInfo, final HttpHeaders headers) {
         User user = userServiceFacade.getUser(loginUser);
         if (user != null && Arrays.equals(loginUser.getPassword(), user.getPassword())) {
             return respondWith(user, uriInfo, headers).build();
@@ -55,23 +56,23 @@ public class UserServiceImpl extends AbstractService implements IUserService {
     }
 
     @Override
-    public Response updateUser(User user, final UriInfo uriInfo, final HttpHeaders headers) {
+    public Response updateUser(final User user, final UriInfo uriInfo, final HttpHeaders headers) {
         return Response.ok(userServiceFacade.updateUser(user)).build();
     }
 
     @Override
-    public Response createUser(User user, final UriInfo uriInfo, final HttpHeaders headers) {
+    public Response createUser(final User user, final UriInfo uriInfo, final HttpHeaders headers) {
         return Response.ok(userServiceFacade.createUser(user)).build();
     }
 
     @Override
-    public Response deleteUser(String email, final UriInfo uriInfo, final HttpHeaders headers) {
+    public Response deleteUser(final String email, final UriInfo uriInfo, final HttpHeaders headers) {
         validateEmail(email);
         userServiceFacade.deleteUser(email);
         return Response.ok().build();
     }
 
-    private static void validateEmail(String email) {
+    private static void validateEmail(final String email) {
         if (email == null || "".equals(email)) {
             throw ValidationException.build(new ValidationFailedException("email cannot be null or empty"));
         } else if (!emailRegex.matcher(email).matches()) {
@@ -79,7 +80,7 @@ public class UserServiceImpl extends AbstractService implements IUserService {
         }
     }
 
-    public void setUserServiceFacade(IUserServiceFacade userServiceFacade) {
+    public void setUserServiceFacade(final IUserServiceFacade userServiceFacade) {
         this.userServiceFacade = userServiceFacade;
     }
 }

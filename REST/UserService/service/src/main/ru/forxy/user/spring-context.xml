@@ -6,9 +6,11 @@
         http://www.springframework.org/schema/beans     http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context   http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="2" system-properties-mode="OVERRIDE"
+    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="2"
+                                  system-properties-mode="OVERRIDE"
                                   location="file:${catalina.base}/conf/appconfig/base/ru.forxy.user.properties"/>
-    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="1" system-properties-mode="OVERRIDE"
+    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="1"
+                                  system-properties-mode="OVERRIDE"
                                   location="file:${catalina.base}/conf/appconfig/env/${env}/ru.forxy.user.properties"/>
 
     <import resource="classpath:ru/forxy/user/rest-spring-context.xml"/>

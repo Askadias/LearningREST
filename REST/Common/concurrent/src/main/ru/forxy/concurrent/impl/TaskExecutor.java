@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
  * Custom implementation of the {@code ThreadPoolExecutor}
  */
 public class TaskExecutor extends ThreadPoolExecutor implements ITaskExecutor {
+
     public TaskExecutor(final int nThreads, final int nMaxThreads, final long keepAliveTime) {
         super(nThreads, nMaxThreads, keepAliveTime, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(),
                 new ThreadPoolExecutor.CallerRunsPolicy());
@@ -55,13 +56,11 @@ public class TaskExecutor extends ThreadPoolExecutor implements ITaskExecutor {
     }
 
     @Override
-    public ITaskStatus launch(final ITask task, final IExecutionContext context,
-                              final ITaskStatusGroup group) {
+    public ITaskStatus launch(final ITask task, final IExecutionContext context, final ITaskStatusGroup group) {
         return doLaunch(task, context, group);
     }
 
-    private ITaskStatus doLaunch(final ITask task, final IExecutionContext context,
-                                 final ITaskStatusGroup group) {
+    private ITaskStatus doLaunch(final ITask task, final IExecutionContext context, final ITaskStatusGroup group) {
         TaskStatusImpl status;
         status = new TaskStatusImpl(task, group);
         final TaskRunnableImpl taskRunnable = new TaskRunnableImpl(task, context, status);
@@ -79,7 +78,7 @@ public class TaskExecutor extends ThreadPoolExecutor implements ITaskExecutor {
          * @param param The object to evaluate.
          * @return Returns true if the specified object is at an exit state
          */
-        boolean isExitState(Object param);
+        boolean isExitState(final Object param);
     }
 
     private class TaskStatusImpl implements ITaskStatus {
@@ -190,8 +189,7 @@ public class TaskExecutor extends ThreadPoolExecutor implements ITaskExecutor {
         @Override
         public boolean waitAnyOperationCompletes(final long timeout) {
             synchronized (m_statuses) {
-                final boolean anyDone =
-                        waitForExitStateNoThrow(timeout, m_statuses, m_completeAnyCallback, this);
+                final boolean anyDone = waitForExitStateNoThrow(timeout, m_statuses, m_completeAnyCallback, this);
                 if (anyDone) {
                     m_oneCompleted = false;
                 }
@@ -252,7 +250,8 @@ public class TaskExecutor extends ThreadPoolExecutor implements ITaskExecutor {
      * @throws InterruptedException
      */
     private static boolean waitForExitState(long timeout, final Object synchronizeObject,
-                                            final IExitNotificationCallback callback, final Object param) throws InterruptedException {
+                                            final IExitNotificationCallback callback, final Object param)
+            throws InterruptedException {
         boolean inExitState = false;
         final long waitStart = System.currentTimeMillis();
         //noinspection SynchronizationOnLocalVariableOrMethodParameter

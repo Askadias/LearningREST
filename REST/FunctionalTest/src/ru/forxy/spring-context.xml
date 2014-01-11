@@ -2,7 +2,6 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:http="http://cxf.apache.org/transports/http/configuration"
        xmlns:sec="http://cxf.apache.org/configuration/security"
-       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:jaxrs="http://cxf.apache.org/jaxrs"
        xmlns:util="http://www.springframework.org/schema/util"
        xmlns:p="http://www.springframework.org/schema/p"
@@ -10,13 +9,21 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans            http://www.springframework.org/schema/beans/spring-beans.xsd
          http://cxf.apache.org/transports/http/configuration    http://cxf.apache.org/schemas/configuration/http-conf.xsd
          http://cxf.apache.org/configuration/security           http://cxf.apache.org/schemas/configuration/security.xsd
-         http://www.springframework.org/schema/context          http://www.springframework.org/schema/context/spring-context.xsd http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+                    http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
        default-lazy-init="false">
 
-    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="2"
-                                  location="classpath:appconfig/base/ru.forxy.test.properties"/>
-    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="1"
-                                  location="classpath:appconfig/env/${env}/ru.forxy.test.properties"/>
+    <!--<context:property-override location="classpath:appconfig/base/ru.forxy.test.properties"/>
+    <context:property-placeholder location="classpath:appconfig/env/${env}/ru.forxy.test.properties"/>-->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+          p:ignoreResourceNotFound="true"
+          p:nullValue="{null}">
+        <property name="locations">
+            <list>
+                <value>classpath:appconfig/base/ru.forxy.test.properties</value>
+                <value>classpath:appconfig/env/${env}/ru.forxy.test.properties</value>
+            </list>
+        </property>
+    </bean>
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
@@ -73,8 +80,10 @@
     <bean id="userServiceStressTestConfig" class="ru.forxy.common.support.Configuration">
         <constructor-arg name="settings">
             <map>
-                <entry key="#{T(ru.forxy.stress.UserServiceStressTest$Config).ThreadsCount}" value="${threads}"/>
-                <entry key="#{T(ru.forxy.stress.UserServiceStressTest$Config).IterationsCount}" value="${iterations}"/>
+                <entry key="#{T(ru.forxy.stress.UserServiceStressTest$Config).ThreadsCount}"
+                       value="${ru.forxy.StressTest/threads}"/>
+                <entry key="#{T(ru.forxy.stress.UserServiceStressTest$Config).IterationsCount}"
+                       value="${ru.forxy.StressTest/iterations}"/>
             </map>
         </constructor-arg>
     </bean>
@@ -87,7 +96,7 @@
 
     <bean id="userServiceConnectionPool" class="org.springframework.aop.target.CommonsPoolTargetSource"
           p:targetBeanName="userServiceClient"
-          p:maxSize="${threads}"
+          p:maxSize="${ru.forxy.user.rest.IUserService/threads}"
           p:maxWait="0"
           p:whenExhaustedActionName="WHEN_EXHAUSTED_GROW"/>
 
@@ -104,7 +113,7 @@
 
     <bean id="userSystemStatusConnectionPool" class="org.springframework.aop.target.CommonsPoolTargetSource"
           p:targetBeanName="userSystemStatusClient"
-          p:maxSize="${threads}"
+          p:maxSize="${ru.forxy.user.rest.IUserService/threads}"
           p:maxWait="0"
           p:whenExhaustedActionName="WHEN_EXHAUSTED_GROW"/>
 

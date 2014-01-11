@@ -1,1 +1,0 @@
-CREATE KEYSPACE user WITH strategy_class = SimpleStrategy

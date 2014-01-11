@@ -55,8 +55,7 @@ public class SpringELFieldExtractor implements IHttpFieldExtractor, IFieldExtrac
 
     @Override
     public Map<String, Object> extract(final byte[] payload, final Map<String, Object> frame,
-                                       final HttpServletRequest request,
-                                       final HttpServletResponse response,
+                                       final HttpServletRequest request, final HttpServletResponse response,
                                        final Map<String, List<String>> requestHeaders,
                                        final Map<String, List<String>> responseHeaders) {
         return extractInternal(payload, frame, request, response, requestHeaders, responseHeaders);
@@ -64,8 +63,7 @@ public class SpringELFieldExtractor implements IHttpFieldExtractor, IFieldExtrac
 
 
     private Map<String, Object> extractInternal(final byte[] payload, final Map<String, Object> frame,
-                                                final HttpServletRequest request,
-                                                final HttpServletResponse response,
+                                                final HttpServletRequest request, final HttpServletResponse response,
                                                 final Map<String, List<String>> requestHeaders,
                                                 final Map<String, List<String>> responseHeaders) {
         final Map<String, Object> result = new LinkedHashMap<String, Object>();

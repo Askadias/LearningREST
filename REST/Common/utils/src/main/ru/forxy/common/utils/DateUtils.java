@@ -10,13 +10,13 @@ import java.util.GregorianCalendar;
  */
 public abstract class DateUtils {
 
-    public static XMLGregorianCalendar newXMLGregorianCalendar(Date date) throws Exception {
+    public static XMLGregorianCalendar newXMLGregorianCalendar(final Date date) throws Exception {
         GregorianCalendar gregorianCalendar = new GregorianCalendar();
         gregorianCalendar.setTime(date);
         return DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
     }
 
-    public static Date dateFromXMLGregorianCalendar(XMLGregorianCalendar xmlGregorianCalendar) throws Exception {
+    public static Date dateFromXMLGregorianCalendar(final XMLGregorianCalendar xmlGregorianCalendar) throws Exception {
         return xmlGregorianCalendar.toGregorianCalendar().getTime();
     }
 }
