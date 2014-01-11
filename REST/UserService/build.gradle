@@ -1,7 +1,5 @@
 apply plugin: 'eclipse'
 
-
-
 allprojects {
     apply plugin: 'maven'
     apply plugin: 'eclipse'

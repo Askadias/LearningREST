@@ -1,8 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'war'
 
-repositories { maven { url "https://github.com/s7/mvnrepo/raw/master" } }
-
 sourceSets {
     main {
         java { srcDir 'src/main' }
@@ -114,18 +112,7 @@ dependencies {
     compile "org.springframework.data:spring-data-mongodb:${rev_spring_mongo}"
 
     // --------------------- CASSANDRA -----------------------------------
-    //compile "org.apache-extras.cassandra-jdbc:cassandra-jdbc:${rev_cassandra_jdbc}"
-    //compile "org.apache.cassandra:cassandra-all:${rev_cassandra_apache}"
     compile "com.datastax.cassandra:cassandra-driver-core:${rev_cassandra_datastax}"
-    compile("com.impetus.core:kundera-core:${rev_cassandra_kundera}") {
-        exclude module: 'persistence-api'
-    }
-    compile("com.impetus.client:kundera-cassandra:${rev_cassandra_kundera}") {
-        exclude module: 'snappy'
-        exclude module: 'persistence-api'
-    }
-    compile "org.xerial.snappy:snappy-java:${rev_snappy}"
-    compile "org.hibernate.javax.persistence:hibernate-jpa-2.0-api:${rev_persistance}"
 
     // --------------------- SPRING --------------------------------------
     compile "org.springframework:spring-core:${rev_spring}"

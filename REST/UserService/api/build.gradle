@@ -70,9 +70,6 @@ dependencies {
 
     // --------------------- CXF -----------------------------------------
     compile "org.apache.cxf:cxf-bundle-jaxrs:${rev_cxf}"
-
-    // --------------------- PERSISTANCE ---------------------------------
-    compile "org.hibernate.javax.persistence:hibernate-jpa-2.0-api:${rev_persistance}"
 }
 
 eclipse {
