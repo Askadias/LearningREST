@@ -29,31 +29,29 @@
         </property>
     </bean>
 
-    <bean id="ru.forxy.user.performance.logger.request"
-          class="ru.forxy.common.logging.writer.LogWriter" c:name="user.performance.request"/>
-    <bean id="ru.forxy.user.performance.logger.response"
-          class="ru.forxy.common.logging.writer.LogWriter" c:name="user.performance.response"/>
+    <bean id="ru.forxy.fraud.performance.logger.request"
+          class="ru.forxy.common.logging.writer.LogWriter" c:name="fraud.performance.request"/>
+    <bean id="ru.forxy.fraud.performance.logger.response"
+          class="ru.forxy.common.logging.writer.LogWriter" c:name="fraud.performance.response"/>
 
-    <bean id="ru.forxy.user.service.performance.loggingFilter"
+    <bean id="ru.forxy.fraud.service.performance.loggingFilter"
           class="ru.forxy.common.logging.LoggingServletFilter"
           p:configuration-ref="ru.forxy.common.support.Configuration.performance.endpoint"
-          p:requestWriter-ref="ru.forxy.user.performance.logger.request"
-          p:responseWriter-ref="ru.forxy.user.performance.logger.response">
+          p:requestWriter-ref="ru.forxy.fraud.performance.logger.request"
+          p:responseWriter-ref="ru.forxy.fraud.performance.logger.response">
         <property name="requestFieldExtractors">
             <bean class="ru.forxy.common.logging.extractor.SpringELFieldExtractor">
                 <property name="extractRules">
                     <map>
-                        <entry key="Username"
+                        <entry key="Fraudname"
                                value="#request.getParameter('client_id')?:#requestHeaders['client-id']?:null"/>
                         <entry key="TransactionGUID"
                                value="#request.getParameter('transaction_guid')?:#requestHeaders['transaction-guid']?:null"/>
                         <entry key="MessageGUID"
                                value="#request.getParameter('message_guid')?:#requestHeaders['message-guid']?:null"/>
-                        <entry key="OperationName" value="#request.requestURI.matches('.*/users[/\d+]+') and #request.getMethod().equals('GET') ? 'GetUsersPage' :
-                                                          #request.requestURI.matches('.*/users/login/?') and #request.getMethod().equals('POST') ? 'Login' :
-                                                          #request.requestURI.matches('.*/users/?') and #request.getMethod().equals('GET') ? 'GetUser' :
-                                                          #request.requestURI.matches('.*/users/?') and #request.getMethod().equals('POST') ? 'UpdateUser' :
-                                                          #request.requestURI.matches('.*/users/?') and #request.getMethod().equals('DELETE') ? 'DeleteUser' :
+                        <entry key="OperationName" value="#request.requestURI.matches('.*/transactions[/\d+]+') and #request.getMethod().equals('GET') ? 'GetTransactionsPage' :
+                                                          #request.requestURI.matches('.*/transaction/?') and #request.getMethod().equals('GET') ? 'GetTransaction' :
+                                                          #request.requestURI.matches('.*/?') and #request.getMethod().equals('GET') ? 'FraudCheck' :
                                                           #request.requestURI.matches('.*/status/?') and #request.getMethod().equals('GET') ? 'SystemStatus' :
                                                           null"/>
                     </map>
@@ -66,7 +64,7 @@
                     <map>
                         <entry key="TransactionGUID" value="#responseHeaders['Transaction-GUID']"/>
                         <entry key="MessageGUID" value="#responseHeaders['Message-GUID']"/>
-                        <entry key="UserEmail"
+                        <entry key="FraudEmail"
                                value="#payload.indexOf('&quot;email&quot;')&gt;=0 ? #payload.replaceAll('.*?&quot;email&quot;:\s*?&quot;([a-zA-Z0-9!#$%&amp;''*+/=?^_`{|}~-]+(\.[a-zA-Z0-9!#$%&amp;''*+/=?^_`{|}~-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*)&quot;.*','$1') : null"/>
                         <entry key="StatusCode">
                             <value>(#response.responseStatus==200 or #response.responseStatus==201 or
@@ -89,20 +87,20 @@
 
     <bean id="ru.forxy.common.logging.exceptions.DatabaseExceptionHandler"
           class="ru.forxy.common.logging.exceptions.DatabaseExceptionHandler"
-          p:databaseHost="${ru.forxy.user.MongoTemplate/host}:${ru.forxy.user.MongoTemplate/port}"/>
+          p:databaseHost="${ru.forxy.fraud.MongoTemplate/host}:${ru.forxy.fraud.MongoTemplate/port}"/>
 
-    <bean id="ru.forxy.user.performance.logger.dao"
-          class="ru.forxy.common.logging.writer.LogWriter" c:name="user.performance.dao"/>
+    <bean id="ru.forxy.fraud.performance.logger.dao"
+          class="ru.forxy.common.logging.writer.LogWriter" c:name="fraud.performance.dao"/>
 
     <bean id="payment.scoring.performance.dao.loggingInterceptor"
           class="ru.forxy.common.logging.LoggingInterceptor"
           p:configuration-ref="ru.forxy.common.support.Configuration.performance.dao"
-          p:responseWriter-ref="ru.forxy.user.performance.logger.dao"
+          p:responseWriter-ref="ru.forxy.fraud.performance.logger.dao"
           p:exceptionHandler-ref="ru.forxy.common.logging.exceptions.DatabaseExceptionHandler"/>
 
-    <bean id="ru.forxy.user.db.dao.UserDAO.mongo" class="org.springframework.aop.framework.ProxyFactoryBean"
-          p:proxyInterfaces="ru.forxy.user.db.dao.IUserDAO"
-          p:target-ref="ru.forxy.user.db.dao.UserDAO.impl.mongo">
+    <bean id="ru.forxy.fraud.db.dao.FraudDAO.mongo" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:proxyInterfaces="ru.forxy.fraud.db.dao.IFraudDAO"
+          p:target-ref="ru.forxy.fraud.db.dao.FraudDAO.impl.mongo">
         <property name="interceptorNames">
             <list>
                 <idref bean="payment.scoring.performance.dao.loggingInterceptor"/>
@@ -110,9 +108,9 @@
         </property>
     </bean>
 
-    <bean id="ru.forxy.user.db.dao.UserDAO.cassandra" class="org.springframework.aop.framework.ProxyFactoryBean"
-          p:proxyInterfaces="ru.forxy.user.db.dao.IUserDAO"
-          p:target-ref="ru.forxy.user.db.dao.UserDAO.impl.cassandra">
+    <bean id="ru.forxy.fraud.db.dao.FraudDAO.cassandra" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:proxyInterfaces="ru.forxy.fraud.db.dao.IFraudDAO"
+          p:target-ref="ru.forxy.fraud.db.dao.FraudDAO.impl.cassandra">
         <property name="interceptorNames">
             <list>
                 <idref bean="payment.scoring.performance.dao.loggingInterceptor"/>
@@ -128,18 +126,18 @@
     <bean id="ru.forxy.common.logging.exceptions.ServiceExceptionHandler"
           class="ru.forxy.common.logging.exceptions.ServiceExceptionHandler"/>
 
-    <bean id="ru.forxy.user.performance.logger.service.impl"
-          class="ru.forxy.common.logging.writer.LogWriter" c:name="user.performance.service.impl"/>
+    <bean id="ru.forxy.fraud.performance.logger.service.impl"
+          class="ru.forxy.common.logging.writer.LogWriter" c:name="fraud.performance.service.impl"/>
 
     <bean id="payment.scoring.performance.service.impl.loggingInterceptor"
           class="ru.forxy.common.logging.LoggingInterceptor"
           p:configuration-ref="ru.forxy.common.support.Configuration.performance.impl"
-          p:responseWriter-ref="ru.forxy.user.performance.logger.service.impl"
+          p:responseWriter-ref="ru.forxy.fraud.performance.logger.service.impl"
           p:exceptionHandler-ref="ru.forxy.common.logging.exceptions.ServiceExceptionHandler"/>
 
-    <bean id="ru.forxy.user.logic.UserServiceFacade" class="org.springframework.aop.framework.ProxyFactoryBean"
-          p:proxyInterfaces="ru.forxy.user.logic.IUserServiceFacade"
-          p:target-ref="ru.forxy.user.logic.UserServiceFacade.impl">
+    <bean id="ru.forxy.fraud.logic.FraudServiceFacade" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:proxyInterfaces="ru.forxy.fraud.logic.IFraudServiceFacade"
+          p:target-ref="ru.forxy.fraud.logic.FraudServiceFacade.impl">
         <property name="interceptorNames">
             <list>
                 <idref bean="payment.scoring.performance.service.impl.loggingInterceptor"/>

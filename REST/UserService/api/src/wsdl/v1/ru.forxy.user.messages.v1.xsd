@@ -14,7 +14,8 @@
             <xs:element name="LastName" type="xs:string" minOccurs="0"/>
             <xs:element name="FirstName" type="xs:string" minOccurs="0"/>
             <xs:element name="Gender" type="common:Char" minOccurs="0"/>
-            <xs:element name="BirthDate" type="xs:dateTime" minOccurs="0"/>
+            <xs:element name="BirthDate" type="xs:date" minOccurs="0"/>
+            <xs:element name="CreateDate" type="xs:dateTime" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 

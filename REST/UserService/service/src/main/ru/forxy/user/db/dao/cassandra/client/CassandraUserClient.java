@@ -10,6 +10,7 @@ import ru.forxy.user.rest.pojo.User;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -72,7 +73,8 @@ public class CassandraUserClient implements ICassandraClient<User>, Initializing
                 user.getFirstName(),
                 user.getLastName(),
                 String.valueOf(user.getGender()),
-                user.getBirthDate()));
+                user.getBirthDate(),
+                new Date()));
         // @formatter:on
     }
 
@@ -122,8 +124,8 @@ public class CassandraUserClient implements ICassandraClient<User>, Initializing
     public void afterPropertiesSet() throws Exception {
         getByKeyStatement = session.prepare("select * from user where email = ?;");
         addStatement = session.prepare(
-                "insert into user (email, password, login, first_name, last_name, gender, birth_date) " +
-                        "values (?, ?, ?, ?, ?, ?, ?);");
+                "insert into user (email, password, login, first_name, last_name, gender, birth_date, create_date) " +
+                        "values (?, ?, ?, ?, ?, ?, ?, ?);");
         deleteStatement = session.prepare("delete from user where email = ?;");
     }
 }

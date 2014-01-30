@@ -13,28 +13,28 @@
                                    Mongo Data Source
     ========================================================================================== -->
     <context:annotation-config/>
-    <context:component-scan base-package='ru.forxy.user.rest.pojo'/>
+    <context:component-scan base-package='ru.forxy.fraud.rest.pojo'/>
 
-    <mongo:mongo id="mongo" host='${ru.forxy.user.MongoTemplate/host}' port='${ru.forxy.user.MongoTemplate/port}'>
+    <mongo:mongo id="mongo" host='${ru.forxy.fraud.MongoTemplate/host}' port='${ru.forxy.fraud.MongoTemplate/port}'>
         <mongo:options
-                connections-per-host='${ru.forxy.user.MongoTemplate/connections}'
-                connect-timeout='${ru.forxy.user.MongoTemplate/timeout}'
-                max-wait-time='${ru.forxy.user.MongoTemplate/maxWait}'
-                write-number='${ru.forxy.user.MongoTemplate/writeNumber}'
-                write-timeout='${ru.forxy.user.MongoTemplate/writeTimeout}'
-                write-fsync='${ru.forxy.user.MongoTemplate/writeFSync}'/>
+                connections-per-host='${ru.forxy.fraud.MongoTemplate/connections}'
+                connect-timeout='${ru.forxy.fraud.MongoTemplate/timeout}'
+                max-wait-time='${ru.forxy.fraud.MongoTemplate/maxWait}'
+                write-number='${ru.forxy.fraud.MongoTemplate/writeNumber}'
+                write-timeout='${ru.forxy.fraud.MongoTemplate/writeTimeout}'
+                write-fsync='${ru.forxy.fraud.MongoTemplate/writeFSync}'/>
     </mongo:mongo>
 
-    <mongo:db-factory dbname='user' mongo-ref='mongo'/>
+    <mongo:db-factory dbname='fraud' mongo-ref='mongo'/>
 
     <mongo:repositories base-package='ru.forxy.db.dao.mongo'/>
 
     <bean id='mongoTemplate' class='org.springframework.data.mongodb.core.MongoTemplate'>
         <constructor-arg ref='mongo'/>
-        <constructor-arg name='databaseName' value='user'/>
+        <constructor-arg name='databaseName' value='fraud'/>
     </bean>
 
-    <bean id="ru.forxy.user.db.dao.UserDAO.impl.mongo" class="ru.forxy.user.db.dao.mongo.UserDAO"
+    <bean id="ru.forxy.fraud.db.dao.FraudDAO.impl.mongo" class="ru.forxy.fraud.db.dao.mongo.FraudDAO"
           autowire-candidate="false"
           p:mongoTemplate-ref="mongoTemplate"/>
 
@@ -51,12 +51,12 @@
     <bean id="cassandraSession" factory-bean="cassandraCluster" factory-method="connect"
           c:keyspace="forxy"/>
 
-    <bean id="ru.forxy.user.db.dao.cassandra.client.CassandraUserClient"
-          class="ru.forxy.user.db.dao.cassandra.client.CassandraUserClient"
+    <bean id="ru.forxy.fraud.db.dao.cassandra.client.CassandraFraudClient"
+          class="ru.forxy.fraud.db.dao.cassandra.client.CassandraFraudClient"
           p:session-ref="cassandraSession"/>
 
-    <bean id="ru.forxy.user.db.dao.UserDAO.impl.cassandra" class="ru.forxy.user.db.dao.cassandra.UserDAO"
+    <bean id="ru.forxy.fraud.db.dao.FraudDAO.impl.cassandra" class="ru.forxy.fraud.db.dao.cassandra.FraudDAO"
           autowire-candidate="false"
-          p:cassandraClient-ref="ru.forxy.user.db.dao.cassandra.client.CassandraUserClient"/>
+          p:cassandraClient-ref="ru.forxy.fraud.db.dao.cassandra.client.CassandraFraudClient"/>
 
 </beans>
