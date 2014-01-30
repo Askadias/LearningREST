@@ -15,6 +15,4 @@ public interface IFraudServiceFacade {
     EntityPage<Transaction> getTransactions(final Integer page, final Integer size);
 
     Transaction getTransaction(final Long id);
-	
-    Transaction saveTransaction(final Transaction transaction);
 }

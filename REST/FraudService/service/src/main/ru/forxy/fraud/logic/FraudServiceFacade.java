@@ -19,6 +19,7 @@ public class FraudServiceFacade implements IFraudServiceFacade {
 	
 	@Override
     public Boolean check(final Transaction transaction) {
+        fraudDAO.save(transaction);
 	    return false;
 	}
 
@@ -39,11 +40,6 @@ public class FraudServiceFacade implements IFraudServiceFacade {
     public EntityPage<Transaction> getTransactions(final Integer page, final Integer size) {
         final Page<Transaction> p = fraudDAO.findAll(new PageRequest(page, size == null ? DEFAULT_PAGE_SIZE : size));
         return new EntityPage<Transaction>(p.getContent(), p.getSize(), p.getNumber(), p.getTotalElements());
-    }
-
-    @Override
-    public Transaction saveTransaction(final Transaction transaction) {
-        return transaction;
     }
 
     public void setFraudDAO(final IFraudDAO fraudDAO) {
