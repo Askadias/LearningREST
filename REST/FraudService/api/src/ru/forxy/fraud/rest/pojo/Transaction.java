@@ -5,5 +5,5 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "transaction")
 public class Transaction {
 
-    
+    private Entity root;
 }

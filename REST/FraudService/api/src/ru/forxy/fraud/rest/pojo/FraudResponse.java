@@ -4,7 +4,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "fraudResponse")
 public class FraudResponse {
-    Boolean isFraud;
-    Double probability;
-    Double threeshold;
+
+    private Boolean isFraud;
+    private Double probability;
+    private Double threshold;
+
+    private Entity root;
 }
