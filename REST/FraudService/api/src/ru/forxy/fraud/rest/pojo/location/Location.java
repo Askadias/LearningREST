@@ -5,6 +5,7 @@ import ru.forxy.fraud.rest.pojo.Entity;
 public class Location extends Entity {
     protected String city;
     protected String country;
+    protected Integer postalCode;
 
     public String getCity() {
         return city;
@@ -20,5 +21,13 @@ public class Location extends Entity {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public Integer getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(Integer postalCode) {
+        this.postalCode = postalCode;
     }
 }

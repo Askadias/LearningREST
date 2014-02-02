@@ -9,7 +9,49 @@ import java.util.List;
 
 @XmlRootElement(name = "transaction")
 public class Transaction extends Entity {
+    private String ipAddress;
+    private String machineGUID;
     private Account account;
     private List<Payment> payments;
     private List<Product> products;
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
+
+    public String getMachineGUID() {
+        return machineGUID;
+    }
+
+    public void setMachineGUID(String machineGUID) {
+        this.machineGUID = machineGUID;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public List<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(List<Payment> payments) {
+        this.payments = payments;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
 }
