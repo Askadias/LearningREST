@@ -21,5 +21,6 @@
     <import resource="classpath:ru/forxy/fraud/impl-spring-context.xml"/>
     <import resource="classpath:ru/forxy/fraud/log-spring-context.xml"/>
     <import resource="classpath:ru/forxy/fraud/test/dao-spring-test-context.xml"/>
+    <import resource="classpath:ru/forxy/fraud/test/drools-spring-test-context.xml"/>
 
 </beans>

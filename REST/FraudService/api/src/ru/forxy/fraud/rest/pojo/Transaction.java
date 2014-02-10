@@ -13,7 +13,7 @@ public class Transaction extends Entity {
     private String machineGUID;
     private Account account;
     private List<Payment> payments;
-    private List<Product> products;
+    private List<? extends Product> products;
 
     public String getIpAddress() {
         return ipAddress;
@@ -47,11 +47,11 @@ public class Transaction extends Entity {
         this.payments = payments;
     }
 
-    public List<Product> getProducts() {
+    public List<? extends Product> getProducts() {
         return products;
     }
 
-    public void setProducts(List<Product> products) {
+    public void setProducts(List<? extends Product> products) {
         this.products = products;
     }
 }

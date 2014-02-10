@@ -1,0 +1,10 @@
+apply plugin: 'java'
+
+sourceSets {
+    main {
+        java { srcDir 'src/main' }
+        resources { srcDir 'src/main' }
+    }
+}
+
+jar { from sourceSets.main.allJava }

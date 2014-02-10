@@ -12,6 +12,15 @@ public class TravelProduct extends Product {
     protected Date dateStart;
     protected Date dateEnd;
     protected List<Location> locations;
+    protected Type type;
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public Type getType() {
+        return type;
+    }
 
     public List<Traveler> getTravelers() {
         return travelers;
@@ -43,5 +52,14 @@ public class TravelProduct extends Product {
 
     public void setLocations(List<Location> locations) {
         this.locations = locations;
+    }
+
+    public enum Type {
+        Air,
+        Hotel,
+        DestinationExperience,
+        OpaqueHotel,
+        Auto,
+        Cruise
     }
 }

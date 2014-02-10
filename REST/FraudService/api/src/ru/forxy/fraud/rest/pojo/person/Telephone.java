@@ -3,32 +3,32 @@ package ru.forxy.fraud.rest.pojo.person;
 import ru.forxy.fraud.rest.pojo.Entity;
 
 public class Telephone extends Entity {
-    protected Integer areaCode;
-    protected Integer countryAccessCode;
-    protected Integer phoneNumber;
+    protected String areaCode;
+    protected String countryAccessCode;
+    protected String phoneNumber;
     protected Type type;
 
-    public Integer getAreaCode() {
+    public String getAreaCode() {
         return areaCode;
     }
 
-    public void setAreaCode(Integer areaCode) {
+    public void setAreaCode(String areaCode) {
         this.areaCode = areaCode;
     }
 
-    public Integer getCountryAccessCode() {
+    public String getCountryAccessCode() {
         return countryAccessCode;
     }
 
-    public void setCountryAccessCode(Integer countryAccessCode) {
+    public void setCountryAccessCode(String countryAccessCode) {
         this.countryAccessCode = countryAccessCode;
     }
 
-    public Integer getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(Integer phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

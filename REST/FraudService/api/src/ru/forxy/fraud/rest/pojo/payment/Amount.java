@@ -5,15 +5,24 @@ import ru.forxy.fraud.rest.pojo.Entity;
 import java.math.BigDecimal;
 
 public class Amount extends Entity {
-    protected BigDecimal value;
+    protected double value;
+    protected double usdValue;
     protected String currency;
 
-    public BigDecimal getValue() {
+    public double getValue() {
         return value;
     }
 
-    public void setValue(BigDecimal value) {
+    public void setValue(double value) {
         this.value = value;
+    }
+
+    public double getUsdValue() {
+        return usdValue;
+    }
+
+    public void setUsdValue(double usdValue) {
+        this.usdValue = usdValue;
     }
 
     public String getCurrency() {
