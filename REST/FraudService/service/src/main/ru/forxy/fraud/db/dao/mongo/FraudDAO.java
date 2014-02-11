@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class FraudDAO implements IFraudDAO {
 
-    MongoTemplate mongoTemplate;
+    private MongoTemplate mongoTemplate;
 
     @Override
     public Iterable<Transaction> findAll(final Sort sort) {
