@@ -1,4 +1,4 @@
-package ru.forxy.fraud.test.utils.gen;
+package ru.forxy.fraud.test.utils.data;
 
 import ru.forxy.common.test.utils.gen.AbstractGenerator;
 import ru.forxy.fraud.rest.pojo.Transaction;

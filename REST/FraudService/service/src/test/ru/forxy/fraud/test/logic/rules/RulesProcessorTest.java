@@ -8,17 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.forxy.fraud.rest.pojo.Transaction;
-import ru.forxy.fraud.rest.pojo.product.Price;
-import ru.forxy.fraud.rest.pojo.product.Product;
-import ru.forxy.fraud.rest.pojo.product.travel.TravelProduct;
 import ru.forxy.fraud.test.BaseFraudServiceTest;
-import ru.forxy.fraud.test.utils.gen.TravelDataGenerator;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-
-import static ru.forxy.fraud.test.utils.gen.TravelDataGenerator.*;
+import static ru.forxy.fraud.test.utils.data.TravelDataGenerator.*;
 
 /**
  * Evaluates Drools against the transaction
