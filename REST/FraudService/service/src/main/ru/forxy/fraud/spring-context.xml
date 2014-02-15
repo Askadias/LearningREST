@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="
-        http://www.springframework.org/schema/beans     http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context   http://www.springframework.org/schema/context/spring-context.xsd">
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans     http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="2"
-                                  system-properties-mode="OVERRIDE"
-                                  location="file:${catalina.base}/conf/appconfig/base/ru.forxy.fraud.properties"/>
-    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="1"
-                                  system-properties-mode="OVERRIDE"
-                                  location="file:${catalina.base}/conf/appconfig/env/${env}/ru.forxy.fraud.properties"/>
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+          p:ignoreResourceNotFound="true"
+          p:nullValue="{null}">
+        <property name="locations">
+            <list>
+                <value>file:${catalina.base}/conf/appconfig/base/ru.forxy.fraud.properties</value>
+                <value>file:${catalina.base}/conf/appconfig/env/${env}/ru.forxy.fraud.properties</value>
+            </list>
+        </property>
+    </bean>
 
     <import resource="classpath:ru/forxy/fraud/rest-spring-context.xml"/>
+    <import resource="classpath:ru/forxy/fraud/drools-spring-context.xml"/>
     <import resource="classpath:ru/forxy/fraud/impl-spring-context.xml"/>
     <import resource="classpath:ru/forxy/fraud/dao-spring-context.xml"/>
     <import resource="classpath:ru/forxy/fraud/log-spring-context.xml"/>
+
 </beans>

@@ -108,7 +108,7 @@
         </property>
     </bean>
 
-    <bean id="ru.forxy.fraud.db.dao.FraudDAO.cassandra" class="org.springframework.aop.framework.ProxyFactoryBean"
+    <!--<bean id="ru.forxy.fraud.db.dao.FraudDAO.cassandra" class="org.springframework.aop.framework.ProxyFactoryBean"
           p:proxyInterfaces="ru.forxy.fraud.db.dao.IFraudDAO"
           p:target-ref="ru.forxy.fraud.db.dao.FraudDAO.impl.cassandra">
         <property name="interceptorNames">
@@ -116,7 +116,7 @@
                 <idref bean="payment.scoring.performance.dao.loggingInterceptor"/>
             </list>
         </property>
-    </bean>
+    </bean>-->
 
     <!-- ================= IMPLEMENTATION ========================================================================== -->
 

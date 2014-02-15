@@ -57,7 +57,7 @@ public class CurrencyExchangeDAO implements ICurrencyExchangeDAO, InitializingBe
                 currencies.put(pair[1], currency);
                 mongoTemplate.save(currency);
             }
-            if (maxUpdateDate.getTime() > updateDate.getTime()) {
+            if (maxUpdateDate.getTime() < updateDate.getTime()) {
                 maxUpdateDate = updateDate;
             }
         }
@@ -84,7 +84,7 @@ public class CurrencyExchangeDAO implements ICurrencyExchangeDAO, InitializingBe
             Date maxUpdateDate = new Date(0);
             for (Currency currency : currencies) {
                 currencyExchangeRatesToUSD.put(currency.getSymbol(), currency);
-                if (maxUpdateDate.getTime() > currency.getUpdateDate().getTime()) {
+                if (maxUpdateDate.getTime() < currency.getUpdateDate().getTime()) {
                     maxUpdateDate = currency.getUpdateDate();
                 }
             }

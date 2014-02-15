@@ -9,8 +9,7 @@
     <!-- KNOWLEDGE BASE FOR A GIVEN TYPE -->
     <drools:kbase id="productsKBase">
         <drools:resources>
-            <drools:resource type="DRL"
-                             source="classpath:resources/rules/global.drl"/>
+            <drools:resource type="DRL" source="classpath:resources/rules/global.drl"/>
         </drools:resources>
     </drools:kbase>
 

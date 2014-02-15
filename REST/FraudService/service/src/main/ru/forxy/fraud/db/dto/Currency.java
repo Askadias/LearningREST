@@ -1,11 +1,16 @@
 package ru.forxy.fraud.db.dto;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.Date;
 
 /**
  * Currency exchange information
  */
+@Document
 public class Currency {
+    @Id
     private String symbol;
     private Double usdRate;
     private Date updateDate;

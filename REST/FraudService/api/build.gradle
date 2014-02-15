@@ -20,4 +20,7 @@ dependencies {
 
     // --------------------- CXF -----------------------------------------
     compile "org.apache.cxf:cxf-bundle-jaxrs:${rev_cxf}"
+
+    // --------------------- MONGO ---------------------------------------
+    compile "org.springframework.data:spring-data-mongodb:${rev_spring_mongo}"
 }

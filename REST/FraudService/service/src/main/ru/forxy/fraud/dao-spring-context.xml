@@ -73,7 +73,7 @@
     <!-- =========================================================================================
                                    Cassandra Data Source
     ========================================================================================== -->
-    <bean id="cassandraClusterBuilder" class="com.datastax.driver.core.Cluster" factory-method="builder"/>
+    <!--<bean id="cassandraClusterBuilder" class="com.datastax.driver.core.Cluster" factory-method="builder"/>
     <bean id="cassandraClusterBuilder.withHost" factory-bean="cassandraClusterBuilder" factory-method="addContactPoint"
           c:address="localhost"/>
 
@@ -88,6 +88,6 @@
 
     <bean id="ru.forxy.fraud.db.dao.FraudDAO.impl.cassandra" class="ru.forxy.fraud.db.dao.cassandra.FraudDAO"
           autowire-candidate="false"
-          p:cassandraClient-ref="ru.forxy.fraud.db.dao.cassandra.client.CassandraFraudClient"/>
+          p:cassandraClient-ref="ru.forxy.fraud.db.dao.cassandra.client.CassandraFraudClient"/>-->
 
 </beans>

@@ -25,6 +25,7 @@ if (project.hasProperty('env')) {
         from 'appconfig'
         into "$System.env.TOMCAT_HOME/conf/appconfig"
         include '**/*.properties'
+        include '**/*.drl'
         include '**/*.xml'
         exclude '**/*.bat'
         exclude '**/*.sh'
@@ -107,10 +108,11 @@ dependencies {
     compile "org.slf4j:slf4j-api:${rev_slf4j}"
     compile "ch.qos.logback:logback-core:${rev_logback}"
     compile "ch.qos.logback:logback-classic:${rev_logback}"
+    compile "quartz:quartz:${rev_quartz}"
+
 
     // --------------------- MONGO ---------------------------------------
     compile "org.mongodb:mongo-java-driver:${rev_mongo}"
-    compile "org.springframework.data:spring-data-mongodb:${rev_spring_mongo}"
 
     // --------------------- CASSANDRA -----------------------------------
     compile "com.datastax.cassandra:cassandra-driver-core:${rev_cassandra_datastax}"

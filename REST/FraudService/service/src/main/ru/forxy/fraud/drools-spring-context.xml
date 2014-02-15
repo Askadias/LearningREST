@@ -9,8 +9,7 @@
     <!-- KNOWLEDGE BASE FOR A GIVEN TYPE -->
     <drools:kbase id="productsKBase">
         <drools:resources>
-            <drools:resource type="DRL"
-                             source="file:${catalina.base}/conf/appconfig/base/rules/global.drl"/>
+            <drools:resource type="DRL" source="file:${catalina.base}/conf/appconfig/base/rules/global.drl"/>
         </drools:resources>
     </drools:kbase>
 
