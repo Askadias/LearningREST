@@ -1,17 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'war'
 
-sourceSets {
-    main {
-        java { srcDir 'src/main' }
-        resources { srcDir 'src/main' }
-    }
-    test {
-        java { srcDir 'src/test' }
-        resources { srcDir 'src/test' }
-    }
-}
-
 jar { from sourceSets.main.allJava }
 
 // ========= Environment ================================================

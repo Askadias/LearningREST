@@ -8,13 +8,30 @@ import java.util.HashMap;
 import java.lang.Integer;
 import java.lang.Double;
 import org.slf4j.LoggerFactory
+import ru.forxy.fraud.rest.pojo.payment.Amount
+import ru.forxy.fraud.rest.pojo.payment.Payment
 import ru.forxy.fraud.rest.pojo.Transaction
 import ru.forxy.fraud.rest.pojo.product.travel.TravelProduct
 import ru.forxy.fraud.logic.rules.RulesProcessor
+import ru.forxy.fraud.test.logic.rules.RulesProcessorTest
+import ru.forxy.fraud.db.dao.mongo.CurrencyExchangeDAO
 
 import function org.drools.core.util.StringUtils.isEmpty
-import ru.forxy.fraud.logic.rules.RulesProcessor
+import ru.forxy.fraud.test.logic.rules.RulesProcessorTest
 
+rule "USD Value"
+no-loop
+when
+    $usdDAO : CurrencyExchangeDAO()
+    $transaction : Transaction($products : products, $payments : payments)
+    $product : TravelProduct() from $products
+    $payment : Payment() from $payments
+    $price : Amount() from $product.price
+    $amount : Amount() from $payment.amount
+then
+    System.out.println( "Prices:" + $price.value)
+    System.out.println( "Amount:" + $amount.value)
+end
 
 rule "Prive is over 5000"
 no-loop
@@ -23,14 +40,7 @@ when
      $product : TravelProduct ( price.usdValue > 500 ) from $transaction.products
      $attributes : Map () from $transaction.attributes
 then
-     /*modify($attributes) {
-        put("IsPriceOver5000", true)
-     }*/
-     modify($transaction) {
-        getAttributes.put("IsPriceOver5000", true)
-     }
-     //$transaction.attributes.put("IsPriceOver5000", true);
-     LoggerFactory.getLogger(RulesProcessor.class).debug(String.format("Price is over 5000 [%s]", $product.type))
+     $transaction.getAttributes.put("IsPriceOver5000", true)
      System.out.println( "Price is over 5000" + $product)
 end
 
@@ -38,7 +48,7 @@ rule "Print product"
 when
     $transaction : Transaction ( $products : products )
 then
-    LoggerFactory.getLogger(RulesProcessor.class).debug(String.format("Transaction [%s] and and products [%s]", $transaction, $products));
+    LoggerFactory.getLogger(RulesProcessorTest.class).debug(String.format("Transaction [%s] and and products [%s]", $transaction, $products));
     System.out.println( "Transaction ["+ $transaction +"] and and products ["+ $products +"]");
 end
 
