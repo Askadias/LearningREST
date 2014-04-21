@@ -18,7 +18,7 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath*:ru/forxy/user/spring-context.xml</param-value>
+        <param-value>classpath*:spring/spring-context.xml</param-value>
     </context-param>
 
     <!-- CXF -->

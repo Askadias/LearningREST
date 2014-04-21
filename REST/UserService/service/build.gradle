@@ -127,7 +127,3 @@ dependencies {
     testCompile "junit:junit:${rev_junit}"
     testCompile "org.easymock:easymock:${rev_easymock}"
 }
-
-eclipse {
-    project { name = 'ru.forxy.user.service' }
-}

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns='http://www.springframework.org/schema/beans'
+       xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans      http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+       http://www.springframework.org/schema/context    http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="1"
+                                  location="classpath:ru.forxy.user.properties"/>
+
+    <bean id="ru.forxy.common.support.Configuration" class="ru.forxy.common.support.Configuration">
+        <constructor-arg>
+            <map>
+                <entry key="#{T(ru.forxy.common.web.JSONValidationProvider$Configs).IsObjectValidationEnabled}"
+                       value="false"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <import resource="classpath:spring/impl-spring-context.xml"/>
+    <import resource="classpath:spring/log-spring-context.xml"/>
+    <import resource="classpath:spring/dao-spring-test-context.xml"/>
+
+</beans>

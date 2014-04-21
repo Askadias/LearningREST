@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:http="http://cxf.apache.org/transports/http/configuration"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/beans            http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://cxf.apache.org/transports/http/configuration    http://cxf.apache.org/schemas/configuration/http-conf.xsd
+         http://www.springframework.org/schema/context          http://www.springframework.org/schema/context/spring-context.xsd"
+       default-lazy-init="false">
+
+    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="2"
+                                  location="file:${catalina.base}/conf/appconfig/base/ru.forxy.web.properties"/>
+    <context:property-placeholder local-override="true" ignore-resource-not-found="true" order="1"
+                                  location="file:${catalina.base}/conf/appconfig/env/${env}/ru.forxy.web.properties"/>
+
+    <import resource="classpath:spring/client-spring-context.xml"/>
+    <import resource="classpath:webapp/WEB-INF/spring-mvc-servlet.xml"/>
+
+</beans>

@@ -7,8 +7,7 @@ configurations {
 
 sourceSets {
     main {
-        java { srcDirs "src", "$buildDir/build" }
-        resources { srcDir 'src' }
+        java { srcDirs "src/maib/java", "$buildDir/build" }
     }
 }
 
@@ -70,21 +69,4 @@ dependencies {
 
     // --------------------- CXF -----------------------------------------
     compile "org.apache.cxf:cxf-bundle-jaxrs:${rev_cxf}"
-}
-
-eclipse {
-    project {
-        file {
-            whenMerged { project ->
-                project.linkedResources.clear()
-            }
-        }
-    }
-    classpath {
-        file {
-            whenMerged { classpath ->
-                classpath.entries.removeAll { entry -> entry.path.equals('build') }
-            }
-        }
-    }
 }

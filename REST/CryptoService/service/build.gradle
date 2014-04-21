@@ -1,18 +1,4 @@
-apply plugin: 'java'
 apply plugin: 'war'
-
-sourceSets {
-    main {
-        java { srcDir 'src/main' }
-        resources { srcDir 'src/main' }
-    }
-    test {
-        java { srcDir 'src/test' }
-        resources { srcDir 'src/java' }
-    }
-}
-
-jar { from sourceSets.main.allJava }
 
 // ========= Environment ================================================
 
@@ -63,7 +49,7 @@ war {
 task deploy(type: Copy) {
     dependsOn war
     if (project.hasProperty('env')) {
-        dependsOn setupEnv
+        Task.dependsOn setupEnv
     }
     from war
     into "$System.env.TOMCAT_HOME/warfiles"
@@ -110,8 +96,4 @@ dependencies {
 
     // ===================== TEST ========================================
     testCompile "junit:junit:${rev_junit}"
-}
-
-eclipse {
-    project { name = 'ru.forxy.crypto.service' }
 }

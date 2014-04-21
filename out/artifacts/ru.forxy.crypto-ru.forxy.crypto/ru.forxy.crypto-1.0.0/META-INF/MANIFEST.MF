@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Product: ru.forxy.crypto
+Version: 1.0.0
+Built-On: 2014-58-21 22:04:10
+

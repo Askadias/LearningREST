@@ -1,18 +1,3 @@
-apply plugin: 'java'
-
-sourceSets {
-    main {
-        java { srcDir 'src/main' }
-        resources { srcDir 'src/main' }
-    }
-    test {
-        java { srcDir 'src/test' }
-        resources { srcDir 'src/test' }
-    }
-}
-
-jar { from sourceSets.main.allJava }
-
 // ========== Dependencies ==============================================
 
 dependencies {
@@ -20,7 +5,4 @@ dependencies {
     compile project(":ru.forxy.common.soap:ru.forxy.common.soap.api")
     compile project(":ru.forxy.common.utils")
     compile project(":ru.forxy.common.status")
-
-    // ===================== TEST ========================================
-    testCompile "junit:junit:${rev_junit}"
 }

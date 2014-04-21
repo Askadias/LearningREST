@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:http="http://cxf.apache.org/transports/http/configuration"
+       xmlns:sec="http://cxf.apache.org/configuration/security"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/beans            http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://cxf.apache.org/transports/http/configuration    http://cxf.apache.org/schemas/configuration/http-conf.xsd
+         http://cxf.apache.org/configuration/security           http://cxf.apache.org/schemas/configuration/security.xsd
+         http://cxf.apache.org/jaxrs                            http://cxf.apache.org/schemas/jaxrs.xsd
+         http://www.springframework.org/schema/util             http://www.springframework.org/schema/util/spring-util.xsd"
+       default-lazy-init="false">
+
+    <!--<context:property-override location="classpath:appconfig/base/ru.forxy.test.properties"/>
+    <context:property-placeholder location="classpath:appconfig/env/${env}/ru.forxy.test.properties"/>-->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+          p:ignoreResourceNotFound="true"
+          p:nullValue="{null}">
+        <property name="locations">
+            <list>
+                <value>classpath:appconfig/base/ru.forxy.test.properties</value>
+                <value>classpath:appconfig/env/${env}/ru.forxy.test.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <import resource="classpath:META-INF/cxf/cxf.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+
+
+    <!-- =======================================
+          Crypto Service Client Configuration
+         =======================================  -->
+
+    <http:conduit name="{http://crypto.forxy.ru/}ICryptoService.http-conduit">
+        <http:tlsClientParameters>
+            <sec:keyManagers keyPassword="${ru.forxy.crypto.SSLConfig/keyStorePassword}">
+                <sec:keyStore type="${ru.forxy.crypto.SSLConfig/keyStoreType}"
+                              password="${ru.forxy.crypto.SSLConfig/keyStorePassword}"
+                              resource="${ru.forxy.crypto.SSLConfig/keyStoreFile}"/>
+            </sec:keyManagers>
+            <sec:trustManagers>
+                <sec:keyStore type="${ru.forxy.crypto.SSLConfig/trustStoreType}"
+                              password="${ru.forxy.crypto.SSLConfig/trustStorePassword}"
+                              resource="${ru.forxy.crypto.SSLConfig/trustStoreFile}"/>
+            </sec:trustManagers>
+            <sec:cipherSuitesFilter>
+                <sec:include>.*_EXPORT_.*</sec:include>
+                <sec:include>.*_EXPORT1024_.*</sec:include>
+                <sec:include>.*_WITH_DES_.*</sec:include>
+                <sec:include>.*_WITH_AES_.*</sec:include>
+                <sec:include>.*_WITH_NULL_.*</sec:include>
+                <sec:exclude>.*_DH_anon_.*</sec:exclude>
+            </sec:cipherSuitesFilter>
+        </http:tlsClientParameters>
+        <http:client AutoRedirect="true" Connection="Keep-Alive"/>
+    </http:conduit>
+
+    <jaxrs:client id="cryptoServiceClient"
+                  serviceClass="ru.forxy.crypto.ICryptoService"
+                  address="${ru.forxy.crypto.ICryptoService/url}"/>
+
+
+    <!-- =======================================
+          JSON Configuration
+         ======================================= -->
+
+    <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+
+    <util:list id="jsonProviders">
+        <ref bean="jsonProvider"/>
+    </util:list>
+
+
+    <!-- =======================================
+           User Service Client Configuration
+         ======================================= -->
+
+    <bean id="userServiceStressTestConfig" class="ru.forxy.common.support.Configuration">
+        <constructor-arg name="settings">
+            <map>
+                <entry key="#{T(ru.forxy.stress.UserServiceStressTest$Config).ThreadsCount}"
+                       value="${ru.forxy.StressTest/threads}"/>
+                <entry key="#{T(ru.forxy.stress.UserServiceStressTest$Config).IterationsCount}"
+                       value="${ru.forxy.StressTest/iterations}"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="userServiceClient" class="org.apache.cxf.jaxrs.client.JAXRSClientFactory"
+          factory-method="create" scope="prototype"
+          c:baseAddress="${ru.forxy.user.rest.IUserService/url}"
+          c:cls="ru.forxy.user.rest.IUserService"
+          c:providers-ref="jsonProviders"/>
+
+    <bean id="userServiceConnectionPool" class="org.springframework.aop.target.CommonsPoolTargetSource"
+          p:targetBeanName="userServiceClient"
+          p:maxSize="${ru.forxy.user.rest.IUserService/threads}"
+          p:maxWait="0"
+          p:whenExhaustedActionName="WHEN_EXHAUSTED_GROW"/>
+
+    <bean id="userService" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:targetSource-ref="userServiceConnectionPool"
+          p:proxyInterfaces="ru.forxy.user.rest.IUserService"/>
+
+
+    <bean id="userSystemStatusClient" class="org.apache.cxf.jaxrs.client.JAXRSClientFactory"
+          factory-method="create" scope="prototype"
+          c:baseAddress="${ru.forxy.user.rest.IUserService/url}"
+          c:cls="ru.forxy.common.service.ISystemStatusService"
+          c:providers-ref="jsonProviders"/>
+
+    <bean id="userSystemStatusConnectionPool" class="org.springframework.aop.target.CommonsPoolTargetSource"
+          p:targetBeanName="userSystemStatusClient"
+          p:maxSize="${ru.forxy.user.rest.IUserService/threads}"
+          p:maxWait="0"
+          p:whenExhaustedActionName="WHEN_EXHAUSTED_GROW"/>
+
+    <bean id="userSystemStatus" class="org.springframework.aop.framework.ProxyFactoryBean"
+          p:targetSource-ref="userSystemStatusConnectionPool"
+          p:proxyInterfaces="ru.forxy.common.service.ISystemStatusService"/>
+
+
+    <!-- =======================================
+           Photo Service Client Configuration
+         ======================================= -->
+
+    <jaxrs:client id="photoServiceClient"
+                  serviceClass="ru.forxy.photo.IPhotoService"
+                  address="${ru.forxy.photo.IPhotoService/url}">
+        <jaxrs:providers>
+            <ref bean="jsonProvider"/>
+        </jaxrs:providers>
+        <jaxrs:headers>
+            <entry key="Accept" value="application/json"/>
+        </jaxrs:headers>
+    </jaxrs:client>
+
+</beans>

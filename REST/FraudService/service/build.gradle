@@ -1,7 +1,4 @@
-apply plugin: 'java'
 apply plugin: 'war'
-
-jar { from sourceSets.main.allJava }
 
 // ========= Environment ================================================
 
@@ -52,7 +49,7 @@ war {
 task deploy(type: Copy) {
     dependsOn war
     if (project.hasProperty('env')) {
-        dependsOn setupEnv
+        Task.dependsOn setupEnv
     }
     from war
     into "$System.env.TOMCAT_HOME/warfiles"
@@ -127,8 +124,4 @@ dependencies {
     testCompile "org.springframework:spring-test:${rev_spring}"
     testCompile "junit:junit:${rev_junit}"
     testCompile "org.easymock:easymock:${rev_easymock}"
-}
-
-eclipse {
-    project { name = 'ru.forxy.fraud.service' }
 }

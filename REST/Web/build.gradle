@@ -1,20 +1,8 @@
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'war'
-apply plugin: 'eclipse'
 
 group = "forxy"
-
-sourceSets {
-    main {
-        java { srcDir 'src/main' }
-        resources { srcDir 'src/main' }
-    }
-    test {
-        java { srcDir 'src/test' }
-        resources { srcDir 'src/test' }
-    }
-}
 
 jar { from sourceSets.main.allJava }
 
@@ -24,21 +12,9 @@ if (System.env.OUTPUT_ROOT) {
 
 repositories {
     mavenCentral()
-    ivy {
-        url "file://$System.env.OUTPUT_ROOT/deliverables/"
-        layout "pattern", {
-            artifact "[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"
-            m2compatible = true
-        }
-    }
+    ivy { url "file://$System.env.OUTPUT_ROOT/deliverables/" }
 
-    uploadArchives {
-        repositories {
-            ivy {
-                url "file://$System.env.OUTPUT_ROOT/deliverables/"
-            }
-        }
-    }
+    uploadArchives { repositories { ivy { url "file://$System.env.OUTPUT_ROOT/deliverables/" } } }
 }
 
 // ========= Environment ================================================
@@ -123,7 +99,7 @@ dependencies {
     compile "forxy:ru.forxy.crypto.api:${rev_forxy_crypto}"
     compile "forxy:ru.forxy.user.api:${rev_forxy_user}"
     compile "forxy:ru.forxy.photo.api:${rev_forxy_photo}"
-    compile "forxy:ru.forxy.common.support:${rev_forxy_common}"
+    //compile "forxy:ru.forxy.common.support:${rev_forxy_common}"
 
     // --------------------- COMMON --------------------------------------
     compile "commons-collections:commons-collections:${rev_common_collections}"

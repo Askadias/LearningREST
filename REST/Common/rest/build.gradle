@@ -1,18 +1,3 @@
-apply plugin: 'java'
-
-sourceSets {
-    main {
-        java { srcDir 'src/main' }
-        resources { srcDir 'src/main' }
-    }
-    test {
-        java { srcDir 'src/test' }
-        resources { srcDir 'src/test' }
-    }
-}
-
-jar { from sourceSets.main.allJava }
-
 // ========== Dependencies ==============================================
 
 dependencies {
@@ -23,7 +8,4 @@ dependencies {
 
     // --------------------- OBJECT VALIDATION ---------------------------
     compile "net.sf.oval:oval:${rev_oval}"
-
-    // ===================== TEST ========================================
-    testCompile "junit:junit:${rev_junit}"
 }
