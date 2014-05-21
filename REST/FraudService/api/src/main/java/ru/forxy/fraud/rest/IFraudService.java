@@ -32,5 +32,5 @@ public interface IFraudService {
 	
 	@GET
 	@Path("/transaction/{id}/")
-	Response getTransaction(Long id, final UriInfo uriInfo, final HttpHeaders headers);
+	Response getTransaction(@PathParam("id") Long id, final UriInfo uriInfo, final HttpHeaders headers);
 }

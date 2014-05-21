@@ -1,5 +1,3 @@
-apply plugin: 'java'
-
 configurations {
     xsd
     wsimport
@@ -7,15 +5,14 @@ configurations {
 
 sourceSets {
     main {
-        java { srcDirs "src/maib/java", "$buildDir/build" }
+        java { srcDirs "src/main/java" }
     }
 }
-
-jar { from sourceSets.main.allJava }
 
 task wsimport(type: Copy) {
     ext.wsimportTargetDir = file("$buildDir/build")
     ext.wsimportDir = file("$buildDir/build/wsdl")
+    outputs.dir file("$buildDir/build")
 
     from(configurations.xsd) {
         include '*.wsdl'
@@ -42,8 +39,11 @@ task wsimport(type: Copy) {
     }
 }
 
-
 compileJava.dependsOn(wsimport)
+
+compileJava.source wsimport.outputs.files, sourceSets.main.java
+
+jar { from sourceSets.main.allJava, files("$buildDir/build") }
 
 artifacts {
     'default' file: file('src/wsdl/v1/ru.forxy.user.interface.v1.wsdl'), name: 'ru.forxy.user.interface.v1', type: 'wsdl'

@@ -1,65 +1,25 @@
-apply plugin: 'java'
-apply plugin: 'war'
-
-sourceSets {
-    main {
-        java { srcDir 'src/main' }
-        resources { srcDir 'src/main' }
+buildscript {
+    repositories {
+        maven {
+            url uri("file://$System.env.OUTPUT_ROOT/deliverables/")
+        }
     }
-    test {
-        java { srcDir 'src/test' }
-        resources { srcDir 'src/test' }
+    dependencies {
+        classpath "forxy:ru.forxy.common.deploy:$rev_forxy_common"
     }
 }
 
-jar { from sourceSets.main.allJava }
-
-// ========= Environment ================================================
-
-import org.apache.tools.ant.filters.ReplaceTokens
-
-if (project.hasProperty('env')) {
-    def env = project.getProperty("env")
-
-    task copyEnvConfigApp(type: Copy) {
-        from 'appconfig'
-        into "$System.env.TOMCAT_HOME/conf/appconfig"
-        include '**/*.properties'
-        include '**/*.xml'
-        exclude '**/*.bat'
-        exclude '**/*.sh'
-    }
-
-    task copyEnvConfigTomcat(type: Copy) {
-        from "appconfig/env/$env"
-        into "$System.env.TOMCAT_HOME/bin"
-        include '**/*.bat'
-        include '**/*.sh'
-    }
-
-    task copyWebContextConfig(type: Copy) {
-        from "appconfig/UserService.xml"
-        into "$System.env.TOMCAT_HOME/conf/Catalina/localhost"
-        filter(ReplaceTokens, tokens: [war: war.archiveName])
-    }
-
-    task setupEnv {
-        dependsOn copyEnvConfigApp, copyEnvConfigTomcat, copyWebContextConfig
-    }
-}
+//apply plugin: 'war'
+apply plugin: 'deploy'
 
 // ========== Deploy ====================================================
-war {
-    manifest {
-        attributes(
-                'Product': rootProject.name,
-                'Version': version,
-                'Built-On': new Date().format('yyyy-mm-dd HH:MM:ss')
-        )
-    }
+
+deploy {
+    serviceName = 'UserService'
+    basePort = 10000
 }
 
-task deploy(type: Copy) {
+task copyWar(type: Copy) {
     dependsOn war
     if (project.hasProperty('env')) {
         dependsOn setupEnv
@@ -77,13 +37,6 @@ task cleanTomcat(type: Delete) {
                 "conf/appconfig/**/ru.forxy.user*.properties"
     }
     delete tree
-}
-
-// ========== Tests =====================================================
-
-test {
-    reports.html.enabled = true
-    maxParallelForks = 8
 }
 
 // ========== Dependencies ==============================================

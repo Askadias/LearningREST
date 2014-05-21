@@ -38,26 +38,17 @@ public class UserServiceImplTest extends BaseUserServiceTest {
     IUserService userService;
 
     @Autowired
-    @Qualifier("ru.forxy.user.db.dao.UserDAO.mongo")
+    @Qualifier("ru.forxy.user.db.dao.UserDAO.impl.mongo")
     IUserDAO userDAOMock;
 
     @Test
     public void testAddDeleteUser() {
-        User testUser = new User(TEST_USER_EMAIL, new byte[]{});
         Message m = new MessageImpl();
         UriInfo uriInfo = new UriInfoImpl(m);
         HttpHeaders headers = new HttpHeadersImpl(m);
 
-        // Mock setup
-        EasyMock.expect(userDAOMock.exists(TEST_USER_EMAIL)).andReturn(false);
-        EasyMock.expect(userDAOMock.save(testUser)).andReturn(testUser);
-        EasyMock.expect(userDAOMock.findOne(TEST_USER_EMAIL)).andReturn(testUser);
-        EasyMock.expect(userDAOMock.exists(TEST_USER_EMAIL)).andReturn(true);
-        EasyMock.expect(userDAOMock.findOne(TEST_USER_EMAIL)).andReturn(null);
-        EasyMock.replay(userDAOMock);
+        User testUser = addUser(uriInfo, headers);
 
-        // Create user
-        userService.createUser(testUser, uriInfo, headers);
         // Login user
         Response response = userService.login(testUser, uriInfo, headers);
         Assert.assertNotNull(response);
@@ -66,7 +57,7 @@ public class UserServiceImplTest extends BaseUserServiceTest {
         Assert.assertEquals(TEST_USER_EMAIL, user.getEmail());
 
         // Remove user
-        userService.deleteUser(testUser.getEmail(), uriInfo, headers);
+        deleteUser(testUser, uriInfo, headers);
 
         // Check user has been removed
         try {
@@ -79,11 +70,35 @@ public class UserServiceImplTest extends BaseUserServiceTest {
         }
     }
 
+    private User addUser(UriInfo uriInfo, HttpHeaders headers) {
+        User testUser = new User(TEST_USER_EMAIL, new byte[]{});
+
+        // Mock setup
+        EasyMock.expect(userDAOMock.exists(TEST_USER_EMAIL)).andReturn(false);
+        EasyMock.expect(userDAOMock.save(testUser)).andReturn(testUser);
+        EasyMock.expect(userDAOMock.findOne(TEST_USER_EMAIL)).andReturn(testUser);
+        EasyMock.expect(userDAOMock.exists(TEST_USER_EMAIL)).andReturn(true);
+        EasyMock.expect(userDAOMock.findOne(TEST_USER_EMAIL)).andReturn(null);
+        EasyMock.replay(userDAOMock);
+
+        // Create user
+        userService.createUser(testUser, uriInfo, headers);
+        return testUser;
+    }
+
+    private void deleteUser(User user, UriInfo uriInfo, HttpHeaders headers) {
+        // Remove user
+        userService.deleteUser(user.getEmail(), uriInfo, headers);
+    }
+
     @Test
     public void testGetAllUsers() {
         Message m = new MessageImpl();
         UriInfo uriInfo = new UriInfoImpl(m);
         HttpHeaders headers = new HttpHeadersImpl(m);
+
+        //User testUser = addUser(uriInfo, headers);
+
         List<User> users = new ArrayList<User>();
         users.add(new User(TEST_USER_EMAIL, null));
         EasyMock.expect(userDAOMock.findAll(EasyMock.anyObject(Pageable.class))).andReturn(new PageImpl<User>(users));
@@ -95,5 +110,7 @@ public class UserServiceImplTest extends BaseUserServiceTest {
 
         EntityPage<User> userPage = response.readEntity(new GenericType<EntityPage<User>>() {});
         Assert.assertTrue(CollectionUtils.isNotEmpty(userPage.getContent()));
+
+        //deleteUser(testUser, uriInfo, headers);
     }
 }
