@@ -9,7 +9,6 @@ buildscript {
     }
 }
 
-//apply plugin: 'war'
 apply plugin: 'deploy'
 
 // ========== Deploy ====================================================
@@ -17,26 +16,6 @@ apply plugin: 'deploy'
 deploy {
     serviceName = 'UserService'
     basePort = 10000
-}
-
-task copyWar(type: Copy) {
-    dependsOn war
-    if (project.hasProperty('env')) {
-        dependsOn setupEnv
-    }
-    from war
-    into "$System.env.TOMCAT_HOME/warfiles"
-}
-
-// ========== Clean Deployment Configuration ============================
-
-task cleanTomcat(type: Delete) {
-    FileTree tree = fileTree("$System.env.TOMCAT_HOME") {
-        include "conf/Catalina/localhost/UserService.xml",
-                "warfiles/ru.forxy.user*.war",
-                "conf/appconfig/**/ru.forxy.user*.properties"
-    }
-    delete tree
 }
 
 // ========== Dependencies ==============================================

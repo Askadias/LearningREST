@@ -2,10 +2,8 @@ package ru.forxy.common.deploy.extension
 
 class DeployExtension {
     def String tomcatHome = System.env.TOMCAT_HOME
-    def String appconfigSrc = "appconfig"
-    def String appconfigDir = "$System.env.TOMCAT_HOME/conf/appconfig"
+    def String appconfigDir = "appconfig"
     def String env = "dev"
-    def String contextName
     def String host = 'localhost'
     def String serviceName = 'Catalina'
     def Boolean reloadableWar = true

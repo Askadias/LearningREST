@@ -42,7 +42,7 @@
     <!-- =========================================================================================
                                    Cassandra Data Source
     ========================================================================================== -->
-    <bean id="cassandraClusterBuilder" class="com.datastax.driver.core.Cluster" factory-method="builder"/>
+    <!--<bean id="cassandraClusterBuilder" class="com.datastax.driver.core.Cluster" factory-method="builder"/>
     <bean id="cassandraClusterBuilder.withHost" factory-bean="cassandraClusterBuilder" factory-method="addContactPoint"
           c:address="localhost"/>
 
@@ -57,6 +57,6 @@
 
     <bean id="ru.forxy.user.db.dao.UserDAO.impl.cassandra" class="ru.forxy.user.db.dao.cassandra.UserDAO"
           autowire-candidate="false"
-          p:cassandraClient-ref="ru.forxy.user.db.dao.cassandra.client.CassandraUserClient"/>
+          p:cassandraClient-ref="ru.forxy.user.db.dao.cassandra.client.CassandraUserClient"/>-->
 
 </beans>

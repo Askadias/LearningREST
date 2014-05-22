@@ -8,7 +8,6 @@ class CreateWebContextTask extends DefaultTask {
 
     def String tomcatHome = System.env.TOMCAT_HOME
     def String serviceName = 'Catalina'
-    def String contextName = project.name
     def String host = 'localhost'
     def String warFileName = project.name
     def Boolean reloadable = true
@@ -16,7 +15,7 @@ class CreateWebContextTask extends DefaultTask {
     @TaskAction
     void createWebContextFile() {
         def contextDir = new File("$tomcatHome/conf/${serviceName}/${host}")
-        def contextXml = new File("$contextDir.path/${contextName}.xml")
+        def contextXml = new File("$contextDir.path/${serviceName}.xml")
         contextDir.mkdirs()
         contextXml.createNewFile()
         def mb = new MarkupBuilder(contextXml.newPrintWriter())

@@ -2,6 +2,7 @@ package ru.forxy.common.deploy
 
 import org.gradle.api.Project
 import org.gradle.api.tasks.Copy
+import org.gradle.api.tasks.Delete
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Ignore
 import org.junit.Test
@@ -22,6 +23,7 @@ class DeployPluginTest {
         Project project = ProjectBuilder.builder().build()
         project.apply plugin: 'war'
         project.apply plugin: 'deploy'
+        project.deploy.serviceName = 'Test'
 
         assertNotNull(project.deploy.serviceName)
         assertTrue(project.tasks.copyEnvConfigApp instanceof Copy)
@@ -29,15 +31,6 @@ class DeployPluginTest {
         assertTrue(project.tasks.createWebContext instanceof CreateWebContextTask)
         assertTrue(project.tasks.updateServerXml instanceof UpdateServerXmlTask)
         assertTrue(project.tasks.deploy instanceof Copy)
-    }
-
-    @Ignore
-    @Test
-    public void deployPluginNoWar() {
-        Project project = ProjectBuilder.builder().build()
-        project.apply plugin: 'deploy'
-
-        assertNotNull(project.deploy.serviceName)
-        assertNull(project.tasks.findByName('deploy'))
+        assertTrue(project.tasks.cleanDeploy instanceof Delete)
     }
 }

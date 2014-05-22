@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-Product: ru.forxy.web
-Version: 1.0.0
-Built-On: 2014-19-20 19:05:00
-

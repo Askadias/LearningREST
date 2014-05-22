@@ -14,22 +14,37 @@ class UpdateServerXmlTest {
 
     @Test
     public void testUpdateServerConfigFile() {
-        println TOMCAT_HOME
         Project project = ProjectBuilder.builder().build()
-        def UpdateServerXmlTask task = project.task('updateServerXml', type: UpdateServerXmlTask) as UpdateServerXmlTask
-        assertTrue(task instanceof UpdateServerXmlTask)
+        def UpdateServerXmlTask taskAdd = project.task('updateServerXml', type: UpdateServerXmlTask) as UpdateServerXmlTask
+        assertTrue(taskAdd instanceof UpdateServerXmlTask)
 
-        // configure test task
-        task.tomcatHome = TOMCAT_HOME
-        task.useSSL = true
-        task.basePort = 8000
-        task.serviceName = SERVICE_NAME
-        task.updateServerConfigFile()
+        // configure test add service task
+        configureUpdateTask(taskAdd)
+        taskAdd.updateServerConfigFile()
 
         def server = new XmlParser().parse("$TOMCAT_HOME/conf/server.xml");
         def serviceNode = server.Service.find{it.@name == SERVICE_NAME}
         assertNotNull(serviceNode)
         assertEquals(SERVICE_NAME, serviceNode.@name)
         assertEquals('8080', serviceNode.Connector[0].@port)
+
+
+        // now remove service from server.xml
+        def UpdateServerXmlTask taskRemove = project.task('removeServiceFromServerXml', type: RemoveServiceFromServerXmlTask) as RemoveServiceFromServerXmlTask
+        assertTrue(taskRemove instanceof RemoveServiceFromServerXmlTask)
+        // configure test remove service task
+        configureUpdateTask(taskRemove)
+        taskRemove.updateServerConfigFile()
+
+        server = new XmlParser().parse("$TOMCAT_HOME/conf/server.xml");
+        serviceNode = server.Service.find{it.@name == SERVICE_NAME}
+        assertNull(serviceNode)
+    }
+
+    private static void configureUpdateTask(UpdateServerXmlTask task) {
+        task.tomcatHome = TOMCAT_HOME
+        task.useSSL = true
+        task.basePort = 8000
+        task.serviceName = SERVICE_NAME
     }
 }

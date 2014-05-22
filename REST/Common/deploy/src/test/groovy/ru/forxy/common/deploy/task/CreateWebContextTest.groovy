@@ -22,7 +22,6 @@ class CreateWebContextTest {
 
         // configure test task
         task.tomcatHome = TOMCAT_HOME
-        task.contextName = SERVICE_NAME
         task.serviceName = SERVICE_NAME
         task.createWebContextFile()
 

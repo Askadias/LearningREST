@@ -23,7 +23,7 @@
             <list>
                 <bean class="net.sf.oval.configuration.xml.XMLConfigurer">
                     <constructor-arg type="java.io.InputStream"
-                                     value="file:${catalina.base}/conf/appconfig/base/ru.forxy.user.validation.xml"/>
+                                     value="file:${catalina.base}/conf/UserService/appconfig/base/ru.forxy.user.validation.xml"/>
                 </bean>
             </list>
         </constructor-arg>

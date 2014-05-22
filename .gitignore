@@ -220,6 +220,7 @@ pip-log.txt
 *.eml
 *.iml
 .idea/
+out/
 
 #############
 ## Gradle
@@ -230,4 +231,4 @@ pip-log.txt
 #############
 ## Java
 #############
-.class
+*.class
