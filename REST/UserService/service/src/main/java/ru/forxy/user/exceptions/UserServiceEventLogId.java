@@ -9,21 +9,21 @@ public enum UserServiceEventLogId implements EventLogBase {
     // -------------------------------------------------------------------
     // Business events
     // -------------------------------------------------------------------
-    UserNotFound(LoggingCommonEventLogId.BASE_EVENT_LOG_ID, 500,
+    UserNotFound(UserServiceEventLogId.BASE_EVENT_LOG_ID, 400,
             "User with email '%1$s' is not found.",
-            EventType.InternalError),
+            EventType.InvalidInput),
 
-    UserAlreadyExists(LoggingCommonEventLogId.BASE_EVENT_LOG_ID + 1, 500,
+    UserAlreadyExists(UserServiceEventLogId.BASE_EVENT_LOG_ID + 1, 400,
             "User with email '%1$s' already exists.",
-            EventType.InternalError),
+            EventType.InvalidInput),
 
-    EmailIsNullOrEmpty(LoggingCommonEventLogId.BASE_EVENT_LOG_ID + 2, 500,
+    EmailIsNullOrEmpty(UserServiceEventLogId.BASE_EVENT_LOG_ID + 2, 400,
             "Requested user's email shouldn't be null or empty.",
-            EventType.InternalError),
+            EventType.InvalidInput),
 
-    EmptyLoginEmailOrPassword(LoggingCommonEventLogId.BASE_EVENT_LOG_ID + 100, 500,
+    EmptyLoginEmailOrPassword(UserServiceEventLogId.BASE_EVENT_LOG_ID + 100, 400,
             "To login user's email and password should present.",
-            EventType.InternalError),
+            EventType.InvalidInput),
 
     // -------------------------------------------------------------------
     // DB events
@@ -32,7 +32,7 @@ public enum UserServiceEventLogId implements EventLogBase {
             "Cannot retrieve cassandra connection.",
             EventType.InternalError);
 
-    public static final int BASE_EVENT_LOG_ID = 10000;
+    private static final int BASE_EVENT_LOG_ID = 10000;
 
     private Level m_logLevel;
     private String m_formatString;

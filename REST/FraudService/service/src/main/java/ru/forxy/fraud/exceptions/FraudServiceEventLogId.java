@@ -9,25 +9,15 @@ public enum FraudServiceEventLogId implements EventLogBase {
     // -------------------------------------------------------------------
     // Business events
     // -------------------------------------------------------------------
-    IDSouldNotBeNull(LoggingCommonEventLogId.BASE_EVENT_LOG_ID, 500,
+    IDSouldNotBeNull(FraudServiceEventLogId.BASE_EVENT_LOG_ID, 400,
             "Transaction id sould not be null.",
-            EventType.InternalError),
+            EventType.InvalidInput),
 
-    TransactionNotFound(LoggingCommonEventLogId.BASE_EVENT_LOG_ID + 1, 500,
+    TransactionNotFound(FraudServiceEventLogId.BASE_EVENT_LOG_ID + 1, 400,
             "Transaction with id %1$l is not found.",
-            EventType.InternalError),
+            EventType.InvalidInput);
 
-    EmptyLoginEmailOrPassword(LoggingCommonEventLogId.BASE_EVENT_LOG_ID + 100, 500,
-            "To login user's email and password should present.",
-            EventType.InternalError),
-
-    // -------------------------------------------------------------------
-    // DB events
-    // -------------------------------------------------------------------
-    CannotRetrieveCassandraSession(LoggingCommonEventLogId.BASE_EVENT_LOG_ID + 2, 500,
-            "Cannot retrieve cassandra connection.", EventType.InternalError);
-
-    public static final int BASE_EVENT_LOG_ID = 10000;
+    public static final int BASE_EVENT_LOG_ID = 20000;
 
     private Level m_logLevel;
     private String m_formatString;
