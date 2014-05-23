@@ -3,6 +3,7 @@
 dependencies {
     // --------------------- PROJECTS ------------------------------------
     compile project(":ru.forxy.common.utils")
+    compile project(":ru.forxy.common.exceptions")
 
     // --------------------- SERVLET -------------------------------------
     compile "javax.servlet:servlet-api:${rev_servlet_api}"

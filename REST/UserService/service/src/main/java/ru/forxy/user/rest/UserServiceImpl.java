@@ -6,7 +6,7 @@ import ru.forxy.common.exceptions.ValidationException;
 import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.common.rest.AbstractService;
 import ru.forxy.common.support.Constants;
-import ru.forxy.user.exceptions.UserServiceExceptions;
+import ru.forxy.user.exceptions.UserServiceEventLogId;
 import ru.forxy.user.logic.IUserServiceFacade;
 import ru.forxy.user.rest.pojo.User;
 
@@ -39,7 +39,7 @@ public class UserServiceImpl extends AbstractService implements IUserService {
         validateEmail(requestedUser.getEmail());
         User user = userServiceFacade.getUser(requestedUser);
         if (user == null) {
-            throw new ServiceException(UserServiceExceptions.UserNotFound.getStatusTemplate(),
+            throw new ServiceException(UserServiceEventLogId.UserNotFound,
                     requestedUser.getEmail());
         }
         return respondWith(user, uriInfo, headers).build();

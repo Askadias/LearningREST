@@ -1,7 +1,6 @@
 package ru.forxy.common.logging.exceptions;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
-import ru.forxy.common.exceptions.CommonExceptions;
 import ru.forxy.common.exceptions.ServiceException;
 import ru.forxy.common.logging.support.IExceptionHandler;
 
@@ -22,12 +21,12 @@ public class DatabaseExceptionHandler implements IExceptionHandler {
         //noinspection ThrowableResultOfMethodCallIgnored
         Throwable cause = ExceptionUtils.getRootCause(t);
         if (cause instanceof ConnectException) {
-            throw new ServiceException(CommonExceptions.DatabaseIsNotAvailable.getStatusTemplate(), host,
+            throw new ServiceException(LoggingCommonEventLogId.DatabaseIsNotAvailable, host,
                     cause.getMessage());
         } else if (cause instanceof SocketTimeoutException) {
-            throw new ServiceException(CommonExceptions.DatabaseTimeout.getStatusTemplate(), host, cause.getMessage());
+            throw new ServiceException(LoggingCommonEventLogId.DatabaseTimeout, host, cause.getMessage());
         } else {
-            throw new ServiceException(CommonExceptions.UnknownDataBaseException.getStatusTemplate(),
+            throw new ServiceException(LoggingCommonEventLogId.UnknownDataBaseException,
                     cause != null ? cause.getMessage() : t != null ? t.getMessage() : "N/A");
         }
     }

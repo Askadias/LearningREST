@@ -1,7 +1,6 @@
 package ru.forxy.common.logging.exceptions;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
-import ru.forxy.common.exceptions.CommonExceptions;
 import ru.forxy.common.exceptions.ServiceException;
 import ru.forxy.common.logging.support.IExceptionHandler;
 
@@ -22,12 +21,11 @@ public class ServiceExceptionHandler implements IExceptionHandler {
         //noinspection ThrowableResultOfMethodCallIgnored
         Throwable cause = ExceptionUtils.getRootCause(t);
         if (cause instanceof ConnectException) {
-            throw new ServiceException(CommonExceptions.ServiceIsNotAvailable.getStatusTemplate(), host,
-                    cause.getMessage());
+            throw new ServiceException(LoggingCommonEventLogId.ServiceIsNotAvailable, host, cause.getMessage());
         } else if (cause instanceof SocketTimeoutException) {
-            throw new ServiceException(CommonExceptions.ServiceTimeout.getStatusTemplate(), host, cause.getMessage());
+            throw new ServiceException(LoggingCommonEventLogId.ServiceTimeout, host, cause.getMessage());
         } else {
-            throw new ServiceException(CommonExceptions.UnknownServiceException.getStatusTemplate(),
+            throw new ServiceException(LoggingCommonEventLogId.UnknownServiceException,
                     cause != null ? cause.getMessage() : t != null ? t.getMessage() : "N/A");
         }
     }

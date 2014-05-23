@@ -4,6 +4,7 @@ def projects = [
         ':deploy': [name: "ru.forxy.common.deploy", path: 'deploy'],
         ':concurrent': [name: "ru.forxy.common.concurrent", path: 'concurrent'],
         ':logging': [name: "ru.forxy.common.logging", path: 'logging'],
+        ':exceptions': [name: "ru.forxy.common.exceptions", path: 'exceptions'],
         ':status': [name: "ru.forxy.common.status", path: 'status'],
         ':utils': [name: "ru.forxy.common.utils", path: 'utils'],
         ':rest': [name: "ru.forxy.common.rest", path: 'rest'],

@@ -3,7 +3,7 @@ package ru.forxy.fraud.rest;
 import ru.forxy.common.exceptions.ServiceException;
 import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.common.rest.AbstractService;
-import ru.forxy.fraud.exceptions.FraudServiceExceptions;
+import ru.forxy.fraud.exceptions.FraudServiceEventLogId;
 import ru.forxy.fraud.logic.IFraudServiceFacade;
 import ru.forxy.fraud.rest.pojo.Transaction;
 
@@ -36,7 +36,7 @@ public class FraudServiceImpl extends AbstractService implements IFraudService {
     public Response getTransaction(Long id, final UriInfo uriInfo, final HttpHeaders headers) {
         Transaction transaction = fraudServiceFacade.getTransaction(id);
         if (transaction == null) {
-            throw new ServiceException(FraudServiceExceptions.TransactionNotFound.getStatusTemplate(), id);
+            throw new ServiceException(FraudServiceEventLogId.TransactionNotFound, id);
         }
         return respondWith(transaction, uriInfo, headers).build();
     }

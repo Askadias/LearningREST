@@ -13,6 +13,9 @@ public class ResponseStatusMapper implements ExceptionMapper<ServiceException> {
 
     @Override
     public Response toResponse(final ServiceException e) {
-        return ResponseBuilder.build(Response.Status.INTERNAL_SERVER_ERROR, e.getStatusCode(), e.getMessage());
+        return ResponseBuilder.build(
+                Response.Status.INTERNAL_SERVER_ERROR,
+                String.valueOf(e.getStatusCode()),
+                e.getMessage());
     }
 }

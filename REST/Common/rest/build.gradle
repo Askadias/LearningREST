@@ -5,6 +5,7 @@ dependencies {
     compile project(":ru.forxy.common.rest:ru.forxy.common.rest.api")
     compile project(":ru.forxy.common.utils")
     compile project(":ru.forxy.common.status")
+    compile project(":ru.forxy.common.exceptions")
 
     // --------------------- OBJECT VALIDATION ---------------------------
     compile "net.sf.oval:oval:${rev_oval}"

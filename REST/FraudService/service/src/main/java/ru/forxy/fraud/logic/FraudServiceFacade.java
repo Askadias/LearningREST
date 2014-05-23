@@ -5,7 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import ru.forxy.common.exceptions.ServiceException;
 import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.fraud.db.dao.IFraudDAO;
-import ru.forxy.fraud.exceptions.FraudServiceExceptions;
+import ru.forxy.fraud.exceptions.FraudServiceEventLogId;
 import ru.forxy.fraud.rest.pojo.Transaction;
 
 /**
@@ -28,7 +28,7 @@ public class FraudServiceFacade implements IFraudServiceFacade {
         if (id != null) {
             return fraudDAO.findOne(id);
         }
-        throw new ServiceException(FraudServiceExceptions.IDSouldNotBeNull.getStatusTemplate());
+        throw new ServiceException(FraudServiceEventLogId.IDSouldNotBeNull);
     }
 
     @Override

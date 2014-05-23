@@ -5,7 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import ru.forxy.common.exceptions.ServiceException;
 import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.user.db.dao.IUserDAO;
-import ru.forxy.user.exceptions.UserServiceExceptions;
+import ru.forxy.user.exceptions.UserServiceEventLogId;
 import ru.forxy.user.rest.pojo.User;
 
 /**
@@ -33,7 +33,7 @@ public class UserServiceFacade implements IUserServiceFacade {
         if (user != null && user.getEmail() != null) {
             return userDAO.findOne(user.getEmail());
         }
-        throw new ServiceException(UserServiceExceptions.EmailIsNullOrEmpty.getStatusTemplate());
+        throw new ServiceException(UserServiceEventLogId.EmailIsNullOrEmpty);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class UserServiceFacade implements IUserServiceFacade {
             userDAO.save(user);
             return user;
         } else {
-            throw new ServiceException(UserServiceExceptions.EmptyLoginEmailOrPassword.getStatusTemplate());
+            throw new ServiceException(UserServiceEventLogId.EmptyLoginEmailOrPassword);
         }
     }
 
@@ -53,11 +53,11 @@ public class UserServiceFacade implements IUserServiceFacade {
                 userDAO.save(user);
                 return user;
             } else {
-                throw new ServiceException(UserServiceExceptions.UserAlreadyExists.getStatusTemplate(),
+                throw new ServiceException(UserServiceEventLogId.UserAlreadyExists,
                         user.getEmail());
             }
         } else {
-            throw new ServiceException(UserServiceExceptions.EmailIsNullOrEmpty.getStatusTemplate());
+            throw new ServiceException(UserServiceEventLogId.EmailIsNullOrEmpty);
         }
     }
 
@@ -66,7 +66,7 @@ public class UserServiceFacade implements IUserServiceFacade {
         if (userDAO.exists(email)) {
             userDAO.delete(email);
         } else {
-            throw new ServiceException(UserServiceExceptions.UserNotFound.getStatusTemplate(), email);
+            throw new ServiceException(UserServiceEventLogId.UserNotFound, email);
         }
     }
 

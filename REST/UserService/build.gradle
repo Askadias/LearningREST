@@ -1,8 +1,8 @@
-allprojects {
-    apply plugin: "maven"
-    apply plugin: "java"
+subprojects {
+    apply plugin: 'maven'
+    apply plugin: 'java'
 
-    group = "forxy"
+    group = 'forxy'
 
     jar { from sourceSets.main.allJava }
 
