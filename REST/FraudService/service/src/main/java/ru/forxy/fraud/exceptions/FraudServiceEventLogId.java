@@ -2,14 +2,13 @@ package ru.forxy.fraud.exceptions;
 
 import ru.forxy.common.exceptions.EventLogBase;
 import ru.forxy.common.exceptions.EventType;
-import ru.forxy.common.logging.exceptions.LoggingCommonEventLogId;
 
 public enum FraudServiceEventLogId implements EventLogBase {
 
     // -------------------------------------------------------------------
     // Business events
     // -------------------------------------------------------------------
-    IDSouldNotBeNull(FraudServiceEventLogId.BASE_EVENT_LOG_ID, 400,
+    IDShouldNotBeNull(FraudServiceEventLogId.BASE_EVENT_LOG_ID, 400,
             "Transaction id sould not be null.",
             EventType.InvalidInput),
 

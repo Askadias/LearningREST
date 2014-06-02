@@ -7,6 +7,13 @@ dependencies {
     compile project(":ru.forxy.common.status")
     compile project(":ru.forxy.common.exceptions")
 
+    // --------------------- HTTP ----------------------------------------
+    compile "org.apache.httpcomponents:httpcore:${rev_httpcore}"
+    compile "org.apache.httpcomponents:httpclient:${rev_httpclient}"
+
+    // --------------------- COMMONS -------------------------------------
+    compile "commons-io:commons-io:${rev_commons_io}"
+
     // --------------------- OBJECT VALIDATION ---------------------------
     compile "net.sf.oval:oval:${rev_oval}"
 }

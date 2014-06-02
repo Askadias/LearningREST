@@ -1,7 +1,7 @@
 package ru.forxy.user.logic;
 
 import ru.forxy.common.pojo.EntityPage;
-import ru.forxy.user.rest.pojo.User;
+import ru.forxy.user.rest.v1.pojo.User;
 
 /**
  * Entry point into user service business logic

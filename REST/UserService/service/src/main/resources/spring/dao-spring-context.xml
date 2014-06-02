@@ -25,13 +25,12 @@
                 write-fsync='${ru.forxy.user.MongoTemplate/writeFSync}'/>
     </mongo:mongo>
 
-    <mongo:db-factory dbname='user' mongo-ref='mongo'/>
+    <mongo:db-factory id="factory" dbname='user' mongo-ref='mongo'/>
 
     <mongo:repositories base-package='ru.forxy.db.dao.mongo'/>
 
     <bean id='mongoTemplate' class='org.springframework.data.mongodb.core.MongoTemplate'>
-        <constructor-arg ref='mongo'/>
-        <constructor-arg name='databaseName' value='user'/>
+        <constructor-arg ref='factory'/>
     </bean>
 
     <bean id="ru.forxy.user.db.dao.UserDAO.impl.mongo" class="ru.forxy.user.db.dao.mongo.UserDAO"

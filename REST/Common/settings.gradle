@@ -4,6 +4,7 @@ def projects = [
         ':deploy': [name: "ru.forxy.common.deploy", path: 'deploy'],
         ':concurrent': [name: "ru.forxy.common.concurrent", path: 'concurrent'],
         ':logging': [name: "ru.forxy.common.logging", path: 'logging'],
+        ':spring-support': [name: "ru.forxy.common.spring-support", path: 'spring-support'],
         ':exceptions': [name: "ru.forxy.common.exceptions", path: 'exceptions'],
         ':status': [name: "ru.forxy.common.status", path: 'status'],
         ':utils': [name: "ru.forxy.common.utils", path: 'utils'],

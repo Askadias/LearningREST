@@ -2,7 +2,7 @@ package ru.forxy.user.soap.mapper;
 
 import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.common.utils.DateUtils;
-import ru.forxy.user.rest.pojo.User;
+import ru.forxy.user.rest.v1.pojo.User;
 import ru.forxy.user.soap.gen.v1.UserPageType;
 import ru.forxy.user.soap.gen.v1.UserType;
 

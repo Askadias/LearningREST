@@ -72,8 +72,8 @@
 
     <!--<bean id="userServiceClient" class="org.apache.cxf.jaxrs.client.JAXRSClientFactory"
           factory-method="create" scope="prototype"
-            c:baseAddress="${ru.forxy.user.rest.IUserService/url}"
-            c:cls="ru.forxy.user.rest.IUserService"
+            c:baseAddress="${ru.forxy.user.rest.v1.IUserService/url}"
+            c:cls="ru.forxy.user.rest.v1.IUserService"
             c:providers-ref="jsonProviders"/>
 
     <bean id="userServiceConnectionPool" class="org.springframework.aop.target.CommonsPoolTargetSource"
@@ -84,17 +84,17 @@
 
     <bean id="userService" class="org.springframework.aop.framework.ProxyFactoryBean"
           p:targetSource-ref="userServiceConnectionPool"
-          p:proxyInterfaces="ru.forxy.user.rest.IUserService"/>-->
+          p:proxyInterfaces="ru.forxy.user.rest.v1.IUserService"/>-->
 
     <bean id="userServiceClientFactory"
           class="org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean">
-        <property name="serviceClass" value="ru.forxy.user.rest.IUserService"/>
-        <property name="address" value="${ru.forxy.user.rest.IUserService/url}"/>
+        <property name="serviceClass" value="ru.forxy.user.rest.v1.IUserService"/>
+        <property name="address" value="${ru.forxy.user.rest.v1.IUserService/url}"/>
         <property name="provider" ref="jsonProvider"/>
     </bean>
 
     <bean id="userServiceClient"
-          class="ru.forxy.user.rest.IUserService"
+          class="ru.forxy.user.rest.v1.IUserService"
           factory-bean="userServiceClientFactory"
           factory-method="create"/>
 

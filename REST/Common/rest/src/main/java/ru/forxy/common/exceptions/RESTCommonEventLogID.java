@@ -6,9 +6,40 @@ public enum RESTCommonEventLogId implements EventLogBase
     // Common events
     // -------------------------------------------------------------------
 
-    UnexpectedException(RESTCommonEventLogId.BASE_EVENT_LOG_ID, 500,
+    InvalidClientInput(RESTCommonEventLogId.BASE_EVENT_LOG_ID + 400, 400,
+            "Operation is not allowed",
+            EventType.InternalError),
+
+    Unauthorized(RESTCommonEventLogId.BASE_EVENT_LOG_ID + 401, 401,
+            "Operation is not allowed",
+            EventType.InternalError),
+
+    AccessDenied(RESTCommonEventLogId.BASE_EVENT_LOG_ID + 404, 403,
+            "Operation is not allowed",
+            EventType.InternalError),
+
+    ResourceNotFound(RESTCommonEventLogId.BASE_EVENT_LOG_ID + 404, 404,
+            "Operation is not allowed",
+            EventType.InternalError),
+
+    UnexpectedException(RESTCommonEventLogId.BASE_EVENT_LOG_ID + 500, 500,
             "Unexpected unhandled exception. Details: %1$s",
-                        EventType.InternalError);
+                        EventType.InternalError),
+
+
+    SSLConnectivityException(RESTCommonEventLogId.BASE_EVENT_LOG_ID, 403,
+            "Error during SSL communication. Details: %1$s",
+            EventType.InvalidInput),
+
+    SocketTimeoutException(RESTCommonEventLogId.BASE_EVENT_LOG_ID + 501, 501,
+            "Timeout. Details: %1$s",
+            EventType.InternalError),
+
+    ServiceUnavailableException(RESTCommonEventLogId.BASE_EVENT_LOG_ID + 503, 503,
+            "Service is not available. Details: %1$s",
+            EventType.InternalError);
+
+
 
     public static final int BASE_EVENT_LOG_ID = 1000;
 

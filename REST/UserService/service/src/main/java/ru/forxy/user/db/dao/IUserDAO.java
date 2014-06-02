@@ -2,7 +2,7 @@ package ru.forxy.user.db.dao;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 import ru.forxy.common.status.ISystemStatusComponent;
-import ru.forxy.user.rest.pojo.User;
+import ru.forxy.user.rest.v1.pojo.User;
 
 import java.util.List;
 

@@ -14,6 +14,6 @@
           autowire-candidate="false"
           p:userDAO-ref="ru.forxy.user.db.dao.UserDAO.mongo"/>
 
-    <bean id="ru.forxy.user.rest.UserServiceImpl" class="ru.forxy.user.rest.UserServiceImpl"
+    <bean id="ru.forxy.user.rest.UserServiceImpl" class="ru.forxy.user.rest.v1.UserServiceImpl"
           p:userServiceFacade-ref="ru.forxy.user.logic.UserServiceFacade"/>
 </beans>

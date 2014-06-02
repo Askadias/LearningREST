@@ -1,12 +1,11 @@
 package ru.forxy.user.db.dao.cassandra.client;
 
 import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import org.springframework.beans.factory.InitializingBean;
-import ru.forxy.user.rest.pojo.User;
+import ru.forxy.user.rest.v1.pojo.User;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;

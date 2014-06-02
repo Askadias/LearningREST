@@ -31,7 +31,7 @@
 
     <jaxrs:server id="ru.forxy.UserService.rest" address="/rest/v1">
         <jaxrs:serviceBeans>
-            <ref bean="ru.forxy.user.rest.UserServiceImpl"/>
+            <ref bean="ru.forxy.user.rest.v1.UserServiceImpl"/>
             <ref bean="ru.forxy.common.rest.SystemStatusServiceImpl"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
@@ -39,7 +39,7 @@
                 <property name="configuration" ref="ru.forxy.common.support.Configuration"/>
                 <property name="validator" ref="ru.forxy.user.payload.Validator"/>
             </bean>
-            <bean class="ru.forxy.common.exceptions.support.ResponseStatusMapper"/>
+            <bean class="ru.forxy.common.exceptions.support.RuntimeExceptionMapper"/>
         </jaxrs:providers>
         <jaxrs:extensionMappings>
             <entry key="json" value="application/json"/>

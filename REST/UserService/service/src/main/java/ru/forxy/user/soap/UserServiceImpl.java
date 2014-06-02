@@ -5,7 +5,7 @@ import ru.forxy.common.exceptions.ServiceException;
 import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.common.support.SystemProperties;
 import ru.forxy.user.logic.IUserServiceFacade;
-import ru.forxy.user.rest.pojo.User;
+import ru.forxy.user.rest.v1.pojo.User;
 import ru.forxy.user.soap.gen.v1.DeleteUserRQType;
 import ru.forxy.user.soap.gen.v1.ErrorListType;
 import ru.forxy.user.soap.gen.v1.ErrorType;
@@ -109,13 +109,6 @@ public class UserServiceImpl implements UserServicePortType {
         response.getResponseInfo().setRequestInfo(request.getRequestInfo());
         response.getResponseInfo().setResponder(SystemProperties.getHostAddress());
         response.getResponseInfo().setResponseStatus(OK);
-        return response;
-    }
-
-    private static <T extends ResponseType> T buildResponse(T response, final RequestType request,
-                                                            final ResponseStatusType status) {
-        response = buildResponse(response, request);
-        response.getResponseInfo().setResponseStatus(status);
         return response;
     }
 

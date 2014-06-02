@@ -16,9 +16,19 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
-    <context-param>
+    <!-- <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath*:spring/spring-context.xml</param-value>
+    </context-param> -->
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>WEB-INF/user.spring-context.groovy</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>contextClass</param-name>
+        <param-value>org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext</param-value>
     </context-param>
 
     <!-- CXF -->
@@ -56,12 +66,12 @@
     </filter-mapping>
 
     <!-- logging filter -->
-    <filter>
+    <!--<filter>
         <filter-name>ru.forxy.user.service.performance.loggingFilter</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>ru.forxy.user.service.performance.loggingFilter</filter-name>
         <url-pattern>/*</url-pattern>
-    </filter-mapping>
+    </filter-mapping>-->
 </web-app>

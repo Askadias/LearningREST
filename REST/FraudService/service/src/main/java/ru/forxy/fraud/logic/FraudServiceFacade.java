@@ -28,7 +28,7 @@ public class FraudServiceFacade implements IFraudServiceFacade {
         if (id != null) {
             return fraudDAO.findOne(id);
         }
-        throw new ServiceException(FraudServiceEventLogId.IDSouldNotBeNull);
+        throw new ServiceException(FraudServiceEventLogId.IDShouldNotBeNull);
     }
 
     @Override

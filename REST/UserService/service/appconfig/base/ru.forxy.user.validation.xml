@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <oval xmlns="http://oval.sf.net/oval-configuration" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://oval.sf.net/oval-configuration http://oval.sourceforge.net/oval-configuration.xsd">
-    <class type="ru.forxy.user.rest.pojo.User">
+    <class type="ru.forxy.user.rest.v1.pojo.User">
         <!-- ================================================================= -->
         <!--                            User                                   -->
         <!-- ================================================================= -->

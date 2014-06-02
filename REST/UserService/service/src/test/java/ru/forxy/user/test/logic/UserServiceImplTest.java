@@ -16,8 +16,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.user.db.dao.IUserDAO;
-import ru.forxy.user.rest.IUserService;
-import ru.forxy.user.rest.pojo.User;
+import ru.forxy.user.rest.v1.IUserService;
+import ru.forxy.user.rest.v1.pojo.User;
 import ru.forxy.user.test.BaseUserServiceTest;
 
 import javax.ws.rs.NotAuthorizedException;

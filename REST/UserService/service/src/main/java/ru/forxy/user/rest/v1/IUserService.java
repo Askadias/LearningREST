@@ -1,6 +1,6 @@
-package ru.forxy.user.rest;
+package ru.forxy.user.rest.v1;
 
-import ru.forxy.user.rest.pojo.User;
+import ru.forxy.user.rest.v1.pojo.User;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -18,7 +18,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 @Path("/users/")
-@Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public interface IUserService {
 
@@ -38,12 +37,15 @@ public interface IUserService {
 
     @POST
     @Path("/login")
+    @Consumes(MediaType.APPLICATION_JSON)
     Response login(final User loginUser, @Context final UriInfo uriInfo, @Context final HttpHeaders headers);
 
     @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     Response updateUser(final User user, @Context final UriInfo uriInfo, @Context final HttpHeaders headers);
 
     @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
     Response createUser(final User user, @Context final UriInfo uriInfo, @Context final HttpHeaders headers);
 
     @DELETE

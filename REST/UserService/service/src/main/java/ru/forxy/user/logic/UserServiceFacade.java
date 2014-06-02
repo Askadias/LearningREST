@@ -6,7 +6,7 @@ import ru.forxy.common.exceptions.ServiceException;
 import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.user.db.dao.IUserDAO;
 import ru.forxy.user.exceptions.UserServiceEventLogId;
-import ru.forxy.user.rest.pojo.User;
+import ru.forxy.user.rest.v1.pojo.User;
 
 /**
  * Implementation class for UserService business logic

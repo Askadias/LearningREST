@@ -1,4 +1,4 @@
-package ru.forxy.user.rest;
+package ru.forxy.user.rest.v1;
 
 import net.sf.oval.exception.ValidationFailedException;
 import ru.forxy.common.exceptions.ServiceException;
@@ -8,7 +8,7 @@ import ru.forxy.common.rest.AbstractService;
 import ru.forxy.common.support.Constants;
 import ru.forxy.user.exceptions.UserServiceEventLogId;
 import ru.forxy.user.logic.IUserServiceFacade;
-import ru.forxy.user.rest.pojo.User;
+import ru.forxy.user.rest.v1.pojo.User;
 
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.core.HttpHeaders;

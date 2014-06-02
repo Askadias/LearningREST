@@ -1,6 +1,6 @@
 #!/bin/sh
 export JAVA_OPTS="$JAVA_OPTS
--Denv=dev 
+-Denv=dev
 -Xdebug 
 -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8084 
 -Dcom.sun.management.jmxremote 
