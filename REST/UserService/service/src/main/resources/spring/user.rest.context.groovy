@@ -7,21 +7,21 @@ import ru.forxy.common.support.Configuration
 import ru.forxy.common.web.JSONValidationProvider
 
 beans {
-    //def String catalinabase = System.getenv()['TOMCAT_HOME']
-    def String catalinabase = '/usr/local/tomcat/forxy'
     xmlns jaxrs: "http://cxf.apache.org/jaxrs"
 
-    def Map<Object, String> confProps = new HashMap<Object, String>();
-    confProps.put(JSONValidationProvider.Configs.IsObjectValidationEnabled, "true");
+    def String configDir = System.getProperty('config.dir')
 
-    configuration(Configuration, confProps)
+    configuration(Configuration) {
+        settings = [(JSONValidationProvider.Configs.IsObjectValidationEnabled): 'true']
+    }
 
-    xmlConfigurer(XMLConfigurer, new File("${catalinabase}/conf/UserService/appconfig/base/ru.forxy.user.validation.xml"))
+    xmlConfigurer(XMLConfigurer, new File("$configDir/UserService/appconfig/base/ru.forxy.user.validation.xml"))
 
     validator(Validator, ref(xmlConfigurer))
 
     jsonValidationProvider(JSONValidationProvider) {
         configuration = ref(configuration)
+        validator = ref(validator)
     }
 
     runtimeExceptionMapper(RuntimeExceptionMapper)

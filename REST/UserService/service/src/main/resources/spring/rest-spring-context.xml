@@ -41,8 +41,5 @@
             </bean>
             <bean class="ru.forxy.common.exceptions.support.RuntimeExceptionMapper"/>
         </jaxrs:providers>
-        <jaxrs:extensionMappings>
-            <entry key="json" value="application/json"/>
-        </jaxrs:extensionMappings>
     </jaxrs:server>
 </beans>

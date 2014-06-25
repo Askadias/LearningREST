@@ -1,38 +1,34 @@
 package spring
 
-import org.springframework.core.io.ClassPathResource
 import org.springframework.data.mongodb.core.MongoTemplate
 import ru.forxy.user.db.dao.mongo.UserDAO
 
 beans {
-    def String env = System.getenv()['env'] ?: 'dev'
-    def ConfigObject c = new ConfigSlurper(env).parse(new ClassPathResource('spring/user.config.groovy').URL)
-    xmlns context:'http://www.springframework.org/schema/context'
-    xmlns mongo:'http://www.springframework.org/schema/data/mongo'
+    xmlns context: 'http://www.springframework.org/schema/context'
+    xmlns mongo: 'http://www.springframework.org/schema/data/mongo'
 
     context.'component-scan'('base-package': 'ru.forxy.user.rest.pojo')
+    context.'annotation-config'()
 
-    mongo.mongo(id : 'mongo', host = c.mongo.host, port : c.mongo.port) {
+    mongo.mongo(id: 'mongo', host = '${ru.forxy.user.MongoTemplate/host}',
+            port: '${ru.forxy.user.MongoTemplate/port}') {
         mongo.options(
-                'connections-per-host' : c.mongo.connectionsPerHost,
-                'connect-timeout' : c.mongo.connectTimeout,
-                'max-wait-time' : c.mongo.maxWaitTime,
-                'write-number' : c.mongo.writeNumber,
-                'write-timeout' : c.mongo.writeTimeout,
-                'write-fsync' : c.mongo.writeFsync
+                'connections-per-host': '${ru.forxy.user.MongoTemplate/connections}',
+                'connect-timeout': '${ru.forxy.user.MongoTemplate/timeout}',
+                'max-wait-time': '${ru.forxy.user.MongoTemplate/maxWait}',
+                'write-number': '${ru.forxy.user.MongoTemplate/writeNumber}',
+                'write-timeout': '${ru.forxy.user.MongoTemplate/writeTimeout}',
+                'write-fsync': '${ru.forxy.user.MongoTemplate/writeFSync}'
         )
     }
 
-    def mongoBean = ref('mongo')
-    def String mongoRefName = 'mongo'
+    mongo.'db-factory'(id: 'db-factory', dbname: 'user', 'mongo-ref': 'mongo')
 
-    mongo.'db-factory'( id: 'db-factory', dbname : 'user', 'mongo-ref' : mongoRefName)
-
-    mongo.repositories( 'base-package' : 'ru.forxy.db.dao.mongo')
+    mongo.repositories('base-package': 'ru.forxy.db.dao.mongo')
 
     mongoTemplate(MongoTemplate, ref('db-factory'))
 
-    userDAOImplMongo(UserDAO) { bean ->
+    userDAOMongo(UserDAO) { bean ->
         bean.autowire = 'byName'
         mongoTemplate = ref(mongoTemplate)
     }

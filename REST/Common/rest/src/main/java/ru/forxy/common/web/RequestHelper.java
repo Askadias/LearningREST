@@ -55,7 +55,7 @@ public final class RequestHelper {
      * Retrieves the request parameter (either query parameter or HTTP header) from the infrastructure
      * objects provided by the JAX-RS framework
      *
-     * @param param   Paramter to be retrieved from URI Info (as query parameter) or HTTP headers
+     * @param param   Parameter to be retrieved from URI Info (as query parameter) or HTTP headers
      * @param uriInfo URI Info provided by the JAX-RS framework
      * @param headers HTTP Headers provided by the JAX-RS framework
      * @return Query parameter (if specified), HTTP header (if specified), <code>null</tt> otherwise
@@ -68,7 +68,7 @@ public final class RequestHelper {
      * Retrieves the request parameter (either query parameter or HTTP header) from the infrastructure
      * objects provided by the JAX-RS framework
      *
-     * @param param        Paramter to be retrieved from URI Info (as query parameter) or HTTP headers
+     * @param param        Parameter to be retrieved from URI Info (as query parameter) or HTTP headers
      * @param uriInfo      URI Info provided by the JAX-RS framework
      * @param headers      HTTP Headers provided by the JAX-RS framework
      * @param defaultValue The default value to be returned when neither query parameter nor HTTP

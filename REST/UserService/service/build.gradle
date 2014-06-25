@@ -1,3 +1,5 @@
+// ========== Deploy ====================================================
+
 buildscript {
     repositories {
         maven {
@@ -11,7 +13,6 @@ buildscript {
 
 apply plugin: 'deploy'
 
-// ========== Deploy ====================================================
 
 deploy {
     serviceName = 'UserService'
@@ -38,6 +39,7 @@ dependencies {
     compile "org.slf4j:slf4j-api:${rev_slf4j}"
     compile "ch.qos.logback:logback-core:${rev_logback}"
     compile "ch.qos.logback:logback-classic:${rev_logback}"
+    compile "ch.qos.logback:logback-examples:${rev_logback}"
 
     // --------------------- MONGO ---------------------------------------
     compile "org.mongodb:mongo-java-driver:${rev_mongo}"
@@ -45,6 +47,8 @@ dependencies {
 
     // --------------------- CASSANDRA -----------------------------------
     compile "com.datastax.cassandra:cassandra-driver-core:${rev_cassandra_datastax}"
+    compile "com.valchkou.datastax:cassandra-driver-mapping:${rev_datastax_mapping}"
+    //compile "com.netflix.astyanax:astyanax:${rev_astyanax}"
 
     // --------------------- SPRING --------------------------------------
     compile "org.springframework:spring-core:${rev_spring}"
@@ -57,6 +61,12 @@ dependencies {
     compile "org.grails:grails-core:${rev_grails}"
     compile "org.grails:grails-web:${rev_grails}"
     compile "org.codehaus.groovy:groovy-all:${rev_groovy}"
+
+    // --------------------- ENCRYPTION ----------------------------------
+    compile "org.bouncycastle:bcprov-jdk16:${rev_bouncycastle}"
+    compile "org.jasypt:jasypt:${rev_jasypt}"
+    compile "org.jasypt:jasypt-spring3:${rev_jasypt}"
+
 
     // ===================== TEST ========================================
     testCompile "org.springframework:spring-test:${rev_spring}"

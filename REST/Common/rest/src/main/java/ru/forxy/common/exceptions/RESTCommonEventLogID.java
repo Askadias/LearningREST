@@ -1,5 +1,8 @@
 package ru.forxy.common.exceptions;
 
+/**
+ * Event log id enumeration that describes common rest webservice specific events
+ */
 public enum RESTCommonEventLogId implements EventLogBase
 {
     // -------------------------------------------------------------------
@@ -55,7 +58,7 @@ public enum RESTCommonEventLogId implements EventLogBase
     }
 
     private RESTCommonEventLogId(final int eventId, final int responseId, final Level level, final String formatString,
-                       final EventType eventType)
+                                 final EventType eventType)
     {
         m_eventId = eventId;
         m_responseId = responseId;
