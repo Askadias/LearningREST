@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserServicePortType {
 
         try {
 
-            User user = userServiceFacade.getUser(new User(userType.getEmail(), userType.getPassword()));
+            User user = userServiceFacade.getUser(userType.getEmail());
             response.setUser(UserMapper.fromUser(user));
 
         } catch (ServiceException e) {

@@ -69,4 +69,13 @@ dependencies {
 
     // --------------------- CXF -----------------------------------------
     compile "org.apache.cxf:cxf-bundle-jaxrs:${rev_cxf}"
+
+    // --------------------- DATA ----------------------------------------
+    compile ("org.springframework.data:spring-data-mongodb:${rev_spring_data}") {
+        transitive = false
+    }
+    compile ("org.springframework.data:spring-data-commons:${rev_spring_data}") {
+        transitive = false
+    }
+
 }

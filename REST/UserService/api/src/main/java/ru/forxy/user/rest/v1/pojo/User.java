@@ -1,14 +1,18 @@
 package ru.forxy.user.rest.v1.pojo;
 
+import org.codehaus.jackson.map.annotate.JsonDeserialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import ru.forxy.common.pojo.SimpleJacksonDateDeserializer;
 import ru.forxy.common.pojo.SimpleJacksonDateSerializer;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
-@XmlRootElement(name = "user")
+@Document
 public class User {
 
+    @Id
     private String email;
 
     private byte[] password;
@@ -21,10 +25,8 @@ public class User {
 
     private Character gender;
 
-    @JsonSerialize(using = SimpleJacksonDateSerializer.class)
     private Date birthDate;
 
-    @JsonSerialize(using = SimpleJacksonDateSerializer.class)
     private Date createDate = new Date();
 
     public User() {
@@ -83,18 +85,22 @@ public class User {
         this.gender = gender;
     }
 
+    @JsonSerialize(using = SimpleJacksonDateSerializer.class)
     public Date getBirthDate() {
         return birthDate;
     }
 
+    @JsonDeserialize(using = SimpleJacksonDateDeserializer.class)
     public void setBirthDate(final Date birthDate) {
         this.birthDate = birthDate;
     }
 
+    @JsonSerialize(using = SimpleJacksonDateSerializer.class)
     public Date getCreateDate() {
         return createDate;
     }
 
+    @JsonDeserialize(using = SimpleJacksonDateDeserializer.class)
     public void setCreateDate(final Date createDate) {
         this.createDate = createDate;
     }

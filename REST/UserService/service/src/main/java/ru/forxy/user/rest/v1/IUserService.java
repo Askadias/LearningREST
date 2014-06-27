@@ -1,5 +1,6 @@
 package ru.forxy.user.rest.v1;
 
+import ru.forxy.common.support.Constants;
 import ru.forxy.user.rest.v1.pojo.User;
 
 import javax.ws.rs.Consumes;
@@ -22,6 +23,9 @@ import javax.ws.rs.core.UriInfo;
 public interface IUserService {
 
     @GET
+    Response getUsers(@Context final UriInfo uriInfo, @Context final HttpHeaders headers);
+
+    @GET
     @Path("/{page}/")
     Response getUsers(@PathParam("page") final Integer page, @Context final UriInfo uriInfo,
                       @Context final HttpHeaders headers);
@@ -32,21 +36,17 @@ public interface IUserService {
                       @Context final UriInfo uriInfo, @Context final HttpHeaders headers);
 
     @GET
-    Response getUser(@QueryParam("") final User requestedUser, @Context final UriInfo uriInfo,
+    @Path("/")
+    Response getUser(@QueryParam("email") final String email, @Context final UriInfo uriInfo,
                      @Context final HttpHeaders headers);
-
-    @POST
-    @Path("/login")
-    @Consumes(MediaType.APPLICATION_JSON)
-    Response login(final User loginUser, @Context final UriInfo uriInfo, @Context final HttpHeaders headers);
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    Response updateUser(final User user, @Context final UriInfo uriInfo, @Context final HttpHeaders headers);
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     Response createUser(final User user, @Context final UriInfo uriInfo, @Context final HttpHeaders headers);
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    Response updateUser(final User user, @Context final UriInfo uriInfo, @Context final HttpHeaders headers);
 
     @DELETE
     Response deleteUser(@QueryParam("email") final String email, @Context final UriInfo uriInfo,

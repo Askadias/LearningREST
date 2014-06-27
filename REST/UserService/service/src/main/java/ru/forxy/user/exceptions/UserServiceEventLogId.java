@@ -9,7 +9,7 @@ public enum UserServiceEventLogId implements EventLogBase {
     // -------------------------------------------------------------------
     // Business events
     // -------------------------------------------------------------------
-    UserNotFound(UserServiceEventLogId.BASE_EVENT_LOG_ID, 400,
+    UserNotFound(UserServiceEventLogId.BASE_EVENT_LOG_ID, 404,
             "User with email '%1$s' is not found.",
             EventType.InvalidInput),
 

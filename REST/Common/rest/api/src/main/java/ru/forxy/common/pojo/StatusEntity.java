@@ -9,24 +9,24 @@ import java.util.List;
  * Exception message entity
  */
 @XmlRootElement(name = "error_message")
-public class ErrorEntity implements Serializable {
+public class StatusEntity implements Serializable {
     private String code;
     private List<String> messages;
 
-    public ErrorEntity() {
+    public StatusEntity() {
     }
 
-    public ErrorEntity(final String code, final String message) {
+    public StatusEntity(final String code, final String message) {
         this.code = code;
         this.messages = Collections.singletonList(message);
     }
 
-    public ErrorEntity(final String code, final List<String> messages) {
+    public StatusEntity(final String code, final List<String> messages) {
         this.code = code;
         this.messages = messages;
     }
 
-    public ErrorEntity(final String code, final Throwable cause) {
+    public StatusEntity(final String code, final Throwable cause) {
         this.code = code;
         this.messages = Collections.singletonList(cause.getMessage());
     }

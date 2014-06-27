@@ -37,7 +37,7 @@ public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException>
         {
             ex = (ServiceException) re;
             response =
-                ResponseBuilder.build(Response.Status.INTERNAL_SERVER_ERROR,
+                ResponseBuilder.build(Response.Status.fromStatusCode(ex.getEventLogId().getResponseId()),
                     String.valueOf(ex.getEventLogId().getEventId()), ex.getMessage());
         }
         else

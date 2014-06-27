@@ -43,7 +43,7 @@ dependencies {
 
     // --------------------- MONGO ---------------------------------------
     compile "org.mongodb:mongo-java-driver:${rev_mongo}"
-    compile "org.springframework.data:spring-data-mongodb:${rev_spring_mongo}"
+    compile "org.springframework.data:spring-data-mongodb:${rev_spring_data}"
 
     // --------------------- CASSANDRA -----------------------------------
     compile "com.datastax.cassandra:cassandra-driver-core:${rev_cassandra_datastax}"

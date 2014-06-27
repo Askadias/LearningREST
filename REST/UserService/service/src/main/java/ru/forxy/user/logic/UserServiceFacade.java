@@ -8,6 +8,9 @@ import ru.forxy.user.db.dao.IUserDAO;
 import ru.forxy.user.exceptions.UserServiceEventLogId;
 import ru.forxy.user.rest.v1.pojo.User;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Implementation class for UserService business logic
  */
@@ -16,6 +19,15 @@ public class UserServiceFacade implements IUserServiceFacade {
     private static final int DEFAULT_PAGE_SIZE = 10;
 
     private IUserDAO userDAO;
+
+    @Override
+    public List<User> getAllUsers() {
+        List<User> allUsers = new LinkedList<User>();
+        for (User user : userDAO.findAll()) {
+            allUsers.add(user);
+        }
+        return allUsers;
+    }
 
     @Override
     public EntityPage<User> getUsers(final Integer page) {
@@ -29,35 +41,29 @@ public class UserServiceFacade implements IUserServiceFacade {
     }
 
     @Override
-    public User getUser(final User user) {
-        if (user != null && user.getEmail() != null) {
-            return userDAO.findOne(user.getEmail());
+    public User getUser(final String email) {
+        User user = userDAO.findOne(email);
+        if (user == null) {
+            throw new ServiceException(UserServiceEventLogId.UserNotFound, email);
         }
-        throw new ServiceException(UserServiceEventLogId.EmailIsNullOrEmpty);
+        return user;
     }
 
     @Override
-    public User updateUser(final User user) {
-        if (user.getEmail() != null && user.getPassword() != null) {
+    public void updateUser(final User user) {
+        if (userDAO.exists(user.getEmail())) {
             userDAO.save(user);
-            return user;
         } else {
-            throw new ServiceException(UserServiceEventLogId.EmptyLoginEmailOrPassword);
+            throw new ServiceException(UserServiceEventLogId.UserNotFound, user.getEmail());
         }
     }
 
     @Override
-    public User createUser(final User user) {
-        if (user.getEmail() != null) {
-            if (!userDAO.exists(user.getEmail())) {
-                userDAO.save(user);
-                return user;
-            } else {
-                throw new ServiceException(UserServiceEventLogId.UserAlreadyExists,
-                        user.getEmail());
-            }
+    public void createUser(final User user) {
+        if (!userDAO.exists(user.getEmail())) {
+            userDAO.save(user);
         } else {
-            throw new ServiceException(UserServiceEventLogId.EmailIsNullOrEmpty);
+            throw new ServiceException(UserServiceEventLogId.UserAlreadyExists, user.getEmail());
         }
     }
 

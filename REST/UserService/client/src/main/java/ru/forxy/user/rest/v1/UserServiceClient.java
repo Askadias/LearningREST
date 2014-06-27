@@ -4,15 +4,17 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.methods.HttpGet;
 import ru.forxy.common.exceptions.ClientException;
 import ru.forxy.common.pojo.EntityPage;
-import ru.forxy.common.pojo.ErrorEntity;
+import ru.forxy.common.pojo.StatusEntity;
 import ru.forxy.common.rest.client.RestServiceClientSupport;
 import ru.forxy.common.rest.client.transport.ITransport;
 import ru.forxy.common.rest.client.transport.support.ObjectMapperProvider;
 import ru.forxy.user.rest.v1.pojo.User;
 
 import javax.ws.rs.core.HttpHeaders;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -28,8 +30,7 @@ public class UserServiceClient extends RestServiceClientSupport implements IUser
 
     private String clientId;
 
-    public UserServiceClient()
-    {
+    public UserServiceClient() {
     }
 
     public UserServiceClient(final String endpoint, final String clientId, final ITransport transport) {
@@ -62,10 +63,21 @@ public class UserServiceClient extends RestServiceClientSupport implements IUser
 
     @Override
     @SuppressWarnings({"rawtypes", "unchecked"})
+    public List<User> getUsers(String transactionGUID) {
+        final String confUrl = endpoint + "users";
+
+        final ITransport.Response<List, StatusEntity> response =
+                transport.performGet(confUrl, buildHeaders(transactionGUID, endpoint, HttpGet.METHOD_NAME),
+                        createResponseHandler(List.class));
+        return checkForError(response);
+    }
+
+    @Override
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public EntityPage<User> getUsers(final String transactionGUID, final Integer page) {
         final String confUrl = endpoint + "users/" + page;
 
-        final ITransport.Response<EntityPage, ErrorEntity> response =
+        final ITransport.Response<EntityPage, StatusEntity> response =
                 transport.performGet(confUrl, buildHeaders(transactionGUID, endpoint, HttpGet.METHOD_NAME),
                         createResponseHandler(EntityPage.class));
         return checkForError(response);
@@ -76,7 +88,7 @@ public class UserServiceClient extends RestServiceClientSupport implements IUser
     public EntityPage<User> getUsers(final String transactionGUID, Integer page, Integer size) {
         final String confUrl = endpoint + "users/" + page + "/" + size;
 
-        final ITransport.Response<EntityPage, ErrorEntity> response =
+        final ITransport.Response<EntityPage, StatusEntity> response =
                 transport.performGet(confUrl, buildHeaders(transactionGUID, endpoint, HttpGet.METHOD_NAME),
                         createResponseHandler(EntityPage.class));
         return checkForError(response);
@@ -84,12 +96,45 @@ public class UserServiceClient extends RestServiceClientSupport implements IUser
 
     @Override
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public User getUser(final String transactionGUID, User user) {
-        final String confUrl = endpoint + "users?email=" + user.getEmail();
+    public User getUser(final String transactionGUID, String email) {
+        final String confUrl = endpoint + "users?email=" + email;
 
-        final ITransport.Response<User, ErrorEntity> response =
+        final ITransport.Response<User, StatusEntity> response =
                 transport.performGet(confUrl, buildHeaders(transactionGUID, endpoint, HttpGet.METHOD_NAME),
                         createResponseHandler(User.class));
+        return checkForError(response);
+    }
+
+    @Override
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public StatusEntity createUser(final String transactionGUID, final User user) {
+        final String confUrl = endpoint + "users";
+
+        final ITransport.Response<StatusEntity, StatusEntity> response =
+                transport.performPut(confUrl, buildHeaders(transactionGUID, endpoint, HttpGet.METHOD_NAME),
+                        marshal(user), createResponseHandler(StatusEntity.class));
+        return checkForError(response);
+    }
+
+    @Override
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public StatusEntity updateUser(final String transactionGUID, final User user) {
+        final String confUrl = endpoint + "users";
+
+        final ITransport.Response<StatusEntity, StatusEntity> response =
+                transport.performPost(confUrl, buildHeaders(transactionGUID, endpoint, HttpGet.METHOD_NAME),
+                        marshal(user), createResponseHandler(StatusEntity.class));
+        return checkForError(response);
+    }
+
+    @Override
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public StatusEntity deleteUser(String transactionGUID, String email) {
+        final String confUrl = endpoint + "users?email=" + email;
+
+        final ITransport.Response<StatusEntity, StatusEntity> response =
+                transport.performDelete(confUrl, buildHeaders(transactionGUID, endpoint, HttpGet.METHOD_NAME),
+                        createResponseHandler(StatusEntity.class));
         return checkForError(response);
     }
 

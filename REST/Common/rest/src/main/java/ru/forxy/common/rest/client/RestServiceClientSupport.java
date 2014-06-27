@@ -7,7 +7,7 @@ import org.codehaus.jackson.map.type.CollectionType;
 import org.codehaus.jackson.map.type.TypeFactory;
 import ru.forxy.common.exceptions.ClientException;
 import ru.forxy.common.exceptions.RESTCommonEventLogId;
-import ru.forxy.common.pojo.ErrorEntity;
+import ru.forxy.common.pojo.StatusEntity;
 import ru.forxy.common.rest.client.transport.DefaultResponseHandler;
 import ru.forxy.common.rest.client.transport.ITransport;
 
@@ -34,13 +34,13 @@ public abstract class RestServiceClientSupport {
 
     protected ITransport transport;
 
-    protected <R> ITransport.IResponseHandler<R, ErrorEntity> createResponseHandler(
+    protected <R> ITransport.IResponseHandler<R, StatusEntity> createResponseHandler(
             final Class<R> resourceType) {
         return new DefaultResponseHandler<R>(mapper, resourceType);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    protected <C extends Collection<R>, R> ITransport.IResponseHandler<C, ErrorEntity>
+    protected <C extends Collection<R>, R> ITransport.IResponseHandler<C, StatusEntity>
     createResponseCollectionHandler(final Class<C> collectionType, final Class<R> resourceType) {
         final CollectionType responseType =
                 TypeFactory.defaultInstance().constructCollectionType(collectionType, resourceType);
@@ -91,8 +91,8 @@ public abstract class RestServiceClientSupport {
      * @return Response entity if there were no errors while communicating with the service
      * @throws ClientException if there was an error while communicating with the service
      */
-    protected <T> T checkForError(final ITransport.Response<T, ErrorEntity> response) throws ClientException {
-        final ErrorEntity error = response.getError();
+    protected <T> T checkForError(final ITransport.Response<T, StatusEntity> response) throws ClientException {
+        final StatusEntity error = response.getError();
         if (error != null) {
             if (String.valueOf(HttpStatus.SC_FORBIDDEN).equals(error.getCode())) {
                 throw new ClientException(error, RESTCommonEventLogId.AccessDenied);
@@ -119,7 +119,7 @@ public abstract class RestServiceClientSupport {
      * @param error Error response retrieved from the service
      * @return Client exception that is to be thrown
      */
-    protected ClientException processErrorResponse(final ErrorEntity error) {
+    protected ClientException processErrorResponse(final StatusEntity error) {
         return new ClientException(error, RESTCommonEventLogId.UnexpectedException,
                 error != null ? "Error code: " + error.getCode() : "N/A");
     }
