@@ -17,72 +17,30 @@ repositories {
     uploadArchives { repositories { ivy { url "file://$System.env.OUTPUT_ROOT/deliverables/" } } }
 }
 
-// ========= Environment ================================================
-
-import org.apache.tools.ant.filters.ReplaceTokens
-
-if (project.hasProperty('env')) {
-    def env = project.getProperty("env")
-
-    task copyEnvConfigApp(type: Copy) {
-        from 'appconfig'
-        into "$System.env.TOMCAT_HOME/conf/appconfig"
-        include '**/*.properties'
-        include '**/*.jks'
-        exclude '**/*.bat'
-        exclude '**/*.sh'
-    }
-
-    task copyEnvConfigTomcat(type: Copy) {
-        from "appconfig/env/$env"
-        into "$System.env.TOMCAT_HOME/bin"
-        include '**/*.bat'
-        include '**/*.sh'
-    }
-
-    task copyWebContextConfig(type: Copy) {
-        from "appconfig/Web.xml"
-        into "$System.env.TOMCAT_HOME/conf/Web/forxy"
-        filter(ReplaceTokens, tokens: [war: war.archiveName])
-    }
-
-    task setupEnv {
-        dependsOn copyEnvConfigApp, copyEnvConfigTomcat, copyWebContextConfig
-    }
-}
-
 // ========== Deploy ====================================================
 
-war {
-    manifest {
-        attributes(
-                'Product': rootProject.name,
-                'Version': version,
-                'Built-On': new Date().format('yyyy-mm-dd HH:MM:ss')
-        )
+buildscript {
+    repositories {
+        maven {
+            url uri("file://$System.env.OUTPUT_ROOT/deliverables/")
+        }
+    }
+    dependencies {
+        classpath "forxy:ru.forxy.common.deploy:$rev_forxy_common"
     }
 }
 
-task deploy(type: Copy) {
-    dependsOn war
-    if (project.hasProperty('env')) {
-        dependsOn setupEnv
-    }
-    from war
-    into "$System.env.TOMCAT_HOME/warfiles"
-}
+apply plugin: 'deploy'
 
-// ========== Clean Deployment Configuration ============================
-
-task cleanTomcat(type: Delete) {
-    FileTree tree = fileTree("$System.env.TOMCAT_HOME") {
-        include "conf/Web/forxy/Web.xml",
-                "warfiles/ru.forxy.web*.war",
-                "conf/appconfig/**/ru.forxy.web*.properties",
-                "conf/appconfig/**/cryptoClient*.jks",
-                "conf/appconfig/**/web*.jks"
-    }
-    delete tree
+deploy {
+    serviceName = 'Web'
+    basePort = 20000
+    useSSL = true
+    keyAlias = 'web'
+    keystoreFile = '/conf/Web/appconfig/web.jks'
+    keystorePass = 'My5ecredWebPa55w0rd'
+    truststoreFile = '/conf/Web/appconfig/web.jks'
+    truststorePass = 'My5ecredWebPa55w0rd'
 }
 
 // ========== Tests =====================================================
@@ -96,9 +54,9 @@ test {
 
 dependencies {
     // --------------------- FORXY ---------------------------------------
-    compile "forxy:ru.forxy.crypto.api:${rev_forxy_crypto}"
-    compile "forxy:ru.forxy.user.api:${rev_forxy_user}"
-    compile "forxy:ru.forxy.photo.api:${rev_forxy_photo}"
+    //compile "forxy:ru.forxy.crypto.api:${rev_forxy_crypto}"
+    compile "forxy:ru.forxy.user.client:${rev_forxy_user}"
+    //compile "forxy:ru.forxy.photo.api:${rev_forxy_photo}"
     //compile "forxy:ru.forxy.common.support:${rev_forxy_common}"
 
     // --------------------- COMMON --------------------------------------
@@ -116,6 +74,9 @@ dependencies {
     compile "org.springframework:spring-context:${rev_spring}"
     compile "org.springframework:spring-web:${rev_spring}"
     compile "org.springframework:spring-test:${rev_spring}"
+
+    // --------------------- WEB -----------------------------------------
+    compile "org.webjars:angularjs:${rev_angularjs}"
     compile "org.springframework:spring-webmvc:${rev_spring}"
 
     // ===================== TEST ========================================

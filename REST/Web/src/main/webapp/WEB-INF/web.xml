@@ -16,7 +16,7 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath*:ru/forxy/spring-context.xml</param-value>
+        <param-value>classpath*:resources/spring/spring-context.xml</param-value>
     </context-param>
 
     <servlet>

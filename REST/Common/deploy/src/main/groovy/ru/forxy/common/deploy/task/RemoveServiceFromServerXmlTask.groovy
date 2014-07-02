@@ -9,7 +9,7 @@ class RemoveServiceFromServerXmlTask extends UpdateServerXmlTask {
         def serverXml = new File("$tomcatHome/conf/server.xml")
         def server = new XmlSlurper().parse(serverXml);
         def oldServiceNode = server.Service.find {
-            (it.@name = serviceName) || (it.Connector.@port = port)
+            (it.@name == serviceName) || (it.Connector.@port == port)
         }
 
         if (oldServiceNode) {

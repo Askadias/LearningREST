@@ -1,23 +1,19 @@
 package ru.forxy.stuff;
 
-import org.apache.cxf.jaxrs.impl.HttpHeadersImpl;
-import org.apache.cxf.jaxrs.impl.UriInfoImpl;
-import org.apache.cxf.message.Message;
-import org.apache.cxf.message.MessageImpl;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.forxy.BaseSpringContextTest;
+import ru.forxy.common.exceptions.ClientException;
 import ru.forxy.crypto.ICryptoService;
-import ru.forxy.user.rest.IUserService;
-import ru.forxy.user.rest.pojo.User;
+import ru.forxy.user.rest.v1.UserServiceClient;
+import ru.forxy.user.rest.v1.pojo.User;
 
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import java.util.Date;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * Class to generate huge amount of realistic data randomly
@@ -29,8 +25,8 @@ public class DataGenerator extends BaseSpringContextTest {
     @Autowired(required = false)
     ICryptoService cryptoService;
 
-    @Autowired(required = false)
-    IUserService userService;
+    @Autowired
+    private UserServiceClient userServiceClient;
 
     private static final int MAX_USERS = 1000;
 
@@ -138,11 +134,9 @@ public class DataGenerator extends BaseSpringContextTest {
     // @formatter:on
 
     @Test
-    //@Ignore
+    @Ignore
     public void generateUsers() {
-        Message m = new MessageImpl();
-        final UriInfo uriInfo = new UriInfoImpl(m);
-        final HttpHeaders headers = new HttpHeadersImpl(m);
+        final String transactionGUID = UUID.randomUUID().toString();
         final Thread[] threads = new Thread[1];
         for (int t = 0; t < threads.length; t++) {
             threads[t] = new Thread(new Runnable() {
@@ -165,10 +159,14 @@ public class DataGenerator extends BaseSpringContextTest {
                             user.setGender(isMale ? 'M' : 'F');
                             user.setBirthDate(generatePastDate(365 * 10, 365 * 60));
 
-                            Response response = userService.login(user, uriInfo, headers);
-                            exists = response.getStatus() == Response.Status.OK.getStatusCode();
+                            try {
+                                userServiceClient.getUser(transactionGUID, user.getEmail());
+                                exists = true;
+                            } catch (ClientException e) {
+                                exists = !"404".equals(e.getErrorEntity().getCode());
+                            }
                         }
-                        userService.createUser(user, uriInfo, headers);
+                        userServiceClient.createUser(transactionGUID, user);
                     }
                 }
             });

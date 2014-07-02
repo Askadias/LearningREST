@@ -36,6 +36,12 @@ class DeployPlugin implements Plugin<Project> {
             include '**/*.sh'
         }
 
+        project.task('copyEnvConfigCertificates', type: Copy) {
+            from { "$project.deploy.appconfigDir/env/$project.deploy.env" }
+            into { "$project.deploy.tomcatHome/conf/$project.deploy.serviceName/$project.deploy.appconfigDir" }
+            include '**/*.jks'
+        }
+
         project.task('updateServerXml', type: UpdateServerXmlTask) {
             doFirst {
                 tomcatHome project.deploy.tomcatHome
@@ -105,6 +111,7 @@ class DeployPlugin implements Plugin<Project> {
                 [project.tasks.war,
                  project.tasks.copyEnvConfigApp,
                  project.tasks.copyEnvConfigTomcat,
+                 project.tasks.copyEnvConfigCertificates,
                  project.tasks.createWebContext,
                  project.tasks.updateServerXml]) {
             from { project.tasks.war }

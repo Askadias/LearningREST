@@ -11,15 +11,15 @@
          http://www.springframework.org/schema/util             http://www.springframework.org/schema/util/spring-util.xsd"
        default-lazy-init="false">
 
-    <import resource="classpath:META-INF/cxf/cxf.xml"/>
-    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+    <!--<import resource="classpath:META-INF/cxf/cxf.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>-->
 
 
     <!-- =======================================
           Crypto Service Client Configuration
          =======================================  -->
 
-    <http:conduit name="{http://crypto.forxy.ru/}ICryptoService.http-conduit">
+    <!--<http:conduit name="{http://crypto.forxy.ru/}ICryptoService.http-conduit">
         <http:tlsClientParameters>
             <sec:keyManagers keyPassword="${ru.forxy.crypto.SSLConfig/keyStorePassword}">
                 <sec:keyStore type="${ru.forxy.crypto.SSLConfig/keyStoreType}"
@@ -51,59 +51,36 @@
     <bean id="cryptoServiceClient"
           class="ru.forxy.crypto.ICryptoService"
           factory-bean="cryptoServiceClientFactory"
-          factory-method="create"/>
+          factory-method="create"/>-->
 
     <!-- =======================================
           JSON Configuration
          ======================================= -->
 
-    <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+    <!--<bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
 
     <util:list id="jsonProviders">
         <idref bean="jsonProvider"/>
-    </util:list>
+    </util:list>-->
 
     <!-- =======================================
            User Service Client Configuration
          ======================================= -->
 
-    <!-- jaxrs:client id="sampleClient" address="https://localhost:8443/" serviceClass="com.kole.ws.cxf.Addition">
-    </jaxrs:client-->
-
-    <!--<bean id="userServiceClient" class="org.apache.cxf.jaxrs.client.JAXRSClientFactory"
-          factory-method="create" scope="prototype"
-            c:baseAddress="${ru.forxy.user.rest.v1.IUserService/url}"
-            c:cls="ru.forxy.user.rest.v1.IUserService"
-            c:providers-ref="jsonProviders"/>
-
-    <bean id="userServiceConnectionPool" class="org.springframework.aop.target.CommonsPoolTargetSource"
-          p:targetBeanName="userServiceClient"
-          p:maxSize="3"
-          p:maxWait="0"
-          p:whenExhaustedActionName="WHEN_EXHAUSTED_FAIL"/>
-
-    <bean id="userService" class="org.springframework.aop.framework.ProxyFactoryBean"
-          p:targetSource-ref="userServiceConnectionPool"
-          p:proxyInterfaces="ru.forxy.user.rest.v1.IUserService"/>-->
-
-    <bean id="userServiceClientFactory"
-          class="org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean">
-        <property name="serviceClass" value="ru.forxy.user.rest.v1.IUserService"/>
-        <property name="address" value="${ru.forxy.user.rest.v1.IUserService/url}"/>
-        <property name="provider" ref="jsonProvider"/>
+    <bean id="userServiceClient" class="ru.forxy.user.rest.v1.UserServiceClient">
+        <property name="endpoint" value="${ru.forxy.user.rest.v1.UserServiceClient/endpoint}"/>
+        <property name="clientId" value="${ru.forxy.user.rest.v1.UserServiceClient/clientId}"/>
+        <property name="transport">
+                <bean class="ru.forxy.common.rest.client.transport.HttpClientTransport"/>
+        </property>
     </bean>
-
-    <bean id="userServiceClient"
-          class="ru.forxy.user.rest.v1.IUserService"
-          factory-bean="userServiceClientFactory"
-          factory-method="create"/>
 
 
     <!-- =======================================
            Photo Service Client Configuration
          ======================================= -->
 
-    <bean id="photoServiceClientFactory"
+    <!--<bean id="photoServiceClientFactory"
           class="org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean"
           p:serviceClass="ru.forxy.photo.IPhotoService"
           p:address="${ru.forxy.photo.IPhotoService/url}"
@@ -112,6 +89,6 @@
     <bean id="photoServiceClient"
           class="ru.forxy.photo.IPhotoService"
           factory-bean="photoServiceClientFactory"
-          factory-method="create"/>
+          factory-method="create"/>-->
 
 </beans>

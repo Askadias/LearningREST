@@ -13,7 +13,6 @@ buildscript {
 
 apply plugin: 'deploy'
 
-
 deploy {
     serviceName = 'UserService'
     basePort = 10000
@@ -38,8 +37,6 @@ dependencies {
     compile "commons-collections:commons-collections:${rev_common_collections}"
     compile "org.slf4j:slf4j-api:${rev_slf4j}"
     compile "ch.qos.logback:logback-core:${rev_logback}"
-    compile "ch.qos.logback:logback-classic:${rev_logback}"
-    compile "ch.qos.logback:logback-examples:${rev_logback}"
 
     // --------------------- MONGO ---------------------------------------
     compile "org.mongodb:mongo-java-driver:${rev_mongo}"
@@ -66,7 +63,6 @@ dependencies {
     compile "org.bouncycastle:bcprov-jdk16:${rev_bouncycastle}"
     compile "org.jasypt:jasypt:${rev_jasypt}"
     compile "org.jasypt:jasypt-spring3:${rev_jasypt}"
-
 
     // ===================== TEST ========================================
     testCompile "org.springframework:spring-test:${rev_spring}"

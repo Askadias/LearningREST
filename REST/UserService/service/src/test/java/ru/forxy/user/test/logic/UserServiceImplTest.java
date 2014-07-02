@@ -3,7 +3,6 @@ package ru.forxy.user.test.logic;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.cxf.jaxrs.impl.HttpHeadersImpl;
 import org.apache.cxf.jaxrs.impl.UriInfoImpl;
-import org.apache.cxf.message.ExchangeImpl;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.message.MessageImpl;
 import org.easymock.EasyMock;
@@ -105,10 +104,8 @@ public class UserServiceImplTest extends BaseUserServiceTest {
         UriInfo uriInfo = new UriInfoImpl(m);
         HttpHeaders headers = new HttpHeadersImpl(m);
 
-        //User testUser = addUser(uriInfo, headers);
-
         List<User> users = new ArrayList<User>();
-        users.add(new User(TEST_USER_EMAIL, null));
+        users.add(new User(TEST_USER_EMAIL, new byte[]{}));
         EasyMock.expect(userDAOMock.findAll(EasyMock.anyObject(Pageable.class))).andReturn(new PageImpl<User>(users));
         EasyMock.replay(userDAOMock);
         Response response = userService.getUsers(1, uriInfo, headers);
@@ -119,7 +116,5 @@ public class UserServiceImplTest extends BaseUserServiceTest {
         EntityPage<User> userPage = response.readEntity(new GenericType<EntityPage<User>>() {
         });
         Assert.assertTrue(CollectionUtils.isNotEmpty(userPage.getContent()));
-
-        //deleteUser(testUser, uriInfo, headers);
     }
 }

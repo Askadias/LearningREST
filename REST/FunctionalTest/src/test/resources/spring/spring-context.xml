@@ -90,7 +90,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="userServiceClient" class="org.apache.cxf.jaxrs.client.JAXRSClientFactory"
+    <!--<bean id="userServiceClient" class="org.apache.cxf.jaxrs.client.JAXRSClientFactory"
           factory-method="create" scope="prototype"
           c:baseAddress="${ru.forxy.user.rest.v1.IUserService/url}"
           c:cls="ru.forxy.user.rest.v1.IUserService"
@@ -121,7 +121,15 @@
 
     <bean id="userSystemStatus" class="org.springframework.aop.framework.ProxyFactoryBean"
           p:targetSource-ref="userSystemStatusConnectionPool"
-          p:proxyInterfaces="ru.forxy.common.service.ISystemStatusService"/>
+          p:proxyInterfaces="ru.forxy.common.service.ISystemStatusService"/>-->
+
+    <bean id="userServiceClient" class="ru.forxy.user.rest.v1.UserServiceClient">
+        <property name="endpoint" value="${ru.forxy.user.rest.v1.UserServiceClient/endpoint}"/>
+        <property name="clientId" value="${ru.forxy.user.rest.v1.UserServiceClient/clientId}"/>
+        <property name="transport">
+            <bean class="ru.forxy.common.rest.client.transport.HttpClientTransport"/>
+        </property>
+    </bean>
 
 
     <!-- =======================================

@@ -1,6 +1,5 @@
 package ru.forxy.user.db.dao.mongo;
 
-import com.mongodb.CommandResult;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -122,13 +121,6 @@ public class UserDAO implements IUserDAO {
             long timeStart = new Date().getTime();
             try {
                 mongoTemplate.count(null, User.class);
-                CommandResult lastError = mongoTemplate.getDb().getLastError();
-                //noinspection ThrowableResultOfMethodCallIgnored
-                if (lastError.getException() != null) {
-                    exceptionMessage = lastError.getErrorMessage();
-                    exceptionDetails = ExceptionUtils.getStackTrace(lastError.getException());
-                    statusType = StatusType.YELLOW;
-                }
             } catch (final Exception e) {
                 exceptionMessage = e.getMessage();
                 exceptionDetails = ExceptionUtils.getStackTrace(e);

@@ -1,6 +1,5 @@
 package ru.forxy.user.rest.v1;
 
-import ru.forxy.common.support.Constants;
 import ru.forxy.user.rest.v1.pojo.User;
 
 import javax.ws.rs.Consumes;

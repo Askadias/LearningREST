@@ -1,10 +1,6 @@
 package ru.forxy.stress;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.cxf.jaxrs.impl.HttpHeadersImpl;
-import org.apache.cxf.jaxrs.impl.UriInfoImpl;
-import org.apache.cxf.message.Message;
-import org.apache.cxf.message.MessageImpl;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -12,18 +8,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.forxy.BaseSpringContextTest;
 import ru.forxy.common.pojo.EntityPage;
-import ru.forxy.common.service.ISystemStatusService;
+import ru.forxy.common.pojo.StatusEntity;
 import ru.forxy.common.support.Configuration;
-import ru.forxy.user.rest.IUserService;
-import ru.forxy.user.rest.pojo.User;
+import ru.forxy.user.rest.v1.UserServiceClient;
+import ru.forxy.user.rest.v1.pojo.User;
 
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -48,13 +41,11 @@ public class UserServiceStressTest extends BaseSpringContextTest {
     private Configuration configuration;
 
     @Autowired
-    private IUserService userService;
-
-    @Autowired
-    private ISystemStatusService userSystemStatus;
+    private UserServiceClient userServiceClient;
 
     @Test
     public void testAddDelete() throws InterruptedException, ExecutionException {
+        final String transactionGUID = UUID.randomUUID().toString();
         final int threadsCount = configuration.getInt(Config.ThreadsCount, DEFAULT_THREADS_COUNT);
         final int iterationsCount = configuration.getInt(Config.IterationsCount, DEFAULT_ITERATIONS_COUNT);
         List<Runnable> userServiceCallTaskList = new ArrayList<Runnable>();
@@ -64,29 +55,20 @@ public class UserServiceStressTest extends BaseSpringContextTest {
                 @Override
                 public void run() {
                     for (int j = 0; j < iterationsCount; j++) {
-                        final Message m = new MessageImpl();
-                        final UriInfo uriInfo = new UriInfoImpl(m);
-                        final HttpHeaders headers = new HttpHeadersImpl(m);
-
                         final User xander = new User(userEmail, new byte[]{});
 
-                        Response response = userService.createUser(xander, uriInfo, headers);
-                        Assert.assertNotNull(response);
+                        StatusEntity status = userServiceClient.createUser(transactionGUID, xander);
+                        Assert.assertNotNull(status);
 
-                        response = userService.login(xander, uriInfo, headers);
-                        Assert.assertNotNull(response);
-                        final User user = response.readEntity(User.class);
+                        User user = userServiceClient.getUser(transactionGUID, userEmail);
                         Assert.assertNotNull(user);
                         LOGGER.info("User  has been successfully created: {}", user);
                         Assert.assertEquals(userEmail, user.getEmail());
 
-                        response = userService.deleteUser(xander.getEmail(), uriInfo, headers);
-                        Assert.assertNotNull(response);
+                        status = userServiceClient.deleteUser(transactionGUID, userEmail);
+                        Assert.assertNotNull(status);
 
-                        response = userService.getUser(xander, uriInfo, headers);
-                        Object entity = response.getEntity();
-                        Assert.assertNotNull(entity);
-                        Assert.assertEquals(404, response.getStatus());
+                        user = userServiceClient.getUser(transactionGUID, userEmail);
                         LOGGER.info("User has been successfully removed");
                     }
                 }
@@ -104,6 +86,7 @@ public class UserServiceStressTest extends BaseSpringContextTest {
 
     @Test
     public void testGetPage() throws InterruptedException, ExecutionException {
+        final String transactionGUID = UUID.randomUUID().toString();
         final int threadsCount = configuration.getInt(Config.ThreadsCount, DEFAULT_THREADS_COUNT);
         final int iterationsCount = configuration.getInt(Config.IterationsCount, DEFAULT_ITERATIONS_COUNT);
         List<Runnable> userServiceCallTaskList = new ArrayList<Runnable>();
@@ -112,13 +95,8 @@ public class UserServiceStressTest extends BaseSpringContextTest {
                 @Override
                 public void run() {
                     final Random random = new Random();
-                    final Message m = new MessageImpl();
-                    final UriInfo uriInfo = new UriInfoImpl(m);
-                    final HttpHeaders headers = new HttpHeadersImpl(m);
                     for (int j = 0; j < iterationsCount; j++) {
-                        final Response response = userService.getUsers(random.nextInt(threadsCount), uriInfo, headers);
-                        Assert.assertNotNull(response);
-                        final EntityPage<User> userPage = response.readEntity(new GenericType<EntityPage<User>>() {});
+                        EntityPage<User> userPage = userServiceClient.getUsers(transactionGUID, random.nextInt(threadsCount));
                         Assert.assertNotNull(userPage);
                         Assert.assertTrue(CollectionUtils.isNotEmpty(userPage.getContent()));
                     }
@@ -144,13 +122,10 @@ public class UserServiceStressTest extends BaseSpringContextTest {
             userServiceCallTaskList.add(new Runnable() {
                 @Override
                 public void run() {
-                    final Message m = new MessageImpl();
-                    final UriInfo uriInfo = new UriInfoImpl(m);
-                    final HttpHeaders headers = new HttpHeadersImpl(m);
                     for (int j = 0; j < iterationsCount; j++) {
-                        final Response response = userSystemStatus.getSystemStatus(uriInfo, headers);
+                        /*final Response response = userServiceClient.getSystemStatus();
                         Assert.assertNotNull(response);
-                        Assert.assertEquals(response.getStatus(), Response.Status.OK.getStatusCode());
+                        Assert.assertEquals(response.getStatus(), Response.Status.OK.getStatusCode());*/
                     }
                 }
             });

@@ -41,5 +41,12 @@
             </bean>
             <bean class="ru.forxy.common.exceptions.support.RuntimeExceptionMapper"/>
         </jaxrs:providers>
+        <jaxrs:inInterceptors>
+            <ref bean="validationInInterceptor"/>
+        </jaxrs:inInterceptors>
+        <jaxrs:outInterceptors>
+            <ref bean="validationOutInterceptor"/>
+        </jaxrs:outInterceptors>
     </jaxrs:server>
+
 </beans>
