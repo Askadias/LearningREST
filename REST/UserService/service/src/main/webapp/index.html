@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en" ng-app="userAdminApp">
+<head>
+    <meta charset="utf-8">
+    <title>User Service Admin Tool</title>
+    <link rel="stylesheet" href="web/css/app.css">
+    <link rel="stylesheet" href="ext/bootstrap/css/bootstrap.css">
+    <script src="webjars/angularjs/1.2.18/angular.js"></script>
+    <script src="webjars/angularjs/1.2.18/angular-route.js"></script>
+    <script src="webjars/angularjs/1.2.18/angular-resource.js"></script>
+    <script src="web/js/app.js"></script>
+    <script src="web/js/controller/userController.js"></script>
+    <script src="web/js/services/userService.js"></script>
+</head>
+<body>
+
+<ul class="menu">
+    <li><a href="service/soap/v1?wsdl">WSDL</a></li>
+    <li><a href="service/rest/v1?_wadl">WADL</a></li>
+</ul>
+<hr class="" />
+<div ng-view></div>
+
+<!--<script src="resources/js/app.js"></script>
+<script src="resources/js/services.js"></script>
+<script src="resources/js/controllers/RailwayStationController.js"></script>
+<script src="resources/js/controllers/CarController.js"></script>
+<script src="resources/js/controllers/TrainController.js"></script>
+<script src="resources/js/filters.js"></script>
+<script src="resources/js/directives.js"></script>-->
+</body>
+</html>

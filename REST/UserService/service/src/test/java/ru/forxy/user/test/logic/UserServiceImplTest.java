@@ -108,7 +108,7 @@ public class UserServiceImplTest extends BaseUserServiceTest {
         users.add(new User(TEST_USER_EMAIL, new byte[]{}));
         EasyMock.expect(userDAOMock.findAll(EasyMock.anyObject(Pageable.class))).andReturn(new PageImpl<User>(users));
         EasyMock.replay(userDAOMock);
-        Response response = userService.getUsers(1, uriInfo, headers);
+        Response response = userService.getUsers(1, 10, uriInfo, headers);
         EasyMock.reset(userDAOMock);
         Assert.assertNotNull(response);
         Assert.assertNotNull(response.getEntity());

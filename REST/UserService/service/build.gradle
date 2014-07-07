@@ -64,6 +64,10 @@ dependencies {
     compile "org.jasypt:jasypt:${rev_jasypt}"
     compile "org.jasypt:jasypt-spring3:${rev_jasypt}"
 
+    // --------------------- UI ------------------------------------------
+    compile "org.webjars:angularjs:${rev_angularjs}"
+    compile "com.efsavage.twitter.bootstrap:bootstrap-maven:${rev_bootstrap}"
+
     // ===================== TEST ========================================
     testCompile "org.springframework:spring-test:${rev_spring}"
     testCompile "junit:junit:${rev_junit}"

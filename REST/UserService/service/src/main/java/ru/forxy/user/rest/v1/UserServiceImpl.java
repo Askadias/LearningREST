@@ -16,11 +16,11 @@ public class UserServiceImpl extends AbstractService implements IUserService {
     private IUserServiceFacade userServiceFacade;
 
     @Override
-    public Response getUsers(@Context UriInfo uriInfo, @Context HttpHeaders headers) {
+    public Response getUsers(UriInfo uriInfo, HttpHeaders headers) {
         return respondWith(userServiceFacade.getAllUsers(), uriInfo, headers).build();
     }
 
-    @Override
+    //@Override
     public Response getUsers(final Integer page, final UriInfo uriInfo, final HttpHeaders headers) {
         final EntityPage<User> userPage = userServiceFacade.getUsers(page);
         return respondWith(userPage, uriInfo, headers).build();
