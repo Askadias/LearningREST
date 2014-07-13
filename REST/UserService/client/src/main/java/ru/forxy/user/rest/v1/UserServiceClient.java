@@ -75,7 +75,7 @@ public class UserServiceClient extends RestServiceClientSupport implements IUser
     @Override
     @SuppressWarnings({"rawtypes", "unchecked"})
     public EntityPage<User> getUsers(final String transactionGUID, final Integer page) {
-        final String confUrl = endpoint + "users/" + page;
+        final String confUrl = endpoint + "users?page=" + page;
 
         final ITransport.Response<EntityPage, StatusEntity> response =
                 transport.performGet(confUrl, buildHeaders(transactionGUID, endpoint, HttpGet.METHOD_NAME),
@@ -86,7 +86,7 @@ public class UserServiceClient extends RestServiceClientSupport implements IUser
     @Override
     @SuppressWarnings({"rawtypes", "unchecked"})
     public EntityPage<User> getUsers(final String transactionGUID, Integer page, Integer size) {
-        final String confUrl = endpoint + "users/" + page + "/" + size;
+        final String confUrl = endpoint + "users?page=" + page + "&size=" + size;
 
         final ITransport.Response<EntityPage, StatusEntity> response =
                 transport.performGet(confUrl, buildHeaders(transactionGUID, endpoint, HttpGet.METHOD_NAME),
@@ -97,7 +97,7 @@ public class UserServiceClient extends RestServiceClientSupport implements IUser
     @Override
     @SuppressWarnings({"rawtypes", "unchecked"})
     public User getUser(final String transactionGUID, String email) {
-        final String confUrl = endpoint + "users?email=" + email;
+        final String confUrl = endpoint + "users/" + email;
 
         final ITransport.Response<User, StatusEntity> response =
                 transport.performGet(confUrl, buildHeaders(transactionGUID, endpoint, HttpGet.METHOD_NAME),
@@ -130,7 +130,7 @@ public class UserServiceClient extends RestServiceClientSupport implements IUser
     @Override
     @SuppressWarnings({"rawtypes", "unchecked"})
     public StatusEntity deleteUser(String transactionGUID, String email) {
-        final String confUrl = endpoint + "users?email=" + email;
+        final String confUrl = endpoint + "users/" + email;
 
         final ITransport.Response<StatusEntity, StatusEntity> response =
                 transport.performDelete(confUrl, buildHeaders(transactionGUID, endpoint, HttpGet.METHOD_NAME),

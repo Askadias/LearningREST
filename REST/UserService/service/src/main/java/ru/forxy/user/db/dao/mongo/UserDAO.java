@@ -1,5 +1,6 @@
 package ru.forxy.user.db.dao.mongo;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -40,10 +41,34 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public Page<User> findAll(final Pageable pageable) {
-        int size = pageable.getPageSize();
-        int offset = pageable.getOffset();
-        List<User> users = mongoTemplate.find(Query.query(new Criteria()).limit(size).skip(offset), User.class);
-        return new PageImpl<User>(users, pageable, count());
+        return new PageImpl<User>(
+                mongoTemplate.find(Query.query(new Criteria()).with(pageable), User.class),
+                pageable, count()
+        );
+    }
+
+    @Override
+    public Page<User> findAll(final Pageable pageable, final User filter) {
+        Query query = Query.query(new Criteria()).with(pageable);
+        if (filter != null) {
+            if (StringUtils.isNotEmpty(filter.getEmail())) {
+                query.addCriteria(new Criteria("email").regex(filter.getEmail()));
+            }
+            if (StringUtils.isNotEmpty(filter.getLogin())) {
+                query.addCriteria(new Criteria("login").regex(filter.getLogin()));
+            }
+            if (StringUtils.isNotEmpty(filter.getFirstName())) {
+                query.addCriteria(new Criteria("firstName").regex(filter.getFirstName()));
+            }
+            if (StringUtils.isNotEmpty(filter.getLastName())) {
+                query.addCriteria(new Criteria("lastName").regex(filter.getLastName()));
+            }
+            if (filter.getGender() != null) {
+                query.addCriteria(new Criteria("gender").is(filter.getGender()));
+            }
+        }
+
+        return new PageImpl<User>(mongoTemplate.find(query, User.class), pageable, count());
     }
 
     @Override

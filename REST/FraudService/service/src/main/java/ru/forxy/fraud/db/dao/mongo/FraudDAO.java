@@ -15,7 +15,6 @@ import ru.forxy.fraud.db.dao.IFraudDAO;
 import ru.forxy.fraud.rest.pojo.Transaction;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * Mongo DB based data source for transactions
@@ -31,10 +30,14 @@ public class FraudDAO implements IFraudDAO {
 
     @Override
     public Page<Transaction> findAll(final Pageable pageable) {
-        int size = pageable.getPageSize();
+        /*int size = pageable.getPageSize();
         int offset = pageable.getOffset();
-        List<Transaction> transactions = mongoTemplate.find(Query.query(new Criteria()).limit(size).skip(offset), Transaction.class);
-        return new PageImpl<Transaction>(transactions, pageable, count());
+        mongoTemplate.find(Query.query(new Criteria()).with(pageable), Transaction.class);
+        List<Transaction> transactions = mongoTemplate.find(Query.query(new Criteria()).limit(size).skip(offset), Transaction.class);*/
+        return new PageImpl<Transaction>(
+                mongoTemplate.find(Query.query(new Criteria()).with(pageable), Transaction.class),
+                pageable, count()
+        );
     }
 
     @Override

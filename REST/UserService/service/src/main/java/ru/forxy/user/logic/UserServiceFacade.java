@@ -2,8 +2,10 @@ package ru.forxy.user.logic;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import ru.forxy.common.exceptions.ServiceException;
 import ru.forxy.common.pojo.EntityPage;
+import ru.forxy.common.pojo.SortDirection;
 import ru.forxy.user.db.dao.IUserDAO;
 import ru.forxy.user.exceptions.UserServiceEventLogId;
 import ru.forxy.user.rest.v1.pojo.User;
@@ -20,7 +22,6 @@ public class UserServiceFacade implements IUserServiceFacade {
 
     private IUserDAO userDAO;
 
-    @Override
     public List<User> getAllUsers() {
         List<User> allUsers = new LinkedList<User>();
         for (User user : userDAO.findAll()) {
@@ -30,14 +31,22 @@ public class UserServiceFacade implements IUserServiceFacade {
     }
 
     @Override
-    public EntityPage<User> getUsers(final Integer page) {
-        return getUsers(page, null);
-    }
-
-    @Override
-    public EntityPage<User> getUsers(final Integer page, final Integer size) {
-        final Page<User> p = userDAO.findAll(new PageRequest(page, size == null ? DEFAULT_PAGE_SIZE : size));
-        return new EntityPage<User>(p.getContent(), p.getSize(), p.getNumber(), p.getTotalElements());
+    public EntityPage<User> getUsers(final Integer page, final Integer size, final SortDirection sortDirection,
+                                     final String sortedBy, final User filter) {
+        if (page >= 1) {
+            int pageSize = size == null ? DEFAULT_PAGE_SIZE : size;
+            PageRequest pageRequest;
+            if (sortDirection != null && sortedBy != null) {
+                Sort.Direction dir = sortDirection == SortDirection.ASC ? Sort.Direction.ASC : Sort.Direction.DESC;
+                pageRequest = new PageRequest(page - 1, pageSize, dir, sortedBy);
+            } else {
+                pageRequest = new PageRequest(page - 1, pageSize);
+            }
+            final Page<User> p = userDAO.findAll(pageRequest, filter);
+            return new EntityPage<User>(p.getContent(), p.getSize(), p.getNumber(), p.getTotalElements());
+        } else {
+            throw new ServiceException(UserServiceEventLogId.InvalidPageNumber, page);
+        }
     }
 
     @Override

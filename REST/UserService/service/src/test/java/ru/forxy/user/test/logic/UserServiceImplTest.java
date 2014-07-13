@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import ru.forxy.common.exceptions.ServiceException;
 import ru.forxy.common.pojo.EntityPage;
+import ru.forxy.common.pojo.SortDirection;
 import ru.forxy.user.db.dao.IUserDAO;
 import ru.forxy.user.exceptions.UserServiceEventLogId;
 import ru.forxy.user.rest.v1.IUserService;
@@ -108,7 +109,7 @@ public class UserServiceImplTest extends BaseUserServiceTest {
         users.add(new User(TEST_USER_EMAIL, new byte[]{}));
         EasyMock.expect(userDAOMock.findAll(EasyMock.anyObject(Pageable.class))).andReturn(new PageImpl<User>(users));
         EasyMock.replay(userDAOMock);
-        Response response = userService.getUsers(1, 10, uriInfo, headers);
+        Response response = userService.getUsers(1, 10, SortDirection.ASC, "email", null, uriInfo, headers);
         EasyMock.reset(userDAOMock);
         Assert.assertNotNull(response);
         Assert.assertNotNull(response.getEntity());

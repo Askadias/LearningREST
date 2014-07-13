@@ -27,7 +27,13 @@ public class User {
 
     private Date birthDate;
 
+    private Date updateData;
+
+    private String updatedBy;
+
     private Date createDate = new Date();
+
+    private String createdBy;
 
     public User() {
     }

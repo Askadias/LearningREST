@@ -1,16 +1,17 @@
 package ru.forxy.user.rest.v1;
 
+import ru.forxy.common.pojo.SortDirection;
 import ru.forxy.user.rest.v1.pojo.User;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.MatrixParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -22,15 +23,13 @@ import javax.ws.rs.core.UriInfo;
 public interface IUserService {
 
     @GET
-    Response getUsers(@Context final UriInfo uriInfo, @Context final HttpHeaders headers);
-
-    /*@GET
-    Response getUsers(@MatrixParam("page") final Integer page, @Context final UriInfo uriInfo,
-                      @Context final HttpHeaders headers);*/
-
-    @GET
-    Response getUsers(@MatrixParam("page") final Integer page, @MatrixParam("size") final Integer size,
-                      @Context final UriInfo uriInfo, @Context final HttpHeaders headers);
+    Response getUsers(@QueryParam("page") final Integer page,
+                      @QueryParam("size") final Integer size,
+                      @QueryParam("sortDir") final SortDirection sortDirection,
+                      @QueryParam("sortedBy") final String sortedBy,
+                      @QueryParam("") final User filter,
+                      @Context final UriInfo uriInfo,
+                      @Context final HttpHeaders headers);
 
     @GET
     @Path("/{email}/")

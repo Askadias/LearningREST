@@ -56,7 +56,8 @@ public class UserServiceImpl implements UserServicePortType {
 
         try {
 
-            final EntityPage<User> page = userServiceFacade.getUsers(pageInfo.getNumber(), pageInfo.getSize());
+            final EntityPage<User> page = userServiceFacade.getUsers(pageInfo.getNumber(), pageInfo.getSize(),
+                    null, null, null);
             response.setPage(UserMapper.fromUserPage(page));
 
         } catch (ServiceException e) {

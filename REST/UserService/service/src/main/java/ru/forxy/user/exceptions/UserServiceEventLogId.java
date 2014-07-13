@@ -21,14 +21,18 @@ public enum UserServiceEventLogId implements EventLogBase {
             "Requested user's email shouldn't be null or empty.",
             EventType.InvalidInput),
 
-    EmptyLoginEmailOrPassword(UserServiceEventLogId.BASE_EVENT_LOG_ID + 100, 400,
+    EmptyLoginEmailOrPassword(UserServiceEventLogId.BASE_EVENT_LOG_ID + 3, 400,
             "To login user's email and password should present.",
+            EventType.InvalidInput),
+
+    InvalidPageNumber(UserServiceEventLogId.BASE_EVENT_LOG_ID + 4, 400,
+            "Invalid page number provided: '%1$s'",
             EventType.InvalidInput),
 
     // -------------------------------------------------------------------
     // DB events
     // -------------------------------------------------------------------
-    CannotRetrieveCassandraSession(LoggingCommonEventLogId.BASE_EVENT_LOG_ID + 101, 500,
+    CannotRetrieveCassandraSession(LoggingCommonEventLogId.BASE_EVENT_LOG_ID + 100, 500,
             "Cannot retrieve cassandra connection.",
             EventType.InternalError);
 

@@ -21,6 +21,11 @@ public class UserDAO implements IUserDAO {
     private ICassandraClient<User> cassandraClient;
 
     @Override
+    public Page<User> findAll(Pageable pageable, User filter) {
+        return findAll(pageable);
+    }
+
+    @Override
     public List<User> findByLastName(final String LastName) {
         return null;
     }

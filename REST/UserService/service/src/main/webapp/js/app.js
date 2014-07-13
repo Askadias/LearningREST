@@ -1,19 +1,22 @@
 'use strict';
 
-var userAdminApp = angular.module('userAdminApp', [
+var UserAdminApp = angular.module('UserAdminApp', [
     'ngRoute',
     'userController',
-    'userService'
+    'userService',
+    'userDirectives',
+    'restangular'
 ]);
 
-userAdminApp.config(['$routeProvider',
-    function ($routeProvider) {
+UserAdminApp.config(['$routeProvider', 'RestangularProvider',
+    function ($routeProvider, RestangularProvider) {
+        RestangularProvider.setBaseUrl('service/rest/v1/');
         $routeProvider.
             when('/users', {
                 templateUrl: 'partials/users-list.html',
                 controller: 'UsersListCtrl'
             }).
-            when('/users/:userEmail', {
+            when('/users/:email', {
                 templateUrl: 'partials/user-details.html',
                 controller: 'UserDetailsCtrl'
             }).otherwise({

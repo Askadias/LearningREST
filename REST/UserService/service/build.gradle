@@ -35,7 +35,6 @@ dependencies {
 
     // --------------------- COMMON --------------------------------------
     compile "commons-collections:commons-collections:${rev_common_collections}"
-    compile "org.slf4j:slf4j-api:${rev_slf4j}"
     compile "ch.qos.logback:logback-core:${rev_logback}"
 
     // --------------------- MONGO ---------------------------------------
@@ -66,7 +65,8 @@ dependencies {
 
     // --------------------- UI ------------------------------------------
     compile "org.webjars:angularjs:${rev_angularjs}"
-    compile "com.efsavage.twitter.bootstrap:bootstrap-maven:${rev_bootstrap}"
+    compile "org.webjars:restangular:${rev_restangular}"
+    compile "org.webjars:bootstrap:${rev_bootstrap}"
 
     // ===================== TEST ========================================
     testCompile "org.springframework:spring-test:${rev_spring}"
