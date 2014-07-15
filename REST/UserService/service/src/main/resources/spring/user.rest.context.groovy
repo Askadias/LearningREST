@@ -29,6 +29,7 @@ beans {
     jaxrs.server(id: 'userService', address: '/rest/v1') {
         jaxrs.serviceBeans {
             ref(bean: 'userServiceImpl')
+            ref(bean: 'authServiceImpl')
             ref(bean: 'systemStatusServiceImpl')
         }
         jaxrs.providers {

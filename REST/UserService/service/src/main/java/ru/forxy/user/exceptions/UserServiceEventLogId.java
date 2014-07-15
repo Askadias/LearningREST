@@ -29,6 +29,9 @@ public enum UserServiceEventLogId implements EventLogBase {
             "Invalid page number provided: '%1$s'",
             EventType.InvalidInput),
 
+    NotAuthorized(UserServiceEventLogId.BASE_EVENT_LOG_ID + 5, 401,
+            "Invalid user name ('%1$s') or password", EventType.InvalidInput),
+
     // -------------------------------------------------------------------
     // DB events
     // -------------------------------------------------------------------

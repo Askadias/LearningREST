@@ -9,7 +9,7 @@
     <xs:complexType name="UserType">
         <xs:sequence>
             <xs:element name="Email" type="common:EmailAddressType" minOccurs="1"/>
-            <xs:element name="Password" type="xs:base64Binary" minOccurs="0"/>
+            <xs:element name="Password" type="xs:string" minOccurs="0"/>
             <xs:element name="Login" type="xs:string" minOccurs="0"/>
             <xs:element name="LastName" type="xs:string" minOccurs="0"/>
             <xs:element name="FirstName" type="xs:string" minOccurs="0"/>

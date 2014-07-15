@@ -1,9 +1,11 @@
 package spring
 
 import org.springframework.aop.framework.ProxyFactoryBean
+import org.springframework.security.crypto.password.StandardPasswordEncoder
 import ru.forxy.common.rest.SystemStatusServiceImpl
 import ru.forxy.user.logic.SystemStatusFacade
 import ru.forxy.user.logic.UserServiceFacade
+import ru.forxy.user.rest.v1.AuthServiceImpl
 import ru.forxy.user.rest.v1.UserServiceImpl
 
 beans {
@@ -23,9 +25,12 @@ beans {
         userDAO = ref(userDAOMongoProxy)
     }
 
+    passwordEncoder(StandardPasswordEncoder)
+
     userServiceFacade(UserServiceFacade) { bean ->
         bean.autowire = 'byName'
         userDAO = ref(userDAOMongoProxy)
+        passwordEncoder = ref(passwordEncoder)
     }
 
     // ================= SERVICE PROXIES ========================================================================
@@ -51,6 +56,10 @@ beans {
     }
 
     userServiceImpl(UserServiceImpl) {
+        userServiceFacade = ref(userServiceFacadeProxy)
+    }
+
+    authServiceImpl(AuthServiceImpl) {
         userServiceFacade = ref(userServiceFacadeProxy)
     }
 }

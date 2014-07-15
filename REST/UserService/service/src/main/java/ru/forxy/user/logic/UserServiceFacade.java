@@ -1,13 +1,16 @@
 package ru.forxy.user.logic;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.forxy.common.exceptions.ServiceException;
 import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.common.pojo.SortDirection;
 import ru.forxy.user.db.dao.IUserDAO;
 import ru.forxy.user.exceptions.UserServiceEventLogId;
+import ru.forxy.user.rest.v1.pojo.Credentials;
 import ru.forxy.user.rest.v1.pojo.User;
 
 import java.util.LinkedList;
@@ -21,6 +24,8 @@ public class UserServiceFacade implements IUserServiceFacade {
     private static final int DEFAULT_PAGE_SIZE = 10;
 
     private IUserDAO userDAO;
+
+    private PasswordEncoder passwordEncoder;
 
     public List<User> getAllUsers() {
         List<User> allUsers = new LinkedList<User>();
@@ -85,7 +90,31 @@ public class UserServiceFacade implements IUserServiceFacade {
         }
     }
 
+    @Override
+    public User login(Credentials credentials) {
+        User user = userDAO.findOne(credentials.getEmail());
+        if (user != null) {
+            if (StringUtils.equals(user.getPassword(), passwordEncoder.encode(credentials.getPassword()))) {
+                return user;
+            }
+        }
+        throw new ServiceException(UserServiceEventLogId.NotAuthorized, credentials.getEmail());
+    }
+
+    @Override
+    public void register(Credentials credentials) {
+        if (!userDAO.exists(credentials.getEmail())) {
+            userDAO.save(new User(credentials.getEmail(), passwordEncoder.encode(credentials.getPassword())));
+        } else {
+            throw new ServiceException(UserServiceEventLogId.UserAlreadyExists, credentials.getEmail());
+        }
+    }
+
     public void setUserDAO(final IUserDAO userDAO) {
         this.userDAO = userDAO;
+    }
+
+    public void setPasswordEncoder(final PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 }

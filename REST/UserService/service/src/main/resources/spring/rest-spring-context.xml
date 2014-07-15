@@ -32,6 +32,7 @@
     <jaxrs:server id="ru.forxy.UserService.rest" address="/rest/v1">
         <jaxrs:serviceBeans>
             <ref bean="ru.forxy.user.rest.v1.UserServiceImpl"/>
+            <ref bean="ru.forxy.user.rest.v1.AuthServiceImpl"/>
             <ref bean="ru.forxy.common.rest.SystemStatusServiceImpl"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
@@ -48,5 +49,6 @@
             <ref bean="validationOutInterceptor"/>
         </jaxrs:outInterceptors>
     </jaxrs:server>
+
 
 </beans>

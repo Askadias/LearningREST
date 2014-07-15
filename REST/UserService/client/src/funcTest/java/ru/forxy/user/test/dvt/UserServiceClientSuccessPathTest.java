@@ -26,7 +26,7 @@ public class UserServiceClientSuccessPathTest extends BaseUserServiceTest {
     public void testGetAllUsers() {
         Assert.assertNotNull(userServiceClient);
         String transactionGUID = UUID.randomUUID().toString();
-        EntityPage<User> userPage = userServiceClient.getUsers(transactionGUID, 0);
+        EntityPage<User> userPage = userServiceClient.getUsers(transactionGUID, 1);
         Assert.assertNotNull(userPage);
     }
 
@@ -34,7 +34,7 @@ public class UserServiceClientSuccessPathTest extends BaseUserServiceTest {
     public void createUpdateDeleteUser() {
         // prepare test data
         String transactionGUID = UUID.randomUUID().toString();
-        User expectedUser = new User("kast.askadias@mail.ru", new byte[]{0,0,0});
+        User expectedUser = new User("kast.askadias@mail.ru", "");
         expectedUser.setFirstName("Kast");
         expectedUser.setLastName("Askadias");
         expectedUser.setGender('m');

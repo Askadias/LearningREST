@@ -67,9 +67,6 @@ dependencies {
     wsimport "com.sun.xml.ws:jaxws-rt:${rev_jax_ws}"
     wsimport "com.sun.xml.ws:jaxws-tools:${rev_jax_ws}"
 
-    // --------------------- CXF -----------------------------------------
-    compile "org.apache.cxf:cxf-bundle-jaxrs:${rev_cxf}"
-
     // --------------------- DATA ----------------------------------------
     compile ("org.springframework.data:spring-data-mongodb:${rev_spring_data}") {
         transitive = false

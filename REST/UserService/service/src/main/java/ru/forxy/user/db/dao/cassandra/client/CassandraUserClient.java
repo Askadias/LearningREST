@@ -7,7 +7,6 @@ import com.datastax.driver.core.Session;
 import org.springframework.beans.factory.InitializingBean;
 import ru.forxy.user.rest.v1.pojo.User;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -67,7 +66,7 @@ public class CassandraUserClient implements ICassandraClient<User>, Initializing
         // @formatter:off
         getSession().execute(newUserStatement.bind(
                 user.getEmail(),
-                ByteBuffer.wrap(user.getPassword()),
+                user.getPassword(),
                 user.getLogin(),
                 user.getFirstName(),
                 user.getLastName(),
@@ -104,12 +103,7 @@ public class CassandraUserClient implements ICassandraClient<User>, Initializing
         if (row == null || row.isNull("email")) {
             return null;
         }
-        ByteBuffer passwordBuffer = row.getBytes("password");
-        byte[] password = null;
-        if (passwordBuffer != null) {
-            password = new byte[passwordBuffer.remaining()];
-            passwordBuffer.get(password);
-        }
+        String password = row.getString("password");
         final User user = new User(row.getString("email"), password);
         user.setBirthDate(row.getDate("birth_date"));
         user.setLogin(row.getString("login"));

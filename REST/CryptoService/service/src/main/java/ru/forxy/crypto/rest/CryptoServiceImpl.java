@@ -1,4 +1,4 @@
-package ru.forxy.rest;
+package ru.forxy.crypto.rest;
 
 
 import org.slf4j.Logger;

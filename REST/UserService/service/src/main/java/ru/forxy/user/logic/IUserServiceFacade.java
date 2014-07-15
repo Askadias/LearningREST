@@ -2,6 +2,7 @@ package ru.forxy.user.logic;
 
 import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.common.pojo.SortDirection;
+import ru.forxy.user.rest.v1.pojo.Credentials;
 import ru.forxy.user.rest.v1.pojo.User;
 
 import java.util.List;
@@ -23,4 +24,8 @@ public interface IUserServiceFacade {
     void createUser(final User user);
 
     void deleteUser(final String email);
+
+    User login(Credentials credentials);
+
+    void register(Credentials credentials);
 }

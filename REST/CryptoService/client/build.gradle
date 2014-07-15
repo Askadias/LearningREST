@@ -41,12 +41,10 @@ jar { from sourceSets.main.allJava }
 
 dependencies {
     // --------------------- FORXY ---------------------------------------
-    compile project(":ru.forxy.user.api")
-    compile "forxy:ru.forxy.user.api"
     compile "forxy:ru.forxy.common.rest:${rev_forxy_common}"
 
     // --------------------- COMMON --------------------------------------
-    //compile "commons-collections:commons-collections:${rev_common_collections}"
+    compile "commons-collections:commons-collections:${rev_common_collections}"
     compile "org.slf4j:slf4j-api:${rev_slf4j}"
     compile "ch.qos.logback:logback-core:${rev_logback}"
     compile "ch.qos.logback:logback-classic:${rev_logback}"
@@ -57,6 +55,7 @@ dependencies {
     compile "org.springframework:spring-context:${rev_spring}"
     compile "org.grails:grails-spring:${rev_grails}"
     compile "org.grails:grails-core:${rev_grails}"
+    compile "org.grails:grails-web:${rev_grails}"
     compile "org.codehaus.groovy:groovy-all:${rev_groovy}"
 
     // ===================== TEST ========================================

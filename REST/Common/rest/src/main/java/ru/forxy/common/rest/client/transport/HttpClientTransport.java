@@ -17,15 +17,15 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.conn.params.ConnRoutePNames;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.LayeredConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.PoolingClientConnectionManager;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
@@ -41,7 +41,6 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * The default implementation of the {@link ITransport} interface.
@@ -178,22 +177,45 @@ public class HttpClientTransport implements ITransport {
      */
     public HttpClientTransport(final HttpClientSSLKeyStore keyStore, final HttpClientConfig config,
                                final boolean proxyEnabled) {
-        final SchemeRegistry schemeRegistry = new SchemeRegistry();
+
+        // Create a registry of custom connection socket factories for supported
+        // protocol schemes / https
+        LayeredConnectionSocketFactory socketFactory = keyStore != null ?
+                keyStore.getSocketFactory() :
+                SSLConnectionSocketFactory.getSystemSocketFactory();
+        Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
+                .register("https", socketFactory)
+                .register("http", new PlainConnectionSocketFactory())
+                .build();
+
+        PoolingHttpClientConnectionManager connPoolControl =
+                new PoolingHttpClientConnectionManager(socketFactoryRegistry);
+        connPoolControl.setMaxTotal(config.getMaxConnections());
+        connPoolControl.setDefaultMaxPerRoute(config.getMaxConnections());
+
+        HttpClientBuilder clientBuilder = HttpClientBuilder.create();
+        clientBuilder.setConnectionManager(connPoolControl);
+        clientBuilder.setSSLSocketFactory(socketFactory);
+        clientBuilder.addInterceptorFirst(config.getRequestInterceptor());
+        clientBuilder.addInterceptorFirst(new RepeatableEntityCreatingResponseInterceptor());
+        clientBuilder.addInterceptorFirst(config.getResponseInterceptor());
+        httpClient = clientBuilder.build();
+        /*final SchemeRegistry schemeRegistry = new SchemeRegistry();
         schemeRegistry.register(new Scheme("http", 80, PlainSocketFactory.getSocketFactory()));
         if (keyStore != null) {
             schemeRegistry.register(new Scheme("https", 443, keyStore.getSocketFactory()));
         }
 
-        final PoolingClientConnectionManager manager =
-                new PoolingClientConnectionManager(schemeRegistry, config.getConnectionTTLMillis(),
-                        TimeUnit.MILLISECONDS);
-        manager.setMaxTotal(config.getMaxConnections());
-        manager.setDefaultMaxPerRoute(config.getMaxConnections());
+        --------final PoolingClientConnectionManager manager =
+        --------        new PoolingClientConnectionManager(schemeRegistry, config.getConnectionTTLMillis(),
+        --------                TimeUnit.MILLISECONDS);
+        --------manager.setMaxTotal(config.getMaxConnections());
+        --------manager.setDefaultMaxPerRoute(config.getMaxConnections());
 
-        final DefaultHttpClient client = new DefaultHttpClient(manager);
-        client.addRequestInterceptor(config.getRequestInterceptor());
-        client.addResponseInterceptor(new RepeatableEntityCreatingResponseInterceptor());
-        client.addResponseInterceptor(config.getResponseInterceptor());
+        --------final DefaultHttpClient client = new DefaultHttpClient(manager);
+        --------client.addRequestInterceptor(config.getRequestInterceptor());
+        --------client.addResponseInterceptor(new RepeatableEntityCreatingResponseInterceptor());
+        --------client.addResponseInterceptor(config.getResponseInterceptor());
 
         final HttpParams params = client.getParams();
         HttpConnectionParams.setConnectionTimeout(params, config.getConnectionTimeoutMillis());
@@ -205,7 +227,7 @@ public class HttpClientTransport implements ITransport {
 
         httpClient = client;
         HttpClientConnectionMonitor.spawn(manager, config.getConnectionMonitorIdleTimeoutMillis(),
-                config.getConnectionMonitorRunIntervalMillis());
+                config.getConnectionMonitorRunIntervalMillis());*/
     }
 
     @Override

@@ -16,6 +16,12 @@ apply plugin: 'deploy'
 deploy {
     serviceName = 'UserService'
     basePort = 10000
+    useSSL = true
+    keyAlias = 'oauth'
+    keystoreFile = 'conf/UserService/appconfig/oauth.jks'
+    keystorePass = '5ecret0AUTHPa55word'
+    truststoreFile = 'conf/UserService/appconfig/oauth.jks'
+    truststorePass = '5ecret0AUTHPa55word'
 }
 
 // ========== Dependencies ==============================================
@@ -28,6 +34,11 @@ dependencies {
     compile "forxy:ru.forxy.common.utils:${rev_forxy_common}"
     compile "forxy:ru.forxy.common.status:${rev_forxy_common}"
     compile "forxy:ru.forxy.common.logging:${rev_forxy_common}"
+
+    // --------------------- CXF -----------------------------------------
+    compile "org.apache.cxf:cxf-rt-frontend-jaxrs:${rev_cxf}"
+    compile "org.apache.cxf:cxf-rt-rs-service-description:${rev_cxf}"
+    compile "org.apache.cxf:cxf-rt-rs-security-oauth2:${rev_cxf}"
 
     // --------------------- JAX-WS --------------------------------------
     compile "org.apache.cxf:cxf-rt-frontend-jaxws:${rev_cxf}"
@@ -53,6 +64,7 @@ dependencies {
     compile "org.springframework:spring-aop:${rev_spring}"
     compile "org.springframework:spring-web:${rev_spring}"
     compile "org.springframework:spring-orm:${rev_spring}"
+    compile "org.springframework.security:spring-security-core:${rev_spring_security}"
     compile "org.grails:grails-spring:${rev_grails}"
     compile "org.grails:grails-core:${rev_grails}"
     compile "org.grails:grails-web:${rev_grails}"
@@ -62,6 +74,7 @@ dependencies {
     compile "org.bouncycastle:bcprov-jdk16:${rev_bouncycastle}"
     compile "org.jasypt:jasypt:${rev_jasypt}"
     compile "org.jasypt:jasypt-spring3:${rev_jasypt}"
+
 
     // --------------------- UI ------------------------------------------
     compile "org.webjars:angularjs:${rev_angularjs}"

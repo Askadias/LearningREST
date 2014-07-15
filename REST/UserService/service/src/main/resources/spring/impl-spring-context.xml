@@ -4,16 +4,24 @@
        xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"/>
+
+    <!-- System Status component-->
     <bean id="ru.forxy.user.logic.SystemStatusFacade" class="ru.forxy.user.logic.SystemStatusFacade"
           p:userDAO-ref="ru.forxy.user.db.dao.UserDAO.mongo"/>
 
     <bean id="ru.forxy.common.rest.SystemStatusServiceImpl" class="ru.forxy.common.rest.SystemStatusServiceImpl"
           p:systemStatusFacade-ref="ru.forxy.user.logic.SystemStatusFacade"/>
 
+    <!-- User Service business logic component-->
     <bean id="ru.forxy.user.logic.UserServiceFacade.impl" class="ru.forxy.user.logic.UserServiceFacade"
           autowire-candidate="false"
-          p:userDAO-ref="ru.forxy.user.db.dao.UserDAO.mongo"/>
+          p:userDAO-ref="ru.forxy.user.db.dao.UserDAO.mongo"
+          p:passwordEncoder-ref="passwordEncoder"/>
 
     <bean id="ru.forxy.user.rest.UserServiceImpl" class="ru.forxy.user.rest.v1.UserServiceImpl"
+          p:userServiceFacade-ref="ru.forxy.user.logic.UserServiceFacade"/>
+
+    <bean id="ru.forxy.user.rest.AuthService" class="ru.forxy.user.rest.v1.AuthServiceImpl"
           p:userServiceFacade-ref="ru.forxy.user.logic.UserServiceFacade"/>
 </beans>

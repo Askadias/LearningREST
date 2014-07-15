@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.forxy.crypto.ICryptoService;
-import ru.forxy.rest.CryptoServiceImpl;
+import ru.forxy.crypto.rest.CryptoServiceImpl;
 
 import java.util.Arrays;
 import java.util.Date;

@@ -23,7 +23,6 @@ import ru.forxy.user.rest.v1.IUserService;
 import ru.forxy.user.rest.v1.pojo.User;
 import ru.forxy.user.test.BaseUserServiceTest;
 
-import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
@@ -56,7 +55,7 @@ public class UserServiceImplTest extends BaseUserServiceTest {
 
         HttpHeaders headers = new HttpHeadersImpl(m);
 
-        User testUser = new User(TEST_USER_EMAIL, new byte[]{});
+        User testUser = new User(TEST_USER_EMAIL, "");
 
         // Mock setup
         EasyMock.expect(uriInfoMock.getAbsolutePath()).andReturn(uri);
@@ -75,7 +74,7 @@ public class UserServiceImplTest extends BaseUserServiceTest {
             Response response = userService.getUser(testUser.getEmail(), uriInfo, headers);
             Assert.assertNotNull(response);
             Assert.assertNotNull(response.getEntity());
-            User user = response.readEntity(User.class);
+            User user = (User) response.getEntity();//response.readEntity(User.class);
             Assert.assertEquals(TEST_USER_EMAIL, user.getEmail());
 
             // Remove user
@@ -99,6 +98,7 @@ public class UserServiceImplTest extends BaseUserServiceTest {
         userService.deleteUser(user.getEmail(), uriInfo, headers);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testGetAllUsers() {
         Message m = new MessageImpl();
@@ -106,16 +106,19 @@ public class UserServiceImplTest extends BaseUserServiceTest {
         HttpHeaders headers = new HttpHeadersImpl(m);
 
         List<User> users = new ArrayList<User>();
-        users.add(new User(TEST_USER_EMAIL, new byte[]{}));
-        EasyMock.expect(userDAOMock.findAll(EasyMock.anyObject(Pageable.class))).andReturn(new PageImpl<User>(users));
+        users.add(new User(TEST_USER_EMAIL, ""));
+        EasyMock.expect(userDAOMock.findAll(EasyMock.anyObject(Pageable.class), EasyMock.anyObject(User.class)))
+                .andReturn(new PageImpl<User>(users));
         EasyMock.replay(userDAOMock);
         Response response = userService.getUsers(1, 10, SortDirection.ASC, "email", null, uriInfo, headers);
         EasyMock.reset(userDAOMock);
         Assert.assertNotNull(response);
         Assert.assertNotNull(response.getEntity());
 
-        EntityPage<User> userPage = response.readEntity(new GenericType<EntityPage<User>>() {
-        });
+
+        EntityPage<User> userPage = (EntityPage<User>) response.getEntity();
+                /*response.readEntity(new GenericType<EntityPage<User>>() {
+        });*/
         Assert.assertTrue(CollectionUtils.isNotEmpty(userPage.getContent()));
     }
 }

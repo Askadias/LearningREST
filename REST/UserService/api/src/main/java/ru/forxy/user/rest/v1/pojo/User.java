@@ -15,7 +15,7 @@ public class User {
     @Id
     private String email;
 
-    private byte[] password;
+    private String password;
 
     private String login;
 
@@ -38,7 +38,7 @@ public class User {
     public User() {
     }
 
-    public User(final String email, final byte[] password) {
+    public User(final String email, final String password) {
         this.email = email;
         this.password = password;
     }
@@ -51,11 +51,11 @@ public class User {
         this.email = email;
     }
 
-    public byte[] getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(final byte[] password) {
+    public void setPassword(final String password) {
         this.password = password;
     }
 

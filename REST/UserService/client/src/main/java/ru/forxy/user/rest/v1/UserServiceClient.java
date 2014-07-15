@@ -1,16 +1,22 @@
 package ru.forxy.user.rest.v1;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.methods.HttpGet;
 import ru.forxy.common.exceptions.ClientException;
+import ru.forxy.common.exceptions.RESTCommonEventLogId;
 import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.common.pojo.StatusEntity;
 import ru.forxy.common.rest.client.RestServiceClientSupport;
+import ru.forxy.common.rest.client.transport.HttpClientSSLKeyStore;
 import ru.forxy.common.rest.client.transport.ITransport;
 import ru.forxy.common.rest.client.transport.support.ObjectMapperProvider;
 import ru.forxy.user.rest.v1.pojo.User;
 
 import javax.ws.rs.core.HttpHeaders;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -25,10 +31,21 @@ public class UserServiceClient extends RestServiceClientSupport implements IUser
     protected static final String CLIENT_ID = "Client-ID";
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
     private static final String TRANSACTION_GUID_PARAM = "transactionGUID";
+    private static final HttpClientSSLKeyStore TRUST_STORE;
 
     private String endpoint;
 
     private String clientId;
+
+    static {
+        try {
+            final InputStream trustStoreStream = UserServiceClient.class.getResourceAsStream("/cert/oauthTrustStore.jks");
+            final byte[] trustStoreBytes = IOUtils.toByteArray(trustStoreStream);
+            TRUST_STORE = new HttpClientSSLKeyStore(new ByteArrayInputStream(trustStoreBytes), "5ecret0AUTHPa55word");
+        } catch (Exception e) {
+            throw new ClientException(new StatusEntity("400", e), e, RESTCommonEventLogId.InvalidClientInput);
+        }
+    }
 
     public UserServiceClient() {
     }
