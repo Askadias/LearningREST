@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
        xmlns:jaxrs="http://cxf.apache.org/jaxrs"
        xsi:schemaLocation="
         http://www.springframework.org/schema/beans     http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -29,11 +30,47 @@
         </constructor-arg>
     </bean>
 
+
+    <!-- implements OAuthDataProvider -->
+    <bean id="oauthProvider" class="ru.forxy.user.rest.v1.OAuthManager"
+            p:userServiceFacade-ref="ru.forxy.user.logic.UserServiceFacade"/>
+
+    <bean id="oauthFiler" class="org.apache.cxf.rs.security.oauth2.filters.OAuthRequestFilter">
+        <property name="dataProvider" ref="oauthProvider"/>
+    </bean>
+
+    <bean id="accessTokenService" class="org.apache.cxf.rs.security.oauth2.services.AccessTokenService">
+        <property name="dataProvider" ref="oauthProvider"/>
+    </bean>
+
+    <bean id="accessTokenValidatorService"
+          class="org.apache.cxf.rs.security.oauth2.services.AccessTokenValidatorService">
+        <property name="dataProvider" ref="oauthProvider"/>
+    </bean>
+
+    <bean id="authorizationService" class="org.apache.cxf.rs.security.oauth2.services.AuthorizationCodeGrantService">
+        <property name="dataProvider" ref="oauthProvider"/>
+    </bean>
+
+    <bean id="oAuthJSONProvider" class="org.apache.cxf.rs.security.oauth2.provider.OAuthJSONProvider"/>
+
+    <jaxrs:server id="oauthServer" address="/oauth">
+        <jaxrs:serviceBeans>
+            <ref bean="accessTokenService"/>
+            <ref bean="accessTokenValidatorService"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="oAuthJSONProvider"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+
     <jaxrs:server id="ru.forxy.UserService.rest" address="/rest/v1">
         <jaxrs:serviceBeans>
             <ref bean="ru.forxy.user.rest.v1.UserServiceImpl"/>
-            <ref bean="ru.forxy.user.rest.v1.AuthServiceImpl"/>
+            <ref bean="ru.forxy.user.rest.v1.ClientServiceImpl"/>
+            <!--<ref bean="ru.forxy.user.rest.v1.AuthServiceImpl"/>-->
             <ref bean="ru.forxy.common.rest.SystemStatusServiceImpl"/>
+            <ref bean="authorizationService"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <bean class="ru.forxy.common.web.JSONValidationProvider">
@@ -41,13 +78,8 @@
                 <property name="validator" ref="ru.forxy.user.payload.Validator"/>
             </bean>
             <bean class="ru.forxy.common.exceptions.support.RuntimeExceptionMapper"/>
+            <!--<ref bean="oauthFiler"/>-->
         </jaxrs:providers>
-        <jaxrs:inInterceptors>
-            <ref bean="validationInInterceptor"/>
-        </jaxrs:inInterceptors>
-        <jaxrs:outInterceptors>
-            <ref bean="validationOutInterceptor"/>
-        </jaxrs:outInterceptors>
     </jaxrs:server>
 
 

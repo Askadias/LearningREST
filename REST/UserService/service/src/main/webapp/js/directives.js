@@ -1,9 +1,7 @@
 'use strict';
 
-var userDirectives = angular.module('userDirectives', []);
-
-userDirectives.directive('onBlurChange', ['$parse',
-    function ($parse) {
+angular.module('userServiceAdmin.directives', [])
+    .directive('onBlurChange', ['$parse', function ($parse) {
         return function (scope, element, attr) {
             var fn = $parse(attr['onBlurChange']);
             var hasChanged = false;
@@ -20,10 +18,8 @@ userDirectives.directive('onBlurChange', ['$parse',
                 }
             });
         };
-    }]);
-
-userDirectives.directive('onEnterBlur',
-    function () {
+    }])
+    .directive('onEnterBlur', function () {
         return function (scope, element, attrs) {
             element.bind("keydown keypress", function (event) {
                 if (event.which === 13) {
@@ -32,10 +28,8 @@ userDirectives.directive('onEnterBlur',
                 }
             });
         };
-    });
-
-userDirectives.directive('sortBy',
-    function () {
+    })
+    .directive('sortBy', function () {
         return {
             templateUrl: 'components/sort-by.html',
             restrict: 'E',
@@ -59,11 +53,8 @@ userDirectives.directive('sortBy',
                 }
             }
         };
-    });
-
-// sets null value if input field is blank or invalid
-userDirectives.directive('input',
-    function () {
+    })
+    .directive('input', function () {
         return {
             priority: 0,
             require: '?ngModel',

@@ -11,6 +11,7 @@ import org.apache.http.HttpResponseInterceptor;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
@@ -48,7 +49,7 @@ import java.util.Map;
 public class HttpClientTransport implements ITransport {
     private static final HttpClientConfig CONFIG = new HttpClientConfig();
 
-    private final HttpHost proxy = new HttpHost("127.0.0.1", 8888, "http");
+    private static final HttpHost PROXY = new HttpHost("127.0.0.1", 8888, "http");
     private final HttpClient httpClient;
 
     private IRetryPolicy m_retryPolicy;
@@ -193,41 +194,30 @@ public class HttpClientTransport implements ITransport {
         connPoolControl.setMaxTotal(config.getMaxConnections());
         connPoolControl.setDefaultMaxPerRoute(config.getMaxConnections());
 
+
         HttpClientBuilder clientBuilder = HttpClientBuilder.create();
         clientBuilder.setConnectionManager(connPoolControl);
+
         clientBuilder.setSSLSocketFactory(socketFactory);
         clientBuilder.addInterceptorFirst(config.getRequestInterceptor());
         clientBuilder.addInterceptorFirst(new RepeatableEntityCreatingResponseInterceptor());
         clientBuilder.addInterceptorFirst(config.getResponseInterceptor());
-        httpClient = clientBuilder.build();
-        /*final SchemeRegistry schemeRegistry = new SchemeRegistry();
-        schemeRegistry.register(new Scheme("http", 80, PlainSocketFactory.getSocketFactory()));
-        if (keyStore != null) {
-            schemeRegistry.register(new Scheme("https", 443, keyStore.getSocketFactory()));
-        }
 
-        --------final PoolingClientConnectionManager manager =
-        --------        new PoolingClientConnectionManager(schemeRegistry, config.getConnectionTTLMillis(),
-        --------                TimeUnit.MILLISECONDS);
-        --------manager.setMaxTotal(config.getMaxConnections());
-        --------manager.setDefaultMaxPerRoute(config.getMaxConnections());
+        RequestConfig.Builder requestConfigBuilder = RequestConfig.custom()
+                .setConnectTimeout(config.getConnectionTimeoutMillis())
+                .setSocketTimeout(config.getSocketTimeoutMillis())
+                .setStaleConnectionCheckEnabled(config.isStaleCheckEnabled());
 
-        --------final DefaultHttpClient client = new DefaultHttpClient(manager);
-        --------client.addRequestInterceptor(config.getRequestInterceptor());
-        --------client.addResponseInterceptor(new RepeatableEntityCreatingResponseInterceptor());
-        --------client.addResponseInterceptor(config.getResponseInterceptor());
-
-        final HttpParams params = client.getParams();
-        HttpConnectionParams.setConnectionTimeout(params, config.getConnectionTimeoutMillis());
-        HttpConnectionParams.setSoTimeout(params, config.getSocketTimeoutMillis());
-        HttpConnectionParams.setStaleCheckingEnabled(params, config.isStaleCheckEnabled());
         if (proxyEnabled) {
-            params.setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+            requestConfigBuilder.setProxy(PROXY);
         }
 
-        httpClient = client;
-        HttpClientConnectionMonitor.spawn(manager, config.getConnectionMonitorIdleTimeoutMillis(),
-                config.getConnectionMonitorRunIntervalMillis());*/
+        clientBuilder.setDefaultRequestConfig(requestConfigBuilder.build());
+
+        httpClient = clientBuilder.build();
+
+        HttpClientConnectionMonitor.spawn(connPoolControl, config.getConnectionMonitorIdleTimeoutMillis(),
+                config.getConnectionMonitorRunIntervalMillis());
     }
 
     @Override

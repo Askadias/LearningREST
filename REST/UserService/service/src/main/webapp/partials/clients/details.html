@@ -1,0 +1,54 @@
+<div>
+    <h1>Application</h1>
+
+    <form name="myForm">
+        <div class="form-group">
+            <label>Application Name:</label>
+            <input type="text" class="form-control ng-pristine ng-valid" ng-model="client.applicationName" required/>
+        </div>
+
+        <div class="form-group">
+            <label>Secret:</label>
+            <input type="password" class="form-control ng-pristine ng-valid" ng-model="client.clientSecret" required/>
+        </div>
+
+        <div class="form-group">
+            <label>Web URI:</label>
+            <input type="url" class="form-control ng-pristine ng-valid" ng-model="client.applicationWebUri"/>
+        </div>
+
+        <div class="form-group">
+            <label>Description:</label>
+            <textarea class="form-control ng-pristine ng-valid" ng-model="client.applicationDescription"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Roles:</label>
+            [ <a href="" ng-click="client.allowedGrantTypes.push('reader')">add</a> ]
+            <div ng-repeat="allowedGrantType in client.allowedGrantTypes track by $index">
+
+                <!--<select class="form-control" ng-model="client.allowedGrantTypes[$index]"
+                        ng-options="role in roles"></select>-->
+                <select ng-model="client.allowedGrantTypes[$index]">
+                    <option selected value="reader">reader</option>
+                    <option value="writer">writer</option>
+                    <option value="admin">admin</option>
+                </select>
+                [ <a href="" ng-click="client.allowedGrantTypes.splice($index, 1)">×</a> ]
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Redirect URLs:</label>
+            [ <a href="" ng-click="client.redirectUris.push('')">add</a> ]
+            <div ng-repeat="url in client.redirectUris track by $index">
+                <input type="text" ng-model="client.redirectUris[$index]" required/>
+                [ <a href="" ng-click="client.redirectUris.splice($index, 1)">×</a> ]<br>
+            </div>
+        </div>
+        <div class="form-group">
+            <button ng-click="cancel()" class="btn btn-danger" ng-disabled="isCancelDisabled()">Cancel</button>
+            <button ng-click="save()" class="btn btn-success" ng-disabled="isSaveDisabled()">Save</button>
+        </div>
+    </form>
+</div>

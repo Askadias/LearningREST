@@ -11,11 +11,11 @@ subprojects {
         ivy { url "file://$System.env.OUTPUT_ROOT/deliverables/" }
 
         uploadArchives { repositories { ivy { url "file://$System.env.OUTPUT_ROOT/deliverables/" } } }
+    }
 
-        test {
-            reports.html.enabled = true
-            maxParallelForks = 8
-        }
+    test {
+        reports.html.enabled = true
+        maxParallelForks = 8
     }
 
     if (System.env.OUTPUT_ROOT) {

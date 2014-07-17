@@ -2,7 +2,7 @@ package ru.forxy.common.rest.client.transport;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.HttpClientConnectionManager;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -11,10 +11,10 @@ import java.util.concurrent.TimeUnit;
 public class HttpClientConnectionMonitor implements Runnable {
     private static final Log LOGGER = LogFactory.getLog(HttpClientConnectionMonitor.class);
 
-    private final ClientConnectionManager m_connectionManager;
+    private final HttpClientConnectionManager m_connectionManager;
     private final long m_idleTimeoutMillis;
 
-    private HttpClientConnectionMonitor(final ClientConnectionManager connectionManager,
+    private HttpClientConnectionMonitor(final HttpClientConnectionManager connectionManager,
                                         final long idleTimeoutMillis) {
         m_connectionManager = connectionManager;
         m_idleTimeoutMillis = idleTimeoutMillis;
@@ -36,8 +36,9 @@ public class HttpClientConnectionMonitor implements Runnable {
         }
     }
 
-    public static void spawn(final ClientConnectionManager connectionManager,
-                             final long connectionMonitorIdleTimeoutMillis, final long connectionMonitorRunIntervalMillis) {
+    public static void spawn(final HttpClientConnectionManager connectionManager,
+                             final long connectionMonitorIdleTimeoutMillis,
+                             final long connectionMonitorRunIntervalMillis) {
         if (connectionMonitorRunIntervalMillis > 0) {
 
             final HttpClientConnectionMonitor idleConnectionMonitor =

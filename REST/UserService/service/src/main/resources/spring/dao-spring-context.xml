@@ -3,7 +3,6 @@
        xmlns:context='http://www.springframework.org/schema/context'
        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
        xmlns:p="http://www.springframework.org/schema/p"
-       xmlns:c="http://www.springframework.org/schema/c"
        xmlns:mongo='http://www.springframework.org/schema/data/mongo'
        xsi:schemaLocation="http://www.springframework.org/schema/beans         http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
         http://www.springframework.org/schema/data/mongo    http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
@@ -13,7 +12,7 @@
                                    Mongo Data Source
     ========================================================================================== -->
     <context:annotation-config/>
-    <context:component-scan base-package='ru.forxy.user.rest.pojo'/>
+    <context:component-scan base-package='ru.forxy.user.rest.v1.pojo'/>
 
     <mongo:mongo id="mongo" host='${ru.forxy.user.MongoTemplate/host}' port='${ru.forxy.user.MongoTemplate/port}'>
         <mongo:options
@@ -34,6 +33,10 @@
     </bean>
 
     <bean id="ru.forxy.user.db.dao.UserDAO.impl.mongo" class="ru.forxy.user.db.dao.mongo.UserDAO"
+          autowire-candidate="false"
+          p:mongoTemplate-ref="mongoTemplate"/>
+
+    <bean id="ru.forxy.user.db.dao.ClientDAO.impl.mongo" class="ru.forxy.user.db.dao.mongo.ClientDAO"
           autowire-candidate="false"
           p:mongoTemplate-ref="mongoTemplate"/>
 

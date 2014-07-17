@@ -1,7 +1,7 @@
 package ru.forxy.user.rest.v1;
 
 import ru.forxy.common.pojo.SortDirection;
-import ru.forxy.user.rest.v1.pojo.User;
+import ru.forxy.oauth.pojo.Client;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -18,34 +18,34 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-@Path("/users/")
+@Path("/clients/")
 @Produces(MediaType.APPLICATION_JSON)
-public interface IUserService {
+public interface IClientService {
 
     @GET
-    Response getUsers(@QueryParam("page") final Integer page,
+    Response getClients(@QueryParam("page") final Integer page,
                       @QueryParam("size") final Integer size,
                       @QueryParam("sortDir") final SortDirection sortDirection,
                       @QueryParam("sortedBy") final String sortedBy,
-                      @QueryParam("") final User filter,
+                      @QueryParam("") final Client filter,
                       @Context final UriInfo uriInfo,
                       @Context final HttpHeaders headers);
 
     @GET
-    @Path("/{email}/")
-    Response getUser(@PathParam("email") final String email, @Context final UriInfo uriInfo,
+    @Path("/{clientID}/")
+    Response getClient(@PathParam("clientID") final String clientID, @Context final UriInfo uriInfo,
                      @Context final HttpHeaders headers);
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    Response createUser(final User user, @Context final UriInfo uriInfo, @Context final HttpHeaders headers);
+    Response registerClient(final Client client, @Context final UriInfo uriInfo, @Context final HttpHeaders headers);
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    Response updateUser(final User user, @Context final UriInfo uriInfo, @Context final HttpHeaders headers);
+    Response updateClient(final Client client, @Context final UriInfo uriInfo, @Context final HttpHeaders headers);
 
     @DELETE
-    @Path("/{email}/")
-    Response deleteUser(@PathParam("email") final String email, @Context final UriInfo uriInfo,
+    @Path("/{clientID}/")
+    Response deleteClient(@PathParam("clientID") final String clientID, @Context final UriInfo uriInfo,
                         @Context final HttpHeaders headers);
 }

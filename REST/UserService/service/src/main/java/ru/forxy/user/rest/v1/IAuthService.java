@@ -19,8 +19,10 @@ import javax.ws.rs.core.UriInfo;
 public interface IAuthService {
 
     @POST
+    @Path("/login")
     Response login(final Credentials credentials, @Context final UriInfo uriInfo, @Context final HttpHeaders headers);
 
-    @PUT
+    @POST
+    @Path("/register")
     Response register(final Credentials credentials, @Context final UriInfo uriInfo, @Context final HttpHeaders headers);
 }

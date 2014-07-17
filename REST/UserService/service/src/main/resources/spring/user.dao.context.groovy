@@ -1,6 +1,7 @@
 package spring
 
 import org.springframework.data.mongodb.core.MongoTemplate
+import ru.forxy.user.db.dao.mongo.ClientDAO
 import ru.forxy.user.db.dao.mongo.UserDAO
 
 beans {
@@ -29,6 +30,11 @@ beans {
     mongoTemplate(MongoTemplate, ref('db-factory'))
 
     userDAOMongo(UserDAO) { bean ->
+        bean.autowire = 'byName'
+        mongoTemplate = ref(mongoTemplate)
+    }
+
+    clientDAOMongo(ClientDAO) { bean ->
         bean.autowire = 'byName'
         mongoTemplate = ref(mongoTemplate)
     }

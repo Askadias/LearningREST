@@ -24,4 +24,12 @@
 
     <bean id="ru.forxy.user.rest.AuthService" class="ru.forxy.user.rest.v1.AuthServiceImpl"
           p:userServiceFacade-ref="ru.forxy.user.logic.UserServiceFacade"/>
+
+    <!-- Client Service business logic component-->
+    <bean id="ru.forxy.user.logic.ClientServiceFacade.impl" class="ru.forxy.user.logic.ClientServiceFacade"
+          autowire-candidate="false"
+          p:clientDAO-ref="ru.forxy.user.db.dao.ClientDAO.mongo"/>
+
+    <bean id="ru.forxy.user.rest.ClientServiceImpl" class="ru.forxy.user.rest.v1.ClientServiceImpl"
+          p:clientServiceFacade-ref="ru.forxy.user.logic.ClientServiceFacade"/>
 </beans>

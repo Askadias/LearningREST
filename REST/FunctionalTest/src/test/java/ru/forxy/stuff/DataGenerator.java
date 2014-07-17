@@ -152,7 +152,7 @@ public class DataGenerator extends BaseSpringContextTest {
                             String password = firstName + "Password";
                             byte[] encryptedPassword = cryptoService.hash(password);
 
-                            user = new User(generateEMail(firstName, lastName), encryptedPassword);
+                            user = new User(generateEMail(firstName, lastName), new String(encryptedPassword));
                             user.setLogin(firstName);
                             user.setFirstName(firstName);
                             user.setLastName(lastName);

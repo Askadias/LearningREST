@@ -128,7 +128,7 @@ public class UserServiceClient extends RestServiceClientSupport implements IUser
         final String confUrl = endpoint + "users";
 
         final ITransport.Response<StatusEntity, StatusEntity> response =
-                transport.performPut(confUrl, buildHeaders(transactionGUID, endpoint, HttpGet.METHOD_NAME),
+                transport.performPost(confUrl, buildHeaders(transactionGUID, endpoint, HttpGet.METHOD_NAME),
                         marshal(user), createResponseHandler(StatusEntity.class));
         return checkForError(response);
     }
@@ -139,7 +139,7 @@ public class UserServiceClient extends RestServiceClientSupport implements IUser
         final String confUrl = endpoint + "users";
 
         final ITransport.Response<StatusEntity, StatusEntity> response =
-                transport.performPost(confUrl, buildHeaders(transactionGUID, endpoint, HttpGet.METHOD_NAME),
+                transport.performPut(confUrl, buildHeaders(transactionGUID, endpoint, HttpGet.METHOD_NAME),
                         marshal(user), createResponseHandler(StatusEntity.class));
         return checkForError(response);
     }

@@ -1,10 +1,7 @@
 "use strict";
 
-var userService = angular.module("userService", ['restangular']);
-
-
-userService.factory("User", ["Restangular",
-    function (Restangular) {
+angular.module("userServiceAdmin.services", ['restangular'])
+    .factory("User", ["Restangular", function (Restangular) {
         return {
             all: function () {
                 return Restangular.all('users').getList();
@@ -21,10 +18,28 @@ userService.factory("User", ["Restangular",
                 return Restangular.one('users', user).put();
             }
         }
+    }])
+    .factory("Client", ["Restangular", function (Restangular) {
+        return {
+            all: function () {
+                return Restangular.all('clients').getList();
+            },
+            page: {
+                search: function (query) {
+                    return Restangular.one('clients').get(query);
+                }
+            },
+            get: function (clientID) {
+                return Restangular.one('clients', clientID).get();
+            },
+            add: function (client) {
+                return Restangular.all('clients').post(client);
+            }
+        }
     }]);
 
 /*
- userService.factory("User", ["$resource",
+ .factory("User", ["$resource",
  function ($resource) {
  return $resource("service/rest/v1/users/:email", {}, {
  getList: {method: 'GET', isArray: true},

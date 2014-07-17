@@ -32,6 +32,15 @@ public enum UserServiceEventLogId implements EventLogBase {
     NotAuthorized(UserServiceEventLogId.BASE_EVENT_LOG_ID + 5, 401,
             "Invalid user name ('%1$s') or password", EventType.InvalidInput),
 
+
+    ClientNotFound(UserServiceEventLogId.BASE_EVENT_LOG_ID + 6, 404,
+            "Client with ID '%1$s' is not found.",
+            EventType.InvalidInput),
+
+    ClientAlreadyExists(UserServiceEventLogId.BASE_EVENT_LOG_ID + 7, 400,
+            "Client with ID '%1$s' already exists.",
+            EventType.InvalidInput),
+
     // -------------------------------------------------------------------
     // DB events
     // -------------------------------------------------------------------

@@ -55,7 +55,7 @@ public class UserServiceStressTest extends BaseSpringContextTest {
                 @Override
                 public void run() {
                     for (int j = 0; j < iterationsCount; j++) {
-                        final User xander = new User(userEmail, new byte[]{});
+                        final User xander = new User(userEmail, "");
 
                         StatusEntity status = userServiceClient.createUser(transactionGUID, xander);
                         Assert.assertNotNull(status);

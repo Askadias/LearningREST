@@ -16,8 +16,6 @@ task dvtTest(type: Test, dependsOn: funcTestClasses) {
     systemProperties System.properties
     includes = ['**/dvt/*Test.class']
 
-    testReport = true
-    testLogging.showStandardStreams = true
     scanForTestClasses = false
 }
 
@@ -30,8 +28,6 @@ task funcTest(type: Test, dependsOn: funcTestClasses) {
     systemProperties System.properties
     includes = ['**/fnt/*Test.class']
 
-    testReport = true
-    testLogging.showStandardStreams = true
     scanForTestClasses = false
 }
 
@@ -46,7 +42,6 @@ dependencies {
     compile "forxy:ru.forxy.common.rest:${rev_forxy_common}"
 
     // --------------------- COMMON --------------------------------------
-    //compile "commons-collections:commons-collections:${rev_common_collections}"
     compile "org.slf4j:slf4j-api:${rev_slf4j}"
     compile "ch.qos.logback:logback-core:${rev_logback}"
     compile "ch.qos.logback:logback-classic:${rev_logback}"
