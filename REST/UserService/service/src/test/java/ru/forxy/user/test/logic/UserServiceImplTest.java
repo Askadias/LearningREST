@@ -19,7 +19,7 @@ import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.common.pojo.SortDirection;
 import ru.forxy.user.db.dao.IUserDAO;
 import ru.forxy.user.exceptions.UserServiceEventLogId;
-import ru.forxy.user.rest.v1.IUserService;
+import ru.forxy.user.rest.v1.UserServiceEndpoint;
 import ru.forxy.user.rest.v1.pojo.User;
 import ru.forxy.user.test.BaseUserServiceTest;
 
@@ -38,7 +38,7 @@ public class UserServiceImplTest extends BaseUserServiceTest {
     private static final String TEST_USER_EMAIL = "kast.askadias@gmail.com";
 
     @Autowired
-    IUserService userService;
+    UserServiceEndpoint userService;
 
     @Autowired
     @Qualifier("ru.forxy.user.db.dao.UserDAO.impl.mongo")

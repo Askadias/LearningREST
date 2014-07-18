@@ -1,6 +1,10 @@
 package ru.forxy.user.rest.v1.pojo;
 
-public class Credentials {
+import java.io.Serializable;
+
+public class Credentials implements Serializable {
+
+    private static final long serialVersionUID = -6314351637400403449L;
 
     private String email;
 

@@ -27,5 +27,5 @@ public interface IUserServiceFacade {
 
     User login(Credentials credentials);
 
-    void register(Credentials credentials);
+    User register(Credentials credentials);
 }

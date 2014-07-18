@@ -10,7 +10,7 @@
     <bean id="ru.forxy.user.logic.SystemStatusFacade" class="ru.forxy.user.logic.SystemStatusFacade"
           p:userDAO-ref="ru.forxy.user.db.dao.UserDAO.mongo"/>
 
-    <bean id="ru.forxy.common.rest.SystemStatusServiceImpl" class="ru.forxy.common.rest.SystemStatusServiceImpl"
+    <bean id="ru.forxy.common.rest.SystemStatusServiceEndpoint" class="ru.forxy.common.rest.SystemStatusServiceEndpoint"
           p:systemStatusFacade-ref="ru.forxy.user.logic.SystemStatusFacade"/>
 
     <!-- User Service business logic component-->
@@ -19,10 +19,10 @@
           p:userDAO-ref="ru.forxy.user.db.dao.UserDAO.mongo"
           p:passwordEncoder-ref="passwordEncoder"/>
 
-    <bean id="ru.forxy.user.rest.UserServiceImpl" class="ru.forxy.user.rest.v1.UserServiceImpl"
+    <bean id="ru.forxy.user.rest.UserServiceEndpoint" class="ru.forxy.user.rest.v1.UserServiceEndpoint"
           p:userServiceFacade-ref="ru.forxy.user.logic.UserServiceFacade"/>
 
-    <bean id="ru.forxy.user.rest.AuthService" class="ru.forxy.user.rest.v1.AuthServiceImpl"
+    <bean id="ru.forxy.user.rest.AuthServiceEndpoint" class="ru.forxy.user.rest.v1.AuthServiceEndpoint"
           p:userServiceFacade-ref="ru.forxy.user.logic.UserServiceFacade"/>
 
     <!-- Client Service business logic component-->
@@ -30,6 +30,11 @@
           autowire-candidate="false"
           p:clientDAO-ref="ru.forxy.user.db.dao.ClientDAO.mongo"/>
 
-    <bean id="ru.forxy.user.rest.ClientServiceImpl" class="ru.forxy.user.rest.v1.ClientServiceImpl"
+    <bean id="ru.forxy.user.rest.ClientServiceEndpoint" class="ru.forxy.user.rest.v1.ClientServiceEndpoint"
+          p:clientServiceFacade-ref="ru.forxy.user.logic.ClientServiceFacade"/>
+
+    <!-- OAuth business logic component-->
+    <bean id="oauthProvider" class="ru.forxy.user.logic.OAuthManager"
+          p:userServiceFacade-ref="ru.forxy.user.logic.UserServiceFacade"
           p:clientServiceFacade-ref="ru.forxy.user.logic.ClientServiceFacade"/>
 </beans>

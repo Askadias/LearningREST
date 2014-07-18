@@ -2,13 +2,14 @@ package spring
 
 import org.springframework.aop.framework.ProxyFactoryBean
 import org.springframework.security.crypto.password.StandardPasswordEncoder
-import ru.forxy.common.rest.SystemStatusServiceImpl
+import ru.forxy.common.rest.SystemStatusServiceEndpoint
 import ru.forxy.user.logic.ClientServiceFacade
+import ru.forxy.user.logic.OAuthManager
 import ru.forxy.user.logic.SystemStatusFacade
 import ru.forxy.user.logic.UserServiceFacade
-import ru.forxy.user.rest.v1.AuthServiceImpl
-import ru.forxy.user.rest.v1.ClientServiceImpl
-import ru.forxy.user.rest.v1.UserServiceImpl
+import ru.forxy.user.rest.v1.AuthServiceEndpoint
+import ru.forxy.user.rest.v1.ClientServiceEndpoint
+import ru.forxy.user.rest.v1.UserServiceEndpoint
 
 beans {
 
@@ -70,21 +71,28 @@ beans {
         interceptorNames = ['serviceLoggingInterceptor']
     }
 
+    // ================= OAUTH ==================================================================================
+
+    oauthProvider(OAuthManager) {
+        userServiceFacade = ref(userServiceFacadeProxy)
+        clientServiceFacade = ref(clientServiceFacadeProxy)
+    }
+
     // ================= ENDPOINTS ==============================================================================
 
-    systemStatusServiceImpl(SystemStatusServiceImpl) {
+    systemStatusServiceEndpoint(SystemStatusServiceEndpoint) {
         systemStatusFacade = ref(systemStatusFacadeProxy)
     }
 
-    userServiceImpl(UserServiceImpl) {
+    userServiceEndpoint(UserServiceEndpoint) {
         userServiceFacade = ref(userServiceFacadeProxy)
     }
 
-    authServiceImpl(AuthServiceImpl) {
+    authServiceEndpoint(AuthServiceEndpoint) {
         userServiceFacade = ref(userServiceFacadeProxy)
     }
 
-    clientServiceImpl(ClientServiceImpl) {
+    clientServiceEndpoint(ClientServiceEndpoint) {
         clientServiceFacade = ref(clientServiceFacadeProxy)
     }
 }

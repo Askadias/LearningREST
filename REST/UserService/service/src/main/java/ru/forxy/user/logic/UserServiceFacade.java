@@ -94,7 +94,7 @@ public class UserServiceFacade implements IUserServiceFacade {
     public User login(Credentials credentials) {
         User user = userDAO.findOne(credentials.getEmail());
         if (user != null) {
-            if (StringUtils.equals(user.getPassword(), passwordEncoder.encode(credentials.getPassword()))) {
+            if (passwordEncoder.matches(credentials.getPassword(), user.getPassword())) {
                 return user;
             }
         }
@@ -102,9 +102,9 @@ public class UserServiceFacade implements IUserServiceFacade {
     }
 
     @Override
-    public void register(Credentials credentials) {
+    public User register(Credentials credentials) {
         if (!userDAO.exists(credentials.getEmail())) {
-            userDAO.save(new User(credentials.getEmail(), passwordEncoder.encode(credentials.getPassword())));
+            return userDAO.save(new User(credentials.getEmail(), passwordEncoder.encode(credentials.getPassword())));
         } else {
             throw new ServiceException(UserServiceEventLogId.UserAlreadyExists, credentials.getEmail());
         }

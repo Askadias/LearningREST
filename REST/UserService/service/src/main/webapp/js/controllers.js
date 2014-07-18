@@ -1,9 +1,35 @@
 'use strict';
 
 angular.module('userServiceAdmin.controllers', ['ui.bootstrap'])
-    .controller('MainCtrl', ['$scope', '$routeSegment', function ($scope, $routeSegment) {
-        $scope.$routeSegment = $routeSegment;
-    }])
+    .controller('MainCtrl', ['$scope', '$rootScope', '$routeSegment', 'Auth', 'Session', 'AUTH_EVENTS',
+        function ($scope, $rootScope, $routeSegment, Auth, Session, AUTH_EVENTS) {
+            $scope.$routeSegment = $routeSegment;
+
+            $scope.setCurrentUser = function (user) {
+                $rootScope.currentUser = user;
+                Session.user = $rootScope.currentUser;
+            };
+            $scope.login = function (credentials) {
+                Auth.login(credentials).then(function (response) {
+                    $scope.setCurrentUser(response);
+                    $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+                }, function (response) {
+                    $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+                })
+            };
+            $scope.logout = function () {
+                Auth.logout();
+                $scope.setCurrentUser(null);
+            };
+            $scope.register = function (credentials) {
+                Auth.register(credentials).then(function (response) {
+                    $scope.setCurrentUser(response);
+                    $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+                }, function (response) {
+                    $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+                })
+            };
+        }])
     .controller('UsersListCtrl', ['$scope', '$modal', '$routeSegment', 'User',
         function ($scope, $modal, $routeSegment, User) {
             $scope.$routeSegment = $routeSegment;
@@ -48,10 +74,10 @@ angular.module('userServiceAdmin.controllers', ['ui.bootstrap'])
 
             //The function that is responsible of fetching the result from the server and setting the grid to the new result
             $scope.fetchResult = function () {
-                return User.page.search($scope.filterCriteria).then(function (data) {
-                    $scope.users = data.content;
-                    $scope.totalPages = Math.ceil(data.total / data.size);
-                    $scope.usersCount = data.total;
+                return User.page.search($scope.filterCriteria).then(function (response) {
+                    $scope.users = response.content;
+                    $scope.totalPages = Math.ceil(response.total / response.size);
+                    $scope.usersCount = response.total;
                 }, function () {
                     $scope.users = [];
                     $scope.totalPages = 0;
@@ -110,9 +136,9 @@ angular.module('userServiceAdmin.controllers', ['ui.bootstrap'])
         }])
     .controller('UserDetailsModalCtrl', ['$scope', '$modalInstance', 'email', 'User',
         function ($scope, $modalInstance, email, User) {
-            User.get(email).then(function (data) {
-                $scope.user = data;
-            }, function () {
+            User.get(email).then(function (response) {
+                $scope.user = response;
+            }, function (response) {
             });
 
             $scope.ok = function () {
@@ -126,9 +152,9 @@ angular.module('userServiceAdmin.controllers', ['ui.bootstrap'])
     .controller('UserDetailsCtrl', ['$scope', '$routeSegment', 'User',
         function ($scope, $routeSegment, User) {
             $scope.$routeSegment = $routeSegment;
-            User.get($routeSegment.$routeParams.email).then(function (data) {
-                $scope.user = data;
-            }, function () {
+            User.get($routeSegment.$routeParams.email).then(function (response) {
+                $scope.user = response;
+            }, function (response) {
             });
         }])
     .controller('ClientsListCtrl', ['$scope', '$modal', '$routeSegment', 'Client',
@@ -175,10 +201,10 @@ angular.module('userServiceAdmin.controllers', ['ui.bootstrap'])
 
             //The function that is responsible of fetching the result from the server and setting the grid to the new result
             $scope.fetchResult = function () {
-                return Client.page.search($scope.filterCriteria).then(function (data) {
-                    $scope.clients = data.content;
-                    $scope.totalPages = Math.ceil(data.total / data.size);
-                    $scope.clientsCount = data.total;
+                return Client.page.search($scope.filterCriteria).then(function (response) {
+                    $scope.clients = response.content;
+                    $scope.totalPages = Math.ceil(response.total / response.size);
+                    $scope.clientsCount = response.total;
                 }, function () {
                     $scope.clients = [];
                     $scope.totalPages = 0;
@@ -211,6 +237,12 @@ angular.module('userServiceAdmin.controllers', ['ui.bootstrap'])
                     $scope.filterCriteria.page = 1;
                 });
             };
+            $scope.remove = function (client) {
+                Client.delete(client).then(function (response) {
+                    $scope.fetchResult();
+                }, function (response) {
+                });
+            };
 
             //manually select a page to trigger an ajax request to populate the grid on page load
             $scope.selectPage(1);
@@ -218,6 +250,7 @@ angular.module('userServiceAdmin.controllers', ['ui.bootstrap'])
     .controller('ClientDetailsCtrl', ['$scope', '$routeSegment', 'Client',
         function ($scope, $routeSegment, Client) {
             $scope.$routeSegment = $routeSegment;
+            $scope.mode = $routeSegment.$routeParams.mode;
 
             $scope.roles = ['reader', 'writer', 'admin'];
             $scope.client = {
@@ -230,30 +263,36 @@ angular.module('userServiceAdmin.controllers', ['ui.bootstrap'])
             };
             $scope.original = angular.copy($scope.client);
 
-            Client.get($routeSegment.$routeParams.clientID).then(function (data) {
-                if (data) {
-                    $scope.client = data;
+            Client.get($routeSegment.$routeParams.clientID).then(function (response) {
+                if (response) {
+                    $scope.client = response;
                     $scope.original = angular.copy($scope.client)
                 }
             }, function () {
             });
 
-            $scope.cancel = function () {
+            $scope.discard = function () {
                 $scope.client = angular.copy($scope.original);
             };
 
             $scope.save = function () {
                 $scope.original = angular.copy($scope.client);
-                Client.add($scope.client).then(function (data) {
+                switch ($scope.mode) {
+                    case 'new' :
+                        Client.add($scope.client).then(function (response) {
 
-                }, function () {
+                        }, function (response) {
 
-                });
-                //$scope.client.add();
+                        });
+                        break;
+                    case 'edit' :
+                        $scope.client.save();
+                        break;
+                }
                 $scope.cancel();
             };
 
-            $scope.addRole = function(role) {
+            $scope.addRole = function (role) {
                 if ($scope.client.allowedGrantTypes.indexOf(role) == -1) {
                     $scope.client.allowedGrantTypes.push(role);
                 }
@@ -267,5 +306,5 @@ angular.module('userServiceAdmin.controllers', ['ui.bootstrap'])
                 return $scope.myForm.$invalid || angular.equals($scope.original, $scope.client);
             };
 
-            $scope.cancel();
+            $scope.discard();
         }]);

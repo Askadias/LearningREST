@@ -10,8 +10,22 @@ var userServiceAdmin = angular.module('userServiceAdmin', [
     'route-segment',
     'view-segment'
 ])
-    .config(['$routeProvider', '$routeSegmentProvider', 'RestangularProvider',
-        function ($routeProvider, $routeSegmentProvider, RestangularProvider) {
+    .constant('ROLES', {
+        admin: 'admin',
+        reader: 'reader',
+        writer: 'writer',
+        guest: 'guest'
+    })
+    .constant('AUTH_EVENTS', {
+        loginSuccess: 'auth-login-success',
+        loginFailed: 'auth-login-failed',
+        logoutSuccess: 'auth-logout-success',
+        sessionTimeout: 'auth-session-timeout',
+        notAuthenticated: 'auth-not-authenticated',
+        notAuthorized: 'auth-not-authorized'
+    })
+    .config(['$routeProvider', '$routeSegmentProvider', 'RestangularProvider', 'ROLES',
+        function ($routeProvider, $routeSegmentProvider, RestangularProvider, ROLES) {
 
             $routeSegmentProvider.options.autoLoadTemplates = true;
 
@@ -20,11 +34,11 @@ var userServiceAdmin = angular.module('userServiceAdmin', [
             $routeSegmentProvider
                 .when('/users', 'users')
                 .when('/users/list', 'users.list')
-                .when('/users/:email', 'users.details')
+                .when('/users/:email/:mode', 'users.details')
 
                 .when('/clients', 'clients')
                 .when('/clients/list', 'clients.list')
-                .when('/clients/:clientID', 'clients.details')
+                .when('/clients/:clientID/:mode', 'clients.details')
 
                 .segment('users', {
                     templateUrl: 'partials/users.html',
@@ -34,12 +48,18 @@ var userServiceAdmin = angular.module('userServiceAdmin', [
                 .segment('list', {
                     default: true,
                     templateUrl: 'partials/users/list.html',
-                    controller: 'UsersListCtrl'
+                    controller: 'UsersListCtrl',
+                    data: {
+                        authorizedRoles: [ROLES.admin, ROLES.reader]
+                    }
                 })
                 .segment('details', {
                     templateUrl: 'partials/users/details.html',
                     controller: 'UserDetailsCtrl',
-                    dependencies: ['email']
+                    dependencies: ['email', 'mode'],
+                    data: {
+                        authorizedRoles: [ROLES.admin, ROLES.writer, ROLES.reader]
+                    }
                 })
                 .up()
 
@@ -51,12 +71,33 @@ var userServiceAdmin = angular.module('userServiceAdmin', [
                 .segment('list', {
                     default: true,
                     templateUrl: 'partials/clients/list.html',
-                    controller: 'ClientsListCtrl'
+                    controller: 'ClientsListCtrl',
+                    data: {
+                        authorizedRoles: [ROLES.admin, ROLES.reader]
+                    }
                 })
                 .segment('details', {
                     templateUrl: 'partials/clients/details.html',
                     controller: 'ClientDetailsCtrl',
-                    dependencies: ['clientID']
+                    dependencies: ['clientID', 'mode'],
+                    data: {
+                        authorizedRoles: [ROLES.admin, ROLES.writer, ROLES.reader]
+                    }
                 });
             $routeProvider.otherwise({redirectTo: '/users'});
-        }]);
+        }])
+    .run(function ($rootScope, AUTH_EVENTS, Auth) {
+        $rootScope.$on('$routeChangeStart', function (event, next, $routeSegment) {
+            var authorizedRoles = next.data.authorizedRoles;
+            if (!Auth.isAuthorized(authorizedRoles)) {
+                event.preventDefault();
+                if (Auth.isAuthenticated()) {
+                    // user is not allowed
+                    $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
+                } else {
+                    // user is not logged in
+                    $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
+                }
+            }
+        });
+    });

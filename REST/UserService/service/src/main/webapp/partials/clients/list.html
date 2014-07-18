@@ -1,7 +1,7 @@
 <div>
     <div class="btn-group">
 
-        <a href="#/clients/new" class="btn btn-default">
+        <a ng-href="#{{ 'clients.details' | routeSegmentUrl: {clientID: 'new', mode: 'new'} }}" class="btn btn-default">
             Add Client
         </a>
     </div>
@@ -45,7 +45,9 @@
                 <td></td>
             </tr>
             <tr ng-repeat="client in clients">
-                <td><a ng-href="#{{ 'clients.details' | routeSegmentUrl: {clientID: client.clientID} }}">{{client.clientID}}</a></td>
+                <td><a ng-href="#{{ 'clients.details' | routeSegmentUrl: {clientID: client.clientID, mode: 'edit'} }}">
+                    {{client.clientID}}
+                </a></td>
                 <td>{{client.applicationName}}</td>
                 <td>{{client.applicationWebUri}}</td>
                 <td>{{client.updatedBy}}</td>
@@ -54,13 +56,15 @@
                 <td>{{client.createDate}}</td>
                 <td>
                     <div class="btn-group" style="width: 100px">
-                        <a href="#/clients/{{client.clientID}}?edit=false" class="btn btn-default btn-sm">
+                        <a ng-href="#{{ 'clients.details' | routeSegmentUrl: {clientID: client.clientID, mode: 'view'} }}"
+                           class="btn btn-default btn-sm">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </a>
-                        <a href="#/clients/{{client.clientID}}?edit=true" class="btn btn-default btn-sm">
+                        <a ng-href="#{{ 'clients.details' | routeSegmentUrl: {clientID: client.clientID, mode: 'edit'} }}"
+                           class="btn btn-default btn-sm">
                             <span class="glyphicon glyphicon-pencil"></span>
                         </a>
-                        <button type="button" class="btn btn-danger btn-sm" ng-click="client.$delete()">
+                        <button type="button" class="btn btn-danger btn-sm" ng-click="remove(client)">
                             <span class="glyphicon glyphicon-trash"></span>
                         </button>
                     </div>

@@ -81,6 +81,8 @@ dependencies {
     compile "org.webjars:restangular:${rev_restangular}"
     compile "org.webjars:bootstrap:${rev_bootstrap}"
     compile "org.webjars:angular-ui-bootstrap:${rev_angular_ui_bootstrap}"
+    compile "org.webjars:angular-ui-router:${rev_angular_ui_router}"
+
 
     // ===================== TEST ========================================
     testCompile "org.springframework:spring-test:${rev_spring}"

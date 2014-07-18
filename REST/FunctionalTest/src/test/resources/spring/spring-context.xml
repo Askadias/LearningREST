@@ -92,30 +92,30 @@
 
     <!--<bean id="userServiceClient" class="org.apache.cxf.jaxrs.client.JAXRSClientFactory"
           factory-method="create" scope="prototype"
-          c:baseAddress="${ru.forxy.user.rest.v1.IUserService/url}"
-          c:cls="ru.forxy.user.rest.v1.IUserService"
+          c:baseAddress="${ru.forxy.user.rest.v1.UserServiceClient/endpoint}"
+          c:cls="ru.forxy.user.rest.v1.UserService"
           c:providers-ref="jsonProviders"/>
 
     <bean id="userServiceConnectionPool" class="org.springframework.aop.target.CommonsPoolTargetSource"
           p:targetBeanName="userServiceClient"
-          p:maxSize="${ru.forxy.user.rest.v1.IUserService/threads}"
+          p:maxSize="${ru.forxy.user.rest.v1.UserService/threads}"
           p:maxWait="0"
           p:whenExhaustedActionName="WHEN_EXHAUSTED_GROW"/>
 
     <bean id="userService" class="org.springframework.aop.framework.ProxyFactoryBean"
           p:targetSource-ref="userServiceConnectionPool"
-          p:proxyInterfaces="ru.forxy.user.rest.v1.IUserService"/>
+          p:proxyInterfaces="ru.forxy.user.rest.v1.UserService"/>
 
 
     <bean id="userSystemStatusClient" class="org.apache.cxf.jaxrs.client.JAXRSClientFactory"
           factory-method="create" scope="prototype"
-          c:baseAddress="${ru.forxy.user.rest.v1.IUserService/url}"
+          c:baseAddress="${ru.forxy.user.rest.v1.UserServiceClient/endpoint}"
           c:cls="ru.forxy.common.service.ISystemStatusService"
           c:providers-ref="jsonProviders"/>
 
     <bean id="userSystemStatusConnectionPool" class="org.springframework.aop.target.CommonsPoolTargetSource"
           p:targetBeanName="userSystemStatusClient"
-          p:maxSize="${ru.forxy.user.rest.v1.IUserService/threads}"
+          p:maxSize="${ru.forxy.user.rest.v1.UserService/threads}"
           p:maxWait="0"
           p:whenExhaustedActionName="WHEN_EXHAUSTED_GROW"/>
 

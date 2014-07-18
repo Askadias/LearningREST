@@ -2,6 +2,8 @@ package spring
 
 import net.sf.oval.Validator
 import net.sf.oval.configuration.xml.XMLConfigurer
+import org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean
+import org.apache.cxf.rs.security.oauth2.filters.AccessTokenValidatorClient
 import org.apache.cxf.rs.security.oauth2.filters.OAuthRequestFilter
 import org.apache.cxf.rs.security.oauth2.provider.OAuthJSONProvider
 import org.apache.cxf.rs.security.oauth2.services.AccessTokenService
@@ -10,7 +12,6 @@ import org.apache.cxf.rs.security.oauth2.services.AuthorizationCodeGrantService
 import ru.forxy.common.exceptions.support.RuntimeExceptionMapper
 import ru.forxy.common.support.Configuration
 import ru.forxy.common.web.JSONValidationProvider
-import ru.forxy.user.rest.v1.OAuthManager
 
 beans {
     xmlns jaxrs: "http://cxf.apache.org/jaxrs"
@@ -32,23 +33,32 @@ beans {
 
     runtimeExceptionMapper(RuntimeExceptionMapper)
 
-    oauthProvider(OAuthManager) {
-        userServiceFacade = ref(userServiceFacadeProxy)
+    tvServiceClientFactory(JAXRSClientFactoryBean) {
+        address = '${ru.forxy.user.AccessTokenValidatorClient/endpoint}'
+        headers = ['Accept': 'application/xml']
+    }
+
+    tokenValidator(AccessTokenValidatorClient) {
+        tokenValidatorClient = { bean ->
+            bean.factoryBean = 'tvServiceClientFactory'
+            bean.factoryMethod = 'createWebClient'
+        }
     }
 
     oauthFiler(OAuthRequestFilter) {
         dataProvider = ref(oauthProvider)
+        tokenValidator = ref(tokenValidator)
     }
 
-    accessTokenService(AccessTokenService) {
+    accessTokenServiceEndpoint(AccessTokenService) {
         dataProvider = ref(oauthProvider)
     }
 
-    accessTokenValidatorService(AccessTokenValidatorService) {
+    accessTokenValidatorServiceEndpoint(AccessTokenValidatorService) {
         dataProvider = ref(oauthProvider)
     }
 
-    authorizationService(AuthorizationCodeGrantService) {
+    authorizationServiceEndpoint(AuthorizationCodeGrantService) {
         dataProvider = ref(oauthProvider)
     }
 
@@ -56,26 +66,38 @@ beans {
 
     jaxrs.server(id: 'oauthServer', address: '/oauth') {
         jaxrs.serviceBeans {
-            ref(bean: 'accessTokenService')
-            ref(bean: 'accessTokenValidatorService')
+            ref(bean: 'accessTokenServiceEndpoint')
+            ref(bean: 'accessTokenValidatorServiceEndpoint')
+            ref(bean: 'authServiceEndpoint')
         }
         jaxrs.providers {
             ref(bean: 'oAuthJSONProvider')
+            ref(bean: 'runtimeExceptionMapper')
+        }
+    }
+
+    jaxrs.server(id: 'loginService', address: '/auth') {
+        jaxrs.serviceBeans {
+            ref(bean: 'authServiceEndpoint')
+        }
+        jaxrs.providers {
+            ref(bean: 'jsonValidationProvider')
+            ref(bean: 'runtimeExceptionMapper')
         }
     }
 
     jaxrs.server(id: 'userService', address: '/rest/v1') {
         jaxrs.serviceBeans {
-            ref(bean: 'userServiceImpl')
-            //ref(bean: 'authServiceImpl')
-            ref(bean: 'clientServiceImpl')
-            ref(bean: 'systemStatusServiceImpl')
-            ref(bean: 'authorizationService')
+            ref(bean: 'userServiceEndpoint')
+            ref(bean: 'authServiceEndpoint')
+            ref(bean: 'clientServiceEndpoint')
+            ref(bean: 'systemStatusServiceEndpoint')
+            ref(bean: 'authorizationServiceEndpoint')
         }
         jaxrs.providers {
             ref(bean: 'jsonValidationProvider')
             ref(bean: 'runtimeExceptionMapper')
-            //ref(bean: 'oauthFiler')
+            ref(bean: 'oauthFiler')
         }
     }
 }

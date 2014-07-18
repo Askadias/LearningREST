@@ -7,7 +7,7 @@
     <bean id="ru.forxy.fraud.logic.SystemStatusFacade" class="ru.forxy.fraud.logic.SystemStatusFacade"
           p:fraudDAO-ref="ru.forxy.fraud.db.dao.FraudDAO.mongo"/>
 
-    <bean id="ru.forxy.common.rest.SystemStatusServiceImpl" class="ru.forxy.common.rest.SystemStatusServiceImpl"
+    <bean id="ru.forxy.common.rest.SystemStatusServiceEndpoint" class="ru.forxy.common.rest.SystemStatusServiceEndpoint"
           p:systemStatusFacade-ref="ru.forxy.fraud.logic.SystemStatusFacade"/>
 
     <bean id="ru.forxy.fraud.logic.FraudServiceFacade.impl" class="ru.forxy.fraud.logic.FraudServiceFacade"
