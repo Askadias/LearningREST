@@ -84,6 +84,7 @@ dependencies {
     compile "org.webjars:angular-ui-router:${rev_angular_ui_router}"
 
 
+
     // ===================== TEST ========================================
     testCompile "org.springframework:spring-test:${rev_spring}"
     testCompile "junit:junit:${rev_junit}"

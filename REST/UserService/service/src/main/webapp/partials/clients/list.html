@@ -1,7 +1,7 @@
 <div>
     <div class="btn-group">
 
-        <a ng-href="#{{ 'clients.details' | routeSegmentUrl: {clientID: 'new', mode: 'new'} }}" class="btn btn-default">
+        <a ui-sref="clients.details({clientID: 'new', mode: 'new'})" class="btn btn-default">
             Add Client
         </a>
     </div>
@@ -45,7 +45,7 @@
                 <td></td>
             </tr>
             <tr ng-repeat="client in clients">
-                <td><a ng-href="#{{ 'clients.details' | routeSegmentUrl: {clientID: client.clientID, mode: 'edit'} }}">
+                <td><a ui-sref="clients.details({clientID: client.clientID, mode: 'edit'})">
                     {{client.clientID}}
                 </a></td>
                 <td>{{client.applicationName}}</td>
@@ -56,11 +56,11 @@
                 <td>{{client.createDate}}</td>
                 <td>
                     <div class="btn-group" style="width: 100px">
-                        <a ng-href="#{{ 'clients.details' | routeSegmentUrl: {clientID: client.clientID, mode: 'view'} }}"
+                        <a ui-sref="clients.details({clientID: client.clientID, mode: 'view'})"
                            class="btn btn-default btn-sm">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </a>
-                        <a ng-href="#{{ 'clients.details' | routeSegmentUrl: {clientID: client.clientID, mode: 'edit'} }}"
+                        <a ui-sref="clients.details({clientID: client.clientID, mode: 'edit'})"
                            class="btn btn-default btn-sm">
                             <span class="glyphicon glyphicon-pencil"></span>
                         </a>

@@ -97,7 +97,7 @@ beans {
         jaxrs.providers {
             ref(bean: 'jsonValidationProvider')
             ref(bean: 'runtimeExceptionMapper')
-            ref(bean: 'oauthFiler')
+            //ref(bean: 'oauthFiler')
         }
     }
 }

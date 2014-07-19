@@ -1,9 +1,8 @@
 'use strict';
 
 angular.module('userServiceAdmin.controllers', ['ui.bootstrap'])
-    .controller('MainCtrl', ['$scope', '$rootScope', '$routeSegment', 'Auth', 'Session', 'AUTH_EVENTS',
-        function ($scope, $rootScope, $routeSegment, Auth, Session, AUTH_EVENTS) {
-            $scope.$routeSegment = $routeSegment;
+    .controller('MainCtrl', ['$scope', '$rootScope', 'Auth', 'Session', 'AUTH_EVENTS',
+        function ($scope, $rootScope, Auth, Session, AUTH_EVENTS) {
 
             $scope.setCurrentUser = function (user) {
                 $rootScope.currentUser = user;
@@ -30,9 +29,8 @@ angular.module('userServiceAdmin.controllers', ['ui.bootstrap'])
                 })
             };
         }])
-    .controller('UsersListCtrl', ['$scope', '$modal', '$routeSegment', 'User',
-        function ($scope, $modal, $routeSegment, User) {
-            $scope.$routeSegment = $routeSegment;
+    .controller('UsersListCtrl', ['$scope', '$modal', 'User',
+        function ($scope, $modal, User) {
             $scope.totalPages = 0;
             $scope.usersCount = 0;
             $scope.headers = [
@@ -149,17 +147,15 @@ angular.module('userServiceAdmin.controllers', ['ui.bootstrap'])
                 $modalInstance.dismiss('cancel');
             };
         }])
-    .controller('UserDetailsCtrl', ['$scope', '$routeSegment', 'User',
-        function ($scope, $routeSegment, User) {
-            $scope.$routeSegment = $routeSegment;
-            User.get($routeSegment.$routeParams.email).then(function (response) {
+    .controller('UserDetailsCtrl', ['$scope', '$stateParams', 'User',
+        function ($scope, $stateParams, User) {
+            User.get($stateParams.email).then(function (response) {
                 $scope.user = response;
             }, function (response) {
             });
         }])
-    .controller('ClientsListCtrl', ['$scope', '$modal', '$routeSegment', 'Client',
-        function ($scope, $modal, $routeSegment, Client) {
-            $scope.$routeSegment = $routeSegment;
+    .controller('ClientsListCtrl', ['$scope', '$modal', '$stateParams', 'Client',
+        function ($scope, $modal, $stateParams, Client) {
             $scope.totalPages = 0;
             $scope.clientsCount = 0;
             $scope.headers = [
@@ -247,10 +243,9 @@ angular.module('userServiceAdmin.controllers', ['ui.bootstrap'])
             //manually select a page to trigger an ajax request to populate the grid on page load
             $scope.selectPage(1);
         }])
-    .controller('ClientDetailsCtrl', ['$scope', '$routeSegment', 'Client',
-        function ($scope, $routeSegment, Client) {
-            $scope.$routeSegment = $routeSegment;
-            $scope.mode = $routeSegment.$routeParams.mode;
+    .controller('ClientDetailsCtrl', ['$scope', '$stateParams', 'Client',
+        function ($scope, $stateParams, Client) {
+            $scope.mode = $stateParams.mode;
 
             $scope.roles = ['reader', 'writer', 'admin'];
             $scope.client = {
@@ -263,7 +258,7 @@ angular.module('userServiceAdmin.controllers', ['ui.bootstrap'])
             };
             $scope.original = angular.copy($scope.client);
 
-            Client.get($routeSegment.$routeParams.clientID).then(function (response) {
+            Client.get($stateParams.clientID).then(function (response) {
                 if (response) {
                     $scope.client = response;
                     $scope.original = angular.copy($scope.client)

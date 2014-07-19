@@ -10,13 +10,14 @@
 
 <div class="wrapper container ng-cloak" ng-controller="MainCtrl">
     <header>
+        {{$state}}
         <nav class="navbar navbar-default">
             <ul class="nav navbar-nav">
-                <li ng-class="{active: ('users' | routeSegmentStartsWith)}">
-                    <a href="#{{'users' | routeSegmentUrl}}">Users</a>
+                <li ng-class="{active: ('users' | includedByState)}">
+                    <a ui-sref="users.list">Users</a>
                 </li>
-                <li ng-class="{active: ('clients' | routeSegmentStartsWith)}">
-                    <a href="#{{'clients' | routeSegmentUrl}}">Applications</a>
+                <li ng-class="{active: ('clients' | includedByState)}">
+                    <a ui-sref="clients.list">Applications</a>
                 </li>
             </ul>
 
@@ -51,11 +52,10 @@
     </header>
 
     <div class="tab-content">
-        <div class="heading">
-            <h1>{{main.tab}}</h1>
-        </div>
 
-        <div class="anim" app-view-segment="0"></div>
+        <div ui-view></div>
+        <!--<div class="anim" app-view-segment="0"></div>-->
+
         <!--<div class="row">
             <aside class="col-md-2">
                 <div class="navbar navbar-default">
@@ -70,12 +70,6 @@
                 <div ng-view></div>
             </section>
         </div>-->
-    </div>
-    <div class="progress" ng-show="loader.show">
-        <div class="progress-bar progress-bar-striped active" role="progressbar"
-             aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-            <span class="sr-only">Loading...</span>
-        </div>
     </div>
 </div>
 
@@ -96,11 +90,13 @@
 <script src="webjars/lodash/2.4.1/lodash.compat.min.js"></script>
 <script src="webjars/lodash/2.4.1/lodash.underscore.min.js"></script>
 <script src="webjars/restangular/1.4.0/restangular.min.js"></script>
-<!--<script src="webjars/angular-ui-router/0.2.10/angular-ui-router.min.js"></script>-->
-<script src="js/thirdparty/angular-route-segment.min.js"></script>
-<script src="js/app.js"></script>
+<script src="webjars/angular-ui-router/0.2.10/angular-ui-router.min.js"></script>
+<!--<script src="js/thirdparty/angular-route-segment.min.js"></script>-->
+<!--<script src="js/app.js"></script>-->
+<script src="js/app_backup.js"></script>
 <script src="js/controllers.js"></script>
 <script src="js/services.js"></script>
 <script src="js/directives.js"></script>
+<script src="js/routingConfig.js"></script>
 </body>
 </html>

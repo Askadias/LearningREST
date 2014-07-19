@@ -48,18 +48,12 @@ var userServiceAdmin = angular.module('userServiceAdmin', [
                 .segment('list', {
                     default: true,
                     templateUrl: 'partials/users/list.html',
-                    controller: 'UsersListCtrl',
-                    data: {
-                        authorizedRoles: [ROLES.admin, ROLES.reader]
-                    }
+                    controller: 'UsersListCtrl'
                 })
                 .segment('details', {
                     templateUrl: 'partials/users/details.html',
                     controller: 'UserDetailsCtrl',
-                    dependencies: ['email', 'mode'],
-                    data: {
-                        authorizedRoles: [ROLES.admin, ROLES.writer, ROLES.reader]
-                    }
+                    dependencies: ['email', 'mode']
                 })
                 .up()
 
@@ -71,18 +65,12 @@ var userServiceAdmin = angular.module('userServiceAdmin', [
                 .segment('list', {
                     default: true,
                     templateUrl: 'partials/clients/list.html',
-                    controller: 'ClientsListCtrl',
-                    data: {
-                        authorizedRoles: [ROLES.admin, ROLES.reader]
-                    }
+                    controller: 'ClientsListCtrl'
                 })
                 .segment('details', {
                     templateUrl: 'partials/clients/details.html',
                     controller: 'ClientDetailsCtrl',
-                    dependencies: ['clientID', 'mode'],
-                    data: {
-                        authorizedRoles: [ROLES.admin, ROLES.writer, ROLES.reader]
-                    }
+                    dependencies: ['clientID', 'mode']
                 });
             $routeProvider.otherwise({redirectTo: '/users'});
         }])

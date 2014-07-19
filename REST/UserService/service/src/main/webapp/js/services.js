@@ -54,7 +54,7 @@ angular.module('userServiceAdmin.services', ['restangular'])
         };
         return this;
     }])
-    .factory('Auth', ['Restangular', 'Session', function (Restangular, Session) {
+    .factory('Auth', ['Restangular', 'Session', '$cookieStore', function (Restangular, Session, $cookieStore) {
         return {
             login: function (credentials) {
                 return Restangular
