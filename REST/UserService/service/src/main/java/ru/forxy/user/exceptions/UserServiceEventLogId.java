@@ -2,7 +2,6 @@ package ru.forxy.user.exceptions;
 
 import ru.forxy.common.exceptions.EventLogBase;
 import ru.forxy.common.exceptions.EventType;
-import ru.forxy.common.logging.exceptions.LoggingCommonEventLogId;
 
 public enum UserServiceEventLogId implements EventLogBase {
 
@@ -44,7 +43,7 @@ public enum UserServiceEventLogId implements EventLogBase {
     // -------------------------------------------------------------------
     // DB events
     // -------------------------------------------------------------------
-    CannotRetrieveCassandraSession(LoggingCommonEventLogId.BASE_EVENT_LOG_ID + 100, 500,
+    CannotRetrieveCassandraSession(UserServiceEventLogId.BASE_EVENT_LOG_ID + 100, 500,
             "Cannot retrieve cassandra connection.",
             EventType.InternalError);
 

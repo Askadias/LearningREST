@@ -19,30 +19,6 @@ angular.module('userServiceAdmin.services', ['restangular'])
             }
         }
     }])
-    .factory('Client', ['Restangular', function (Restangular) {
-        return {
-            all: function () {
-                return Restangular.all('clients').getList();
-            },
-            page: {
-                search: function (query) {
-                    return Restangular.one('clients').get(query);
-                }
-            },
-            get: function (clientID) {
-                return Restangular.one('clients', clientID).get();
-            },
-            add: function (client) {
-                return Restangular.all('clients').post(client);
-            },
-            save: function (client) {
-                return Restangular.one('clients', client.clientID).put(client);
-            },
-            delete: function (client) {
-                return Restangular.one('clients', client.clientID).remove();
-            }
-        }
-    }])
     .service('Session', [function () {
         this.create = function (sessionId, user) {
             this.id = sessionId;

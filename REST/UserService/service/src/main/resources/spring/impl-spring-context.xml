@@ -25,16 +25,7 @@
     <bean id="ru.forxy.user.rest.AuthServiceEndpoint" class="ru.forxy.user.rest.v1.AuthServiceEndpoint"
           p:userServiceFacade-ref="ru.forxy.user.logic.UserServiceFacade"/>
 
-    <!-- Client Service business logic component-->
-    <bean id="ru.forxy.user.logic.ClientServiceFacade.impl" class="ru.forxy.user.logic.ClientServiceFacade"
-          autowire-candidate="false"
-          p:clientDAO-ref="ru.forxy.user.db.dao.ClientDAO.mongo"/>
-
-    <bean id="ru.forxy.user.rest.ClientServiceEndpoint" class="ru.forxy.user.rest.v1.ClientServiceEndpoint"
-          p:clientServiceFacade-ref="ru.forxy.user.logic.ClientServiceFacade"/>
-
     <!-- OAuth business logic component-->
     <bean id="oauthProvider" class="ru.forxy.user.logic.OAuthManager"
-          p:userServiceFacade-ref="ru.forxy.user.logic.UserServiceFacade"
-          p:clientServiceFacade-ref="ru.forxy.user.logic.ClientServiceFacade"/>
+          p:userServiceFacade-ref="ru.forxy.user.logic.UserServiceFacade"/>
 </beans>

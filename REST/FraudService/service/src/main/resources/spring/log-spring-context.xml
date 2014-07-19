@@ -65,7 +65,7 @@
                         <entry key="TransactionGUID" value="#responseHeaders['Transaction-GUID']"/>
                         <entry key="MessageGUID" value="#responseHeaders['Message-GUID']"/>
                         <entry key="FraudEmail"
-                               value="#payload.indexOf('&quot;email&quot;')&gt;=0 ? #payload.replaceAll('.*?&quot;email&quot;:\s*?&quot;([a-zA-Z0-9!#$%&amp;''*+/=?^_`{|}~-]+(\.[a-zA-Z0-9!#$%&amp;''*+/=?^_`{|}~-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*)&quot;.*','$1') : null"/>
+                               value="#payload.indexOf('&quot;tokenKey&quot;')&gt;=0 ? #payload.replaceAll('.*?&quot;tokenKey&quot;:\s*?&quot;([a-zA-Z0-9!#$%&amp;''*+/=?^_`{|}~-]+(\.[a-zA-Z0-9!#$%&amp;''*+/=?^_`{|}~-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*)&quot;.*','$1') : null"/>
                         <entry key="StatusCode">
                             <value>(#response.responseStatus==200 or #response.responseStatus==201 or
                                 #response.responseStatus==204) ? '0' :

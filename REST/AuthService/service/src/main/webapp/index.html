@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en" ng-app="authServiceAdmin">
+<head>
+    <meta charset="utf-8">
+    <title>Auth Service Admin Tool</title>
+    <link rel="stylesheet" href="css/app.css">
+    <!--<link rel="stylesheet" href="webjars/bootstrap/2.3.2/css/bootstrap.min.css">-->
+</head>
+<body>
+
+<div class="wrapper container ng-cloak" ng-controller="MainCtrl">
+    <header>
+        {{$state}}
+        <nav class="navbar navbar-default">
+            <ul class="nav navbar-nav">
+                <li ng-class="{active: ('users' | includedByState)}">
+                    <a ui-sref="users.list">Auths</a>
+                </li>
+                <li ng-class="{active: ('clients' | includedByState)}">
+                    <a ui-sref="clients.list">Applications</a>
+                </li>
+            </ul>
+
+            <div class="navbar-right navbar-text">
+                <div ng-if="!!currentAuth">
+                    {{currentAuth.tokenKey}}
+                    <div ng-repeat="role in currentAuth.roles">
+                        <span class="label label-success">{{role}}</span>
+                    </div>
+                </div>
+                <div ng-if="!currentAuth">
+                    <span class="label label-default">guest</span>
+                </div>
+            </div>
+            <form class="navbar-form navbar-right">
+                <div class="form-group">
+                    <div ng-if="!!currentAuth">
+                        <button type="submit" ng-click="logout()" class="btn btn-default">Log out</button>
+                    </div>
+                    <div ng-if="!currentAuth">
+                        <input type="tokenKey" ng-model="credentials.tokenKey" class="form-control" placeholder="Email"
+                               required>
+                        <input type="password" ng-model="credentials.password" class="form-control"
+                               placeholder="Password"
+                               required>
+                        <button type="submit" ng-click="login(credentials)" class="btn btn-default">Log in</button>
+                        <button type="button" ng-click="register(credentials)" class="btn btn-default">Register</button>
+                    </div>
+                </div>
+            </form>
+        </nav>
+    </header>
+
+    <div class="tab-content">
+
+        <div ui-view></div>
+        <!--<div class="anim" app-view-segment="0"></div>-->
+
+        <!--<div class="row">
+            <aside class="col-md-2">
+                <div class="navbar navbar-default">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li class="active"><a href="#">users list</a></li>
+                        <li><a href="service/soap/v1?wsdl">wsdl</a></li>
+                        <li><a href="service/rest/v1?_wadl">wadl</a></li>
+                    </ul>
+                </div>
+            </aside>
+            <section class="col-md-10">
+                <div ng-view></div>
+            </section>
+        </div>-->
+    </div>
+</div>
+
+
+<script src="webjars/jquery/1.11.1/jquery.min.js"></script>
+<script src="webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="webjars/angularjs/1.3.0-beta.13/angular.js"></script>
+<script src="webjars/angularjs/1.3.0-beta.13/angular-touch.min.js"></script>
+<script src="webjars/angularjs/1.3.0-beta.13/angular-route.min.js"></script>
+<script src="webjars/angularjs/1.3.0-beta.13/angular-resource.min.js"></script>
+<script src="webjars/angularjs/1.3.0-beta.13/angular-animate.min.js"></script>
+<script src="webjars/angularjs/1.3.0-beta.13/angular-cookies.min.js"></script>
+<script src="webjars/angularjs/1.3.0-beta.13/angular-loader.min.js"></script>
+<script src="webjars/angularjs/1.3.0-beta.13/angular-sanitize.min.js"></script>
+<script src="webjars/angularjs/1.3.0-beta.13/i18n/angular-locale_en-us.js"></script>
+<script src="webjars/angular-ui-bootstrap/0.11.0/ui-bootstrap-tpls.js"></script>
+<script src="webjars/lodash/2.4.1/lodash.min.js"></script>
+<script src="webjars/lodash/2.4.1/lodash.compat.min.js"></script>
+<script src="webjars/lodash/2.4.1/lodash.underscore.min.js"></script>
+<script src="webjars/restangular/1.4.0/restangular.min.js"></script>
+<script src="webjars/angular-ui-router/0.2.10/angular-ui-router.min.js"></script>
+<script src="js/app.js"></script>
+<script src="js/controllers.js"></script>
+<script src="js/services.js"></script>
+<script src="js/directives.js"></script>
+<script src="js/routingConfig.js"></script>
+</body>
+</html>

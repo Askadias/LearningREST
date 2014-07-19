@@ -1,0 +1,95 @@
+(function (exports) {
+
+    var config = {
+
+        /* List all the roles you wish to use in the app
+         * You have a max of 31 before the bit shift pushes the accompanying integer out of
+         * the memory footprint for an integer
+         */
+        roles: [
+            'public',
+            'auth',
+            'admin'],
+
+        /*
+         Build out all the access levels you want referencing the roles listed above
+         You can use the "*" symbol to represent access to all roles
+         */
+        accessLevels: {
+            'public': "*",
+            'anon': ['public'],
+            'auth': ['auth', 'admin'],
+            'admin': ['admin']
+        }
+
+    };
+
+    exports.authRoles = buildRoles(config.roles);
+    exports.accessLevels = buildAccessLevels(config.accessLevels, exports.authRoles);
+
+    /*
+     Method to build a distinct bit mask for each role
+     It starts off with "1" and shifts the bit to the left for each element in the
+     roles array parameter
+     */
+
+    function buildRoles(roles) {
+
+        var bitMask = "01";
+        var authRoles = {};
+
+        for (var role in roles) {
+            var intCode = parseInt(bitMask, 2);
+            authRoles[roles[role]] = {
+                bitMask: intCode,
+                title: roles[role]
+            };
+            bitMask = (intCode << 1 ).toString(2)
+        }
+
+        return authRoles;
+    }
+
+    /*
+     This method builds access level bit masks based on the accessLevelDeclaration parameter which must
+     contain an array for each access level containing the allowed auth roles.
+     */
+    function buildAccessLevels(accessLevelDeclarations, authRoles) {
+
+        var accessLevels = {};
+        for (var level in accessLevelDeclarations) {
+
+            if (typeof accessLevelDeclarations[level] == 'string') {
+                if (accessLevelDeclarations[level] == '*') {
+
+                    var resultBitMask = '';
+
+                    for (var role in authRoles) {
+                        resultBitMask += "1"
+                    }
+                    //accessLevels[level] = parseInt(resultBitMask, 2);
+                    accessLevels[level] = {
+                        bitMask: parseInt(resultBitMask, 2)
+                    };
+                }
+                else console.log("Access Control Error: Could not parse '" + accessLevelDeclarations[level] + "' as access definition for level '" + level + "'")
+
+            }
+            else {
+
+                var resultBitMask = 0;
+                for (var role in accessLevelDeclarations[level]) {
+                    if (authRoles.hasOwnProperty(accessLevelDeclarations[level][role]))
+                        resultBitMask = resultBitMask | authRoles[accessLevelDeclarations[level][role]].bitMask
+                    else console.log("Access Control Error: Could not find role '" + accessLevelDeclarations[level][role] + "' in registered roles while building access for '" + level + "'")
+                }
+                accessLevels[level] = {
+                    bitMask: resultBitMask
+                };
+            }
+        }
+
+        return accessLevels;
+    }
+
+})(typeof exports === 'undefined' ? this['routingConfig'] = {} : exports);

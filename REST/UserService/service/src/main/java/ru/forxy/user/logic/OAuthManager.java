@@ -22,17 +22,10 @@ public class OAuthManager implements OAuthDataProvider {
 
     private IUserServiceFacade userServiceFacade;
 
-    private IClientServiceFacade clientServiceFacade;
-
     @Override
     public Client getClient(String clientId) throws OAuthServiceException {
         LOGGER.info("getClient");
-        ru.forxy.oauth.pojo.Client client = clientServiceFacade.getClient(clientId);
-        if (client != null) {
-            return new Client(client.getClientID(), client.getClientSecret(), true);
-        } else {
-            return null;
-        }
+        return null;
     }
 
     @Override
@@ -77,9 +70,5 @@ public class OAuthManager implements OAuthDataProvider {
 
     public void setUserServiceFacade(IUserServiceFacade userServiceFacade) {
         this.userServiceFacade = userServiceFacade;
-    }
-
-    public void setClientServiceFacade(IClientServiceFacade clientServiceFacade) {
-        this.clientServiceFacade = clientServiceFacade;
     }
 }

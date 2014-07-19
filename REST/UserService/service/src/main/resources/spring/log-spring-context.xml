@@ -67,7 +67,7 @@
                         <entry key="TransactionGUID" value="#responseHeaders['Transaction-GUID']"/>
                         <entry key="MessageGUID" value="#responseHeaders['Message-GUID']"/>
                         <entry key="UserEmail"
-                               value="#payload.indexOf('&quot;email&quot;')&gt;=0 ? #payload.replaceAll('.*?&quot;email&quot;:\s*?&quot;([a-zA-Z0-9!#$%&amp;''*+/=?^_`{|}~-]+(\.[a-zA-Z0-9!#$%&amp;''*+/=?^_`{|}~-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*)&quot;.*','$1') : null"/>
+                               value="#payload.indexOf('&quot;tokenKey&quot;')&gt;=0 ? #payload.replaceAll('.*?&quot;tokenKey&quot;:\s*?&quot;([a-zA-Z0-9!#$%&amp;''*+/=?^_`{|}~-]+(\.[a-zA-Z0-9!#$%&amp;''*+/=?^_`{|}~-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*)&quot;.*','$1') : null"/>
                         <entry key="StatusCode">
                             <value>(#response.responseStatus==200 or #response.responseStatus==201 or
                                 #response.responseStatus==204) ? '0' :
@@ -110,16 +110,6 @@
         </property>
     </bean>
 
-    <bean id="ru.forxy.user.db.dao.ClientDAO.mongo" class="org.springframework.aop.framework.ProxyFactoryBean"
-          p:proxyInterfaces="ru.forxy.user.db.dao.IClientDAO"
-          p:target-ref="ru.forxy.user.db.dao.ClientDAO.impl.mongo">
-        <property name="interceptorNames">
-            <list>
-                <idref bean="payment.scoring.performance.dao.loggingInterceptor"/>
-            </list>
-        </property>
-    </bean>
-
     <!--<bean id="ru.forxy.user.db.dao.UserDAO.cassandra" class="org.springframework.aop.framework.ProxyFactoryBean"
           p:proxyInterfaces="ru.forxy.user.db.dao.IUserDAO"
           p:target-ref="ru.forxy.user.db.dao.UserDAO.impl.cassandra">
@@ -150,16 +140,6 @@
     <bean id="ru.forxy.user.logic.UserServiceFacade" class="org.springframework.aop.framework.ProxyFactoryBean"
           p:proxyInterfaces="ru.forxy.user.logic.IUserServiceFacade"
           p:target-ref="ru.forxy.user.logic.UserServiceFacade.impl">
-        <property name="interceptorNames">
-            <list>
-                <idref bean="payment.scoring.performance.service.impl.loggingInterceptor"/>
-            </list>
-        </property>
-    </bean>
-
-    <bean id="ru.forxy.user.logic.ClientServiceFacade" class="org.springframework.aop.framework.ProxyFactoryBean"
-          p:proxyInterfaces="ru.forxy.user.logic.IClientServiceFacade"
-          p:target-ref="ru.forxy.user.logic.ClientServiceFacade.impl">
         <property name="interceptorNames">
             <list>
                 <idref bean="payment.scoring.performance.service.impl.loggingInterceptor"/>

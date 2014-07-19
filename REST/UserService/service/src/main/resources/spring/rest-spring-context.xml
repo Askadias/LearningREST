@@ -84,7 +84,6 @@
     <jaxrs:server id="ru.forxy.UserService.rest" address="/rest/v1">
         <jaxrs:serviceBeans>
             <ref bean="ru.forxy.user.rest.v1.UserServiceEndpoint"/>
-            <ref bean="ru.forxy.user.rest.v1.ClientServiceEndpoint"/>
             <ref bean="ru.forxy.common.rest.SystemStatusServiceEndpoint"/>
             <ref bean="authorizationServiceEndpoint"/>
         </jaxrs:serviceBeans>

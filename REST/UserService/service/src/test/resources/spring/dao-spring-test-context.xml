@@ -10,11 +10,6 @@
           factory-method="createNiceMock"
           c:toMock="ru.forxy.user.db.dao.IUserDAO"/>
 
-    <bean id="ru.forxy.user.db.dao.ClientDAO.impl.mongo"
-          class="org.easymock.EasyMock"
-          factory-method="createNiceMock"
-          c:toMock="ru.forxy.user.db.dao.IClientDAO"/>
-
     <bean id="ru.forxy.user.db.dao.UserDAO.impl.cassandra"
           class="org.easymock.EasyMock"
           factory-method="createNiceMock"

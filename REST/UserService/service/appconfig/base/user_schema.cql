@@ -4,7 +4,7 @@ CREATE KEYSPACE forxy WITH replication = {'class': 'SimpleStrategy', 'replicatio
 USE forxy;
 
 CREATE TABLE user (
-    email TEXT,
+    tokenKey TEXT,
     login TEXT,
     password BLOB,
     first_name TEXT,
@@ -13,7 +13,7 @@ CREATE TABLE user (
     birth_date TIMESTAMP,
     create_date timestamp,
     favorites SET<TEXT>,
-    PRIMARY KEY (email)
+    PRIMARY KEY (tokenKey)
 );
 //WITH CLUSTERING ORDER BY (create_date DESC);
 

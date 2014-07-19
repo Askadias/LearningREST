@@ -7,7 +7,7 @@
     <GlobalNamingResources>
         <Resource description="User database that can be updated and saved" name="UserDatabase"
                   factory="org.apache.catalina.users.MemoryUserDatabaseFactory" pathname="conf/tomcat-users.xml"
-                  type="org.apache.catalina.UserDatabase" auth="Container"/>
+                  type="org.apache.catalina.UserDatabase" token="Container"/>
     </GlobalNamingResources>
     <Service name="Catalina">
         <Connector port="10080" protocol="HTTP/1.1" connectionTimeout="20000" redirectPort="10090"/>

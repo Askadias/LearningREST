@@ -36,10 +36,6 @@
           autowire-candidate="false"
           p:mongoTemplate-ref="mongoTemplate"/>
 
-    <bean id="ru.forxy.user.db.dao.ClientDAO.impl.mongo" class="ru.forxy.user.db.dao.mongo.ClientDAO"
-          autowire-candidate="false"
-          p:mongoTemplate-ref="mongoTemplate"/>
-
 
     <!-- =========================================================================================
                                    Cassandra Data Source

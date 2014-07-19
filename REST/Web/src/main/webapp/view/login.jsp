@@ -6,7 +6,7 @@
 
 <form action="login" method="post">
     <label>
-        <input type="email" name="email">
+        <input type="tokenKey" name="tokenKey">
     </label><br/>
     <label>
         <input type="password" name="password">
