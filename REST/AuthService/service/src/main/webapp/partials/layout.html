@@ -1,0 +1,58 @@
+<header>
+    <nav class="navbar navbar-default">
+        <button ng-click="login()">Authorize</button>
+        <ul class="nav navbar-nav">
+            <li ng-class="{active: ('clients' | includedByState)}">
+                <a ui-sref="clients.list">Applications</a>
+            </li>
+            <li ng-class="{active: ('tokens' | includedByState)}">
+               <a ui-sref="tokens.list">Tokens</a>
+           </li>
+        </ul>
+        <!--<form class="navbar-form navbar-right">
+            <div class="form-group">
+                <div ng-if="!!currentUser">
+                    <button type="submit" ng-click="logout()" class="btn btn-default">Log out</button>
+                </div>
+                <div ng-if="!currentUser">
+                    <input type="email" ng-model="credentials.email" class="form-control" placeholder="Email"
+                           required>
+                    <input type="password" ng-model="credentials.password" class="form-control"
+                           placeholder="Password"
+                           required>
+                    <button type="submit" ng-click="login(credentials)" class="btn btn-default">Log in</button>
+                    <button type="button" ng-click="register(credentials)" class="btn btn-default">Register</button>
+                </div>
+            </div>
+        </form>-->
+
+        <!--<div class="navbar-right navbar-text">
+            <div ng-if="!!currentUser">
+                {{currentUser.email}}
+                <div ng-repeat="role in currentUser.roles">
+                    <label class="label label-success">{{role}}</label>
+                </div>
+            </div>
+            <div ng-if="!currentUser">
+                <span class="label label-default">guest</span>
+            </div>
+        </div>-->
+    </nav>
+</header>
+
+<!--<oauth
+        site="https://oauth-ng-server.herokuapp.com"
+        client-id="23c6ceaba56c00e940f890acc9f4c75a94991c62f5561338b6311f7026343d58"
+        redirect-uri="https://oauth-ng-demo.herokuapp.com"
+        profile-uri="https://oauth-ng-server.herokuapp.com/api/v1/me"
+        scope="public">
+</oauth>-->
+
+<div class="token" ng-if="accessToken">
+    with access token {{accessToken}}
+</div>
+
+<div class="tab-content">
+
+    <div ui-view></div>
+</div>

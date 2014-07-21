@@ -19,57 +19,71 @@ angular.module('userServiceAdmin.services', ['restangular'])
             }
         }
     }])
-    .service('Session', [function () {
-        this.create = function (sessionId, user) {
-            this.id = sessionId;
-            this.user = user;
-        };
-        this.destroy = function () {
-            this.id = null;
-            this.user = null;
-        };
-        return this;
-    }])
-    .factory('Auth', ['Restangular', 'Session', '$cookieStore', function (Restangular, Session, $cookieStore) {
+    .factory('Auth', ['Restangular', '$sessionStorage', function (Restangular, $sessionStorage) {
+
+        var accessLevels = routingConfig.accessLevels,
+            userRoles = routingConfig.userRoles,
+            currentUser = $sessionStorage.user || {
+                    firstName: 'Guest',
+                    roles: ['public'],
+                    isLoggedIn: false
+                };
+
+        Restangular = Restangular.withConfig(function (RestangularConfigurer) {
+            RestangularConfigurer.setBaseUrl('service/auth');
+        });
+
+        function changeUser(user) {
+            angular.extend(currentUser, user);
+            $sessionStorage.user = currentUser;
+        }
+
         return {
-            login: function (credentials) {
-                return Restangular
-                    .withConfig(function (RestangularConfigurer) {
-                        RestangularConfigurer.setBaseUrl('service/auth');
-                    })
-                    .all('login').post(credentials);
+            authorize: function (accessLevel, role) {
+                var isAuthorized = false;
+                if (role === undefined && !!currentUser.roles) {
+                    for (var userRole in currentUser.roles) {
+                        isAuthorized |= this.authorize(accessLevel, currentUser.roles[userRole])
+                    }
+                }
+                else {
+                    isAuthorized = accessLevel.bitMask & userRoles[role].bitMask;
+                }
+                return isAuthorized;
             },
-            register: function (credentials) {
-                return Restangular
-                    .withConfig(function (RestangularConfigurer) {
-                        RestangularConfigurer.setBaseUrl('service/auth');
-                    })
-                    .all('register').post(credentials);
+            register: function (credentials, success, error) {
+                return Restangular.all('register').post(credentials).then(function (response) {
+                    user.isLoggedIn = true;
+                    changeUser(response);
+                    success();
+                }, function (response) {
+                    error(response);
+                });
+            },
+            login: function (credentials, success, error) {
+                return Restangular.all('login').post(credentials).then(function (user) {
+                    user.isLoggedIn = true;
+                    changeUser(user);
+                    success();
+                }, function (response) {
+                    error(response);
+                });
             },
             logout: function () {
-                Session.destroy();
+                changeUser({
+                    firstName: 'Guest',
+                    roles: ['public'],
+                    isLoggedIn: false
+                })
             },
-            isAuthenticated: function () {
-                return !!Session.user;
-            },
-            isAuthorized: function (authorizedRoles) {
-                if (!authorizedRoles) return true;
-                if (!Session.user || (!!authorizedRoles && !Session.user.roles)) return false;
-                for (var role in Session.user.roles) {
-                    if (authorizedRoles.indexOf(role) > -1) return true;
+            isLoggedIn: function (user) {
+                if (user === undefined) {
+                    user = currentUser;
                 }
-            }
+                return user.isLoggedIn === true;
+            },
+            accessLevels: accessLevels,
+            userRoles: userRoles,
+            user: currentUser
         }
     }]);
-
-/*
- .factory('User', ['$resource',
- function ($resource) {
- return $resource('service/rest/v1/users/:email', {}, {
- getList: {method: 'GET', isArray: true},
- get: {method: 'GET'},
- save: {method: 'POST'},
- add: {method: 'PUT'},
- delete: {method: 'DELETE'}
- });
- }]);*/

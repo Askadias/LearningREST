@@ -16,10 +16,6 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
-    <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
-    </welcome-file-list>
-
     <!-- Spring XML context definition -->
     <!-- <context-param>
         <param-name>contextConfigLocation</param-name>
@@ -51,6 +47,22 @@
     <servlet-mapping>
         <servlet-name>CXFServlet</servlet-name>
         <url-pattern>/service/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Web UI -->
+
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+    <servlet>
+        <servlet-name>StaticServlet</servlet-name>
+        <jsp-file>/index.html</jsp-file>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>StaticServlet</servlet-name>
+        <url-pattern>/app/*</url-pattern>
     </servlet-mapping>
 
     <!-- character encoding filter -->

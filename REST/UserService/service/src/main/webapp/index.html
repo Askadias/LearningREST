@@ -2,55 +2,18 @@
 <html lang="en" ng-app="userServiceAdmin">
 <head>
     <meta charset="utf-8">
-    <title>User Service Admin Tool</title>
-    <link rel="stylesheet" href="css/app.css">
+    <title>Forxy</title>
+    <link rel="stylesheet" href="/UserService/css/app.css">
+    <base href="/UserService/app"/>
     <!--<link rel="stylesheet" href="webjars/bootstrap/2.3.2/css/bootstrap.min.css">-->
 </head>
 <body>
 
 <div class="wrapper container ng-cloak" ng-controller="MainCtrl">
-    <header>
-        {{$state}}
-        <nav class="navbar navbar-default">
-            <!--<ul class="nav navbar-nav">
-                <li ng-class="{active: ('users' | includedByState)}">
-                    <a ui-sref="users.list">Users</a>
-                </li>
-                <li ng-class="{active: ('clients' | includedByState)}">
-                    <a ui-sref="clients.list">Applications</a>
-                </li>
-            </ul>
--->
-            <div class="navbar-right navbar-text">
-                <div ng-if="!!currentUser">
-                    {{currentUser.email}}
-                    <div ng-repeat="role in currentUser.roles">
-                        <span class="label label-success">{{role}}</span>
-                    </div>
-                </div>
-                <div ng-if="!currentUser">
-                    <span class="label label-default">guest</span>
-                </div>
-            </div>
-            <form class="navbar-form navbar-right">
-                <div class="form-group">
-                    <div ng-if="!!currentUser">
-                        <button type="submit" ng-click="logout()" class="btn btn-default">Log out</button>
-                    </div>
-                    <div ng-if="!currentUser">
-                        <input type="email" ng-model="credentials.email" class="form-control" placeholder="Email"
-                               required>
-                        <input type="password" ng-model="credentials.password" class="form-control"
-                               placeholder="Password"
-                               required>
-                        <button type="submit" ng-click="login(credentials)" class="btn btn-default">Log in</button>
-                        <button type="button" ng-click="register(credentials)" class="btn btn-default">Register</button>
-                    </div>
-                </div>
-            </form>
-        </nav>
-    </header>
-
+    <div id="alertBox" data-ng-show="error" class="alert alert-danger">
+        <button type="button" data-ng-click="error = null;" class="close">&times;</button>
+        <strong>Oh no!&nbsp;</strong><span data-ng-bind="error"></span>
+    </div>
     <div class="tab-content">
 
         <div ui-view></div>
@@ -74,6 +37,7 @@
 <script src="webjars/lodash/2.4.1/lodash.compat.min.js"></script>
 <script src="webjars/lodash/2.4.1/lodash.underscore.min.js"></script>
 <script src="webjars/restangular/1.4.0/restangular.min.js"></script>
+<script src="webjars/ngStorage/0.3.0/ngStorage.min.js"></script>
 <script src="webjars/angular-ui-router/0.2.10/angular-ui-router.min.js"></script>
 <script src="js/app.js"></script>
 <script src="js/controllers.js"></script>

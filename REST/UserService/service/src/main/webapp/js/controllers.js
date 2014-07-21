@@ -1,32 +1,37 @@
 'use strict';
 
 angular.module('userServiceAdmin.controllers', ['ui.bootstrap'])
-    .controller('MainCtrl', ['$scope', '$rootScope', 'Auth', 'Session', 'AUTH_EVENTS',
-        function ($scope, $rootScope, Auth, Session, AUTH_EVENTS) {
+    .controller('MainCtrl', ['$scope', '$rootScope', '$location', 'Auth', '$stateParams',
+        function ($scope, $rootScope, $location, Auth, $stateParams) {
+            $scope.redirrectUrl = $location.search().redirect_url;
+            $scope.currentUser = Auth.user;
+            $scope.userRoles = Auth.userRoles;
+            $scope.accessLevels = Auth.accessLevels;
 
-            $scope.setCurrentUser = function (user) {
-                $rootScope.currentUser = user;
-                Session.user = $rootScope.currentUser;
-            };
             $scope.login = function (credentials) {
-                Auth.login(credentials).then(function (response) {
-                    $scope.setCurrentUser(response);
-                    $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-                }, function (response) {
-                    $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+                Auth.login(credentials, function (response) {
+                    $scope.currentUser = Auth.user;
+                    if(!!$scope.redirrectUrl) {
+                        window.location.replace($scope.redirrectUrl);
+                    } else {
+                        $location.path('/');
+                    }
+                }, function (error) {
+                    $scope.error = error;
+                });
+            };
+            $scope.register = function (credentials) {
+                Auth.register(credentials).then(function (response) {
+                    $scope.currentUser = Auth.user;
+                    $location.path('/');
+                }, function (error) {
+                    $scope.error = error;
                 })
             };
             $scope.logout = function () {
                 Auth.logout();
-                $scope.setCurrentUser(null);
-            };
-            $scope.register = function (credentials) {
-                Auth.register(credentials).then(function (response) {
-                    $scope.setCurrentUser(response);
-                    $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-                }, function (response) {
-                    $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
-                })
+                $scope.currentUser = Auth.user;
+                $location.path('/app/login');
             };
         }])
     .controller('UsersListCtrl', ['$scope', '$modal', 'User',

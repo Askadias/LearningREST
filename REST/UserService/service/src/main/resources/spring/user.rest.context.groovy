@@ -89,7 +89,6 @@ beans {
     jaxrs.server(id: 'userService', address: '/rest/v1') {
         jaxrs.serviceBeans {
             ref(bean: 'userServiceEndpoint')
-            ref(bean: 'authServiceEndpoint')
             ref(bean: 'systemStatusServiceEndpoint')
             ref(bean: 'authorizationServiceEndpoint')
         }

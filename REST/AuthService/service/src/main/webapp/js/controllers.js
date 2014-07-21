@@ -1,85 +1,69 @@
 'use strict';
 
 angular.module('authServiceAdmin.controllers', ['ui.bootstrap'])
-    .controller('MainCtrl', ['$scope', '$rootScope', 'Token', 'Session', 'AUTH_EVENTS',
-        function ($scope, $rootScope, Auth, Session, AUTH_EVENTS) {
+    .controller('MainCtrl', ['$scope', '$rootScope', 'OAuth',
+        function ($scope, $rootScope, OAuth) {
 
-            $scope.setCurrentAuth = function (auth) {
-                $rootScope.currentAuth = auth;
-                Session.auth = $rootScope.currentAuth;
-            };
-            $scope.login = function (credentials) {
-                Auth.login(credentials).then(function (response) {
-                    $scope.setCurrentAuth(response);
-                    $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-                }, function (response) {
-                    $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+            $scope.login = function() {
+                OAuth.getTokenByPopup().then(function (params) {
+                    OAuth.verifyAsync(params.access_token).then(function (data) {
+                        $sessionStorage.token = params.access_token;
+                        $sessionStorage.expires_in = params.expires_in;
+                    })
                 })
-            };
-            $scope.logout = function () {
-                Auth.logout();
-                $scope.setCurrentAuth(null);
-            };
-            $scope.register = function (credentials) {
-                Auth.register(credentials).then(function (response) {
-                    $scope.setCurrentAuth(response);
-                    $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-                }, function (response) {
-                    $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
-                })
-            };
+            }
         }])
-    .controller('AuthsListCtrl', ['$scope', '$modal', 'Token',
-        function ($scope, $modal, Auth) {
+    .controller('TokensListCtrl', ['$scope', '$modal', 'Token',
+        function ($scope, $modal, Token) {
             $scope.totalPages = 0;
-            $scope.authsCount = 0;
+            $scope.tokensCount = 0;
             $scope.headers = [
                 {
-                    title: 'Email',
-                    value: 'email'
+                    title: 'Token Key',
+                    value: 'tokenKey'
                 },
                 {
-                    title: 'Login',
-                    value: 'login'
+                    title: 'Client ID',
+                    value: 'clientID'
                 },
                 {
-                    title: 'First Name',
-                    value: 'firstName'
+                    title: 'Type',
+                    value: 'type'
                 },
                 {
-                    title: 'Last Name',
-                    value: 'lastName'
+                    title: 'Refresh Token',
+                    value: 'refreshToken'
                 },
                 {
-                    title: 'Gender',
-                    value: 'gender'
+                    title: 'Subject',
+                    value: 'subject'
                 },
                 {
-                    title: 'Birthday',
-                    value: 'birthDate'
+                    title: 'Expires In(ms)',
+                    value: 'expiresIn'
                 },
                 {
-                    title: 'Registration',
-                    value: 'createDate'
+                    title: 'Issued At',
+                    value: 'issuedAt'
                 }
             ];
 
             $scope.filterCriteria = {
                 page: 1,
                 sortDir: 'ASC',
-                sortedBy: 'email'
+                sortedBy: 'tokenKey'
             };
 
             //The function that is responsible of fetching the result from the server and setting the grid to the new result
             $scope.fetchResult = function () {
-                return Auth.page.search($scope.filterCriteria).then(function (response) {
-                    $scope.auths = response.content;
+                return Token.page.search($scope.filterCriteria).then(function (response) {
+                    $scope.tokens = response.content;
                     $scope.totalPages = Math.ceil(response.total / response.size);
-                    $scope.authsCount = response.total;
+                    $scope.tokensCount = response.total;
                 }, function () {
-                    $scope.auths = [];
+                    $scope.tokens = [];
                     $scope.totalPages = 0;
-                    $scope.authsCount = 0;
+                    $scope.tokensCount = 0;
                 });
             };
 
@@ -111,46 +95,11 @@ angular.module('authServiceAdmin.controllers', ['ui.bootstrap'])
 
             //manually select a page to trigger an ajax request to populate the grid on page load
             $scope.selectPage(1);
-
-            $scope.open = function (size, email) {
-
-                var modalInstance = $modal.open({
-                    templateUrl: 'partials/auths/details.html',
-                    controller: 'AuthDetailsModalCtrl',
-                    backdrop: true,
-                    size: size,
-                    resolve: {
-                        email: function () {
-                            return email;
-                        }
-                    }
-                });
-
-                modalInstance.result.then(function (auth) {
-                    $scope.newAuth = auth;
-                }, function () {
-                });
-            };
         }])
-    .controller('AuthDetailsModalCtrl', ['$scope', '$modalInstance', 'email', 'Token',
-        function ($scope, $modalInstance, email, Auth) {
-            Auth.get(email).then(function (response) {
-                $scope.auth = response;
-            }, function (response) {
-            });
-
-            $scope.ok = function () {
-                $modalInstance.close($scope.auth);
-            };
-
-            $scope.cancel = function () {
-                $modalInstance.dismiss('cancel');
-            };
-        }])
-    .controller('AuthDetailsCtrl', ['$scope', '$stateParams', 'Token',
-        function ($scope, $stateParams, Auth) {
-            Auth.get($stateParams.email).then(function (response) {
-                $scope.auth = response;
+    .controller('TokenDetailsCtrl', ['$scope', '$stateParams', 'Token',
+        function ($scope, $stateParams, Token) {
+            Token.get($stateParams.tokenKey).then(function (response) {
+                $scope.token = response;
             }, function (response) {
             });
         }])

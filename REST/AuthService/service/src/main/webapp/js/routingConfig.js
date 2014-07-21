@@ -8,7 +8,7 @@
          */
         roles: [
             'public',
-            'auth',
+            'user',
             'admin'],
 
         /*
@@ -18,7 +18,7 @@
         accessLevels: {
             'public': "*",
             'anon': ['public'],
-            'auth': ['auth', 'admin'],
+            'user': ['user', 'admin'],
             'admin': ['admin']
         }
 

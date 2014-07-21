@@ -79,8 +79,8 @@
             </tbody>
         </table>
         <div ng-show="totalPages > 1">
-            <pagination num-pages="totalPages" current-page="filterCriteria.page" max-size="10"
-                        class="" boundary-links="true" on-select-page="selectPage(page)"></pagination>
+            <pagination num-pages="totalPages" ng-model="filterCriteria.page" current-page="filterCriteria.page"
+                        max-size="10" class="" boundary-links="true" on-select-page="selectPage(page)"></pagination>
         </div>
     </div>
 </div>

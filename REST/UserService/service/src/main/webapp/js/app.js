@@ -1,25 +1,14 @@
 'use strict';
 
 var userServiceAdmin = angular.module('userServiceAdmin', [
-    //'ngRoute',
-    'ngCookies',
+    'ngStorage',
     'userServiceAdmin.controllers',
     'userServiceAdmin.services',
     'userServiceAdmin.directives',
     'restangular',
     'ngAnimate',
     'ui.router'
-    //'route-segment',
-    //'view-segment'
 ])
-    .constant('AUTH_EVENTS', {
-        loginSuccess: 'auth-login-success',
-        loginFailed: 'auth-login-failed',
-        logoutSuccess: 'auth-logout-success',
-        sessionTimeout: 'auth-session-timeout',
-        notAuthenticated: 'auth-not-authenticated',
-        notAuthorized: 'auth-not-authorized'
-    })
     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'RestangularProvider',
         function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, RestangularProvider) {
 
@@ -27,27 +16,36 @@ var userServiceAdmin = angular.module('userServiceAdmin', [
 
             var access = routingConfig.accessLevels;
 
-            $urlRouterProvider
-                .when('', '/users/')
-                .when('/login', '/login.html');
+            $urlRouterProvider.otherwise('/app/users/');
 
             $stateProvider
+                .state('login', {
+                    url: '/app/login/',
+                    templateUrl: 'partials/login.html',
+                    controller: 'MainCtrl',
+                    data: {
+                        access: access.public
+                    }
+                })
                 .state('users', {
                     abstract: true,
-                    url: '/users',
-                    template: '<ui-view/>',
+                    url: '/app',
+                    templateUrl: 'partials/layout.html',
                     controller: 'MainCtrl',
+                    data: {
+                     access: access.public
+                     }
+                })
+                .state('users.list', {
+                    url: '/users/',
+                    templateUrl: 'partials/users/list.html',
+                    controller: 'UsersListCtrl',
                     data: {
                         access: access.user
                     }
                 })
-                .state('users.list', {
-                    url: '/',
-                    templateUrl: 'partials/users/list.html',
-                    controller: 'UsersListCtrl'
-                })
                 .state('users.details', {
-                    url: '/:email/:mode',
+                    url: '/users/:email/:mode/',
                     templateUrl: 'partials/users/details.html',
                     controller: 'UserDetailsCtrl',
                     data: {
@@ -83,20 +81,17 @@ var userServiceAdmin = angular.module('userServiceAdmin', [
                 return path + '/?' + params.join('&');
             });
 
-            //$locationProvider.html5Mode(true);
+            $locationProvider.html5Mode(true).hashPrefix('!');
 
-            $httpProvider.interceptors.push(function ($q, $location) {
+            $httpProvider.interceptors.push(function($q, $location) {
                 return {
-                    'responseError': function (response) {
-                        if (response.status === 401 || response.status === 403) {
-                            $location.path('/users');
-                            return $q.reject(response);
+                    'responseError': function(response) {
+                        if(response.status === 401 || response.status === 403) {
+                            $location.path('/login/');
                         }
-                        else {
-                            return $q.reject(response);
-                        }
+                        return $q.reject(response);
                     }
-                }
+                };
             });
         }])
     .run(['$rootScope', '$state', 'Auth', function ($rootScope, $state, Auth) {
@@ -107,7 +102,7 @@ var userServiceAdmin = angular.module('userServiceAdmin', [
 
                 if (fromState.url === '^') {
                     if (Auth.isLoggedIn())
-                        $state.go('users');
+                        $state.go('users.list');
                     else {
                         $rootScope.error = null;
                         $state.go('login');

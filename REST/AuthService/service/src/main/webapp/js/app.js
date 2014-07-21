@@ -1,88 +1,78 @@
 'use strict';
 
 var authServiceAdmin = angular.module('authServiceAdmin', [
-    //'ngRoute',
-    'ngCookies',
+    'ngStorage',
     'authServiceAdmin.controllers',
     'authServiceAdmin.services',
     'authServiceAdmin.directives',
     'restangular',
     'ngAnimate',
-    'ui.router'
-    //'route-segment',
-    //'view-segment'
+    'ui.router',
+    'base64'
 ])
-    .constant('AUTH_EVENTS', {
-        loginSuccess: 'auth-login-success',
-        loginFailed: 'auth-login-failed',
-        logoutSuccess: 'auth-logout-success',
-        sessionTimeout: 'auth-session-timeout',
-        notAuthenticated: 'auth-not-authenticated',
-        notAuthorized: 'auth-not-authorized'
-    })
-    .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'RestangularProvider',
-        function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, RestangularProvider) {
+    .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'RestangularProvider', 'OAuthProvider',
+        function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, RestangularProvider, OAuthProvider) {
 
-            //$routeSegmentProvider.options.autoLoadTemplates = true;
+            OAuthProvider.extendConfig({
+                authorizationEndpoint: 'http://localhost:10080/UserService/app/login/',
+                client_id: '53cab7ca3004c4a709c985c3',
+                client_secret: 'secret',
+                scope: 'readClients writeClients readTokens updateTokens'
+            });
 
-            RestangularProvider.setBaseUrl('service/rest/v1/');
+            RestangularProvider.setBaseUrl('service/rest/v1');
 
             var access = routingConfig.accessLevels;
 
-            /*$urlRouterProvider
-
-             // The `when` method says if the url is ever the 1st param, then redirect to the 2nd param
-             // Here we are just setting up some convenience urls.
-             .when('u?email', 'auths/:email')
-             .when('auths/:email', 'auths/:email/view')
-             .when('auths/:email/:mode', 'auths/:email/:mode')
-             //.when('auths', 'auths.list')
-             //.when('auths', 'auths.list')
-
-             // If the url is ever invalid, e.g. '/asdf', then redirect to '/' aka the home state
-             .otherwise('auths');*/
-            $urlRouterProvider.when('', '/auths/');
+            $urlRouterProvider.otherwise('/app/clients/');
 
             $stateProvider
-                .state('auths', {
+                .state('clients', {
                     abstract: true,
-                    url: '/auths',
-                    template: '<ui-view/>',
+                    url: '/app',
+                    templateUrl: 'partials/layout.html',
                     controller: 'MainCtrl',
                     data: {
-                        access: access.auth
+                        access: access.public
                     }
                 })
-                .state('auths.list', {
-                    url: '/',
-                    templateUrl: 'partials/auths/list.html',
-                    controller: 'AuthsListCtrl'
+                .state('clients.list', {
+                    url: '/clients/',
+                    templateUrl: 'partials/clients/list.html',
+                    controller: 'ClientsListCtrl',
+                    data: {
+                        access: access.user
+                    }
                 })
-                .state('auths.details', {
-                    url: '/:email/:mode',
-                    templateUrl: 'partials/auths/details.html',
-                    controller: 'AuthDetailsCtrl',
+                .state('clients.details', {
+                    url: '/clients/:clientID/:mode/',
+                    templateUrl: 'partials/clients/details.html',
+                    controller: 'ClientDetailsCtrl',
                     data: {
                         access: access.admin
                     }
                 })
-                .state('clients', {
+                .state('tokens', {
                     abstract: true,
-                    url: '/clients',
-                    template: '<ui-view/>',
+                    url: '/app',
+                    templateUrl: 'partials/layout.html',
+                    controller: 'MainCtrl',
                     data: {
-                        access: access.auth
+                        access: access.public
                     }
                 })
-                .state('clients.list', {
-                    url: '/',
-                    templateUrl: 'partials/clients/list.html',
-                    controller: 'ClientsListCtrl'
+                .state('tokens.list', {
+                    url: '/tokens/',
+                    templateUrl: 'partials/tokens/list.html',
+                    controller: 'TokensListCtrl',
+                    data: {
+                        access: access.user
+                    }
                 })
-                .state('clients.details', {
-                    url: '/:clientID/:mode',
-                    templateUrl: 'partials/clients/details.html',
-                    controller: 'ClientDetailsCtrl',
+                .state('tokens.details', {
+                    url: '/tokens/:clientID/:mode/',
+                    templateUrl: 'partials/tokens/details.html',
+                    controller: 'TokenDetailsCtrl',
                     data: {
                         access: access.admin
                     }
@@ -116,13 +106,13 @@ var authServiceAdmin = angular.module('authServiceAdmin', [
                 return path + '/?' + params.join('&');
             });
 
-            //$locationProvider.html5Mode(true);
+            $locationProvider.html5Mode(true);
 
             $httpProvider.interceptors.push(function ($q, $location) {
                 return {
                     'responseError': function (response) {
                         if (response.status === 401 || response.status === 403) {
-                            $location.path('/auths');
+                            //$location.url('http://localhost:10080/UserService/app/login/?redirect_url=' + $location.url());
                             return $q.reject(response);
                         }
                         else {
@@ -131,22 +121,25 @@ var authServiceAdmin = angular.module('authServiceAdmin', [
                     }
                 }
             });
+            $httpProvider.interceptors.push('OAuthInterceptor');
         }])
-    .run(['$rootScope', '$state', 'Token', function ($rootScope, $state, Auth) {
+    .run(['$rootScope', '$state', 'OAuth', '$location', function ($rootScope, $state, OAuth, $location) {
         $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
-            if (!Auth.authorize(toState.data.access)) {
-                $rootScope.error = "Seems like you tried accessing a route you don't have access to...";
-                event.preventDefault();
+            /*if (toParams) {
+             window.location.replace('http://localhost:10080/UserService/app/login/?redirect_url=' + $location.url());
+             }*/
+            /*if (!Auth.authorize(toState.data.access)) {
+             $rootScope.error = "Seems like you tried accessing a route you don't have access to...";
+             event.preventDefault();
 
-                if (fromState.url === '^') {
-                    if (Auth.isLoggedIn())
-                        $state.go('auths');
-                    else {
-                        $rootScope.error = null;
-                        $state.go('login');
-                    }
-                }
-            }
+             if (fromState.url === '^') {
+             if (Auth.isLoggedIn())
+             $state.go('clients.list');
+             else {
+             $rootScope.error = null;
+             window.location.replace('http://localhost:10080/UserService/app/login/?redirect_url=' + $location.url());
+             }
+             }
+             }*/
         });
-
     }]);

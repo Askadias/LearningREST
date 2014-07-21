@@ -80,6 +80,8 @@ dependencies {
     compile "org.webjars:bootstrap:${rev_bootstrap}"
     compile "org.webjars:angular-ui-bootstrap:${rev_angular_ui_bootstrap}"
     compile "org.webjars:angular-ui-router:${rev_angular_ui_router}"
+    compile "org.webjars:ngStorage:${rev_angular_storage}"
+
 
     // ===================== TEST ========================================
     testCompile "org.springframework:spring-test:${rev_spring}"

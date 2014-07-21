@@ -66,6 +66,7 @@ beans {
 
     jaxrs.server(id: 'oauthServer', address: '/oauth') {
         jaxrs.serviceBeans {
+            ref(bean: 'authorizationServiceEndpoint')
             ref(bean: 'accessTokenServiceEndpoint')
             ref(bean: 'accessTokenValidatorServiceEndpoint')
         }
@@ -80,7 +81,6 @@ beans {
             ref(bean: 'tokenGrantServiceEndpoint')
             ref(bean: 'clientServiceEndpoint')
             ref(bean: 'systemStatusServiceEndpoint')
-            ref(bean: 'authorizationServiceEndpoint')
         }
         jaxrs.providers {
             ref(bean: 'jsonValidationProvider')

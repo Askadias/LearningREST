@@ -1,0 +1,19 @@
+<div class="login">
+    <form name="loginForm" role="form" class="form-horizontal">
+        <div class="form-group" ng-show="!currentUser.isLoggedIn">
+            <h1>Sign In</h1>
+            <input type="email" ng-model="credentials.email" class="form-control"
+                   placeholder="Email" required autofocus>
+            <input type="password" ng-model="credentials.password" class="form-control"
+                   placeholder="Password" required>
+            <button type="submit" ng-click="login(credentials)" class="btn btn-default">Log in</button>
+        </div>
+        <div class="form-group" ng-show="currentUser.isLoggedIn">
+            <h1>Sign Out</h1>
+            <span data-ng-class="{&quot;label-info&quot;: user.role.title == userRoles.user.title, &quot;label-success&quot;: user.role.title == userRoles.admin.title}"
+                  class="label">{{ currentUser.role.title }}</span>
+            <!--<h2>Welcome, </h2>{{currentUser.firstName === undefined ? 'Guest' : currentUser.firstName}}-->
+            <button type="button" ng-click="logout()" class="btn btn-default">Log Out</button>
+        </div>
+    </form>
+</div>
