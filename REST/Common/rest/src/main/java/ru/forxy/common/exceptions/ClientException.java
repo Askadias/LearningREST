@@ -7,6 +7,8 @@ import ru.forxy.common.pojo.StatusEntity;
  */
 public class ClientException extends ServiceException{
 
+    private static final long serialVersionUID = -3213181048744156035L;
+
     private final StatusEntity errorEntity;
 
     public ClientException(StatusEntity errorEntity, String message, EventLogBase eventLogId) {

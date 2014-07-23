@@ -68,7 +68,6 @@ beans {
         jaxrs.serviceBeans {
             ref(bean: 'accessTokenServiceEndpoint')
             ref(bean: 'accessTokenValidatorServiceEndpoint')
-            ref(bean: 'authServiceEndpoint')
         }
         jaxrs.providers {
             ref(bean: 'oAuthJSONProvider')

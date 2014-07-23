@@ -5,53 +5,44 @@ import org.slf4j.Logger;
 /**
  * Default exception implementation
  */
-public class ServiceException extends BaseServiceException
-{
-    public ServiceException(final String message, final EventLogBase eventLogId)
-    {
-        super(message, eventLogId);
-    }
+public class ServiceException extends BaseServiceException {
 
-    public ServiceException(final EventLogBase eventLogId)
-    {
+    private static final long serialVersionUID = -2523533558899886010L;
+
+    public ServiceException(final EventLogBase eventLogId) {
         super(eventLogId);
     }
 
-    public ServiceException(final Throwable cause, final String message, final EventLogBase eventLogId)
-    {
+    public ServiceException(final String message, final EventLogBase eventLogId) {
+        super(message, eventLogId);
+    }
+
+    public ServiceException(final Throwable cause, final String message, final EventLogBase eventLogId) {
         super(cause, message, eventLogId);
     }
 
-    public ServiceException(final Throwable cause, final EventLogBase eventLogId, final Object... args)
-    {
+    public ServiceException(final Throwable cause, final EventLogBase eventLogId, final Object... args) {
         super(cause, eventLogId.getMessage(args), eventLogId);
     }
 
-    public ServiceException(final EventLogBase eventLogId, final Object... args)
-    {
+    public ServiceException(final EventLogBase eventLogId, final Object... args) {
         super(eventLogId.getMessage(args), eventLogId);
     }
 
-    public ServiceException(final Throwable cause, final EventLogBase eventLogId)
-    {
+    public ServiceException(final Throwable cause, final EventLogBase eventLogId) {
         super(cause, eventLogId);
     }
 
-    public void log(final Logger logger)
-    {
-        if (isEnabledFor(logger, getEventLogId().getLogLevel()))
-        {
+    public void log(final Logger logger) {
+        if (isEnabledFor(logger, getEventLogId().getLogLevel())) {
             ExceptionUtils.logEvent(logger, getEventLogId(), getMessage(), this);
         }
     }
 
-    public void log(final Logger logger, final String additionalInfo)
-    {
-        if (isEnabledFor(logger, getEventLogId().getLogLevel()))
-        {
+    public void log(final Logger logger, final String additionalInfo) {
+        if (isEnabledFor(logger, getEventLogId().getLogLevel())) {
             final StringBuilder message = new StringBuilder(getMessage());
-            if (null != additionalInfo)
-            {
+            if (null != additionalInfo) {
                 message.append(additionalInfo);
             }
             ExceptionUtils.logEvent(logger, getEventLogId(), message.toString(), this);

@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class User implements Serializable {
+public class UserSubject implements Serializable {
 
     private static final long serialVersionUID = -958575800069023832L;
 
@@ -29,15 +29,15 @@ public class User implements Serializable {
 
     private String createdBy;
 
-    public User() {
+    public UserSubject() {
     }
 
-    public User(final String userID, final List<String> roles) {
+    public UserSubject(final String userID, final List<String> roles) {
         this.userID = userID;
         this.roles = roles;
     }
 
-    public User(final String userID, final List<String> roles, final Map<String, String> properties) {
+    public UserSubject(final String userID, final List<String> roles, final Map<String, String> properties) {
         this.userID = userID;
         this.roles = roles;
         this.properties = properties;
@@ -111,7 +111,7 @@ public class User implements Serializable {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        final User other = (User) obj;
+        final UserSubject other = (UserSubject) obj;
         if (userID == null) {
             if (other.userID != null) {
                 return false;

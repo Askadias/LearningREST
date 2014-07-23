@@ -25,12 +25,14 @@
             </div>
         </form>
 
-        <div class="navbar-right navbar-text">
+        <div class="navbar-text navbar-right">
             <div ng-if="!!currentUser">
-                {{currentUser.email}}
-                <div ng-repeat="role in currentUser.roles">
-                    <label class="label label-success">{{role}}</label>
-                </div>
+                <ul class="list-inline">
+                    <li>{{currentUser.email}}</li>
+                    <li ng-repeat="role in currentUser.roles">
+                        <label class="label label-success">{{role}}</label>
+                    </li>
+                </ul>
             </div>
             <div ng-if="!currentUser">
                 <span class="label label-default">guest</span>

@@ -34,7 +34,7 @@ public class Client implements Serializable {
     private List<String> registeredAudiences = new ArrayList<>();
 
     private Map<String, String> properties = new HashMap<>();
-    private User subject;
+    private UserSubject subject;
 
     private Date updateDate = new Date();
 
@@ -124,11 +124,11 @@ public class Client implements Serializable {
         this.properties = properties;
     }
 
-    public User getSubject() {
+    public UserSubject getSubject() {
         return subject;
     }
 
-    public void setSubject(User subject) {
+    public void setSubject(UserSubject subject) {
         this.subject = subject;
     }
 

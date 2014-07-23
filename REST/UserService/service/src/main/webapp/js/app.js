@@ -33,8 +33,8 @@ var userServiceAdmin = angular.module('userServiceAdmin', [
                     templateUrl: 'partials/layout.html',
                     controller: 'MainCtrl',
                     data: {
-                     access: access.public
-                     }
+                        access: access.public
+                    }
                 })
                 .state('users.list', {
                     url: '/users/',
@@ -83,10 +83,10 @@ var userServiceAdmin = angular.module('userServiceAdmin', [
 
             $locationProvider.html5Mode(true).hashPrefix('!');
 
-            $httpProvider.interceptors.push(function($q, $location) {
+            $httpProvider.interceptors.push(function ($q, $location) {
                 return {
-                    'responseError': function(response) {
-                        if(response.status === 401 || response.status === 403) {
+                    'responseError': function (response) {
+                        if (response.status === 401 || response.status === 403) {
                             $location.path('/login/');
                         }
                         return $q.reject(response);
@@ -97,17 +97,23 @@ var userServiceAdmin = angular.module('userServiceAdmin', [
     .run(['$rootScope', '$state', 'Auth', function ($rootScope, $state, Auth) {
         $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
             if (!Auth.authorize(toState.data.access)) {
-                $rootScope.error = "Seems like you tried accessing a route you don't have access to...";
+                $rootScope.alerts.push({
+                    type: 'danger',
+                    msg: "Seems like you tried accessing a route you don't have access to..."
+                });
+
                 event.preventDefault();
 
                 if (fromState.url === '^') {
-                    if (Auth.isLoggedIn())
+                    if (Auth.isLoggedIn()) {
+                        $rootScope.alerts = [];
                         $state.go('users.list');
-                    else {
-                        $rootScope.error = null;
+                    } else {
                         $state.go('login');
                     }
                 }
+            } else {
+                $rootScope.alerts = [];
             }
         });
 

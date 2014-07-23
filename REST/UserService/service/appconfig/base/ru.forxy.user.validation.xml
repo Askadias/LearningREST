@@ -7,7 +7,7 @@
         <!-- ================================================================= -->
         <field name="email">
             <notNull message="email cannot be null"/>
-            <email message="tokenKey is not valid"/>
+            <email message="email is not valid"/>
         </field>
         <field name="login">
             <length min="1" max="60" message="login is not between {min} and {max} characters long"/>
@@ -23,6 +23,20 @@
         </field>
         <field name="birthDate">
             <past message="birthDate should be in the past"/>
+        </field>
+    </class>
+
+    <class type="ru.forxy.user.rest.v1.pojo.Credentials">
+        <!-- ================================================================= -->
+        <!--                            Credentials                            -->
+        <!-- ================================================================= -->
+        <field name="email">
+            <notNull message="email cannot be null"/>
+            <email message="email is not valid"/>
+        </field>
+        <field name="password">
+            <notNull message="password cannot be null"/>
+            <length min="3" max="1000" message="password is not between {min} and {max} characters long"/>
         </field>
     </class>
 </oval>

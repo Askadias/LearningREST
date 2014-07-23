@@ -4,14 +4,13 @@ import org.apache.cxf.rs.security.oauth2.common.AccessTokenRegistration;
 import org.apache.cxf.rs.security.oauth2.common.Client;
 import org.apache.cxf.rs.security.oauth2.common.OAuthPermission;
 import org.apache.cxf.rs.security.oauth2.common.ServerAccessToken;
-import org.apache.cxf.rs.security.oauth2.common.UserSubject;
 import org.apache.cxf.rs.security.oauth2.provider.OAuthDataProvider;
 import org.apache.cxf.rs.security.oauth2.provider.OAuthServiceException;
 import org.apache.cxf.rs.security.oauth2.tokens.bearer.BearerAccessToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.forxy.auth.pojo.Token;
-import ru.forxy.auth.pojo.User;
+import ru.forxy.auth.pojo.UserSubject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,7 +50,7 @@ public class OAuthManager implements OAuthDataProvider {
     private Token toToken(ServerAccessToken accessToken) {
         Token token = new Token();
         token.setClientID(accessToken.getClient().getClientId());
-        token.setSubject(toUser(accessToken.getSubject()));
+        token.setSubject(toUserSubject(accessToken.getSubject()));
         token.setExpiresIn(accessToken.getExpiresIn());
         token.setIssuedAt(new Date());
         token.setScopes(toScopesList(accessToken.getScopes()));
@@ -78,7 +77,7 @@ public class OAuthManager implements OAuthDataProvider {
             client.setApplicationDescription(clientTO.getApplicationDescription());
             client.setRedirectUris(clientTO.getRedirectUris());
             client.setProperties(clientTO.getProperties());
-            client.setSubject(fromUser(clientTO.getSubject()));
+            client.setSubject(fromUserSubject(clientTO.getSubject()));
             client.setRegisteredAudiences(clientTO.getRegisteredAudiences());
             return client;
         } else {
@@ -89,7 +88,7 @@ public class OAuthManager implements OAuthDataProvider {
     @Override
     public ServerAccessToken getPreauthorizedToken(final Client client,
                                                    final List<String> requestedScopes,
-                                                   final UserSubject subject,
+                                                   final org.apache.cxf.rs.security.oauth2.common.UserSubject subject,
                                                    final String grantType) throws OAuthServiceException {
         LOGGER.info("getPreauthorizedToken");
         return null;
@@ -129,13 +128,18 @@ public class OAuthManager implements OAuthDataProvider {
         this.clientServiceFacade = clientServiceFacade;
     }
 
-    private User toUser(final UserSubject userSubject) {
-        return userSubject == null ? null :
-                new User(userSubject.getId(), userSubject.getRoles(), userSubject.getProperties());
+    private UserSubject toUserSubject(final org.apache.cxf.rs.security.oauth2.common.UserSubject userSubject) {
+        return userSubject == null ? null : new UserSubject(
+                userSubject.getId(),
+                userSubject.getRoles(),
+                userSubject.getProperties());
     }
 
-    private UserSubject fromUser(final User user) {
-        return user == null ? null : new UserSubject(user.getUserID(), user.getUserID(), user.getRoles());
+    private org.apache.cxf.rs.security.oauth2.common.UserSubject fromUserSubject(final UserSubject user) {
+        return user == null ? null : new org.apache.cxf.rs.security.oauth2.common.UserSubject(
+                user.getUserID(),
+                user.getUserID(),
+                user.getRoles());
     }
 
     private List<String> toScopesList(List<OAuthPermission> permissions) {

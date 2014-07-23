@@ -3,12 +3,14 @@ package spring
 import net.sf.oval.Validator
 import net.sf.oval.configuration.xml.XMLConfigurer
 import org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean
+import org.apache.cxf.jaxrs.provider.RequestDispatcherProvider
 import org.apache.cxf.rs.security.oauth2.filters.AccessTokenValidatorClient
 import org.apache.cxf.rs.security.oauth2.filters.OAuthRequestFilter
 import org.apache.cxf.rs.security.oauth2.provider.OAuthJSONProvider
 import org.apache.cxf.rs.security.oauth2.services.AccessTokenService
 import org.apache.cxf.rs.security.oauth2.services.AccessTokenValidatorService
 import org.apache.cxf.rs.security.oauth2.services.AuthorizationCodeGrantService
+import ru.forxy.auth.rest.support.SecurityContextFilter
 import ru.forxy.common.exceptions.support.RuntimeExceptionMapper
 import ru.forxy.common.support.Configuration
 import ru.forxy.common.web.JSONValidationProvider
@@ -45,9 +47,17 @@ beans {
         }
     }
 
+    authorizationServiceEndpoint(AuthorizationCodeGrantService) {
+        dataProvider = ref(oauthProvider)
+    }
+
+    oAuthJSONProvider(OAuthJSONProvider)
+
+    // ------ Token grant service endpoint configuration -------------------------------
+
     oauthFiler(OAuthRequestFilter) {
         dataProvider = ref(oauthProvider)
-        tokenValidator = ref(tokenValidator)
+        //tokenValidator = ref(tokenValidator)
     }
 
     accessTokenServiceEndpoint(AccessTokenService) {
@@ -58,21 +68,30 @@ beans {
         dataProvider = ref(oauthProvider)
     }
 
-    authorizationServiceEndpoint(AuthorizationCodeGrantService) {
-        dataProvider = ref(oauthProvider)
+    // ------ Authentication and Authorization endpoints configuration -----------------
+
+    securityContextFilter(SecurityContextFilter) {
+        userServiceClient = ref(userServiceClient)
+    }
+    socialViews(RequestDispatcherProvider) {
+        classResources = ['org.apache.cxf.rs.security.oauth2.common.OAuthAuthorizationData': '/app/authorize']
+        beanNames = ['org.apache.cxf.rs.security.oauth2.common.OAuthAuthorizationData': 'client']
+        logRedirects = true
     }
 
-    oAuthJSONProvider(OAuthJSONProvider)
+    // ------ Clients management endpoint configuration --------------------------------
+
 
     jaxrs.server(id: 'oauthServer', address: '/oauth') {
         jaxrs.serviceBeans {
-            ref(bean: 'authorizationServiceEndpoint')
             ref(bean: 'accessTokenServiceEndpoint')
             ref(bean: 'accessTokenValidatorServiceEndpoint')
+            ref(bean: 'authorizationServiceEndpoint')
         }
         jaxrs.providers {
             ref(bean: 'oAuthJSONProvider')
-            ref(bean: 'runtimeExceptionMapper')
+            ref(bean: 'socialViews')
+            ref(bean: 'securityContextFilter')
         }
     }
 
@@ -85,7 +104,7 @@ beans {
         jaxrs.providers {
             ref(bean: 'jsonValidationProvider')
             ref(bean: 'runtimeExceptionMapper')
-            //ref(bean: 'oauthFiler')
+            ref(bean: 'oauthFiler')
         }
     }
 }

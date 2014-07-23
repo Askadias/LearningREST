@@ -51,6 +51,7 @@ angular.module('authServiceAdmin.services', ['restangular'])
         var MUST_OVERRIDE = {};
 
         var config = {
+            authenticationEndpoint: MUST_OVERRIDE,
             authorizationEndpoint: MUST_OVERRIDE,
             client_id: MUST_OVERRIDE,
             client_secret: MUST_OVERRIDE,
@@ -90,8 +91,8 @@ angular.module('authServiceAdmin.services', ['restangular'])
                     popupOptions = angular.extend({
                         name: 'AuthPopup',
                         openParams: {
-                            width: 650,
-                            height: 300,
+                            width: 1024,
+                            height: 512,
                             resizable: true,
                             scrollbars: true,
                             status: true
@@ -99,7 +100,9 @@ angular.module('authServiceAdmin.services', ['restangular'])
                     }, popupOptions);
 
                     var deferred = $q.defer(),
-                        params = angular.extend(angular.extend(config, {redirect_url: $location.url()}, extraParams)),
+                        params = angular.extend(angular.extend(config, {
+                            redirect_url: $location.href
+                        }, extraParams)),
                         url = config.authorizationEndpoint + '?' + objectToQueryString(params),
                         resolved = false;
 
@@ -114,7 +117,14 @@ angular.module('authServiceAdmin.services', ['restangular'])
                         return pairs.join(',');
                     };
 
+                    $window.domain = 'forxy.ru';
                     var popup = window.open(url, popupOptions.name, formatPopupOptions(popupOptions.openParams));
+                    popup.domain = 'forxy.ru';
+                    //window.onfocus=function(){popup.close();};
+                    $window.inviteCallback = function (user) {
+                        popup.close();
+                        alert(user);
+                    };
 
                     // TODO: binding occurs for each reauthentication, leading to leaks for long-running apps.
 
@@ -137,7 +147,7 @@ angular.module('authServiceAdmin.services', ['restangular'])
                     return deferred.promise;
                 },
                 authorize: function (authorizationData, success, error) {
-                    Restangular.one('authorize').customPOST(
+                    Restangular.one('authorize').customGET(
                         config,
                         'token',
                         {},
@@ -190,6 +200,67 @@ angular.module('authServiceAdmin.services', ['restangular'])
             };
 
             return service;
+        }])
+    .factory('Auth', ['Restangular', '$sessionStorage',
+        function (Restangular, $sessionStorage) {
+
+            var guest = {
+                firstName: 'Guest',
+                roles: ['public'],
+                isLoggedIn: false
+            };
+            var accessLevels = routingConfig.accessLevels;
+            var userRoles = routingConfig.userRoles;
+            var currentUser = $sessionStorage.user || guest;
+
+            Restangular = Restangular.withConfig(function (RestangularConfigurer) {
+                RestangularConfigurer.setBaseUrl('http://localhost:10080/UserService/service/auth');
+            });
+
+            function changeUser(user) {
+                angular.extend(currentUser, user);
+                $sessionStorage.user = currentUser;
+            }
+
+            return {
+                authorize: function (accessLevel, role) {
+                    var isAuthorized = false;
+                    if (role === undefined && !!currentUser.roles) {
+                        for (var userRole in currentUser.roles) {
+                            isAuthorized |= this.authorize(accessLevel, currentUser.roles[userRole])
+                        }
+                    }
+                    else {
+                        isAuthorized = accessLevel.bitMask & userRoles[role].bitMask;
+                    }
+                    return isAuthorized;
+                },
+                login: function (credentials, success, error) {
+                    return Restangular.all('login').post(credentials).then(function (user) {
+                        user.isLoggedIn = true;
+                        changeUser(user);
+                        success();
+                    }, function (response) {
+                        error(response);
+                    });
+                },
+                logout: function () {
+                    changeUser({
+                        firstName: 'Guest',
+                        roles: ['public'],
+                        isLoggedIn: false
+                    })
+                },
+                isLoggedIn: function (user) {
+                    if (user === undefined) {
+                        user = currentUser;
+                    }
+                    return user.isLoggedIn === true;
+                },
+                accessLevels: accessLevels,
+                userRoles: userRoles,
+                user: currentUser
+            }
         }]);
 
 /*

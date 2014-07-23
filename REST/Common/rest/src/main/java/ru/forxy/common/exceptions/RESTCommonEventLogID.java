@@ -11,19 +11,23 @@ public enum RESTCommonEventLogId implements EventLogBase
 
     InvalidClientInput(RESTCommonEventLogId.BASE_EVENT_LOG_ID + 400, 400,
             "Operation is not allowed",
-            EventType.InternalError),
+            EventType.InvalidInput),
+
+    ValidationException(RESTCommonEventLogId.BASE_EVENT_LOG_ID + 400, 400,
+            "Validation rule violation. Details: %1$s",
+            EventType.InvalidInput),
 
     Unauthorized(RESTCommonEventLogId.BASE_EVENT_LOG_ID + 401, 401,
             "Operation is not allowed",
-            EventType.InternalError),
+            EventType.InvalidInput),
 
     AccessDenied(RESTCommonEventLogId.BASE_EVENT_LOG_ID + 404, 403,
             "Operation is not allowed",
-            EventType.InternalError),
+            EventType.InvalidInput),
 
     ResourceNotFound(RESTCommonEventLogId.BASE_EVENT_LOG_ID + 404, 404,
             "Operation is not allowed",
-            EventType.InternalError),
+            EventType.InvalidInput),
 
     UnexpectedException(RESTCommonEventLogId.BASE_EVENT_LOG_ID + 500, 500,
             "Unexpected unhandled exception. Details: %1$s",

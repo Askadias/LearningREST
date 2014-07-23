@@ -1,6 +1,7 @@
 package ru.forxy.common.exceptions;
 
 import net.sf.oval.exception.ValidationFailedException;
+import org.apache.commons.lang.ArrayUtils;
 import ru.forxy.common.exceptions.support.ResponseBuilder;
 
 import javax.ws.rs.BadRequestException;
@@ -11,20 +12,49 @@ import java.util.List;
 /**
  * Generic validation exception
  */
-public class ValidationException extends BadRequestException {
+public class ValidationException extends ServiceException {
 
-    private static final long serialVersionUID = 5239154110932452859L;
+    private static final long serialVersionUID = 2500370557195275595L;
 
-    public ValidationException(final List<String> messages) {
-        super(ResponseBuilder.build(Response.Status.BAD_REQUEST, messages));
+    private final List<String> messages;
+
+    public ValidationException(List<String> messages) {
+        super(RESTCommonEventLogId.ValidationException);
+        this.messages = messages;
     }
 
-    public ValidationException(final String message) {
-        super(ResponseBuilder.build(Response.Status.BAD_REQUEST, message));
+    public ValidationException(String message) {
+        super(message, RESTCommonEventLogId.ValidationException);
+        messages = new ArrayList<>(1);
+        messages.add(message);
     }
 
-    public ValidationException(final Throwable cause) {
-        super(ResponseBuilder.build(Response.Status.BAD_REQUEST, cause));
+    public ValidationException(Throwable cause, String message) {
+        super(cause, message, RESTCommonEventLogId.ValidationException);
+        messages = new ArrayList<>(1);
+        messages.add(super.getMessage());
+    }
+
+    public ValidationException(Throwable cause, Object... args) {
+        super(cause, RESTCommonEventLogId.ValidationException, args);
+        messages = new ArrayList<>(1);
+        messages.add(super.getMessage());
+    }
+
+    public ValidationException(Object... args) {
+        super(RESTCommonEventLogId.ValidationException, args);
+        messages = new ArrayList<>(1);
+        messages.add(super.getMessage());
+    }
+
+    public ValidationException(Throwable cause) {
+        super(cause, RESTCommonEventLogId.ValidationException);
+        messages = new ArrayList<>(1);
+        messages.add(super.getMessage());
+    }
+
+    public List<String> getMessages() {
+        return messages;
     }
 
     public static ValidationException build(final ValidationFailedException e) {

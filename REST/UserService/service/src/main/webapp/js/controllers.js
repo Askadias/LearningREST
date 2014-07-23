@@ -1,23 +1,41 @@
 'use strict';
 
 angular.module('userServiceAdmin.controllers', ['ui.bootstrap'])
-    .controller('MainCtrl', ['$scope', '$rootScope', '$location', 'Auth', '$stateParams',
-        function ($scope, $rootScope, $location, Auth, $stateParams) {
+    .controller('MainCtrl', ['$scope', '$rootScope', '$location', 'Auth', '$stateParams', '$window',
+        function ($scope, $rootScope, $location, Auth, $stateParams, $window) {
             $scope.redirrectUrl = $location.search().redirect_url;
-            $scope.currentUser = Auth.user;
+            $scope.currentUser = Auth.user || {};
+            $scope.credentials = {};
             $scope.userRoles = Auth.userRoles;
             $scope.accessLevels = Auth.accessLevels;
 
             $scope.login = function (credentials) {
+                $rootScope.alerts = [];
                 Auth.login(credentials, function (response) {
                     $scope.currentUser = Auth.user;
-                    if(!!$scope.redirrectUrl) {
-                        window.location.replace($scope.redirrectUrl);
+                    if (window.opener) {
+                        $window.domain = 'forxy.ru';
+                        //window.location.replace($scope.redirrectUrl);
+                        window.opener.focus();
+
+                        //var state = '<%= state %>';
+                        var user = JSON.stringify($scope.currentUser);
+                        if (window.opener.app &&
+                            window.opener.app.authState) {
+
+                            window.opener.app.authState("success", user);
+                        }
+                        window.close();
                     } else {
                         $location.path('/');
                     }
                 }, function (error) {
-                    $scope.error = error;
+                    if (window.opener) {
+                        window.opener.app.authState("failure", error);
+                    }
+                    error.data.messages.forEach(function (item) {
+                        $rootScope.alerts.push({type: 'danger', msg: item})
+                    });
                 });
             };
             $scope.register = function (credentials) {
@@ -25,7 +43,10 @@ angular.module('userServiceAdmin.controllers', ['ui.bootstrap'])
                     $scope.currentUser = Auth.user;
                     $location.path('/');
                 }, function (error) {
-                    $scope.error = error;
+                    $rootScope.alerts.push({
+                        type: 'danger',
+                        msg: error.data.messages.join("<br>")
+                    });
                 })
             };
             $scope.logout = function () {
@@ -34,6 +55,12 @@ angular.module('userServiceAdmin.controllers', ['ui.bootstrap'])
                 $location.path('/app/login');
             };
         }])
+    .controller('AlertCtrl', ['$rootScope', function ($rootScope) {
+        $rootScope.alerts = [];
+        $rootScope.closeAlert = function (index) {
+            $rootScope.alerts.splice(index, 1);
+        };
+    }])
     .controller('UsersListCtrl', ['$scope', '$modal', 'User',
         function ($scope, $modal, User) {
             $scope.totalPages = 0;

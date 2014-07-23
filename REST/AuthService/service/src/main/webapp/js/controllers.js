@@ -4,7 +4,7 @@ angular.module('authServiceAdmin.controllers', ['ui.bootstrap'])
     .controller('MainCtrl', ['$scope', '$rootScope', 'OAuth',
         function ($scope, $rootScope, OAuth) {
 
-            $scope.login = function() {
+            $scope.login = function () {
                 OAuth.getTokenByPopup().then(function (params) {
                     OAuth.verifyAsync(params.access_token).then(function (data) {
                         $sessionStorage.token = params.access_token;
@@ -13,6 +13,12 @@ angular.module('authServiceAdmin.controllers', ['ui.bootstrap'])
                 })
             }
         }])
+    .controller('AlertCtrl', ['$rootScope', function ($rootScope) {
+        $rootScope.alerts = [];
+        $rootScope.closeAlert = function (index) {
+            $rootScope.alerts.splice(index, 1);
+        };
+    }])
     .controller('TokensListCtrl', ['$scope', '$modal', 'Token',
         function ($scope, $modal, Token) {
             $scope.totalPages = 0;
@@ -251,4 +257,45 @@ angular.module('authServiceAdmin.controllers', ['ui.bootstrap'])
             };
 
             $scope.discard();
+        }])
+    .controller('AuthCtrl', ['$scope', 'OAuth', '$location',
+        function ($scope, OAuth, $location) {
+            //$scope.user = $location.search().user;
+            $scope.authorize = function () {
+                OAuth.getTokenByPopup().then(function (params) {
+                    OAuth.verifyAsync(params.access_token).then(function (data) {
+                        $sessionStorage.token = params.access_token;
+                        $sessionStorage.expires_in = params.expires_in;
+                    })
+                })
+            }
+        }])
+    .controller('LoginCtrl', ['$scope', '$rootScope', '$location', 'Auth', '$stateParams', '$window',
+        function ($scope, $rootScope, $location, Auth, $stateParams, $window) {
+            $scope.redirrectUrl = $location.search().redirect_url;
+            $scope.currentUser = Auth.user || {};
+            $scope.credentials = {};
+            $scope.userRoles = Auth.userRoles;
+            $scope.accessLevels = Auth.accessLevels;
+
+            $scope.login = function (credentials) {
+                $rootScope.alerts = [];
+                Auth.login(credentials, function (response) {
+                    $scope.currentUser = Auth.user;
+                    var returnUrl = $stateParams.redirect_url ? $stateParams.redirect_url : "/";
+                    $location.url(returnUrl);
+                }, function (error) {
+                    if (window.opener) {
+                        window.opener.app.authState("failure", error);
+                    }
+                    error.data.messages.forEach(function (item) {
+                        $rootScope.alerts.push({type: 'danger', msg: item})
+                    });
+                });
+            };
+            $scope.logout = function () {
+                Auth.logout();
+                $scope.currentUser = Auth.user;
+                $location.path('/app/login');
+            };
         }]);

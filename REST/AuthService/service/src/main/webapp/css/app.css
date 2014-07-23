@@ -6175,6 +6175,10 @@ body .wrapper .navbar a {
 body .wrapper .submenu li a {
   text-transform: uppercase;
 }
+body .wrapper ul,
+body .wrapper ol {
+  margin-bottom: 0;
+}
 .anim.ng-enter {
   transition: opacity 1s;
   opacity: 0.0;
@@ -6184,4 +6188,14 @@ body .wrapper .submenu li a {
 }
 .anim.ng-leave {
   display: none;
+}
+.login {
+  max-width: 500px;
+  _width: 500px;
+  padding: 30px 50px 20px;
+  border: 1px solid #b3b3b3;
+  border-radius: 4px;
+  margin: 100px auto 0;
+  box-shadow: 0 1px 10px #a7a7a7, inset 0 1px 0 #fff;
+  background: #fcfcfc;
 }

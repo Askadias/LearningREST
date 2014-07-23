@@ -34,6 +34,8 @@ dependencies {
     compile "forxy:ru.forxy.common.status:${rev_forxy_common}"
     compile "forxy:ru.forxy.common.logging:${rev_forxy_common}"
 
+    compile "forxy:ru.forxy.user.client:${rev_forxy_common}"
+
     // --------------------- CXF -----------------------------------------
     compile "org.apache.cxf:cxf-rt-frontend-jaxrs:${rev_cxf}"
     compile "org.apache.cxf:cxf-rt-rs-service-description:${rev_cxf}"

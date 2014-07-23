@@ -1,15 +1,20 @@
 <header>
-    <nav class="navbar navbar-default">
-        <button ng-click="login()">Authorize</button>
+    <nav class="navbar navbar-default" ng-controller="LoginCtrl">
         <ul class="nav navbar-nav">
             <li ng-class="{active: ('clients' | includedByState)}">
                 <a ui-sref="clients.list">Applications</a>
             </li>
             <li ng-class="{active: ('tokens' | includedByState)}">
-               <a ui-sref="tokens.list">Tokens</a>
-           </li>
+                <a ui-sref="tokens.list">Tokens</a>
+            </li>
+            <li>
+                <div ng-controller="AuthCtrl">
+                    <button ng-click="authorize()">Authorize</button>
+                </div>
+            </li>
         </ul>
-        <!--<form class="navbar-form navbar-right">
+
+        <form class="navbar-form navbar-right">
             <div class="form-group">
                 <div ng-if="!!currentUser">
                     <button type="submit" ng-click="logout()" class="btn btn-default">Log out</button>
@@ -24,19 +29,21 @@
                     <button type="button" ng-click="register(credentials)" class="btn btn-default">Register</button>
                 </div>
             </div>
-        </form>-->
+        </form>
 
-        <!--<div class="navbar-right navbar-text">
+        <div class="navbar-text navbar-right">
             <div ng-if="!!currentUser">
-                {{currentUser.email}}
-                <div ng-repeat="role in currentUser.roles">
-                    <label class="label label-success">{{role}}</label>
-                </div>
+                <ul class="list-inline">
+                    <li>{{currentUser.email}}</li>
+                    <li ng-repeat="role in currentUser.roles">
+                        <label class="label label-success">{{role}}</label>
+                    </li>
+                </ul>
             </div>
             <div ng-if="!currentUser">
                 <span class="label label-default">guest</span>
             </div>
-        </div>-->
+        </div>
     </nav>
 </header>
 

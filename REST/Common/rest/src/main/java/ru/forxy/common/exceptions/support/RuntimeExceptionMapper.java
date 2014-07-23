@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.forxy.common.exceptions.RESTCommonEventLogId;
 import ru.forxy.common.exceptions.ServiceException;
+import ru.forxy.common.exceptions.ValidationException;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -21,45 +22,52 @@ import javax.ws.rs.ext.Provider;
  * available in the exception.
  */
 @Provider
-public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException>
-{
+public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException> {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(RuntimeExceptionMapper.class);
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Response toResponse(RuntimeException re)
-    {
+    public Response toResponse(RuntimeException re) {
         ServiceException ex;
         Response response;
-        if (re instanceof ServiceException)
-        {
+        if (re instanceof ValidationException) {
+            ex = (ValidationException) re;
+            response = ResponseBuilder.build(
+                    Response.Status.fromStatusCode(ex.getEventLogId().getResponseId()),
+                    ((ValidationException) re).getMessages());
+        } else if(re instanceof ServiceException) {
             ex = (ServiceException) re;
-            response =
-                ResponseBuilder.build(Response.Status.fromStatusCode(ex.getEventLogId().getResponseId()),
+            response = ResponseBuilder.build(
+                    Response.Status.fromStatusCode(ex.getEventLogId().getResponseId()),
                     String.valueOf(ex.getEventLogId().getEventId()), ex.getMessage());
-        }
-        else
-        {
-            ex = new ServiceException(re, RESTCommonEventLogId.UnexpectedException, ExceptionUtils.getRootCauseMessage(re));
-            response =
-                ResponseBuilder.build(Response.Status.INTERNAL_SERVER_ERROR, String.valueOf(ex.getStatusCode()),
+        } else {
+            ex = new ServiceException(re,
+                    RESTCommonEventLogId.UnexpectedException,
+                    ExceptionUtils.getRootCauseMessage(re));
+            response = ResponseBuilder.build(
+                    Response.Status.INTERNAL_SERVER_ERROR,
+                    String.valueOf(ex.getStatusCode()),
                     ExceptionUtils.getFullStackTrace(re));
         }
 
-        if (re instanceof WebApplicationException)
-        {
-            if (re.getCause() instanceof ServiceException)
-            {
+        if (re instanceof WebApplicationException) {
+            if (re.getCause() instanceof ServiceException) {
                 ex = (ServiceException) re.getCause();
-                response =
-                    ResponseBuilder.build(Response.Status.INTERNAL_SERVER_ERROR,
-                        String.valueOf(ex.getEventLogId().getEventId()), ex.getMessage());
-            }
-            else
-            {
-                response = ((WebApplicationException) re).getResponse();
+                response = ResponseBuilder.build(
+                        Response.Status.INTERNAL_SERVER_ERROR,
+                        String.valueOf(ex.getEventLogId().getEventId()),
+                        ex.getMessage());
+            } else if (response == null) {
+                ex = new ServiceException(re,
+                        RESTCommonEventLogId.UnexpectedException,
+                        ExceptionUtils.getRootCauseMessage(re));
+                response = ResponseBuilder.build(
+                        Response.Status.fromStatusCode(((WebApplicationException) re).getResponse().getStatus()),
+                        String.valueOf(ex.getStatusCode()),
+                        ExceptionUtils.getFullStackTrace(re));
             }
         }
         ex.log(LOGGER);

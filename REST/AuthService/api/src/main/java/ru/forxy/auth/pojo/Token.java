@@ -29,7 +29,7 @@ public class Token implements Serializable {
 
     private List<String> scopes;
 
-    private User subject;
+    private UserSubject subject;
 
     private Long expiresIn;
 
@@ -79,11 +79,11 @@ public class Token implements Serializable {
         this.scopes = scopes;
     }
 
-    public User getSubject() {
+    public UserSubject getSubject() {
         return subject;
     }
 
-    public void setSubject(User subject) {
+    public void setSubject(UserSubject subject) {
         this.subject = subject;
     }
 

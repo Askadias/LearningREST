@@ -5,17 +5,16 @@
     <title>Forxy</title>
     <link rel="stylesheet" href="/AuthService/css/app.css">
     <base href="/AuthService/app"/>
-    <!--<link rel="stylesheet" href="webjars/bootstrap/2.3.2/css/bootstrap.min.css">-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 </head>
 <body>
 
-<div class="wrapper container ng-cloak" ng-controller="MainCtrl">
-    <div id="alertBox" data-ng-show="error" class="alert alert-danger">
-        <button type="button" data-ng-click="error = null;" class="close">&times;</button>
-        <strong>Oh no!&nbsp;</strong><span data-ng-bind="error"></span>
+<div class="wrapper container" ng-controller="MainCtrl">
+    <div ng-controller="AlertCtrl">
+        <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
     </div>
-    <div class="tab-content">
 
+    <div class="tab-content">
         <div ui-view></div>
     </div>
 </div>
