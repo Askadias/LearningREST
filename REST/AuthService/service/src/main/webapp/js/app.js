@@ -9,6 +9,14 @@ var authServiceAdmin = angular.module('authServiceAdmin', [
     'ngAnimate',
     'ui.router'
 ])
+    .constant('AUTH_EVENTS', {
+        loginSuccess: 'auth-login-success',
+        loginFailed: 'auth-login-failed',
+        logoutSuccess: 'auth-logout-success',
+        sessionTimeout: 'auth-session-timeout',
+        notAuthenticated: 'auth-not-authenticated',
+        notAuthorized: 'auth-not-authorized'
+    })
     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'RestangularProvider', 'OAuthProvider',
         function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, RestangularProvider, OAuthProvider) {
 
@@ -173,41 +181,72 @@ var authServiceAdmin = angular.module('authServiceAdmin', [
                 }
             });
             $httpProvider.interceptors.push('OAuthInterceptor');
-            /*$httpProvider.interceptors.push(function ($q, $location, $state) {
-                return {
-                    'responseError': function (response) {
-                        if (response.status === 401 || response.status === 403) {
-                            $location.path('/AuthService/app/login/?redirect_url=' + $location.url());
-                        }
+            $httpProvider.interceptors.push(['$location', '$q', '$injector', function ($location, $q, $injector) {
+                function success(response) {
+                    return response;
+                }
+
+                function error(response) {
+                    if (response.status === 401) {
+                        $injector.get('$state').transitionTo('login');
                         return $q.reject(response);
                     }
-                };
-            });*/
-        }])
-    .run(['$rootScope', '$state', 'Auth', function ($rootScope, $state, Auth) {
-        $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
-            if (!Auth.authorize(toState.data.access)) {
-                $rootScope.alerts.push({
-                    type: 'danger',
-                    msg: "Seems like you tried accessing a route you don't have access to..."
-                });
-
-                event.preventDefault();
-
-                if (fromState.url === '^') {
-                    if (Auth.isLoggedIn()) {
-                        $rootScope.alerts = [];
-                        $state.go('clients.list');
-                    } else {
-                        $state.go('login');
+                    else {
+                        return $q.reject(response);
                     }
                 }
-            } else {
-                $rootScope.alerts = [];
-            }
-        });
 
-    }])
+                return function (promise) {
+                    return promise.then(success, error);
+                }
+            }]);
+        }])
+    .run(['$rootScope', '$state', 'Auth', '$location', 'AUTH_EVENTS', '$http',
+        function ($rootScope, $state, Auth, $location, AUTH_EVENTS, $http) {
+            var backToLogin = function () {
+                $state.transitionTo('login', {redirect_url: $location.url()});
+
+            };
+            var goToRedirectUrl = function (event, params) {
+
+                $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode(
+                    params.user.email + ':' + params.user.password
+                );
+
+                $location.url(params.redirectUrl ? params.redirectUrl : "/");
+            };
+            $rootScope.$on(AUTH_EVENTS.notAuthenticated, backToLogin);
+            $rootScope.$on(AUTH_EVENTS.sessionTimeout, backToLogin);
+            $rootScope.$on(AUTH_EVENTS.loginFailed, backToLogin);
+            $rootScope.$on(AUTH_EVENTS.loginSuccess, goToRedirectUrl);
+        }])
+    .run(['$rootScope', '$state', 'Auth', '$location', 'AUTH_EVENTS',
+        function ($rootScope, $state, Auth, $location, AUTH_EVENTS) {
+            $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
+                if (!Auth.authorize(toState.data.access)) {
+                    $rootScope.alerts.push({
+                        type: 'danger',
+                        msg: "Seems like you tried accessing a route you don't have access to..."
+                    });
+
+                    event.preventDefault();
+
+                    if (fromState.url === '^') {
+                        if (Auth.isLoggedIn()) {
+                            $rootScope.alerts = [];
+                            $state.go('clients.list');
+                        } else {
+                            $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
+                            //$state.transitionTo('login', {redirect_url: $location.url()});
+                        }
+                    }
+                } else {
+                    $rootScope.alerts = [];
+                    $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
+                }
+            });
+
+        }])
     .run(['$rootScope', '$window', 'OAuth',
         function ($rootScope, $window, OAuth) {
             //$rootScope.session = sessionService;
@@ -219,8 +258,7 @@ var authServiceAdmin = angular.module('authServiceAdmin', [
                                 OAuth.verifyAsync(user);
                                 break;
                             case 'failure':
-                                //OAuth.authFailed();
-                                alert('Authentication failed');
+                                $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
                                 break;
                         }
 

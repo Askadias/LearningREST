@@ -60,13 +60,13 @@ public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException>
                         Response.Status.INTERNAL_SERVER_ERROR,
                         String.valueOf(ex.getEventLogId().getEventId()),
                         ex.getMessage());
-            } else if (response == null) {
+            } else {
                 ex = new ServiceException(re,
                         RESTCommonEventLogId.UnexpectedException,
                         ExceptionUtils.getRootCauseMessage(re));
                 response = ResponseBuilder.build(
                         Response.Status.fromStatusCode(((WebApplicationException) re).getResponse().getStatus()),
-                        String.valueOf(ex.getStatusCode()),
+                        String.valueOf(((WebApplicationException) re).getResponse().getStatus()),
                         ExceptionUtils.getFullStackTrace(re));
             }
         }

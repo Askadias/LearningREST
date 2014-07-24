@@ -16,10 +16,10 @@
 
         <form class="navbar-form navbar-right">
             <div class="form-group">
-                <div ng-if="!!currentUser">
+                <div ng-if="!!$storage.user">
                     <button type="submit" ng-click="logout()" class="btn btn-default">Log out</button>
                 </div>
-                <div ng-if="!currentUser">
+                <div ng-if="!$storage.user">
                     <input type="email" ng-model="credentials.email" class="form-control" placeholder="Email"
                            required>
                     <input type="password" ng-model="credentials.password" class="form-control"
@@ -32,15 +32,15 @@
         </form>
 
         <div class="navbar-text navbar-right">
-            <div ng-if="!!currentUser">
+            <div ng-if="!!$storage.user">
                 <ul class="list-inline">
-                    <li>{{currentUser.email}}</li>
-                    <li ng-repeat="role in currentUser.roles">
+                    <li>{{$storage.user.email}}</li>
+                    <li ng-repeat="role in $storage.user.roles">
                         <label class="label label-success">{{role}}</label>
                     </li>
                 </ul>
             </div>
-            <div ng-if="!currentUser">
+            <div ng-if="!$storage.user">
                 <span class="label label-default">guest</span>
             </div>
         </div>

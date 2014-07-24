@@ -6,10 +6,8 @@ angular.module('authServiceAdmin.services', ['restangular'])
             all: function () {
                 return Restangular.all('tokens').getList();
             },
-            page: {
-                search: function (query) {
-                    return Restangular.one('tokens').get(query);
-                }
+            page: function (query) {
+                return Restangular.one('tokens').get(query);
             },
             get: function (tokenKey) {
                 return Restangular.one('tokens', tokenKey).get();
@@ -27,10 +25,8 @@ angular.module('authServiceAdmin.services', ['restangular'])
             all: function () {
                 return Restangular.all('clients').getList();
             },
-            page: {
-                search: function (query) {
-                    return Restangular.one('clients').get(query);
-                }
+            page: function (query) {
+                return Restangular.one('clients').get(query);
             },
             get: function (clientID) {
                 return Restangular.one('clients', clientID).get();
@@ -218,8 +214,8 @@ angular.module('authServiceAdmin.services', ['restangular'])
             });
 
             function changeUser(user) {
-                angular.extend(currentUser, user);
-                $sessionStorage.user = currentUser;
+                //angular.extend(currentUser, user);
+                $sessionStorage.user = user;
             }
 
             return {

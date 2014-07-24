@@ -19,6 +19,36 @@ angular.module('authServiceAdmin.controllers', ['ui.bootstrap'])
             $rootScope.alerts.splice(index, 1);
         };
     }])
+    .controller('LoginCtrl', ['$scope', '$state', '$rootScope', '$location', 'Auth', '$stateParams', '$http', '$sessionStorage', 'AUTH_EVENTS',
+        function ($scope, $state, $rootScope, $location, Auth, $stateParams, $http, $sessionStorage, AUTH_EVENTS) {
+            $scope.redirectUrl = $location.search().redirect_url;
+            $scope.$storage = $sessionStorage;
+            $scope.credentials = {};
+
+            $scope.login = function (credentials) {
+                $rootScope.alerts = [];
+                Auth.login(credentials, function (response) {
+                    $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, {
+                        user : $sessionStorage.user,
+                        redirectUrl: $scope.redirectUrl
+                    });
+                    $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode(
+                        $sessionStorage.user.email + ':' + $sessionStorage.user.password
+                    );
+
+                    var returnUrl = $stateParams.redirect_url ? $stateParams.redirect_url : "/";
+                    $location.url(returnUrl);
+                }, function (error) {
+                    error.data.messages.forEach(function (item) {
+                        $rootScope.alerts.push({type: 'danger', msg: item})
+                    });
+                });
+            };
+            $scope.logout = function () {
+                Auth.logout();
+                $state.transitionTo('login', {redirect_url: $location.url()});
+            };
+        }])
     .controller('TokensListCtrl', ['$scope', '$modal', 'Token',
         function ($scope, $modal, Token) {
             $scope.totalPages = 0;
@@ -62,7 +92,7 @@ angular.module('authServiceAdmin.controllers', ['ui.bootstrap'])
 
             //The function that is responsible of fetching the result from the server and setting the grid to the new result
             $scope.fetchResult = function () {
-                return Token.page.search($scope.filterCriteria).then(function (response) {
+                return Token.page($scope.filterCriteria).then(function (response) {
                     $scope.tokens = response.content;
                     $scope.totalPages = Math.ceil(response.total / response.size);
                     $scope.tokensCount = response.total;
@@ -269,33 +299,4 @@ angular.module('authServiceAdmin.controllers', ['ui.bootstrap'])
                     })
                 })
             }
-        }])
-    .controller('LoginCtrl', ['$scope', '$rootScope', '$location', 'Auth', '$stateParams', '$window',
-        function ($scope, $rootScope, $location, Auth, $stateParams, $window) {
-            $scope.redirrectUrl = $location.search().redirect_url;
-            $scope.currentUser = Auth.user || {};
-            $scope.credentials = {};
-            $scope.userRoles = Auth.userRoles;
-            $scope.accessLevels = Auth.accessLevels;
-
-            $scope.login = function (credentials) {
-                $rootScope.alerts = [];
-                Auth.login(credentials, function (response) {
-                    $scope.currentUser = Auth.user;
-                    var returnUrl = $stateParams.redirect_url ? $stateParams.redirect_url : "/";
-                    $location.url(returnUrl);
-                }, function (error) {
-                    if (window.opener) {
-                        window.opener.app.authState("failure", error);
-                    }
-                    error.data.messages.forEach(function (item) {
-                        $rootScope.alerts.push({type: 'danger', msg: item})
-                    });
-                });
-            };
-            $scope.logout = function () {
-                Auth.logout();
-                $scope.currentUser = Auth.user;
-                $location.path('/app/login');
-            };
         }]);

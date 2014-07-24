@@ -36,7 +36,8 @@ angular.module('userServiceAdmin.services', ['restangular'])
             });
 
             function changeUser(user) {
-                $sessionStorage.user = currentUser = user;
+                angular.extend(currentUser, user);
+                $sessionStorage.user = currentUser;
             }
 
             return {
