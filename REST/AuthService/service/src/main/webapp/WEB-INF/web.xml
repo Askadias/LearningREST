@@ -16,15 +16,10 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
-    <!-- Spring Groovy DSL context definition -->
-    <context-param>
+    <!-- Spring XML context definition -->
+     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>WEB-INF/auth.spring-context.groovy</param-value>
-    </context-param>
-
-    <context-param>
-        <param-name>contextClass</param-name>
-        <param-value>org.codehaus.groovy.grails.commons.spring.GrailsWebApplicationContext</param-value>
+        <param-value>classpath*:spring/spring-context.xml</param-value>
     </context-param>
 
     <!-- Web UI -->
@@ -69,7 +64,7 @@
 
     <!-- character encoding filter -->
     <filter>
-        <filter-name>ru.forxy.token.charset.encoding.filter</filter-name>
+        <filter-name>ru.forxy.auth.charset.encoding.filter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
         <init-param>
             <param-name>encoding</param-name>
@@ -81,17 +76,17 @@
         </init-param>
     </filter>
     <filter-mapping>
-        <filter-name>ru.forxy.token.charset.encoding.filter</filter-name>
+        <filter-name>ru.forxy.auth.charset.encoding.filter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
     <!-- logging filter -->
     <filter>
-        <filter-name>endpointPerflogFilter</filter-name>
+        <filter-name>performance.loggingFilter</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>endpointPerflogFilter</filter-name>
+        <filter-name>performance.loggingFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 

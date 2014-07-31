@@ -8,23 +8,42 @@ public enum AuthServiceEventLogId implements EventLogBase {
     // -------------------------------------------------------------------
     // Business events
     // -------------------------------------------------------------------
-    TokenNotFound(AuthServiceEventLogId.BASE_EVENT_LOG_ID, 404,
+    UserNotFound(AuthServiceEventLogId.BASE_EVENT_LOG_ID, 404,
+            "User with email '%1$s' is not found.",
+            EventType.InvalidInput),
+
+    UserAlreadyExists(AuthServiceEventLogId.BASE_EVENT_LOG_ID + 1, 400,
+            "User with email '%1$s' already exists.",
+            EventType.InvalidInput),
+
+    EmailIsNullOrEmpty(AuthServiceEventLogId.BASE_EVENT_LOG_ID + 2, 400,
+            "Requested user's email shouldn't be null or empty.",
+            EventType.InvalidInput),
+
+    EmptyLoginEmailOrPassword(AuthServiceEventLogId.BASE_EVENT_LOG_ID + 3, 400,
+            "To login user's email and password should present.",
+            EventType.InvalidInput),
+
+    NotAuthorized(AuthServiceEventLogId.BASE_EVENT_LOG_ID + 4, 401,
+            "Invalid user name ('%1$s') or password", EventType.InvalidInput),
+
+    TokenNotFound(AuthServiceEventLogId.BASE_EVENT_LOG_ID + 5, 404,
             "Token with tokenKey '%1$s' is not found.",
             EventType.InvalidInput),
 
-    TokenAlreadyExists(AuthServiceEventLogId.BASE_EVENT_LOG_ID + 1, 400,
+    TokenAlreadyExists(AuthServiceEventLogId.BASE_EVENT_LOG_ID + 6, 400,
             "Token with tokenKey '%1$s' already exists.",
             EventType.InvalidInput),
 
-    InvalidPageNumber(AuthServiceEventLogId.BASE_EVENT_LOG_ID + 4, 400,
+    InvalidPageNumber(AuthServiceEventLogId.BASE_EVENT_LOG_ID + 7, 400,
             "Invalid page number provided: '%1$s'",
             EventType.InvalidInput),
 
-    ClientNotFound(AuthServiceEventLogId.BASE_EVENT_LOG_ID + 6, 404,
+    ClientNotFound(AuthServiceEventLogId.BASE_EVENT_LOG_ID + 8, 404,
             "Client with ID '%1$s' is not found.",
             EventType.InvalidInput),
 
-    ClientAlreadyExists(AuthServiceEventLogId.BASE_EVENT_LOG_ID + 7, 400,
+    ClientAlreadyExists(AuthServiceEventLogId.BASE_EVENT_LOG_ID + 9, 400,
             "Client with ID '%1$s' already exists.",
             EventType.InvalidInput);
 

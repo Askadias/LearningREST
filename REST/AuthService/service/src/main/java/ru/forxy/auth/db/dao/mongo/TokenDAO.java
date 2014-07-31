@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import ru.forxy.auth.db.dao.ITokenDAO;
-import ru.forxy.auth.pojo.Token;
+import ru.forxy.auth.rest.v1.pojo.Token;
 import ru.forxy.common.status.pojo.ComponentStatus;
 import ru.forxy.common.status.pojo.StatusType;
 

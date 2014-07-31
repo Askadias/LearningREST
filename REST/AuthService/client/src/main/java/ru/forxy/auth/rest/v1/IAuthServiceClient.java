@@ -1,6 +1,6 @@
 package ru.forxy.auth.rest.v1;
 
-import ru.forxy.auth.pojo.Client;
+import ru.forxy.auth.rest.v1.pojo.Client;
 import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.common.pojo.StatusEntity;
 

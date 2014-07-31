@@ -38,11 +38,12 @@ body {
 .anim.ng-enter-active {
   opacity: 1.0;
 }
+
 .anim.ng-leave {
   display: none;
 }
 
-.login {
+#login-form {
   max-width: 500px;
   _width: 500px;
   padding: 30px 50px 20px;
@@ -51,4 +52,82 @@ body {
   margin: 100px auto 0;
   box-shadow: 0 1px 10px #a7a7a7, inset 0 1px 0 #fff;
   background: #fcfcfc;
+}
+
+#login {
+  -webkit-perspective: 600px;
+  -moz-perspective: 600px;
+  perspective: 600px;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  12.5% {
+    transform: translateX(-6px) rotateY(-5deg);
+  }
+  37.5% {
+    transform: translateX(5px) rotateY(4deg);
+  }
+  62.5% {
+    transform: translateX(-3px) rotateY(-2deg);
+  }
+  87.5% {
+    transform: translateX(2px) rotateY(1deg);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@-webkit-keyframes shake {
+  0% {
+    -webkit-transform: translateX(0);
+  }
+  12.5% {
+    -webkit-transform: translateX(-6px) rotateY(-5deg);
+  }
+  37.5% {
+    -webkit-transform: translateX(5px) rotateY(4deg);
+  }
+  62.5% {
+    -webkit-transform: translateX(-3px) rotateY(-2deg);
+  }
+  87.5% {
+    -webkit-transform: translateX(2px) rotateY(1deg);
+  }
+  100% {
+    -webkit-transform: translateX(0);
+  }
+}
+
+@-moz-keyframes shake {
+  0% {
+    -moz-transform: translateX(0);
+  }
+  12.5% {
+    -moz-transform: translateX(-6px) rotateY(-5deg);
+  }
+  37.5% {
+    -moz-transform: translateX(5px) rotateY(4deg);
+  }
+  62.5% {
+    -moz-transform: translateX(-3px) rotateY(-2deg);
+  }
+  87.5% {
+    -moz-transform: translateX(2px) rotateY(1deg);
+  }
+  100% {
+    -moz-transform: translateX(0);
+  }
+}
+
+.shake {
+  -webkit-animation: shake 400ms ease-in-out;
+  -moz-animation: shake 400ms ease-in-out;
+  animation: shake 400ms ease-in-out;
 }

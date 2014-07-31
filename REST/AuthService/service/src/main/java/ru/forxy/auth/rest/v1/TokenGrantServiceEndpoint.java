@@ -1,7 +1,7 @@
 package ru.forxy.auth.rest.v1;
 
-import ru.forxy.auth.logic.ITokenGrantServiceFacade;
-import ru.forxy.auth.pojo.Token;
+import ru.forxy.auth.logic.ITokenManager;
+import ru.forxy.auth.rest.v1.pojo.Token;
 import ru.forxy.common.pojo.SortDirection;
 import ru.forxy.common.pojo.StatusEntity;
 import ru.forxy.common.rest.AbstractService;
@@ -25,7 +25,7 @@ import javax.ws.rs.core.UriInfo;
 @Produces(MediaType.APPLICATION_JSON)
 public class TokenGrantServiceEndpoint extends AbstractService {
 
-    private ITokenGrantServiceFacade tokenGrantServiceFacade;
+    private ITokenManager tokenGrantServiceFacade;
 
     @GET
     public Response getTokens(@QueryParam("page") final Integer page,
@@ -77,7 +77,7 @@ public class TokenGrantServiceEndpoint extends AbstractService {
                 "Token with tokenID='" + tokenID + "' has been successfully removed")).build();
     }
 
-    public void setTokenGrantServiceFacade(ITokenGrantServiceFacade tokenGrantServiceFacade) {
-        this.tokenGrantServiceFacade = tokenGrantServiceFacade;
+    public void setTokenManager(ITokenManager tokenManager) {
+        this.tokenGrantServiceFacade = tokenManager;
     }
 }

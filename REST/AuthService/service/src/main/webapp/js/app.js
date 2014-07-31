@@ -201,27 +201,8 @@ var authServiceAdmin = angular.module('authServiceAdmin', [
                 }
             }]);
         }])
-    .run(['$rootScope', '$state', 'Auth', '$location', 'AUTH_EVENTS', '$http',
-        function ($rootScope, $state, Auth, $location, AUTH_EVENTS, $http) {
-            var backToLogin = function () {
-                $state.transitionTo('login', {redirect_url: $location.url()});
-
-            };
-            var goToRedirectUrl = function (event, params) {
-
-                $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode(
-                    params.user.email + ':' + params.user.password
-                );
-
-                $location.url(params.redirectUrl ? params.redirectUrl : "/");
-            };
-            $rootScope.$on(AUTH_EVENTS.notAuthenticated, backToLogin);
-            $rootScope.$on(AUTH_EVENTS.sessionTimeout, backToLogin);
-            $rootScope.$on(AUTH_EVENTS.loginFailed, backToLogin);
-            $rootScope.$on(AUTH_EVENTS.loginSuccess, goToRedirectUrl);
-        }])
-    .run(['$rootScope', '$state', 'Auth', '$location', 'AUTH_EVENTS',
-        function ($rootScope, $state, Auth, $location, AUTH_EVENTS) {
+    .run(['$rootScope', '$state', 'Auth', '$location',
+        function ($rootScope, $state, Auth, $location) {
             $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
                 if (!Auth.authorize(toState.data.access)) {
                     $rootScope.alerts.push({
@@ -236,13 +217,11 @@ var authServiceAdmin = angular.module('authServiceAdmin', [
                             $rootScope.alerts = [];
                             $state.go('clients.list');
                         } else {
-                            $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
-                            //$state.transitionTo('login', {redirect_url: $location.url()});
+                            $state.transitionTo('login', {redirect_url: $location.url()});
                         }
                     }
                 } else {
                     $rootScope.alerts = [];
-                    $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
                 }
             });
 

@@ -3,7 +3,7 @@ package ru.forxy.auth.test.dvt;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.forxy.auth.pojo.Client;
+import ru.forxy.auth.rest.v1.pojo.Client;
 import ru.forxy.auth.rest.v1.IAuthServiceClient;
 import ru.forxy.auth.test.BaseAuthServiceTest;
 import ru.forxy.common.exceptions.ClientException;

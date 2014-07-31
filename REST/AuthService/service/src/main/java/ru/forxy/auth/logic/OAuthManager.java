@@ -9,8 +9,8 @@ import org.apache.cxf.rs.security.oauth2.provider.OAuthServiceException;
 import org.apache.cxf.rs.security.oauth2.tokens.bearer.BearerAccessToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.forxy.auth.pojo.Token;
-import ru.forxy.auth.pojo.UserSubject;
+import ru.forxy.auth.rest.v1.pojo.Token;
+import ru.forxy.auth.rest.v1.pojo.UserSubject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,14 +23,14 @@ public class OAuthManager implements OAuthDataProvider {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OAuthManager.class);
 
-    private ITokenGrantServiceFacade tokenGrantServiceFacade;
+    private ITokenManager tokenGrantServiceFacade;
 
-    private IClientServiceFacade clientServiceFacade;
+    private IClientManager clientServiceFacade;
 
     @Override
     public Client getClient(final String clientId) throws OAuthServiceException {
         LOGGER.info("getClient");
-        ru.forxy.auth.pojo.Client client = clientServiceFacade.getClient(clientId);
+        ru.forxy.auth.rest.v1.pojo.Client client = clientServiceFacade.getClient(clientId);
         if (client != null) {
             return new Client(client.getClientID(), client.getClientSecret(), true);
         } else {
@@ -62,14 +62,14 @@ public class OAuthManager implements OAuthDataProvider {
         LOGGER.info("getAccessToken");
         Token token = tokenGrantServiceFacade.getToken(accessTokenKey);
         if (token != null) {
-            ru.forxy.auth.pojo.Client client = clientServiceFacade.getClient(token.getClientID());
+            ru.forxy.auth.rest.v1.pojo.Client client = clientServiceFacade.getClient(token.getClientID());
             return new BearerAccessToken(fromClient(client), 8600L);
         } else {
             return null;
         }
     }
 
-    private Client fromClient(ru.forxy.auth.pojo.Client clientTO) {
+    private Client fromClient(ru.forxy.auth.rest.v1.pojo.Client clientTO) {
         if (clientTO != null) {
             Client client = new Client(clientTO.getClientID(), clientTO.getClientSecret(), true,
                     clientTO.getApplicationName(), clientTO.getApplicationWebUri());
@@ -120,12 +120,12 @@ public class OAuthManager implements OAuthDataProvider {
         return null;
     }
 
-    public void setTokenGrantServiceFacade(final ITokenGrantServiceFacade tokenGrantServiceFacade) {
-        this.tokenGrantServiceFacade = tokenGrantServiceFacade;
+    public void setTokenManager(final ITokenManager tokenManager) {
+        this.tokenGrantServiceFacade = tokenManager;
     }
 
-    public void setClientServiceFacade(final IClientServiceFacade clientServiceFacade) {
-        this.clientServiceFacade = clientServiceFacade;
+    public void setClientManager(final IClientManager clientManager) {
+        this.clientServiceFacade = clientManager;
     }
 
     private UserSubject toUserSubject(final org.apache.cxf.rs.security.oauth2.common.UserSubject userSubject) {

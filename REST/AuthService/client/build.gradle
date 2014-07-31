@@ -49,9 +49,6 @@ dependencies {
     compile "org.springframework:spring-core:${rev_spring}"
     compile "org.springframework:spring-beans:${rev_spring}"
     compile "org.springframework:spring-context:${rev_spring}"
-    compile "org.grails:grails-spring:${rev_grails}"
-    compile "org.grails:grails-core:${rev_grails}"
-    compile "org.codehaus.groovy:groovy-all:${rev_groovy}"
 
     // ===================== TEST ========================================
     testCompile "forxy:ru.forxy.common.spring-support:${rev_forxy_common}"

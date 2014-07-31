@@ -3,8 +3,8 @@ package ru.forxy.auth.rest.support;
 import org.apache.cxf.common.security.SimplePrincipal;
 import org.apache.cxf.common.util.Base64Exception;
 import org.apache.cxf.common.util.Base64Utility;
-import ru.forxy.user.rest.v1.IUserServiceClient;
-import ru.forxy.user.rest.v1.pojo.User;
+import ru.forxy.auth.logic.IUserManager;
+import ru.forxy.auth.rest.v1.pojo.User;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -15,14 +15,13 @@ import javax.ws.rs.core.SecurityContext;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
-import java.util.UUID;
 
 public class SecurityContextFilter implements ContainerRequestFilter {
 
     @Context
     private HttpHeaders headers;
 
-    private IUserServiceClient userServiceClient;
+    private IUserManager userServiceFacade;
 
 
     @Override
@@ -33,7 +32,7 @@ public class SecurityContextFilter implements ContainerRequestFilter {
             if (principal != null) {
                 String accountName = principal.getName();
 
-                final User account = userServiceClient.getUser(UUID.randomUUID().toString(), accountName);
+                final User account = userServiceFacade.getUser(accountName);
                 if (account == null) {
                     requestContext.abortWith(createFaultResponse());
                 } else {
@@ -61,7 +60,7 @@ public class SecurityContextFilter implements ContainerRequestFilter {
                 requestContext.abortWith(createFaultResponse());
                 return;
             }
-            final User account = userServiceClient.getUser(UUID.randomUUID().toString(), namePassword[0]);
+            final User account = userServiceFacade.getUser(namePassword[0]);
             if (account == null || !account.getPassword().equals(namePassword[1])) {
                 requestContext.abortWith(createFaultResponse());
                 return;
@@ -105,7 +104,7 @@ public class SecurityContextFilter implements ContainerRequestFilter {
         //return Response.status(301).header("location", "/AuthService/app/login").build();
     }
 
-    public void setUserServiceClient(IUserServiceClient userServiceClient) {
-        this.userServiceClient = userServiceClient;
+    public void setUserServiceFacade(IUserManager userServiceFacade) {
+        this.userServiceFacade = userServiceFacade;
     }
 }

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://cxf.apache.org/jaxrs                 http://cxf.apache.org/schemas/jaxrs.xsd">
+
+    <import resource="classpath:META-INF/cxf/cxf.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+
+    <bean id="service.configuration" class="ru.forxy.common.support.Configuration">
+        <constructor-arg>
+            <map>
+                <entry key="#{T(ru.forxy.common.web.JSONValidationProvider$Configs).IsObjectValidationEnabled}"
+                       value="true"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="payload.validator" class="net.sf.oval.Validator">
+        <constructor-arg>
+            <list>
+                <bean class="net.sf.oval.configuration.xml.XMLConfigurer">
+                    <constructor-arg type="java.io.InputStream"
+                                     value="classpath:/validation/ru.forxy.auth.validation.xml"/>
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+
+
+    <!-- OAuth configuration -->
+    <!--<bean id="tvServiceClientFactory" class="org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean">
+        <property name="address" value="${ru.forxy.auth.AccessTokenValidatorClient/endpoint}"/>
+        <property name="headers">
+            <map>
+                <entry key="Accept" value="application/xml"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="tvServiceClient" factory-bean="tvServiceClientFactory" factory-method="createWebClient"/>
+
+    <bean id="tokenValidator" class="org.apache.cxf.rs.security.oauth2.filters.AccessTokenValidatorClient">
+        <property name="tokenValidatorClient" ref="tvServiceClient"/>
+    </bean>
+
+    <bean id="oauthFiler" class="org.apache.cxf.rs.security.oauth2.filters.OAuthRequestFilter">
+        <property name="dataProvider" ref="oauthProvider"/>
+        <property name="tokenValidator" ref="tokenValidator"/>
+    </bean>
+
+    <bean id="accessTokenServiceEndpoint" class="org.apache.cxf.rs.security.oauth2.services.AccessTokenService">
+        <property name="dataProvider" ref="oauthProvider"/>
+    </bean>
+
+    <bean id="accessTokenValidatorServiceEndpoint"
+          class="org.apache.cxf.rs.security.oauth2.services.AccessTokenValidatorService">
+        <property name="dataProvider" ref="oauthProvider"/>
+    </bean>
+
+    <bean id="authorizationServiceEndpoint"
+          class="org.apache.cxf.rs.security.oauth2.services.AuthorizationCodeGrantService">
+        <property name="dataProvider" ref="oauthProvider"/>
+    </bean>
+
+    <bean id="oAuthJSONProvider" class="org.apache.cxf.rs.security.oauth2.provider.OAuthJSONProvider"/>-->
+
+    <bean id="runtimeExceptionMapper" class="ru.forxy.common.exceptions.support.RuntimeExceptionMapper"/>
+
+    <!--<jaxrs:server id="oauthServer" address="/oauth">
+        <jaxrs:serviceBeans>
+            <ref bean="accessTokenServiceEndpoint"/>
+            <ref bean="accessTokenValidatorServiceEndpoint"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="oAuthJSONProvider"/>
+            <ref bean="runtimeExceptionMapper"/>
+        </jaxrs:providers>
+    </jaxrs:server>-->
+
+    <jaxrs:server id="authService.rest" address="/rest/v1">
+        <jaxrs:serviceBeans>
+            <ref bean="userServiceEndpoint"/>
+            <ref bean="authServiceEndpoint"/>
+            <ref bean="tokenGrantServiceEndpoint"/>
+            <ref bean="clientServiceEndpoint"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="ru.forxy.common.web.JSONValidationProvider">
+                <property name="configuration" ref="service.configuration"/>
+                <property name="validator" ref="payload.validator"/>
+            </bean>>
+            <ref bean="runtimeExceptionMapper"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+
+
+</beans>

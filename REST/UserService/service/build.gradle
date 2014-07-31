@@ -39,6 +39,9 @@ dependencies {
     compile "org.apache.cxf:cxf-rt-frontend-jaxrs:${rev_cxf}"
     compile "org.apache.cxf:cxf-rt-rs-service-description:${rev_cxf}"
     compile "org.apache.cxf:cxf-rt-rs-security-oauth2:${rev_cxf}"
+    compile "org.apache.cxf:cxf-rt-rs-security-oauth2-jwt:${rev_cxf}"
+    compile "org.apache.cxf:cxf-rt-rs-security-sso-saml:${rev_cxf}"
+
 
     // --------------------- JAX-WS --------------------------------------
     compile "org.apache.cxf:cxf-rt-frontend-jaxws:${rev_cxf}"

@@ -3,7 +3,7 @@ package ru.forxy.auth.rest.v1;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.methods.HttpGet;
-import ru.forxy.auth.pojo.Client;
+import ru.forxy.auth.rest.v1.pojo.Client;
 import ru.forxy.common.exceptions.ClientException;
 import ru.forxy.common.exceptions.RESTCommonEventLogId;
 import ru.forxy.common.pojo.EntityPage;

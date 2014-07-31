@@ -19,19 +19,16 @@ angular.module('authServiceAdmin.controllers', ['ui.bootstrap'])
             $rootScope.alerts.splice(index, 1);
         };
     }])
-    .controller('LoginCtrl', ['$scope', '$state', '$rootScope', '$location', 'Auth', '$stateParams', '$http', '$sessionStorage', 'AUTH_EVENTS',
-        function ($scope, $state, $rootScope, $location, Auth, $stateParams, $http, $sessionStorage, AUTH_EVENTS) {
-            $scope.redirectUrl = $location.search().redirect_url;
+    .controller('LoginCtrl', ['$scope', '$state', '$rootScope', '$location', 'Auth', '$stateParams', '$http', '$sessionStorage', '$animate',
+        function ($scope, $state, $rootScope, $location, Auth, $stateParams, $http, $sessionStorage, $animate) {
+            $scope.redirrectUrl = $location.search().redirect_url;
             $scope.$storage = $sessionStorage;
             $scope.credentials = {};
+            var loginForm = $('#login-form');
 
             $scope.login = function (credentials) {
                 $rootScope.alerts = [];
                 Auth.login(credentials, function (response) {
-                    $rootScope.$broadcast(AUTH_EVENTS.loginSuccess, {
-                        user : $sessionStorage.user,
-                        redirectUrl: $scope.redirectUrl
-                    });
                     $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode(
                         $sessionStorage.user.email + ':' + $sessionStorage.user.password
                     );
@@ -41,6 +38,9 @@ angular.module('authServiceAdmin.controllers', ['ui.bootstrap'])
                 }, function (error) {
                     error.data.messages.forEach(function (item) {
                         $rootScope.alerts.push({type: 'danger', msg: item})
+                    });
+                    $animate.addClass(loginForm, 'shake', function () {
+                        $animate.removeClass(loginForm, 'shake');
                     });
                 });
             };

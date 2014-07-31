@@ -77,10 +77,21 @@ dependencies {
     compile "org.springframework:spring-context:${rev_spring}"
     compile "org.springframework:spring-web:${rev_spring}"
     compile "org.springframework:spring-test:${rev_spring}"
+    compile "org.springframework.security:spring-security-core:${rev_spring_security}"
+    compile "org.springframework.security:spring-security-ldap:${rev_spring_security}"
+    compile "org.springframework.security.oauth:spring-security-oauth2:${rev_spring_security_oauth}"
 
     // --------------------- WEB -----------------------------------------
     compile "org.webjars:angularjs:${rev_angularjs}"
     compile "org.springframework:spring-webmvc:${rev_spring}"
+
+    // --------------------- OpenID --------------------------------------
+    compile ("org.mitre:openid-connect-server-webapp:${rev_mitre}") {
+        exclude group: 'com.sun.jdmk'
+        exclude group: 'com.sun.jmx'
+        exclude group: 'javax.jms'
+    }
+    compile "org.mitre:openid-connect-common:${rev_mitre}"
 
     // ===================== TEST ========================================
     compile "junit:junit:${rev_junit}"

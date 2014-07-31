@@ -1,10 +1,10 @@
 package ru.forxy.auth.rest.v1;
 
+import ru.forxy.auth.logic.IClientManager;
+import ru.forxy.auth.rest.v1.pojo.Client;
 import ru.forxy.common.pojo.SortDirection;
 import ru.forxy.common.pojo.StatusEntity;
 import ru.forxy.common.rest.AbstractService;
-import ru.forxy.auth.pojo.Client;
-import ru.forxy.auth.logic.IClientServiceFacade;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -25,7 +25,7 @@ import javax.ws.rs.core.UriInfo;
 @Produces(MediaType.APPLICATION_JSON)
 public class ClientServiceEndpoint extends AbstractService {
 
-    private IClientServiceFacade clientServiceFacade;
+    private IClientManager clientServiceFacade;
 
     @GET
     public Response getClients(@QueryParam("page") final Integer page,
@@ -77,7 +77,7 @@ public class ClientServiceEndpoint extends AbstractService {
                 "Client with clientID='" + clientID + "' has been successfully removed")).build();
     }
 
-    public void setClientServiceFacade(final IClientServiceFacade clientServiceFacade) {
+    public void setClientServiceFacade(final IClientManager clientServiceFacade) {
         this.clientServiceFacade = clientServiceFacade;
     }
 }

@@ -1,11 +1,10 @@
 package ru.forxy.auth.test;
 
-import org.junit.runner.RunWith;
+import org.junit.Ignore;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import ru.forxy.common.string.GenericGroovyContextLoader;
+import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:/spring/*context.groovy"}, loader = GenericGroovyContextLoader.class)
-public abstract class BaseAuthServiceTest {
+@Ignore
+@ContextConfiguration(locations = {"classpath:spring/spring-test-context.xml"})
+public abstract class BaseAuthServiceTest extends AbstractJUnit4SpringContextTests {
 }

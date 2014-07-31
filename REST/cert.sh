@@ -38,3 +38,6 @@ keytool -genkey -v -alias oauth -keyalg RSA -keypass 5ecret0AUTHPa55word -validi
 keytool -export -rfc -alias oauth -keyalg RSA -keystore oauth.jks -storepass 5ecret0AUTHPa55word -storetype JKS -file oauth.cer
 :: import oauth server certificate into clients trust store
 keytool -import -v -noprompt -alias oauth -keyalg RSA -file oauth.cer -keystore oauthTrustStore.jks -storepass 5ecret0AUTHPa55word -storetype JKS
+
+:: ---------------------- RACS Keystore -----------------------------------------------------------------
+keytool -genkey -v -alias forxy -keyalg RSA -keypass sing1e5ign0n -validity 3650 -dname "CN=localhost, OU=UserService, O=Forxy, C=BY" -keystore racs.jks -storepass sing1e5ign0n -storetype JKS

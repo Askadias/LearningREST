@@ -34,12 +34,12 @@ dependencies {
     compile "forxy:ru.forxy.common.status:${rev_forxy_common}"
     compile "forxy:ru.forxy.common.logging:${rev_forxy_common}"
 
-    compile "forxy:ru.forxy.user.client:${rev_forxy_common}"
-
     // --------------------- CXF -----------------------------------------
     compile "org.apache.cxf:cxf-rt-frontend-jaxrs:${rev_cxf}"
     compile "org.apache.cxf:cxf-rt-rs-service-description:${rev_cxf}"
     compile "org.apache.cxf:cxf-rt-rs-security-oauth2:${rev_cxf}"
+    compile "org.apache.cxf:cxf-rt-rs-security-oauth2-jwt:${rev_cxf}"
+    compile "org.apache.cxf:cxf-rt-rs-security-sso-saml:${rev_cxf}"
 
     // --------------------- JAX-WS --------------------------------------
     compile "org.apache.cxf:cxf-rt-frontend-jaxws:${rev_cxf}"
@@ -66,10 +66,7 @@ dependencies {
     compile "org.springframework:spring-web:${rev_spring}"
     compile "org.springframework:spring-orm:${rev_spring}"
     compile "org.springframework.security:spring-security-core:${rev_spring_security}"
-    compile "org.grails:grails-spring:${rev_grails}"
-    compile "org.grails:grails-core:${rev_grails}"
-    compile "org.grails:grails-web:${rev_grails}"
-    compile "org.codehaus.groovy:groovy-all:${rev_groovy}"
+    compile "org.springframework.security.oauth:spring-security-oauth2:${rev_spring_security_oauth}"
 
     // --------------------- ENCRYPTION ----------------------------------
     compile "org.bouncycastle:bcprov-jdk16:${rev_bouncycastle}"
@@ -83,10 +80,13 @@ dependencies {
     compile "org.webjars:angular-ui-bootstrap:${rev_angular_ui_bootstrap}"
     compile "org.webjars:angular-ui-router:${rev_angular_ui_router}"
     compile "org.webjars:ngStorage:${rev_angular_storage}"
-
+    compile ("org.mitre:openid-connect-server-webapp:${rev_mitre}") {
+        transitive = false
+    }
+    compile "org.mitre:openid-connect-common:${rev_mitre}"
 
     // ===================== TEST ========================================
-    testCompile "org.springframework:spring-test:${rev_spring}"
+    testCompile "forxy:ru.forxy.common.spring-support:${rev_forxy_common}"
     testCompile "junit:junit:${rev_junit}"
     testCompile "org.easymock:easymock:${rev_easymock}"
 }

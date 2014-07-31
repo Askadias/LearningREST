@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import ru.forxy.common.status.pojo.ComponentStatus;
 import ru.forxy.common.status.pojo.StatusType;
 import ru.forxy.auth.db.dao.IClientDAO;
-import ru.forxy.auth.pojo.Client;
+import ru.forxy.auth.rest.v1.pojo.Client;
 
 import java.util.Date;
 
