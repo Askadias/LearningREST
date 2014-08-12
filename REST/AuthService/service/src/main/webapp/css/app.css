@@ -304,7 +304,7 @@ th {
 .glyphicon-star-empty:before {
   content: "\e007";
 }
-.glyphicon-token:before {
+.glyphicon-user:before {
   content: "\e008";
 }
 .glyphicon-film:before {
@@ -2718,10 +2718,10 @@ select[multiple].input-lg {
   font-size: 14px;
   line-height: 1.42857143;
   border-radius: 4px;
-  -webkit-token-select: none;
-  -moz-token-select: none;
-  -ms-token-select: none;
-  token-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .btn:focus,
 .btn:active:focus,
@@ -4652,7 +4652,7 @@ a.thumbnail.active {
   color: #66512c;
 }
 .alert-danger {
-  background-color: #f2dede;
+  background-color: rgba(242, 222, 222, 0.9);
   border-color: #ebccd1;
   color: #a94442;
 }
@@ -6189,7 +6189,7 @@ body .wrapper ol {
 .anim.ng-leave {
   display: none;
 }
-#login-form {
+.login-form {
   max-width: 500px;
   _width: 500px;
   padding: 30px 50px 20px;
@@ -6199,7 +6199,7 @@ body .wrapper ol {
   box-shadow: 0 1px 10px #a7a7a7, inset 0 1px 0 #fff;
   background: #fcfcfc;
 }
-#login {
+.login {
   -webkit-perspective: 600px;
   -moz-perspective: 600px;
   perspective: 600px;
@@ -6271,4 +6271,44 @@ body .wrapper ol {
   -webkit-animation: shake 400ms ease-in-out;
   -moz-animation: shake 400ms ease-in-out;
   animation: shake 400ms ease-in-out;
+}
+.alert-list {
+  position: absolute;
+  left: 50%;
+  z-index: 100;
+  width: 600px;
+}
+.alert-pupup {
+  position: relative;
+  left: -50%;
+}
+.alert-pupup.ng-enter,
+.alert-pupup.ng-leave {
+  -webkit-transition: 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75) all;
+  -moz-transition: 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75) all;
+  -ms-transition: 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75) all;
+  -o-transition: 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75) all;
+  transition: 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75) all;
+  position: relative;
+  display: block;
+}
+.alert-pupup.ng-leave.ng-leave-active,
+.alert-pupup.ng-enter {
+  -webkit-transform: rotateX(-180deg) translatez(30px);
+  -moz-transform: rotateX(-180deg) translatez(30px);
+  -ms-transform: rotateX(-180deg) translatez(30px);
+  -o-transform: rotateX(-180deg) translatez(30px);
+  transform: rotateX(-180deg) translatez(30px);
+  opacity: 0;
+  height: 0px;
+}
+.alert-pupup.ng-enter.ng-enter-active,
+.alert-pupup.ng-leave {
+  -webkit-transform: rotateX(0deg) translatez(30px);
+  -moz-transform: rotateX(0deg) translatez(30px);
+  -ms-transform: rotateX(0deg) translatez(30px);
+  -o-transform: rotateX(0deg) translatez(30px);
+  transform: rotateX(0deg) translatez(30px);
+  opacity: 1;
+  height: 30px;
 }

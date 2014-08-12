@@ -1,6 +1,9 @@
 <header>
     <nav class="navbar navbar-default" ng-controller="LoginCtrl">
         <ul class="nav navbar-nav">
+            <li ng-class="{active: ('users' | includedByState)}">
+                <a ui-sref="users.list">Users</a>
+            </li>
             <li ng-class="{active: ('clients' | includedByState)}">
                 <a ui-sref="clients.list">Applications</a>
             </li>
@@ -57,11 +60,6 @@
 
 <div class="token" ng-if="accessToken">
     with access token {{accessToken}}
-</div>
-
-
-<div ng-controller="AlertCtrl">
-    <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
 </div>
 
 <div class="tab-content">

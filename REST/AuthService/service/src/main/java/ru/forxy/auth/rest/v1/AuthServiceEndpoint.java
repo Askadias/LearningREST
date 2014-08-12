@@ -17,7 +17,7 @@ import javax.ws.rs.core.UriInfo;
 /**
  * Provides server-side authentication procedure
  */
-@Path("/")
+@Path("/auth/")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class AuthServiceEndpoint extends AbstractService {

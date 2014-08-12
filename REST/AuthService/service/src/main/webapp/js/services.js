@@ -1,6 +1,38 @@
 'use strict';
 
 angular.module('authServiceAdmin.services', ['restangular'])
+    .factory('AlertMgr', function () {
+        return {
+            alerts: {},
+            addAlert: function (type, message) {
+                this.alerts[type] = this.alerts[type] || [];
+                this.alerts[type].push(message);
+            },
+            clearAlerts: function () {
+                for (var x in this.alerts) {
+                    delete this.alerts[x];
+                }
+            }
+        };
+    })
+
+    .factory('User', ['Restangular', function (Restangular) {
+        return {
+            all: function () {
+                return Restangular.all('users').getList();
+            },
+            page: function (query) {
+                return Restangular.one('users').get(query);
+            },
+            get: function (email) {
+                return Restangular.one('users', email).get();
+            },
+            add: function (user) {
+                return Restangular.one('users', user).put();
+            }
+        }
+    }])
+
     .factory('Token', ['Restangular', function (Restangular) {
         return {
             all: function () {
@@ -20,6 +52,7 @@ angular.module('authServiceAdmin.services', ['restangular'])
             }
         }
     }])
+
     .factory('Client', ['Restangular', function (Restangular) {
         return {
             all: function () {
@@ -42,6 +75,7 @@ angular.module('authServiceAdmin.services', ['restangular'])
             }
         }
     }])
+
     .provider('OAuth', function () {
 
         var MUST_OVERRIDE = {};
@@ -207,11 +241,11 @@ angular.module('authServiceAdmin.services', ['restangular'])
             };
             var accessLevels = routingConfig.accessLevels;
             var userRoles = routingConfig.userRoles;
-            var currentUser = $sessionStorage.user || guest;
+            //var currentUser = $sessionStorage.user || guest;
 
-            Restangular = Restangular.withConfig(function (RestangularConfigurer) {
-                RestangularConfigurer.setBaseUrl('http://localhost:10080/UserService/service/auth');
-            });
+            /*Restangular = Restangular.withConfig(function (RestangularConfigurer) {
+             RestangularConfigurer.setBaseUrl('http://localhost:10080/UserService/service/auth');
+             });*/
 
             function changeUser(user) {
                 //angular.extend(currentUser, user);
@@ -221,9 +255,9 @@ angular.module('authServiceAdmin.services', ['restangular'])
             return {
                 authorize: function (accessLevel, role) {
                     var isAuthorized = false;
-                    if (role === undefined && !!currentUser.roles) {
-                        for (var userRole in currentUser.roles) {
-                            isAuthorized |= this.authorize(accessLevel, currentUser.roles[userRole])
+                    if (role === undefined && !!$sessionStorage.user.roles) {
+                        for (var userRole in $sessionStorage.user.roles) {
+                            isAuthorized |= this.authorize(accessLevel, $sessionStorage.user.roles[userRole])
                         }
                     }
                     else {
@@ -232,7 +266,7 @@ angular.module('authServiceAdmin.services', ['restangular'])
                     return isAuthorized;
                 },
                 login: function (credentials, success, error) {
-                    return Restangular.all('login').post(credentials).then(function (user) {
+                    return Restangular.all('auth/login').post(credentials).then(function (user) {
                         user.isLoggedIn = true;
                         changeUser(user);
                         success();
@@ -241,21 +275,16 @@ angular.module('authServiceAdmin.services', ['restangular'])
                     });
                 },
                 logout: function () {
-                    changeUser({
-                        firstName: 'Guest',
-                        roles: ['public'],
-                        isLoggedIn: false
-                    })
+                    changeUser(guest)
                 },
                 isLoggedIn: function (user) {
                     if (user === undefined) {
-                        user = currentUser;
+                        user = $sessionStorage.user;
                     }
                     return user.isLoggedIn === true;
                 },
                 accessLevels: accessLevels,
-                userRoles: userRoles,
-                user: currentUser
+                userRoles: userRoles
             }
         }]);
 

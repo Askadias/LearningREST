@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('authServiceAdmin.directives', [])
+
     .directive('onBlurChange', ['$parse', function ($parse) {
         return function (scope, element, attr) {
             var fn = $parse(attr['onBlurChange']);
@@ -19,6 +20,7 @@ angular.module('authServiceAdmin.directives', [])
             });
         };
     }])
+
     .directive('onEnterBlur', function () {
         return function (scope, element, attrs) {
             element.bind("keydown keypress", function (event) {
@@ -29,6 +31,7 @@ angular.module('authServiceAdmin.directives', [])
             });
         };
     })
+
     .directive('sortBy', function () {
         return {
             templateUrl: 'components/sort-by.html',
@@ -54,6 +57,7 @@ angular.module('authServiceAdmin.directives', [])
             }
         };
     })
+
     .directive('input', function () {
         return {
             priority: 0,
@@ -77,42 +81,21 @@ angular.module('authServiceAdmin.directives', [])
             }
         };
     })
-    .directive('autoFillSync', function ($timeout) {
-        return {
-            require: 'ngModel',
-            link: function (scope, elem, attrs, ngModel) {
-                var origVal = elem.val();
-                $timeout(function () {
-                    var newVal = elem.val();
-                    if (ngModel.$pristine && origVal !== newVal) {
-                        ngModel.$setViewValue(newVal);
-                    }
-                }, 100);
-            }
-        }
-    })
-    .directive('shakeThat', ['$animate', function ($animate) {
-        return {
-            require: '^form',
-            scope: {
-                submit: '&',
-                submitted: '='
-            },
-            link: function (scope, element, attrs, form) {
-                // listen on submit event
-                element.on('submit', function () {
-                    // tell angular to update scope
-                    scope.$apply(function () {
-                        // everything ok -> call submit fn from controller
-                        if (form.$valid) return scope.submit();
-                        // show error messages on submit
-                        scope.submitted = true;
-                        // shake that form
-                        $animate.addClass(element, 'shake', function () {
-                            $animate.removeClass(element, 'shake');
-                        });
+
+    .directive('formAutofillFix', function () {
+        return function (scope, elem, attrs) {
+            // Fixes Chrome bug: https://groups.google.com/forum/#!topic/angular/6NlucSskQjY
+            elem.prop('method', 'POST');
+
+            // Fix autofill issues where Angular doesn't know about autofilled inputs
+            if (attrs.ngSubmit) {
+                setTimeout(function () {
+                    elem.unbind('submit').submit(function (e) {
+                        e.preventDefault();
+                        elem.find('input, textarea, select').trigger('input').trigger('change').trigger('keydown');
+                        scope.$apply(attrs.ngSubmit);
                     });
-                });
+                }, 0);
             }
         };
-    }]);
+    });

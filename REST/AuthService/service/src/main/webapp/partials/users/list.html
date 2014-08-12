@@ -1,0 +1,86 @@
+<div>
+    <div class="alert alert-info" ng-show="usersCount == 0">
+        No users found
+    </div>
+
+    <div ng-show="usersCount > 0">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th ng-repeat="header in headers">
+                    <sort-by onsort="onSort" sortdir="filterCriteria.sortDir" sortedby="filterCriteria.sortedBy"
+                             sortvalue="{{header.value}}">{{header.title}}
+                    </sort-by>
+                </th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td></td>
+                <td>
+                    <input class="form-control" style="width: 100px" on-enter-blur
+                           on-blur-change="filterResult()" ng-model="filterCriteria.email">
+                </td>
+                <td>
+                    <input class="form-control" style="width: 80px" on-enter-blur
+                           on-blur-change="filterResult()" ng-model="filterCriteria.login">
+                </td>
+                <td>
+                    <input class="form-control" style="width: 100px" on-enter-blur
+                           on-blur-change="filterResult()" ng-model="filterCriteria.firstName">
+                </td>
+                <td>
+                    <input class="form-control" style="width: 100px" on-enter-blur
+                           on-blur-change="filterResult()" ng-model="filterCriteria.lastName">
+                </td>
+                <td>
+                    <select ng-change="filterResult()" class="form-control" style="width: 80px"
+                            ng-model="filterCriteria.gender">
+                        <option></option>
+                        <option value="m">Male</option>
+                        <option value="f">Female</option>
+                    </select>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr ng-repeat="user in users">
+                <td>{{$index + 1}}</td>
+                <td><a ui-sref="users.details({login: user.email, mode : 'view'})">
+                    {{user.email}}
+                </a></td>
+                <td>{{user.login}}</td>
+                <td>{{user.firstName}}</td>
+                <td>{{user.lastName}}</td>
+                <td>{{user.gender}}</td>
+                <td>{{user.birthDate}}</td>
+                <td>{{user.createDate}}</td>
+                <td>
+                    <div class="btn-group" style="width: 100px">
+                        <a ui-sref="users.details({login: user.email, mode : 'edit'})"
+                           class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-eye-open"></span>
+                        </a>
+
+                        <button type="button" class="btn btn-default btn-sm" ng-click="open('lg', user.email)">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                        <!--<a href="#/users/{{user.email}}?mode=edit" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </a>-->
+                        <button type="button" class="btn btn-danger btn-sm" ng-click="user.remove()">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div ng-show="totalPages > 1">
+            <pagination num-pages="totalPages" ng-model="filterCriteria.page" current-page="filterCriteria.page"
+                        max-size="10" class="" boundary-links="true" on-select-page="selectPage(page)"></pagination>
+        </div>
+    </div>
+</div>

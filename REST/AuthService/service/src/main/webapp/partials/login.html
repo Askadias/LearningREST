@@ -1,33 +1,26 @@
-<div id="login" class="login">
+<div class="login">
 
     <form id="login-form" ng-show="!currentUser.isLoggedIn" name="loginForm" method="post"
-          ng-submit="login(credentials)" role="form" class="form-horizontal">
-        <div ng-controller="AlertCtrl">
-            <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
-        </div>
+          ng-submit="login(credentials)" role="form" class="login-form form-horizontal" form-autofill-fix>
         <div class="row">
+
             <div class="form-group">
-                <div class="col-md-3">
-                    <label class="control-label" for="email">Email:</label>
-                </div>
-                <div class="col-md-9">
-                    <input id="email" type="email" name="email" ng-model="credentials.email" class="form-control"
-                           placeholder="Email" ng-model-options="{updateOn: 'blur'}" auto-fill-sync required autofocus>
-                    <span class="alert-danger" ng-show="loginForm.email.$invalid">Email should not be empty</span>
+                <div class="input-group">
+                    <span class="input-group-addon glyphicon glyphicon-user"></span>
+                    <input id="login" type="text" name="login" ng-model="credentials.email" class="form-control"
+                           placeholder="Username or Email" required autofocus>
                 </div>
             </div>
+
             <div class="form-group">
-                <div class="col-md-3">
-                    <label class="control-label" for="password">Password:</label>
-                </div>
-                <div class="col-md-9">
-                    <input id="password" type="password" name="password" ng-model="credentials.password"
-                           class="form-control" placeholder="Password" ng-model-options="{updateOn: 'blur'}" auto-fill-sync required>
-                    <span class="alert-danger" ng-show="loginForm.password.$invalid">Password should not be empty</span>
+                <div class="input-group">
+                    <span class="input-group-addon glyphicon glyphicon-lock"></span>
+                    <input id="password" type="password" name="password" ng-model="credentials.password" class="form-control"
+                           placeholder="Password" required>
                 </div>
             </div>
             <div class="btn-group-lg">
-                <button type="submit"  class="btn btn-default btn-block">Log in</button>
+                <button type="submit" class="btn btn-default btn-block">Log in</button>
             </div>
         </div>
     </form>

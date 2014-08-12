@@ -2,33 +2,25 @@
 
 var authServiceAdmin = angular.module('authServiceAdmin', [
     'ngStorage',
-    'authServiceAdmin.controllers',
+    'authServiceAdmin.controllers.common',
+    'authServiceAdmin.controllers.user',
+    'authServiceAdmin.controllers.client',
+    'authServiceAdmin.controllers.token',
     'authServiceAdmin.services',
     'authServiceAdmin.directives',
     'restangular',
     'ngAnimate',
     'ui.router'
 ])
-    .constant('AUTH_EVENTS', {
-        loginSuccess: 'auth-login-success',
-        loginFailed: 'auth-login-failed',
-        logoutSuccess: 'auth-logout-success',
-        sessionTimeout: 'auth-session-timeout',
-        notAuthenticated: 'auth-not-authenticated',
-        notAuthorized: 'auth-not-authorized'
-    })
     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'RestangularProvider', 'OAuthProvider',
         function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, RestangularProvider, OAuthProvider) {
 
-            /*$httpProvider.defaults.useXDomain = true;
-             delete $httpProvider.defaults.headers.common['X-Requested-With'];*/
             $httpProvider.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode('username:password');
 
             RestangularProvider.setDefaultHeaders({
                 'Content-Type': 'application/json',
                 'X-Requested-With': 'XMLHttpRequest'
             });
-            //RestangularProvider.setDefaultHttpFields({'withCredentials': true});
 
             OAuthProvider.extendConfig({
                 authenticationEndpoint: 'http://localhost:11080/AuthService/app/login/',
@@ -84,6 +76,31 @@ var authServiceAdmin = angular.module('authServiceAdmin', [
                     controller: 'AuthController',
                     data: {
                         access: access.user
+                    }
+                })
+                .state('users', {
+                    abstract: true,
+                    url: '/app',
+                    templateUrl: 'partials/layout.html',
+                    controller: 'MainCtrl',
+                    data: {
+                        access: access.public
+                    }
+                })
+                .state('users.list', {
+                    url: '/users/',
+                    templateUrl: 'partials/users/list.html',
+                    controller: 'UsersListCtrl',
+                    data: {
+                        access: access.user
+                    }
+                })
+                .state('users.details', {
+                    url: '/users/:login/:mode/',
+                    templateUrl: 'partials/users/details.html',
+                    controller: 'UserDetailsCtrl',
+                    data: {
+                        access: access.admin
                     }
                 })
                 .state('clients', {
@@ -142,10 +159,10 @@ var authServiceAdmin = angular.module('authServiceAdmin', [
                 if ($location.protocol() === 'file')
                     return;
 
-                var path = $location.path()
                 // Note: misnomer. This returns a query object, not a search string
-                    , search = $location.search(), params
-                    ;
+                var path = $location.path(),
+                    search = $location.search(),
+                    params = [];
 
                 // check to see if the path already ends in '/'
                 if (path[path.length - 1] === '/') {
@@ -158,7 +175,6 @@ var authServiceAdmin = angular.module('authServiceAdmin', [
                 }
 
                 // Otherwise build the search string and return a `/?` prefix
-                params = [];
                 angular.forEach(search, function (v, k) {
                     params.push(k + '=' + v);
                 });
@@ -167,19 +183,6 @@ var authServiceAdmin = angular.module('authServiceAdmin', [
 
             $locationProvider.html5Mode(true);
 
-            $httpProvider.interceptors.push(function ($q, $location) {
-                return {
-                    'responseError': function (response) {
-                        if (response.status === 401 || response.status === 403) {
-                            //$location.url('http://localhost:10080/UserService/app/login/?redirect_url=' + $location.url());
-                            return $q.reject(response);
-                        }
-                        else {
-                            return $q.reject(response);
-                        }
-                    }
-                }
-            });
             $httpProvider.interceptors.push('OAuthInterceptor');
             $httpProvider.interceptors.push(['$location', '$q', '$injector', function ($location, $q, $injector) {
                 function success(response) {
@@ -187,7 +190,7 @@ var authServiceAdmin = angular.module('authServiceAdmin', [
                 }
 
                 function error(response) {
-                    if (response.status === 401) {
+                    if (response.status === 401 || response.status === 403) {
                         $injector.get('$state').transitionTo('login');
                         return $q.reject(response);
                     }
@@ -201,14 +204,11 @@ var authServiceAdmin = angular.module('authServiceAdmin', [
                 }
             }]);
         }])
-    .run(['$rootScope', '$state', 'Auth', '$location',
-        function ($rootScope, $state, Auth, $location) {
+    .run(['$rootScope', '$state', 'Auth', '$location', 'AlertMgr',
+        function ($rootScope, $state, Auth, $location, AlertMgr) {
             $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
                 if (!Auth.authorize(toState.data.access)) {
-                    $rootScope.alerts.push({
-                        type: 'danger',
-                        msg: "Seems like you tried accessing a route you don't have access to..."
-                    });
+                    AlertMgr.addAlert('danger', "Seems like you tried accessing a route you don`t have access to...");
 
                     event.preventDefault();
 
@@ -221,10 +221,9 @@ var authServiceAdmin = angular.module('authServiceAdmin', [
                         }
                     }
                 } else {
-                    $rootScope.alerts = [];
+                    AlertMgr.clearAlerts();
                 }
             });
-
         }])
     .run(['$rootScope', '$window', 'OAuth',
         function ($rootScope, $window, OAuth) {

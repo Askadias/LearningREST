@@ -304,7 +304,7 @@ th {
 .glyphicon-star-empty:before {
   content: "\e007";
 }
-.glyphicon-token:before {
+.glyphicon-user:before {
   content: "\e008";
 }
 .glyphicon-film:before {
@@ -2718,10 +2718,10 @@ select[multiple].input-lg {
   font-size: 14px;
   line-height: 1.42857143;
   border-radius: 4px;
-  -webkit-token-select: none;
-  -moz-token-select: none;
-  -ms-token-select: none;
-  token-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .btn:focus,
 .btn:active:focus,
