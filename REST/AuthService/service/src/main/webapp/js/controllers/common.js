@@ -1,9 +1,27 @@
 'use strict';
 
 angular.module('authServiceAdmin.controllers.common', ['ui.bootstrap'])
-    .controller('MainCtrl', ['$scope', '$rootScope', 'OAuth',
-        function ($scope, $rootScope, OAuth) {
+    .controller('MainCtrl', ['$scope', '$rootScope', 'OAuth', '$state',
+        function ($scope, $rootScope, OAuth, $state) {
+            $scope.tabs = [
+                {heading: "Users", route: "users.list", active: false},
+                {heading: "Applications", route: "clients.list", active: false},
+                {heading: "Tokens", route: "tokens.list", active: false}
+            ];
 
+            $scope.go = function (route) {
+                $state.go(route);
+            };
+
+            $scope.active = function (route) {
+                return $state.is(route);
+            };
+
+            $scope.$on("$stateChangeSuccess", function () {
+                $scope.tabs.forEach(function (tab) {
+                    tab.active = $scope.active(tab.route);
+                });
+            });
         }])
 
     .controller('AlertCtrl', ['$scope', 'AlertMgr',

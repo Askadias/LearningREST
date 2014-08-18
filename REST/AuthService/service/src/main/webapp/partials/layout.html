@@ -1,5 +1,9 @@
-<header>
-    <nav class="navbar navbar-default" ng-controller="LoginCtrl">
+<div role="navigation" class="navbar navbar-fixed-top" ng-controller="LoginCtrl">
+    <div class="navbar-header">
+        <a title="Auth Service admin tool" ui-sref="users.list" class="navbar-brand">AuthService Admin Tool</a>
+    </div>
+
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav">
             <li ng-class="{active: ('users' | includedByState)}">
                 <a ui-sref="users.list">Users</a>
@@ -10,11 +14,11 @@
             <li ng-class="{active: ('tokens' | includedByState)}">
                 <a ui-sref="tokens.list">Tokens</a>
             </li>
-            <li>
+            <!--<li>
                 <div ng-controller="AuthCtrl">
                     <button ng-click="authorize()">Authorize</button>
                 </div>
-            </li>
+            </li>-->
         </ul>
 
         <form class="navbar-form navbar-right">
@@ -47,22 +51,67 @@
                 <span class="label label-default">guest</span>
             </div>
         </div>
-    </nav>
-</header>
 
-<!--<oauth
-        site="https://oauth-ng-server.herokuapp.com"
-        client-id="23c6ceaba56c00e940f890acc9f4c75a94991c62f5561338b6311f7026343d58"
-        redirect-uri="https://oauth-ng-demo.herokuapp.com"
-        profile-uri="https://oauth-ng-server.herokuapp.com/api/v1/me"
-        scope="public">
-</oauth>-->
-
-<div class="token" ng-if="accessToken">
-    with access token {{accessToken}}
+    </div>
 </div>
 
-<div class="tab-content">
+<div class="wrapper container tab-content">
 
-    <div ui-view></div>
+    <div class="row">
+        <div class="col-md-2">
+            <div class="well sidebar-nav">
+                <ul class="nav nav-list">
+                    <li class="nav-header">Users</li>
+                    <li ng-class="{active: ('users.list' | includedByState)}">
+                        <a ui-sref="users.list">
+                            Manage Users
+                        </a>
+                    </li>
+                    <li ng-class="{active: ('users.details' | includedByState)}">
+                        <a ui-sref="users.details({email: 'new', mode: 'new'})">
+                            Add User
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            Manage Groups
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+
+                    <li class="nav-header">Clients</li>
+                    <li ng-class="{active: ('clients.list' | includedByState)}">
+                        <a ui-sref="clients.list">
+                            Manage Clients
+                        </a>
+                    </li>
+                    <li ng-class="{active: ('clients.details' | includedByState)}">
+                        <a ui-sref="clients.details({clientID: 'new', mode: 'new'})">
+                            Add Client
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            Manage Roles
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <!--<oauth
+                    site="https://oauth-ng-server.herokuapp.com"
+                    client-id="23c6ceaba56c00e940f890acc9f4c75a94991c62f5561338b6311f7026343d58"
+                    redirect-uri="https://oauth-ng-demo.herokuapp.com"
+                    profile-uri="https://oauth-ng-server.herokuapp.com/api/v1/me"
+                    scope="public">
+            </oauth>-->
+
+            <div class="token" ng-if="accessToken">
+                with access token {{accessToken}}
+            </div>
+
+            <div ui-view></div>
+        </div>
+    </div>
 </div>

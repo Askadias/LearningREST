@@ -10,6 +10,7 @@ import ru.forxy.common.exceptions.RESTCommonEventLogId;
 import ru.forxy.common.pojo.StatusEntity;
 import ru.forxy.common.rest.client.transport.DefaultResponseHandler;
 import ru.forxy.common.rest.client.transport.ITransport;
+import ru.forxy.common.utils.ValidationUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,9 +23,6 @@ import java.util.regex.Pattern;
  * some basic functionality, such as JSON marshalling etc.
  */
 public abstract class RestServiceClientSupport {
-
-    protected static final Pattern GUID_PATTERN = Pattern
-            .compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}");
     protected static final String TRANSACTION_GUID = "Transaction-GUID";
     protected static final String MESSAGE_GUID = "Message-GUID";
     protected static final String CLIENT_ID = "Client-ID";
@@ -138,7 +136,7 @@ public abstract class RestServiceClientSupport {
             throw new ClientException(null, RESTCommonEventLogId.InvalidClientInput,
                     "Parameter '" + name + "' should not be empty");
         }
-        if (!StringUtils.isBlank(value) && !GUID_PATTERN.matcher(value).matches()) {
+        if (!StringUtils.isBlank(value) && !ValidationUtils.isValidGUID(value)) {
             throw new ClientException(null, RESTCommonEventLogId.InvalidClientInput,
                     "Parameter '" + name + "' is not in GUID format");
         }

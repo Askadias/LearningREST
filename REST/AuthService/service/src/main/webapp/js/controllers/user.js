@@ -28,11 +28,11 @@ angular.module('authServiceAdmin.controllers.user', ['ui.bootstrap'])
                     value: 'gender'
                 },
                 {
-                    title: 'Birthday',
-                    value: 'birthDate'
+                    title: 'Update Date',
+                    value: 'updateDate'
                 },
                 {
-                    title: 'Registration',
+                    title: 'Create Date',
                     value: 'createDate'
                 }
             ];
@@ -40,12 +40,15 @@ angular.module('authServiceAdmin.controllers.user', ['ui.bootstrap'])
             $scope.filterCriteria = {
                 page: 1,
                 sortDir: 'ASC',
-                sortedBy: 'email'
+                sortedBy: 'email',
+                gender: ''
             };
 
             //The function that is responsible of fetching the result from the server and setting the grid to the new result
             $scope.fetchResult = function () {
-                return User.page($scope.filterCriteria).then(function (response) {
+                var filter = angular.copy($scope.filterCriteria);
+                filter.gender = filter.gender || null;
+                return User.page(filter).then(function (response) {
                     $scope.users = response.content;
                     $scope.totalPages = Math.ceil(response.total / response.size);
                     $scope.usersCount = response.total;
@@ -79,6 +82,13 @@ angular.module('authServiceAdmin.controllers.user', ['ui.bootstrap'])
                 $scope.fetchResult().then(function () {
                     //The request fires correctly but sometimes the ui doesn't update, that's a fix
                     $scope.filterCriteria.page = 1;
+                });
+            };
+
+            $scope.remove = function (user) {
+                User.delete(user).then(function (response) {
+                    $scope.fetchResult();
+                }, function (response) {
                 });
             };
 
@@ -121,11 +131,76 @@ angular.module('authServiceAdmin.controllers.user', ['ui.bootstrap'])
                 $modalInstance.dismiss('cancel');
             };
         }])
-
+/*
     .controller('UserDetailsCtrl', ['$scope', '$stateParams', 'User',
         function ($scope, $stateParams, User) {
             User.get($stateParams.login).then(function (response) {
                 $scope.user = response;
             }, function (response) {
             });
+        }])*/
+
+    .controller('UserDetailsCtrl', ['$scope', '$stateParams', 'User', '$state',
+        function ($scope, $stateParams, User, $state) {
+            $scope.mode = $stateParams.mode;
+
+            $scope.roles = ['user', 'admin'];
+            $scope.user = {
+                email: '',
+                password: '',
+                login: '',
+                firstName: '',
+                lastName: '',
+                gender: null,
+                roles: []
+            };
+            $scope.original = angular.copy($scope.user);
+
+            if ($scope.mode === 'edit') {
+                User.get($stateParams.login).then(function (response) {
+                    if (response) {
+                        $scope.user = response;
+                        $scope.original = angular.copy($scope.user)
+                    }
+                }, function () {
+                });
+            }
+
+            $scope.discard = function () {
+                $scope.user = angular.copy($scope.original);
+            };
+
+            $scope.save = function () {
+                $scope.user.gender = $scope.user.gender || null;
+                $scope.original = angular.copy($scope.user);
+                switch ($scope.mode) {
+                    case 'new' :
+                        User.add($scope.user).then(function (response) {
+                            $state.go('users.details', {login : $scope.user.email, mode : 'edit'});
+                        }, function (response) {
+
+                        });
+                        break;
+                    case 'edit' :
+                        $scope.user.save();
+                        break;
+                }
+                $scope.cancel();
+            };
+
+            $scope.addRole = function (role) {
+                if ($scope.user.roles.indexOf(role) == -1) {
+                    $scope.user.roles.push(role);
+                }
+            };
+
+            $scope.isCancelDisabled = function () {
+                return angular.equals($scope.original, $scope.user);
+            };
+
+            $scope.isSaveDisabled = function () {
+                return $scope.myForm.$invalid || angular.equals($scope.original, $scope.user);
+            };
+
+            $scope.discard();
         }]);

@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-@Document
+@Document(collection = "token")
 public class Token implements Serializable {
 
     private static final long serialVersionUID = 8325766446360560392L;

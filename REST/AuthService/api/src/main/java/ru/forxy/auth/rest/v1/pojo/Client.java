@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Document
+@Document(collection = "client")
 public class Client implements Serializable {
 
     private static final long serialVersionUID = -6795472289012239081L;

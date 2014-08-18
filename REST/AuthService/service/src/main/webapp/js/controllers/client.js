@@ -16,20 +16,16 @@ angular.module('authServiceAdmin.controllers.client', ['ui.bootstrap'])
                     value: 'applicationName'
                 },
                 {
-                    title: 'URI',
-                    value: 'applicationWebUri'
-                },
-                {
-                    title: 'Last Updated By',
+                    title: 'Updated By',
                     value: 'updatedBy'
-                },
-                {
-                    title: 'Update Date',
-                    value: 'updateDate'
                 },
                 {
                     title: 'Created By',
                     value: 'createdBy'
+                },
+                {
+                    title: 'Update Date',
+                    value: 'updateDate'
                 },
                 {
                     title: 'Create Date',
@@ -103,7 +99,7 @@ angular.module('authServiceAdmin.controllers.client', ['ui.bootstrap'])
                 applicationDescription: '',
                 applicationWebUri: '',
                 redirectUris: [],
-                allowedGrantTypes: []
+                registeredScopes: []
             };
             $scope.original = angular.copy($scope.client);
 
@@ -147,7 +143,7 @@ angular.module('authServiceAdmin.controllers.client', ['ui.bootstrap'])
             };
 
             $scope.isSaveDisabled = function () {
-                return $scope.myForm.$invalid || angular.equals($scope.original, $scope.client);
+                return $scope.clientForm.$invalid || angular.equals($scope.original, $scope.client);
             };
 
             $scope.discard();

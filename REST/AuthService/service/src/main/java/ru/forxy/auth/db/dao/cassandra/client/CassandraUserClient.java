@@ -5,6 +5,7 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import org.springframework.beans.factory.InitializingBean;
+import ru.forxy.auth.rest.v1.pojo.Gender;
 import ru.forxy.auth.rest.v1.pojo.User;
 
 import java.util.ArrayList;
@@ -71,7 +72,6 @@ public class CassandraUserClient implements ICassandraClient<User>, Initializing
                 user.getFirstName(),
                 user.getLastName(),
                 String.valueOf(user.getGender()),
-                user.getBirthDate(),
                 new Date()));
         // @formatter:on
     }
@@ -105,9 +105,8 @@ public class CassandraUserClient implements ICassandraClient<User>, Initializing
         }
         String password = row.getString("password");
         final User user = new User(row.getString("email"), password);
-        user.setBirthDate(row.getDate("birth_date"));
         user.setLogin(row.getString("login"));
-        user.setGender(row.isNull("gender") ? null : row.getString("gender").charAt(0));
+        user.setGender(Gender.valueOf(row.getString("gender")));
         user.setFirstName(row.getString("first_name"));
         user.setLastName(row.getString("last_name"));
         return user;
@@ -117,8 +116,8 @@ public class CassandraUserClient implements ICassandraClient<User>, Initializing
     public void afterPropertiesSet() throws Exception {
         getByKeyStatement = session.prepare("select * from user where email = ?;");
         addStatement = session.prepare(
-                "insert into user (email, password, login, first_name, last_name, gender, birth_date, create_date) " +
-                        "values (?, ?, ?, ?, ?, ?, ?, ?);");
+                "insert into user (email, password, login, first_name, last_name, gender, create_date) " +
+                        "values (?, ?, ?, ?, ?, ?, ?);");
         deleteStatement = session.prepare("delete from user where email = ?;");
     }
 }

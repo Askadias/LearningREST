@@ -9,8 +9,8 @@ angular.module('authServiceAdmin.services', ['restangular'])
                 this.alerts[type].push(message);
             },
             clearAlerts: function () {
-                for (var x in this.alerts) {
-                    delete this.alerts[x];
+                for (var i in this.alerts) {
+                    delete this.alerts[i];
                 }
             }
         };
@@ -28,7 +28,13 @@ angular.module('authServiceAdmin.services', ['restangular'])
                 return Restangular.one('users', email).get();
             },
             add: function (user) {
-                return Restangular.one('users', user).put();
+                return Restangular.all('users').post(user);
+            },
+            save: function (user) {
+                return Restangular.one('users', user.email).put(user);
+            },
+            delete: function (user) {
+                return Restangular.one('users', user.email).remove();
             }
         }
     }])
@@ -241,26 +247,21 @@ angular.module('authServiceAdmin.services', ['restangular'])
             };
             var accessLevels = routingConfig.accessLevels;
             var userRoles = routingConfig.userRoles;
-            //var currentUser = $sessionStorage.user || guest;
-
-            /*Restangular = Restangular.withConfig(function (RestangularConfigurer) {
-             RestangularConfigurer.setBaseUrl('http://localhost:10080/UserService/service/auth');
-             });*/
+            $sessionStorage.user = $sessionStorage.user || guest;
 
             function changeUser(user) {
-                //angular.extend(currentUser, user);
                 $sessionStorage.user = user;
             }
 
             return {
                 authorize: function (accessLevel, role) {
                     var isAuthorized = false;
-                    if (role === undefined && !!$sessionStorage.user.roles) {
+                    if (role === undefined && !!$sessionStorage.user && !!$sessionStorage.user.roles) {
                         for (var userRole in $sessionStorage.user.roles) {
                             isAuthorized |= this.authorize(accessLevel, $sessionStorage.user.roles[userRole])
                         }
                     }
-                    else {
+                    else if (!!role){
                         isAuthorized = accessLevel.bitMask & userRoles[role].bitMask;
                     }
                     return isAuthorized;
@@ -287,15 +288,3 @@ angular.module('authServiceAdmin.services', ['restangular'])
                 userRoles: userRoles
             }
         }]);
-
-/*
- .factory('Token', ['$resource',
- function ($resource) {
- return $resource('service/rest/v1/auths/:email', {}, {
- getList: {method: 'GET', isArray: true},
- get: {method: 'GET'},
- save: {method: 'POST'},
- add: {method: 'PUT'},
- delete: {method: 'DELETE'}
- });
- }]);*/

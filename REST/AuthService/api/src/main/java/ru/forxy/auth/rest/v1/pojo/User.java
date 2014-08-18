@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-@Document
+@Document(collection = "user")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 4780940749658431820L;
@@ -27,11 +27,9 @@ public class User implements Serializable {
 
     private String lastName;
 
-    private Character gender;
+    private Gender gender;
 
     private List<String> roles;
-
-    private Date birthDate;
 
     private Date updateDate = new Date();
 
@@ -89,11 +87,11 @@ public class User implements Serializable {
         this.lastName = lastName;
     }
 
-    public Character getGender() {
+    public Gender getGender() {
         return gender;
     }
 
-    public void setGender(final Character gender) {
+    public void setGender(final Gender gender) {
         this.gender = gender;
     }
 
@@ -103,16 +101,6 @@ public class User implements Serializable {
 
     public void setRoles(List<String> roles) {
         this.roles = roles;
-    }
-
-    @JsonSerialize(using = SimpleJacksonDateSerializer.class)
-    public Date getBirthDate() {
-        return birthDate;
-    }
-
-    @JsonDeserialize(using = SimpleJacksonDateDeserializer.class)
-    public void setBirthDate(final Date birthDate) {
-        this.birthDate = birthDate;
     }
 
     @JsonSerialize(using = SimpleJacksonDateSerializer.class)
@@ -209,13 +197,6 @@ public class User implements Serializable {
         } else if (!roles.equals(other.roles)) {
             return false;
         }
-        if (birthDate == null) {
-            if (other.birthDate != null) {
-                return false;
-            }
-        } else if (!birthDate.equals(other.birthDate)) {
-            return false;
-        }
         if (updateDate == null) {
             if (other.updateDate != null) {
                 return false;
@@ -258,7 +239,6 @@ public class User implements Serializable {
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
         result = prime * result + ((gender == null) ? 0 : gender.hashCode());
         result = prime * result + ((roles == null) ? 0 : roles.hashCode());
-        result = prime * result + ((birthDate == null) ? 0 : birthDate.hashCode());
         result = prime * result + ((updateDate == null) ? 0 : updateDate.hashCode());
         result = prime * result + ((updatedBy == null) ? 0 : updatedBy.hashCode());
         result = prime * result + ((createDate == null) ? 0 : createDate.hashCode());
@@ -268,8 +248,8 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("{email=%s, login=%s, firstName=%s, lastName=%s, gender=%c, birthDate=%s, " +
+        return String.format("{email=%s, login=%s, firstName=%s, lastName=%s, gender=%c, " +
                         "updateDate=%s, updatedBy=%s, createDate=%s, createdBy=%s, roles=%s}",
-                email, login, firstName, lastName, gender, birthDate, updateDate, updatedBy, createDate, createdBy, roles);
+                email, login, firstName, lastName, gender, updateDate, updatedBy, createDate, createdBy, roles);
     }
 }

@@ -22,14 +22,14 @@ import javax.ws.rs.core.UriInfo;
 @Produces(MediaType.APPLICATION_JSON)
 public class AuthServiceEndpoint extends AbstractService {
 
-    private IUserManager userServiceFacade;
+    private IUserManager userManager;
 
     @POST
     @Path("/login")
     public Response login(final Credentials credentials,
                           @Context final UriInfo uriInfo,
                           @Context final HttpHeaders headers) {
-        return respondWith(userServiceFacade.login(credentials), uriInfo, headers).build();
+        return respondWith(userManager.login(credentials), uriInfo, headers).build();
     }
 
     @POST
@@ -37,12 +37,10 @@ public class AuthServiceEndpoint extends AbstractService {
     public Response register(final Credentials credentials,
                              @Context final UriInfo uriInfo,
                              @Context final HttpHeaders headers) {
-        return respondWith(userServiceFacade.register(credentials), uriInfo, headers).build();
-        //userServiceFacade.register(credentials);
-        //return Response.ok(new StatusEntity("200", uriInfo.getAbsolutePath() + "/" + credentials.getEmail())).build();
+        return respondWith(userManager.register(credentials), uriInfo, headers).build();
     }
 
     public void setUserManager(final IUserManager userManager) {
-        this.userServiceFacade = userManager;
+        this.userManager = userManager;
     }
 }

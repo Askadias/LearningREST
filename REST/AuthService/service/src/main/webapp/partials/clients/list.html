@@ -1,80 +1,82 @@
-<div>
-    <div class="btn-group">
-
-        <a ui-sref="clients.details({clientID: 'new', mode: 'new'})" class="btn btn-default">
-            Add Client
-        </a>
-    </div>
-    <div class="alert alert-info" ng-show="clientsCount == 0">
-        No applications found
-    </div>
-
-    <div ng-show="clientsCount > 0">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th ng-repeat="header in headers">
-                    <sort-by onsort="onSort" sortdir="filterCriteria.sortDir" sortedby="filterCriteria.sortedBy"
-                             sortvalue="{{header.value}}">{{header.title}}
-                    </sort-by>
-                </th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-                    <input class="form-control" style="width: 100px" on-enter-blur
-                           on-blur-change="filterResult()" ng-model="filterCriteria.clientID">
-                </td>
-                <td>
-                    <input class="form-control" style="width: 100px" on-enter-blur
-                           on-blur-change="filterResult()" ng-model="filterCriteria.applicationName">
-                </td>
-                <td></td>
-                <td>
-                    <input class="form-control" style="width: 100px" on-enter-blur
-                           on-blur-change="filterResult()" ng-model="filterCriteria.updatedBy">
-                </td>
-                <td></td>
-                <td>
-                    <input class="form-control" style="width: 100px" on-enter-blur
-                           on-blur-change="filterResult()" ng-model="filterCriteria.createdBy">
-                </td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr ng-repeat="client in clients">
-                <td><a ui-sref="clients.details({clientID: client.clientID, mode: 'edit'})">
-                    {{client.clientID}}
-                </a></td>
-                <td>{{client.applicationName}}</td>
-                <td>{{client.applicationWebUri}}</td>
-                <td>{{client.updatedBy}}</td>
-                <td>{{client.updateDate}}</td>
-                <td>{{client.createdBy}}</td>
-                <td>{{client.createDate}}</td>
-                <td>
-                    <div class="btn-group" style="width: 100px">
-                        <a ui-sref="clients.details({clientID: client.clientID, mode: 'view'})"
-                           class="btn btn-default btn-sm">
-                            <span class="glyphicon glyphicon-eye-open"></span>
-                        </a>
-                        <a ui-sref="clients.details({clientID: client.clientID, mode: 'edit'})"
-                           class="btn btn-default btn-sm">
-                            <span class="glyphicon glyphicon-pencil"></span>
-                        </a>
-                        <button type="button" class="btn btn-danger btn-sm" ng-click="remove(client)">
-                            <span class="glyphicon glyphicon-trash"></span>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <div ng-show="totalPages > 1">
-            <pagination num-pages="totalPages" ng-model="filterCriteria.page" current-page="filterCriteria.page"
-                        max-size="10" class="" boundary-links="true" on-select-page="selectPage(page)"></pagination>
-        </div>
-    </div>
+<div class="well well-sm">
+    <a ui-sref="clients.details({clientID: 'new', mode: 'new'})" class="btn btn-success">
+        <span class="glyphicon glyphicon-plus-sign"></span>
+        Add Application
+    </a>
+</div>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th ng-repeat="header in headers" nowrap>
+            <sort-by onsort="onSort" sortdir="filterCriteria.sortDir" sortedby="filterCriteria.sortedBy"
+                     sortvalue="{{header.value}}">{{header.title}}
+            </sort-by>
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+            <input class="form-control" on-enter-blur placeholder="client ID"
+                   on-blur-change="filterResult()" ng-model="filterCriteria.clientId"></td>
+        <td>
+            <input class="form-control" on-enter-blur placeholder="application name"
+                   on-blur-change="filterResult()" ng-model="filterCriteria.applicationName">
+        </td>
+        <td>
+            <input class="form-control" on-enter-blur placeholder="updater"
+                   on-blur-change="filterResult()" ng-model="filterCriteria.updatedBy">
+        </td>
+        <td>
+            <input class="form-control" on-enter-blur placeholder="creator"
+                   on-blur-change="filterResult()" ng-model="filterCriteria.createdBy">
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr ng-repeat="client in clients">
+        <td><a ui-sref="clients.details({clientID: client.clientID, mode: 'edit'})">
+            {{client.clientID}}
+        </a></td>
+        <td>{{client.applicationName}}</td>
+        <td>{{client.updatedBy}}</td>
+        <td>{{client.createdBy}}</td>
+        <td>{{client.updateDate}}</td>
+        <td>{{client.createDate}}</td>
+        <td>
+            <div class="btn-group" style="width: 100px">
+                <a ui-sref="clients.details({clientID: client.clientID, mode: 'view'})"
+                   class="btn btn-default btn-sm">
+                    <span class="glyphicon glyphicon-eye-open"></span>
+                </a>
+                <a ui-sref="clients.details({clientID: client.clientID, mode: 'edit'})"
+                   class="btn btn-default btn-sm">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </a>
+                <button type="button" class="btn btn-danger btn-sm" ng-click="remove(client)">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </button>
+            </div>
+        </td>
+    </tr>
+    <tr ng-show="!clients || clients.length == 0">
+        <td colspan="8">
+            <div class="alert alert-info">
+                No applications found
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div ng-show="totalPages > 1">
+    <pagination num-pages="totalPages" ng-model="filterCriteria.page" current-page="filterCriteria.page"
+                max-size="10" class="" boundary-links="true" on-select-page="selectPage(page)"></pagination>
+</div>
+<div class="well well-sm">
+    <a ui-sref="clients.details({clientID: 'new', mode: 'new'})" class="btn btn-success">
+        <span class="glyphicon glyphicon-plus-sign"></span>
+        Add Application
+    </a>
 </div>

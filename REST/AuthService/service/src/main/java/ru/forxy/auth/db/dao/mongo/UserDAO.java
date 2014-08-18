@@ -52,16 +52,16 @@ public class UserDAO implements IUserDAO {
         Query query = Query.query(new Criteria()).with(pageable);
         if (filter != null) {
             if (StringUtils.isNotEmpty(filter.getEmail())) {
-                query.addCriteria(new Criteria("email").regex(filter.getEmail()));
+                query.addCriteria(new Criteria("email").regex(filter.getEmail(), "i"));
             }
             if (StringUtils.isNotEmpty(filter.getLogin())) {
-                query.addCriteria(new Criteria("login").regex(filter.getLogin()));
+                query.addCriteria(new Criteria("login").regex(filter.getLogin(), "i"));
             }
             if (StringUtils.isNotEmpty(filter.getFirstName())) {
-                query.addCriteria(new Criteria("firstName").regex(filter.getFirstName()));
+                query.addCriteria(new Criteria("firstName").regex(filter.getFirstName(), "i"));
             }
             if (StringUtils.isNotEmpty(filter.getLastName())) {
-                query.addCriteria(new Criteria("lastName").regex(filter.getLastName()));
+                query.addCriteria(new Criteria("lastName").regex(filter.getLastName(), "i"));
             }
             if (filter.getGender() != null) {
                 query.addCriteria(new Criteria("gender").is(filter.getGender()));

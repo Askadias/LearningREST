@@ -3,15 +3,16 @@ package ru.forxy.auth.logic;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import ru.forxy.auth.db.dao.IClientDAO;
+import ru.forxy.auth.exceptions.AuthServiceEventLogId;
+import ru.forxy.auth.rest.v1.pojo.Client;
 import ru.forxy.common.exceptions.ServiceException;
 import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.common.pojo.SortDirection;
-import ru.forxy.auth.rest.v1.pojo.Client;
-import ru.forxy.auth.db.dao.IClientDAO;
-import ru.forxy.auth.exceptions.AuthServiceEventLogId;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Implementation class for ClientService business logic
@@ -69,6 +70,9 @@ public class ClientManager implements IClientManager {
 
     @Override
     public void createClient(final Client client) {
+        if (client.getClientID() == null) {
+            client.setClientID(UUID.randomUUID().toString());
+        }
         if (!clientDAO.exists(client.getClientID())) {
             clientDAO.save(client);
         } else {
