@@ -4,7 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.methods.HttpGet;
 import ru.forxy.common.exceptions.ClientException;
-import ru.forxy.common.exceptions.RESTCommonEventLogId;
+import ru.forxy.common.exceptions.HttpEventLogId;
 import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.common.pojo.StatusEntity;
 import ru.forxy.common.rest.client.RestServiceClientSupport;
@@ -15,9 +15,7 @@ import ru.forxy.user.rest.v1.pojo.User;
 
 import javax.ws.rs.core.HttpHeaders;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +41,7 @@ public class UserServiceClient extends RestServiceClientSupport implements IUser
             final byte[] trustStoreBytes = IOUtils.toByteArray(trustStoreStream);
             TRUST_STORE = new HttpClientSSLKeyStore(new ByteArrayInputStream(trustStoreBytes), "5ecret0AUTHPa55word");
         } catch (Exception e) {
-            throw new ClientException(new StatusEntity("400", e), e, RESTCommonEventLogId.InvalidClientInput);
+            throw new ClientException(new StatusEntity("400", e), e, HttpEventLogId.InvalidClientInput);
         }
     }
 

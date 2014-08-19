@@ -31,7 +31,7 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import ru.forxy.common.exceptions.ClientException;
-import ru.forxy.common.exceptions.RESTCommonEventLogId;
+import ru.forxy.common.exceptions.HttpEventLogId;
 import ru.forxy.common.rest.client.retry.IRetryPolicy;
 import ru.forxy.common.rest.client.retry.RetryExecutor;
 import ru.forxy.common.rest.client.transport.support.RepeatableEntityCreatingResponseInterceptor;
@@ -272,13 +272,13 @@ public class HttpClientTransport implements ITransport {
                     final StringEntity params = new StringEntity(entity);
                     ((HttpEntityEnclosingRequestBase) request).setEntity(params);
                 } catch (final UnsupportedEncodingException e) {
-                    throw new ClientException(null, e, RESTCommonEventLogId.UnexpectedException, e.getMessage());
+                    throw new ClientException(null, e, HttpEventLogId.UnexpectedException, e.getMessage());
                 }
             }
         } else if (HttpDelete.METHOD_NAME.equals(method)) {
             request = new HttpDelete(url);
         } else {
-            throw new ClientException(null, RESTCommonEventLogId.UnexpectedException,
+            throw new ClientException(null, HttpEventLogId.UnexpectedException,
                     "Unknown HTTP method [" + method + "] while calling '" + url + "'");
         }
         return request;
@@ -342,16 +342,16 @@ public class HttpClientTransport implements ITransport {
                 }
             }, httpContext);
         } catch (final SSLException e) {
-            throw new ClientException(null, e, RESTCommonEventLogId.SSLConnectivityException,
+            throw new ClientException(null, e, HttpEventLogId.SSLConnectivityException,
                     "[" + request.toString() + "]: " + e.getMessage());
         } catch (final java.net.SocketTimeoutException e) {
-            throw new ClientException(null, e, RESTCommonEventLogId.SocketTimeoutException,
+            throw new ClientException(null, e, HttpEventLogId.SocketTimeoutException,
                     "[" + request.toString() + "]: " + e.getMessage());
         } catch (final org.apache.http.conn.HttpHostConnectException e) {
-            throw new ClientException(null, e, RESTCommonEventLogId.ServiceUnavailableException,
+            throw new ClientException(null, e, HttpEventLogId.ServiceUnavailableException,
                     "[" + request.toString() + "]: " + e.getMessage());
         } catch (final IOException e) {
-            throw new ClientException(null, e, RESTCommonEventLogId.ServiceUnavailableException,
+            throw new ClientException(null, e, HttpEventLogId.ServiceUnavailableException,
                     "[" + request.toString() + "]: " + e.getMessage());
         }
     }
@@ -380,7 +380,7 @@ public class HttpClientTransport implements ITransport {
             if (lastException instanceof ClientException) {
                 return (ClientException) lastException;
             } else {
-                return new ClientException(null, lastException, RESTCommonEventLogId.UnexpectedException,
+                return new ClientException(null, lastException, HttpEventLogId.UnexpectedException,
                         ExceptionUtils.getRootCauseMessage(lastException));
             }
         }

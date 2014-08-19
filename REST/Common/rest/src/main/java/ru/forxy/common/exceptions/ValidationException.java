@@ -1,11 +1,7 @@
 package ru.forxy.common.exceptions;
 
 import net.sf.oval.exception.ValidationFailedException;
-import org.apache.commons.lang.ArrayUtils;
-import ru.forxy.common.exceptions.support.ResponseBuilder;
 
-import javax.ws.rs.BadRequestException;
-import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,36 +15,36 @@ public class ValidationException extends ServiceException {
     private final List<String> messages;
 
     public ValidationException(List<String> messages) {
-        super(RESTCommonEventLogId.ValidationException);
+        super(HttpEventLogId.ValidationException);
         this.messages = messages;
     }
 
     public ValidationException(String message) {
-        super(message, RESTCommonEventLogId.ValidationException);
+        super(message, HttpEventLogId.ValidationException);
         messages = new ArrayList<>(1);
         messages.add(message);
     }
 
     public ValidationException(Throwable cause, String message) {
-        super(cause, message, RESTCommonEventLogId.ValidationException);
+        super(cause, message, HttpEventLogId.ValidationException);
         messages = new ArrayList<>(1);
         messages.add(super.getMessage());
     }
 
     public ValidationException(Throwable cause, Object... args) {
-        super(cause, RESTCommonEventLogId.ValidationException, args);
+        super(cause, HttpEventLogId.ValidationException, args);
         messages = new ArrayList<>(1);
         messages.add(super.getMessage());
     }
 
     public ValidationException(Object... args) {
-        super(RESTCommonEventLogId.ValidationException, args);
+        super(HttpEventLogId.ValidationException, args);
         messages = new ArrayList<>(1);
         messages.add(super.getMessage());
     }
 
     public ValidationException(Throwable cause) {
-        super(cause, RESTCommonEventLogId.ValidationException);
+        super(cause, HttpEventLogId.ValidationException);
         messages = new ArrayList<>(1);
         messages.add(super.getMessage());
     }

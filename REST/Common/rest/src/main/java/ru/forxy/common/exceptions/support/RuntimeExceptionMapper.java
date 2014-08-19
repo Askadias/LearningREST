@@ -8,7 +8,7 @@ package ru.forxy.common.exceptions.support;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.forxy.common.exceptions.RESTCommonEventLogId;
+import ru.forxy.common.exceptions.HttpEventLogId;
 import ru.forxy.common.exceptions.ServiceException;
 import ru.forxy.common.exceptions.ValidationException;
 
@@ -45,7 +45,7 @@ public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException>
                     String.valueOf(ex.getEventLogId().getEventId()), ex.getMessage());
         } else {
             ex = new ServiceException(re,
-                    RESTCommonEventLogId.UnexpectedException,
+                    HttpEventLogId.UnexpectedException,
                     ExceptionUtils.getRootCauseMessage(re));
             response = ResponseBuilder.build(
                     Response.Status.INTERNAL_SERVER_ERROR,
@@ -62,7 +62,7 @@ public class RuntimeExceptionMapper implements ExceptionMapper<RuntimeException>
                         ex.getMessage());
             } else {
                 ex = new ServiceException(re,
-                        RESTCommonEventLogId.UnexpectedException,
+                        HttpEventLogId.UnexpectedException,
                         ExceptionUtils.getRootCauseMessage(re));
                 response = ResponseBuilder.build(
                         Response.Status.fromStatusCode(((WebApplicationException) re).getResponse().getStatus()),

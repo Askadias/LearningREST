@@ -3,46 +3,46 @@ package ru.forxy.common.exceptions;
 /**
  * Event log id enumeration that describes common rest webservice specific events
  */
-public enum RESTCommonEventLogId implements EventLogBase
+public enum HttpEventLogId implements EventLogBase
 {
     // -------------------------------------------------------------------
     // Common events
     // -------------------------------------------------------------------
 
-    InvalidClientInput(RESTCommonEventLogId.BASE_EVENT_LOG_ID + 400, 400,
+    InvalidClientInput(HttpEventLogId.BASE_EVENT_LOG_ID + 400, 400,
             "Operation is not allowed",
             EventType.InvalidInput),
 
-    ValidationException(RESTCommonEventLogId.BASE_EVENT_LOG_ID + 400, 400,
+    ValidationException(HttpEventLogId.BASE_EVENT_LOG_ID + 400, 400,
             "Validation rule violation. Details: %1$s",
             EventType.InvalidInput),
 
-    Unauthorized(RESTCommonEventLogId.BASE_EVENT_LOG_ID + 401, 401,
+    Unauthorized(HttpEventLogId.BASE_EVENT_LOG_ID + 401, 401,
             "Operation is not allowed",
             EventType.InvalidInput),
 
-    AccessDenied(RESTCommonEventLogId.BASE_EVENT_LOG_ID + 404, 403,
+    AccessDenied(HttpEventLogId.BASE_EVENT_LOG_ID + 404, 403,
             "Operation is not allowed",
             EventType.InvalidInput),
 
-    ResourceNotFound(RESTCommonEventLogId.BASE_EVENT_LOG_ID + 404, 404,
+    ResourceNotFound(HttpEventLogId.BASE_EVENT_LOG_ID + 404, 404,
             "Operation is not allowed",
             EventType.InvalidInput),
 
-    UnexpectedException(RESTCommonEventLogId.BASE_EVENT_LOG_ID + 500, 500,
+    UnexpectedException(HttpEventLogId.BASE_EVENT_LOG_ID + 500, 500,
             "Unexpected unhandled exception. Details: %1$s",
                         EventType.InternalError),
 
 
-    SSLConnectivityException(RESTCommonEventLogId.BASE_EVENT_LOG_ID, 403,
+    SSLConnectivityException(HttpEventLogId.BASE_EVENT_LOG_ID, 403,
             "Error during SSL communication. Details: %1$s",
             EventType.InvalidInput),
 
-    SocketTimeoutException(RESTCommonEventLogId.BASE_EVENT_LOG_ID + 501, 501,
+    SocketTimeoutException(HttpEventLogId.BASE_EVENT_LOG_ID + 501, 501,
             "Timeout. Details: %1$s",
             EventType.InternalError),
 
-    ServiceUnavailableException(RESTCommonEventLogId.BASE_EVENT_LOG_ID + 503, 503,
+    ServiceUnavailableException(HttpEventLogId.BASE_EVENT_LOG_ID + 503, 503,
             "Service is not available. Details: %1$s",
             EventType.InternalError);
 
@@ -56,13 +56,13 @@ public enum RESTCommonEventLogId implements EventLogBase
     private int m_responseId;
     private EventType m_eventType;
 
-    private RESTCommonEventLogId(final int eventId, final int responseId, final String formatString, final EventType eventType)
+    private HttpEventLogId(final int eventId, final int responseId, final String formatString, final EventType eventType)
     {
         this(eventId, responseId, Level.ERROR, formatString, eventType);
     }
 
-    private RESTCommonEventLogId(final int eventId, final int responseId, final Level level, final String formatString,
-                                 final EventType eventType)
+    private HttpEventLogId(final int eventId, final int responseId, final Level level, final String formatString,
+                           final EventType eventType)
     {
         m_eventId = eventId;
         m_responseId = responseId;

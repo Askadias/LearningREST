@@ -5,7 +5,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.methods.HttpGet;
 import ru.forxy.auth.rest.v1.pojo.Client;
 import ru.forxy.common.exceptions.ClientException;
-import ru.forxy.common.exceptions.RESTCommonEventLogId;
+import ru.forxy.common.exceptions.HttpEventLogId;
+import ru.forxy.common.exceptions.HttpEventLogId;
 import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.common.pojo.StatusEntity;
 import ru.forxy.common.rest.client.RestServiceClientSupport;
@@ -41,7 +42,7 @@ public class AuthServiceClient extends RestServiceClientSupport implements IAuth
             final byte[] trustStoreBytes = IOUtils.toByteArray(trustStoreStream);
             TRUST_STORE = new HttpClientSSLKeyStore(new ByteArrayInputStream(trustStoreBytes), "5ecret0AUTHPa55word");
         } catch (Exception e) {
-            throw new ClientException(new StatusEntity("400", e), e, RESTCommonEventLogId.InvalidClientInput);
+            throw new ClientException(new StatusEntity("400", e), e, HttpEventLogId.InvalidClientInput);
         }
     }
 
