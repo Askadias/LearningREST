@@ -39,7 +39,6 @@ dependencies {
     compile "org.apache.cxf:cxf-rt-rs-service-description:${rev_cxf}"
     compile "org.apache.cxf:cxf-rt-rs-security-oauth2:${rev_cxf}"
     compile "org.apache.cxf:cxf-rt-rs-security-oauth2-jwt:${rev_cxf}"
-    compile "org.apache.cxf:cxf-rt-rs-security-sso-saml:${rev_cxf}"
 
     // --------------------- JAX-WS --------------------------------------
     compile "org.apache.cxf:cxf-rt-frontend-jaxws:${rev_cxf}"
@@ -69,7 +68,7 @@ dependencies {
     compile "org.springframework.security.oauth:spring-security-oauth2:${rev_spring_security_oauth}"
 
     // --------------------- ENCRYPTION ----------------------------------
-    compile "org.bouncycastle:bcprov-jdk16:${rev_bouncycastle}"
+    //compile "org.bouncycastle:bcprov-jdk16:${rev_bouncycastle}"
     compile "org.jasypt:jasypt:${rev_jasypt}"
     compile "org.jasypt:jasypt-spring3:${rev_jasypt}"
     compile "com.nimbusds:nimbus-jose-jwt:${rev_jose_jwt}"

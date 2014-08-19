@@ -6326,7 +6326,7 @@ th a,
 .alert-list {
   position: absolute;
   left: 50%;
-  z-index: 100;
+  z-index: 10000;
   width: 600px;
 }
 .alert-pupup {

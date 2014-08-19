@@ -1,6 +1,6 @@
 set JAVA_OPTS=%JAVA_OPTS% ^
 -Denv=dev ^
--Dconfig.dir=%TOMCAT_HOME/conf ^
+-Dconfig.dir=%TOMCAT_HOME%/conf ^
 -Xdebug ^
 -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8084 ^
 -Dcom.sun.management.jmxremote ^

@@ -72,9 +72,10 @@ public class UserManager implements IUserManager {
     }
 
     @Override
-    public void createUser(final User user) {
+    public User createUser(final User user) {
         if (!userDAO.exists(user.getEmail())) {
-            userDAO.save(user);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            return userDAO.save(user);
         } else {
             throw new ServiceException(AuthServiceEventLogId.UserAlreadyExists, user.getEmail());
         }
@@ -98,15 +99,6 @@ public class UserManager implements IUserManager {
             }
         }
         throw new ServiceException(AuthServiceEventLogId.NotAuthorized, credentials.getEmail());
-    }
-
-    @Override
-    public User register(Credentials credentials) {
-        if (!userDAO.exists(credentials.getEmail())) {
-            return userDAO.save(new User(credentials.getEmail(), passwordEncoder.encode(credentials.getPassword())));
-        } else {
-            throw new ServiceException(AuthServiceEventLogId.UserAlreadyExists, credentials.getEmail());
-        }
     }
 
     public void setUserDAO(final IUserDAO userDAO) {

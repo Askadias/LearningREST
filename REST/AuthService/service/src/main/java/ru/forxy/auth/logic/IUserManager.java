@@ -19,11 +19,9 @@ public interface IUserManager {
 
     void updateUser(final User user);
 
-    void createUser(final User user);
+    User createUser(final User user);
 
     void deleteUser(final String email);
 
     User login(Credentials credentials);
-
-    User register(Credentials credentials);
 }

@@ -41,7 +41,7 @@
         <div class="navbar-text navbar-right">
             <div ng-if="!!$storage.user">
                 <ul class="list-inline">
-                    <li>{{$storage.user.email}}</li>
+                    <li>{{$storage.user.login}}</li>
                     <li ng-repeat="role in $storage.user.roles">
                         <label class="label label-success">{{role}}</label>
                     </li>

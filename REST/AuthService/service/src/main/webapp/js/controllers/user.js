@@ -140,8 +140,8 @@ angular.module('authServiceAdmin.controllers.user', ['ui.bootstrap'])
             });
         }])*/
 
-    .controller('UserDetailsCtrl', ['$scope', '$stateParams', 'User', '$state',
-        function ($scope, $stateParams, User, $state) {
+    .controller('UserDetailsCtrl', ['$scope', '$stateParams', 'User', '$state', 'AlertMgr',
+        function ($scope, $stateParams, User, $state, AlertMgr) {
             $scope.mode = $stateParams.mode;
 
             $scope.roles = ['user', 'admin'];
@@ -177,8 +177,10 @@ angular.module('authServiceAdmin.controllers.user', ['ui.bootstrap'])
                     case 'new' :
                         User.add($scope.user).then(function (response) {
                             $state.go('users.details', {login : $scope.user.email, mode : 'edit'});
-                        }, function (response) {
-
+                        }, function (error) {
+                            error.data.messages.forEach(function (item) {
+                                AlertMgr.addAlert('danger', item)
+                            });
                         });
                         break;
                     case 'edit' :
@@ -199,7 +201,7 @@ angular.module('authServiceAdmin.controllers.user', ['ui.bootstrap'])
             };
 
             $scope.isSaveDisabled = function () {
-                return $scope.myForm.$invalid || angular.equals($scope.original, $scope.user);
+                return $scope.userForm.$invalid || angular.equals($scope.original, $scope.user);
             };
 
             $scope.discard();

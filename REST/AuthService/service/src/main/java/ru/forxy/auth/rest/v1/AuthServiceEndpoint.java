@@ -1,8 +1,9 @@
 package ru.forxy.auth.rest.v1;
 
 import ru.forxy.auth.logic.IUserManager;
-import ru.forxy.common.rest.AbstractService;
 import ru.forxy.auth.rest.v1.pojo.Credentials;
+import ru.forxy.auth.rest.v1.pojo.User;
+import ru.forxy.common.rest.AbstractService;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -37,7 +38,8 @@ public class AuthServiceEndpoint extends AbstractService {
     public Response register(final Credentials credentials,
                              @Context final UriInfo uriInfo,
                              @Context final HttpHeaders headers) {
-        return respondWith(userManager.register(credentials), uriInfo, headers).build();
+        return respondWith(userManager.createUser(new User(credentials.getEmail(), credentials.getPassword())),
+                uriInfo, headers).build();
     }
 
     public void setUserManager(final IUserManager userManager) {

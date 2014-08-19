@@ -88,6 +88,7 @@
             <ref bean="clientServiceEndpoint"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
+            <!--<bean class="ru.forxy.auth.rest.support.SecurityContextFilter"/>-->
             <bean class="ru.forxy.common.web.JSONValidationProvider">
                 <property name="configuration" ref="service.configuration"/>
                 <property name="validator" ref="payload.validator"/>

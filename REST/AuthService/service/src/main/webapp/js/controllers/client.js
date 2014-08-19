@@ -88,8 +88,8 @@ angular.module('authServiceAdmin.controllers.client', ['ui.bootstrap'])
             $scope.selectPage(1);
         }])
 
-    .controller('ClientDetailsCtrl', ['$scope', '$stateParams', 'Client',
-        function ($scope, $stateParams, Client) {
+    .controller('ClientDetailsCtrl', ['$scope', '$state', '$stateParams', 'Client', 'AlertMgr',
+        function ($scope, $state, $stateParams, Client, AlertMgr) {
             $scope.mode = $stateParams.mode;
 
             $scope.roles = ['reader', 'writer', 'admin'];
@@ -120,9 +120,11 @@ angular.module('authServiceAdmin.controllers.client', ['ui.bootstrap'])
                 switch ($scope.mode) {
                     case 'new' :
                         Client.add($scope.client).then(function (response) {
-
-                        }, function (response) {
-
+                            $state.go('client.details', {clientID : $scope.client.clientID, mode : 'edit'});
+                        }, function (error) {
+                            error.data.messages.forEach(function (item) {
+                                AlertMgr.addAlert('danger', item)
+                            });
                         });
                         break;
                     case 'edit' :
