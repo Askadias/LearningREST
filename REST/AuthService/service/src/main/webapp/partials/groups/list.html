@@ -1,7 +1,7 @@
 <div class="well well-sm">
-    <a ui-sref="clients.details({client_id: 'new', mode: 'new'})" class="btn btn-success">
+    <a ui-sref="groups.details({code: 'new', mode: 'new'})" class="btn btn-success">
         <span class="glyphicon glyphicon-plus-sign"></span>
-        Add Application
+        Add Group
     </a>
 </div>
 <table class="table table-striped">
@@ -18,10 +18,10 @@
     <tbody>
     <tr>
         <td>
-            <input class="form-control" on-enter-blur placeholder="client ID"
-                   on-blur-change="filterResult()" ng-model="filterCriteria.client_id"></td>
+            <input class="form-control" on-enter-blur placeholder="code"
+                   on-blur-change="filterResult()" ng-model="filterCriteria.code"></td>
         <td>
-            <input class="form-control" on-enter-blur placeholder="application name"
+            <input class="form-control" on-enter-blur placeholder="group name"
                    on-blur-change="filterResult()" ng-model="filterCriteria.name">
         </td>
         <td>
@@ -36,32 +36,32 @@
         <td></td>
         <td></td>
     </tr>
-    <tr ng-repeat="client in clients">
-        <td><a ui-sref="clients.details({client_id: client.client_id, mode: 'edit'})">
-            {{client.client_id}}
+    <tr ng-repeat="group in groups">
+        <td><a ui-sref="groups.details({code: group.code, mode: 'edit'})">
+            {{group.code}}
         </a></td>
-        <td>{{client.name}}</td>
-        <td>{{client.updated_by}}</td>
-        <td>{{client.created_by}}</td>
-        <td>{{client.update_date}}</td>
-        <td>{{client.create_date}}</td>
+        <td>{{group.name}}</td>
+        <td>{{group.updated_by}}</td>
+        <td>{{group.created_by}}</td>
+        <td>{{group.update_date}}</td>
+        <td>{{group.create_date}}</td>
         <td>
             <div class="btn-group" style="width: 100px">
-                <a ui-sref="clients.details({client_id: client.client_id, mode: 'view'})"
+                <a ui-sref="groups.details({code: group.code, mode: 'view'})"
                    class="btn btn-default btn-sm">
                     <span class="glyphicon glyphicon-eye-open"></span>
                 </a>
-                <a ui-sref="clients.details({client_id: client.client_id, mode: 'edit'})"
+                <a ui-sref="groups.details({code: group.code, mode: 'edit'})"
                    class="btn btn-default btn-sm">
                     <span class="glyphicon glyphicon-pencil"></span>
                 </a>
-                <button type="button" class="btn btn-danger btn-sm" ng-click="remove(client)">
+                <button type="button" class="btn btn-danger btn-sm" ng-click="remove(group)">
                     <span class="glyphicon glyphicon-trash"></span>
                 </button>
             </div>
         </td>
     </tr>
-    <tr ng-show="!clients || clients.length == 0">
+    <tr ng-show="!groups || groups.length == 0">
         <td colspan="8">
             <div class="alert alert-info">
                 No applications found
@@ -75,8 +75,8 @@
                 max-size="10" class="" boundary-links="true" on-select-page="selectPage(page)"></pagination>
 </div>
 <div class="well well-sm">
-    <a ui-sref="clients.details({client_id: 'new', mode: 'new'})" class="btn btn-success">
+    <a ui-sref="groups.details({code: 'new', mode: 'new'})" class="btn btn-success">
         <span class="glyphicon glyphicon-plus-sign"></span>
-        Add Application
+        Add Group
     </a>
 </div>

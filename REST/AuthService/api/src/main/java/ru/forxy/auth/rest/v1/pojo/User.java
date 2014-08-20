@@ -29,7 +29,7 @@ public class User implements Serializable {
 
     private Gender gender;
 
-    private List<String> roles;
+    private List<String> groups;
 
     private Date updateDate = new Date();
 
@@ -45,6 +45,14 @@ public class User implements Serializable {
     public User(final String email, final String password) {
         this.email = email;
         this.password = password;
+    }
+
+    public User(String email, String login, String firstName, String lastName, Gender gender) {
+        this.email = email;
+        this.login = login;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
     }
 
     public String getEmail() {
@@ -95,12 +103,12 @@ public class User implements Serializable {
         this.gender = gender;
     }
 
-    public List<String> getRoles() {
-        return roles;
+    public List<String> getGroups() {
+        return groups;
     }
 
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
+    public void setGroups(List<String> groups) {
+        this.groups = groups;
     }
 
     @JsonSerialize(using = SimpleJacksonDateSerializer.class)
@@ -190,11 +198,11 @@ public class User implements Serializable {
         } else if (!gender.equals(other.gender)) {
             return false;
         }
-        if (roles == null) {
-            if (other.roles != null) {
+        if (groups == null) {
+            if (other.groups != null) {
                 return false;
             }
-        } else if (!roles.equals(other.roles)) {
+        } else if (!groups.equals(other.groups)) {
             return false;
         }
         if (updateDate == null) {
@@ -238,7 +246,7 @@ public class User implements Serializable {
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
         result = prime * result + ((gender == null) ? 0 : gender.hashCode());
-        result = prime * result + ((roles == null) ? 0 : roles.hashCode());
+        result = prime * result + ((groups == null) ? 0 : groups.hashCode());
         result = prime * result + ((updateDate == null) ? 0 : updateDate.hashCode());
         result = prime * result + ((updatedBy == null) ? 0 : updatedBy.hashCode());
         result = prime * result + ((createDate == null) ? 0 : createDate.hashCode());
@@ -248,8 +256,8 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("{email=%s, login=%s, firstName=%s, lastName=%s, gender=%c, " +
-                        "updateDate=%s, updatedBy=%s, createDate=%s, createdBy=%s, roles=%s}",
-                email, login, firstName, lastName, gender, updateDate, updatedBy, createDate, createdBy, roles);
+        return String.format("{email=%s, login=%s, firstName=%s, lastName=%s, gender=%s, " +
+                        "updateDate=%s, updatedBy=%s, createDate=%s, createdBy=%s, groups=%s}",
+                email, login, firstName, lastName, gender, updateDate, updatedBy, createDate, createdBy, groups);
     }
 }

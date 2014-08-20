@@ -10,6 +10,7 @@ import ru.forxy.common.exceptions.ServiceException;
 import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.common.pojo.SortDirection;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -73,6 +74,7 @@ public class ClientManager implements IClientManager {
         if (client.getClientID() == null) {
             client.setClientID(UUID.randomUUID().toString());
         }
+        client.setCreateDate(new Date());
         if (!clientDAO.exists(client.getClientID())) {
             clientDAO.save(client);
         } else {

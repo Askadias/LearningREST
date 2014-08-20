@@ -122,6 +122,17 @@
         </property>
     </bean>
 
+    <bean id="groupDAO.mongo.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
+          autowire-candidate="false"
+          p:proxyInterfaces="ru.forxy.auth.db.dao.IGroupDAO"
+          p:target-ref="groupDAO.impl.mongo">
+        <property name="interceptorNames">
+            <list>
+                <idref bean="performance.dao.loggingInterceptor"/>
+            </list>
+        </property>
+    </bean>
+
     <bean id="tokenDAO.mongo.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
           autowire-candidate="false"
           p:proxyInterfaces="ru.forxy.auth.db.dao.ITokenDAO"
@@ -175,6 +186,17 @@
           autowire-candidate="false"
           p:proxyInterfaces="ru.forxy.auth.logic.IClientManager"
           p:target-ref="clientManager.impl">
+        <property name="interceptorNames">
+            <list>
+                <idref bean="impl.loggingInterceptor"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="groupManager.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
+          autowire-candidate="false"
+          p:proxyInterfaces="ru.forxy.auth.logic.IGroupManager"
+          p:target-ref="groupManager.impl">
         <property name="interceptorNames">
             <list>
                 <idref bean="impl.loggingInterceptor"/>

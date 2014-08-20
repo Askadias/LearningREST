@@ -84,7 +84,7 @@ public class SecurityContextFilter implements ContainerRequestFilter {
 
             @Override
             public boolean isUserInRole(String role) {
-                return user.getRoles() != null && user.getRoles().contains(role);
+                return user.getGroups() != null && user.getGroups().contains(role);
             }
 
             @Override

@@ -42,7 +42,7 @@
             <div ng-if="!!$storage.user">
                 <ul class="list-inline">
                     <li>{{$storage.user.login}}</li>
-                    <li ng-repeat="role in $storage.user.roles">
+                    <li ng-repeat="role in $storage.user.groups">
                         <label class="label label-success">{{role}}</label>
                     </li>
                 </ul>
@@ -72,8 +72,8 @@
                             Add User
                         </a>
                     </li>
-                    <li>
-                        <a href="#">
+                    <li ng-class="{active: ('groups.list' | includedByState)}">
+                        <a ui-sref="groups.list">
                             Manage Groups
                         </a>
                     </li>

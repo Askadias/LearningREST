@@ -134,7 +134,7 @@
                             <th>
                                 <a href="" class="btn glyphicon glyphicon-plus-sign" style="color: #5cb85c"
                                    ng-disabled="userForm.role.$invalid || !newRole"
-                                   ng-click="user.roles.push(newRole); newRole = null"></a>
+                                   ng-click="user.groups.push(newRole); newRole = null"></a>
                             </th>
                         </tr>
                         </thead>
@@ -147,10 +147,10 @@
                                 </p>
                             </td>
                         </tr>
-                        <tr ng-repeat="role in user.roles track by $index">
+                        <tr ng-repeat="role in user.groups track by $index">
                             <td><span class="label label-success">{{role}}</span></td>
                             <td><a href="" class="btn glyphicon glyphicon-minus-sign"
-                                   ng-click="user.roles.splice($index, 1)"></a></td>
+                                   ng-click="user.groups.splice($index, 1)"></a></td>
                         </tr>
                         </tbody>
                     </table>

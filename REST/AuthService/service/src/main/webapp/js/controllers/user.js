@@ -76,8 +76,8 @@ angular.module('authServiceAdmin.controllers.user', ['ui.bootstrap'])
 
             //call back function that we passed to our custom directive sortBy, will be called when clicking on any field to sort
             $scope.onSort = function (sortedBy, sortDir) {
-                $scope.filterCriteria.sortDir = sortDir;
-                $scope.filterCriteria.sortedBy = sortedBy;
+                $scope.filterCriteria.sort_dir = sortDir;
+                $scope.filterCriteria.sorted_by = sortedBy;
                 $scope.filterCriteria.page = 1;
                 $scope.fetchResult().then(function () {
                     //The request fires correctly but sometimes the ui doesn't update, that's a fix
@@ -152,7 +152,7 @@ angular.module('authServiceAdmin.controllers.user', ['ui.bootstrap'])
                 first_name: '',
                 last_name: '',
                 gender: null,
-                roles: []
+                groups: []
             };
             $scope.original = angular.copy($scope.user);
 

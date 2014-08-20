@@ -5,6 +5,7 @@ var authServiceAdmin = angular.module('authServiceAdmin', [
     'authServiceAdmin.controllers.common',
     'authServiceAdmin.controllers.user',
     'authServiceAdmin.controllers.client',
+    'authServiceAdmin.controllers.group',
     'authServiceAdmin.controllers.token',
     'authServiceAdmin.services',
     'authServiceAdmin.directives',
@@ -121,9 +122,34 @@ var authServiceAdmin = angular.module('authServiceAdmin', [
                     }
                 })
                 .state('clients.details', {
-                    url: '/clients/:clientID/:mode/',
+                    url: '/clients/:client_id/:mode/',
                     templateUrl: 'partials/clients/details.html',
                     controller: 'ClientDetailsCtrl',
+                    data: {
+                        access: access.admin
+                    }
+                })
+                .state('groups', {
+                    abstract: true,
+                    url: '/app',
+                    templateUrl: 'partials/layout.html',
+                    controller: 'MainCtrl',
+                    data: {
+                        access: access.user
+                    }
+                })
+                .state('groups.list', {
+                    url: '/groups/',
+                    templateUrl: 'partials/groups/list.html',
+                    controller: 'GroupsListCtrl',
+                    data: {
+                        access: access.user
+                    }
+                })
+                .state('groups.details', {
+                    url: '/groups/:code/:mode/',
+                    templateUrl: 'partials/groups/details.html',
+                    controller: 'GroupDetailsCtrl',
                     data: {
                         access: access.admin
                     }
@@ -146,7 +172,7 @@ var authServiceAdmin = angular.module('authServiceAdmin', [
                     }
                 })
                 .state('tokens.details', {
-                    url: '/tokens/:clientID/:mode/',
+                    url: '/tokens/:token_key/:mode/',
                     templateUrl: 'partials/tokens/details.html',
                     controller: 'TokenDetailsCtrl',
                     data: {

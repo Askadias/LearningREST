@@ -13,22 +13,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Document(collection = "client")
-public class Client implements Serializable {
+@Document(collection = "group")
+public class Group implements Serializable {
 
-    private static final long serialVersionUID = -6795472289012239081L;
+    private static final long serialVersionUID = -6795472289012335081L;
 
     @Id
-    private String clientID;
-    private String secret;
+    private String code;
 
     @Indexed(unique = true)
     private String name;
     private String description;
-    private String webUri;
-    private List<String> redirectUris = new ArrayList<>();
     private List<String> scopes = new ArrayList<>();
-    private List<String> audiences = new ArrayList<>();
 
     private Date updateDate = new Date();
 
@@ -38,29 +34,21 @@ public class Client implements Serializable {
 
     private String createdBy;
 
-    public Client() {}
+    public Group() {}
 
-    public Client(final String clientID, final String name, final String updatedBy, final String createdBy) {
-        this.clientID = clientID;
+    public Group(final String code, final String name, final String updatedBy, final String createdBy) {
+        this.code = code;
         this.name = name;
         this.updatedBy = updatedBy;
         this.createdBy = createdBy;
     }
 
-    public String getClientID() {
-        return clientID;
+    public String getCode() {
+        return code;
     }
 
-    public void setClientID(final String clientID) {
-        this.clientID = clientID;
-    }
-
-    public String getSecret() {
-        return secret;
-    }
-
-    public void setSecret(final String secret) {
-        this.secret = secret;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getName() {
@@ -79,36 +67,12 @@ public class Client implements Serializable {
         this.description = description;
     }
 
-    public String getWebUri() {
-        return webUri;
-    }
-
-    public void setWebUri(final String webUri) {
-        this.webUri = webUri;
-    }
-
-    public List<String> getRedirectUris() {
-        return redirectUris;
-    }
-
-    public void setRedirectUris(final List<String> redirectUris) {
-        this.redirectUris = redirectUris;
-    }
-
     public List<String> getScopes() {
         return scopes;
     }
 
     public void setScopes(final List<String> scopes) {
         this.scopes = scopes;
-    }
-
-    public List<String> getAudiences() {
-        return audiences;
-    }
-
-    public void setAudiences(final List<String> audiences) {
-        this.audiences = audiences;
     }
 
     @JsonSerialize(using = SimpleJacksonDateSerializer.class)
@@ -155,19 +119,12 @@ public class Client implements Serializable {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        final Client other = (Client) obj;
-        if (clientID == null) {
-            if (other.clientID != null) {
+        final Group other = (Group) obj;
+        if (code == null) {
+            if (other.code != null) {
                 return false;
             }
-        } else if (!clientID.equals(other.clientID)) {
-            return false;
-        }
-        if (secret == null) {
-            if (other.secret != null) {
-                return false;
-            }
-        } else if (!secret.equals(other.secret)) {
+        } else if (!code.equals(other.code)) {
             return false;
         }
         if (name == null) {
@@ -184,32 +141,11 @@ public class Client implements Serializable {
         } else if (!description.equals(other.description)) {
             return false;
         }
-        if (webUri == null) {
-            if (other.webUri != null) {
-                return false;
-            }
-        } else if (!webUri.equals(other.webUri)) {
-            return false;
-        }
-        if (redirectUris == null) {
-            if (other.redirectUris != null) {
-                return false;
-            }
-        } else if (!redirectUris.equals(other.redirectUris)) {
-            return false;
-        }
         if (scopes == null) {
             if (other.scopes != null) {
                 return false;
             }
         } else if (!scopes.equals(other.scopes)) {
-            return false;
-        }
-        if (audiences == null) {
-            if (other.audiences != null) {
-                return false;
-            }
-        } else if (!audiences.equals(other.audiences)) {
             return false;
         }
         if (updateDate == null) {
@@ -247,14 +183,10 @@ public class Client implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((clientID == null) ? 0 : clientID.hashCode());
-        result = prime * result + ((secret == null) ? 0 : secret.hashCode());
+        result = prime * result + ((code == null) ? 0 : code.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((description == null) ? 0 : description.hashCode());
-        result = prime * result + ((webUri == null) ? 0 : webUri.hashCode());
-        result = prime * result + ((redirectUris == null) ? 0 : redirectUris.hashCode());
         result = prime * result + ((scopes == null) ? 0 : scopes.hashCode());
-        result = prime * result + ((audiences == null) ? 0 : audiences.hashCode());
         result = prime * result + ((updateDate == null) ? 0 : updateDate.hashCode());
         result = prime * result + ((updatedBy == null) ? 0 : updatedBy.hashCode());
         result = prime * result + ((createDate == null) ? 0 : createDate.hashCode());
@@ -264,9 +196,8 @@ public class Client implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("{clientID=%s, name=%s, description=%s, webUri=%s, updateDate=%s, updatedBy=%s, " +
-                        "createDate=%s, createdBy=%s, redirectUris=%s, scopes=%s, audiences=%s}",
-                clientID, name, description, webUri, updateDate, updatedBy, createDate,
-                createdBy, redirectUris, scopes, audiences);
+        return String.format("{code=%s, name=%s, description=%s, updateDate=%s, updatedBy=%s, createDate=%s, " +
+                        "createdBy=%s, scopes=%s}",
+                code, name, description, updateDate, updatedBy, createDate, createdBy, scopes);
     }
 }

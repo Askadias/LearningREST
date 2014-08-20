@@ -9,39 +9,39 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import ru.forxy.auth.db.dao.IGroupDAO;
+import ru.forxy.auth.rest.v1.pojo.Group;
 import ru.forxy.common.status.pojo.ComponentStatus;
 import ru.forxy.common.status.pojo.StatusType;
-import ru.forxy.auth.db.dao.IClientDAO;
-import ru.forxy.auth.rest.v1.pojo.Client;
 
 import java.util.Date;
 
 /**
  * Mongo DB based data source for auths
  */
-public class ClientDAO implements IClientDAO {
+public class GroupDAO implements IGroupDAO {
 
     MongoTemplate mongoTemplate;
 
     @Override
-    public Iterable<Client> findAll(final Sort sort) {
-        return mongoTemplate.find(Query.query(new Criteria()).with(sort), Client.class);
+    public Iterable<Group> findAll(final Sort sort) {
+        return mongoTemplate.find(Query.query(new Criteria()).with(sort), Group.class);
     }
 
     @Override
-    public Page<Client> findAll(final Pageable pageable) {
+    public Page<Group> findAll(final Pageable pageable) {
         return new PageImpl<>(
-                mongoTemplate.find(Query.query(new Criteria()).with(pageable), Client.class),
+                mongoTemplate.find(Query.query(new Criteria()).with(pageable), Group.class),
                 pageable, count()
         );
     }
 
     @Override
-    public Page<Client> findAll(final Pageable pageable, final Client filter) {
+    public Page<Group> findAll(final Pageable pageable, final Group filter) {
         Query query = Query.query(new Criteria()).with(pageable);
         if (filter != null) {
-            if (StringUtils.isNotEmpty(filter.getClientID())) {
-                query.addCriteria(new Criteria("_id").regex(filter.getClientID(), "i"));
+            if (StringUtils.isNotEmpty(filter.getCode())) {
+                query.addCriteria(new Criteria("_id").regex(filter.getCode(), "i"));
             }
             if (StringUtils.isNotEmpty(filter.getName())) {
                 query.addCriteria(new Criteria("name").regex(filter.getName(), "i"));
@@ -54,65 +54,65 @@ public class ClientDAO implements IClientDAO {
             }
         }
 
-        return new PageImpl<>(mongoTemplate.find(query, Client.class), pageable, count());
+        return new PageImpl<>(mongoTemplate.find(query, Group.class), pageable, count());
     }
 
     @Override
-    public <S extends Client> S save(final S client) {
+    public <S extends Group> S save(final S client) {
         mongoTemplate.save(client);
         return client;
     }
 
     @Override
-    public <S extends Client> Iterable<S> save(final Iterable<S> clients) {
+    public <S extends Group> Iterable<S> save(final Iterable<S> clients) {
         throw null;
     }
 
     @Override
-    public Client findOne(final String clientID) {
-        return mongoTemplate.findOne(Query.query(Criteria.where("clientID").is(clientID)), Client.class);
+    public Group findOne(final String code) {
+        return mongoTemplate.findOne(Query.query(Criteria.where("code").is(code)), Group.class);
     }
 
     @Override
-    public boolean exists(final String clientID) {
-        return mongoTemplate.findOne(Query.query(Criteria.where("clientID").is(clientID)), Client.class) != null;
+    public boolean exists(final String code) {
+        return mongoTemplate.findOne(Query.query(Criteria.where("code").is(code)), Group.class) != null;
     }
 
     @Override
-    public Iterable<Client> findAll() {
-        return mongoTemplate.findAll(Client.class);
+    public Iterable<Group> findAll() {
+        return mongoTemplate.findAll(Group.class);
     }
 
     @Override
-    public Iterable<Client> findAll(final Iterable<String> clientIDs) {
-        return mongoTemplate.find(Query.query(Criteria.where("clientID").in(clientIDs)), Client.class);
+    public Iterable<Group> findAll(final Iterable<String> codes) {
+        return mongoTemplate.find(Query.query(Criteria.where("code").in(codes)), Group.class);
     }
 
     @Override
     public long count() {
-        return mongoTemplate.count(null, Client.class);
+        return mongoTemplate.count(null, Group.class);
     }
 
     @Override
-    public void delete(final String clientID) {
-        mongoTemplate.remove(Query.query(Criteria.where("clientID").is(clientID)), Client.class);
+    public void delete(final String code) {
+        mongoTemplate.remove(Query.query(Criteria.where("code").is(code)), Group.class);
     }
 
     @Override
-    public void delete(final Client client) {
+    public void delete(final Group client) {
         mongoTemplate.remove(client);
     }
 
     @Override
-    public void delete(final Iterable<? extends Client> clients) {
-        for (Client client : clients) {
+    public void delete(final Iterable<? extends Group> clients) {
+        for (Group client : clients) {
             mongoTemplate.remove(client);
         }
     }
 
     @Override
     public void deleteAll() {
-        mongoTemplate.remove(null, Client.class);
+        mongoTemplate.remove(null, Group.class);
     }
 
     public void setMongoTemplate(final MongoTemplate mongoTemplate) {
@@ -131,7 +131,7 @@ public class ClientDAO implements IClientDAO {
 
             long timeStart = new Date().getTime();
             try {
-                mongoTemplate.count(null, Client.class);
+                mongoTemplate.count(null, Group.class);
             } catch (final Exception e) {
                 exceptionMessage = e.getMessage();
                 exceptionDetails = ExceptionUtils.getStackTrace(e);
@@ -144,7 +144,7 @@ public class ClientDAO implements IClientDAO {
         } else {
             statusType = StatusType.RED;
         }
-        return new ComponentStatus("Client DAO", location, statusType, null, ComponentStatus.ComponentType.DB,
+        return new ComponentStatus("Group DAO", location, statusType, null, ComponentStatus.ComponentType.DB,
                 responseTime, null, exceptionMessage, exceptionDetails);
     }
 }

@@ -1,10 +1,11 @@
 package ru.forxy.auth.rest.v1;
 
 import ru.forxy.auth.logic.IUserManager;
+import ru.forxy.auth.rest.v1.pojo.Gender;
+import ru.forxy.auth.rest.v1.pojo.User;
 import ru.forxy.common.pojo.SortDirection;
 import ru.forxy.common.pojo.StatusEntity;
 import ru.forxy.common.rest.AbstractService;
-import ru.forxy.auth.rest.v1.pojo.User;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -32,12 +33,17 @@ public class UserServiceEndpoint extends AbstractService {
                              @QueryParam("size") final Integer size,
                              @QueryParam("sortDir") final SortDirection sortDirection,
                              @QueryParam("sortedBy") final String sortedBy,
-                             @QueryParam("") final User filter,
+                             @QueryParam("email") final String emailFilter,
+                             @QueryParam("login") final String loginFilter,
+                             @QueryParam("first_name") final String firstNameFilter,
+                             @QueryParam("last_name") final String lastNameFilter,
+                             @QueryParam("gender") final Gender genderFilter,
                              @Context final UriInfo uriInfo,
                              @Context final HttpHeaders headers) {
         return respondWith(page == null && size == null ?
                         userServiceFacade.getAllUsers() :
-                        userServiceFacade.getUsers(page, size, sortDirection, sortedBy, filter),
+                        userServiceFacade.getUsers(page, size, sortDirection, sortedBy,
+                                new User(emailFilter, loginFilter, firstNameFilter, lastNameFilter, genderFilter)),
                 uriInfo, headers).build();
     }
 

@@ -47,8 +47,8 @@ angular.module('authServiceAdmin.services', ['restangular'])
             page: function (query) {
                 return Restangular.one('tokens').get(query);
             },
-            get: function (tokenKey) {
-                return Restangular.one('tokens', tokenKey).get();
+            get: function (token_key) {
+                return Restangular.one('tokens', token_key).get();
             },
             add: function (token) {
                 return Restangular.all('tokens').post(token);
@@ -67,8 +67,8 @@ angular.module('authServiceAdmin.services', ['restangular'])
             page: function (query) {
                 return Restangular.one('clients').get(query);
             },
-            get: function (clientID) {
-                return Restangular.one('clients', clientID).get();
+            get: function (client_id) {
+                return Restangular.one('clients', client_id).get();
             },
             add: function (client) {
                 return Restangular.all('clients').post(client);
@@ -78,6 +78,29 @@ angular.module('authServiceAdmin.services', ['restangular'])
             },
             delete: function (client) {
                 return Restangular.one('clients', client.client_id).remove();
+            }
+        }
+    }])
+
+    .factory('Group', ['Restangular', function (Restangular) {
+        return {
+            all: function () {
+                return Restangular.all('groups').getList();
+            },
+            page: function (query) {
+                return Restangular.one('groups').get(query);
+            },
+            get: function (code) {
+                return Restangular.one('groups', code).get();
+            },
+            add: function (group) {
+                return Restangular.all('groups').post(group);
+            },
+            save: function (group) {
+                return Restangular.one('groups', group.code).put(group);
+            },
+            delete: function (group) {
+                return Restangular.one('groups', group.code).remove();
             }
         }
     }])
@@ -242,7 +265,7 @@ angular.module('authServiceAdmin.services', ['restangular'])
 
             var guest = {
                 firstName: 'Guest',
-                roles: ['public'],
+                groups: ['public'],
                 isLoggedIn: false
             };
             var accessLevels = routingConfig.accessLevels;
@@ -256,9 +279,9 @@ angular.module('authServiceAdmin.services', ['restangular'])
             return {
                 authorize: function (accessLevel, role) {
                     var isAuthorized = false;
-                    if (role === undefined && !!$sessionStorage.user && !!$sessionStorage.user.roles) {
-                        for (var userRole in $sessionStorage.user.roles) {
-                            isAuthorized |= this.authorize(accessLevel, $sessionStorage.user.roles[userRole])
+                    if (role === undefined && !!$sessionStorage.user && !!$sessionStorage.user.groups) {
+                        for (var groupIdx in $sessionStorage.user.groups) {
+                            isAuthorized |= this.authorize(accessLevel, $sessionStorage.user.groups[groupIdx])
                         }
                     }
                     else if (!!role){

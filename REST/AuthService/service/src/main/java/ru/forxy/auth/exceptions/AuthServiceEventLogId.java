@@ -39,13 +39,21 @@ public enum AuthServiceEventLogId implements EventLogBase {
             "Invalid page number provided: '%1$s'",
             EventType.InvalidInput),
 
+    GroupAlreadyExists(AuthServiceEventLogId.BASE_EVENT_LOG_ID + 9, 400,
+            "Group with code '%1$s' already exists.",
+            EventType.InvalidInput),
+
+    GroupNotFound(AuthServiceEventLogId.BASE_EVENT_LOG_ID + 8, 404,
+            "Group with code '%1$s' is not found.",
+            EventType.InvalidInput),
+
     ClientNotFound(AuthServiceEventLogId.BASE_EVENT_LOG_ID + 8, 404,
             "Client with ID '%1$s' is not found.",
             EventType.InvalidInput),
 
     ClientAlreadyExists(AuthServiceEventLogId.BASE_EVENT_LOG_ID + 9, 400,
             "Client with ID '%1$s' already exists.",
-            EventType.InvalidInput);
+                        EventType.InvalidInput);
 
     private static final int BASE_EVENT_LOG_ID = 20000;
 

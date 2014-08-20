@@ -26,12 +26,12 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public List<User> findByLastName(final String lastName) {
-        return mongoTemplate.find(Query.query(Criteria.where("lastName").is(lastName)), User.class);
+        return mongoTemplate.find(Query.query(Criteria.where("last_name").is(lastName)), User.class);
     }
 
     @Override
     public List<User> findByFirstName(final String firstName) {
-        return mongoTemplate.find(Query.query(Criteria.where("firstName").is(firstName)), User.class);
+        return mongoTemplate.find(Query.query(Criteria.where("first_name").is(firstName)), User.class);
     }
 
     @Override
@@ -58,10 +58,10 @@ public class UserDAO implements IUserDAO {
                 query.addCriteria(new Criteria("login").regex(filter.getLogin(), "i"));
             }
             if (StringUtils.isNotEmpty(filter.getFirstName())) {
-                query.addCriteria(new Criteria("firstName").regex(filter.getFirstName(), "i"));
+                query.addCriteria(new Criteria("first_name").regex(filter.getFirstName(), "i"));
             }
             if (StringUtils.isNotEmpty(filter.getLastName())) {
-                query.addCriteria(new Criteria("lastName").regex(filter.getLastName(), "i"));
+                query.addCriteria(new Criteria("last_name").regex(filter.getLastName(), "i"));
             }
             if (filter.getGender() != null) {
                 query.addCriteria(new Criteria("gender").is(filter.getGender()));

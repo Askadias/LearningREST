@@ -21,6 +21,9 @@
     <bean id="clientManager.impl" class="ru.forxy.auth.logic.ClientManager"
           p:clientDAO-ref="clientDAO.mongo.perf"/>
 
+    <bean id="groupManager.impl" class="ru.forxy.auth.logic.GroupManager"
+          p:groupDAO-ref="groupDAO.mongo.perf"/>
+
     <bean id="tokenManager.impl" class="ru.forxy.auth.logic.TokenManager"
           p:tokenDAO-ref="tokenDAO.mongo.perf"/>
 
@@ -32,13 +35,16 @@
           p:userManager-ref="userManager.perf"/>
 
     <bean id="tokenGrantServiceEndpoint" class="ru.forxy.auth.rest.v1.TokenGrantServiceEndpoint"
-          p:tokenManager-ref="tokenManager.impl"/>
+          p:tokenManager-ref="tokenManager.perf"/>
 
     <bean id="clientServiceEndpoint" class="ru.forxy.auth.rest.v1.ClientServiceEndpoint"
-          p:clientServiceFacade-ref="clientManager.impl"/>
+          p:clientServiceFacade-ref="clientManager.perf"/>
+
+    <bean id="groupServiceEndpoint" class="ru.forxy.auth.rest.v1.GroupServiceEndpoint"
+          p:groupServiceFacade-ref="groupManager.perf"/>
 
     <!-- OAuth business logic component-->
-    <bean id="oauthProvider" class="ru.forxy.auth.logic.OAuthManager"
+    <!--<bean id="oauthProvider" class="ru.forxy.auth.logic.OAuthManager"
           p:clientManager-ref="clientManager.impl"
-          p:tokenManager-ref="tokenManager.impl"/>
+          p:tokenManager-ref="tokenManager.impl"/>-->
 </beans>

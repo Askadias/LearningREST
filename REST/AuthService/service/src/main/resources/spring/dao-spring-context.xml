@@ -30,21 +30,27 @@
     <mongo:repositories base-package='ru.forxy.auth.db.dao.mongo'/>
 
 
-    <bean id="mappingContext" class="org.springframework.data.mongodb.core.mapping.MongoMappingContext" />
+    <bean id="mappingContext" class="org.springframework.data.mongodb.core.mapping.MongoMappingContext">
+        <property name="fieldNamingStrategy">
+            <bean class="org.springframework.data.mongodb.core.mapping.SnakeCaseFieldNamingStrategy"/>
+        </property>
+    </bean>
 
     <bean id="defaultMongoTypeMapper" class="org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper">
-        <constructor-arg name="typeKey"><null/></constructor-arg>
+        <constructor-arg name="typeKey">
+            <null/>
+        </constructor-arg>
     </bean>
 
     <bean id="mappingMongoConverter" class="org.springframework.data.mongodb.core.convert.MappingMongoConverter">
-        <constructor-arg name="mongoDbFactory" ref="factory" />
-        <constructor-arg name="mappingContext" ref="mappingContext" />
-        <property name="typeMapper" ref="defaultMongoTypeMapper" />
+        <constructor-arg name="mongoDbFactory" ref="factory"/>
+        <constructor-arg name="mappingContext" ref="mappingContext"/>
+        <property name="typeMapper" ref="defaultMongoTypeMapper"/>
     </bean>
 
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-        <constructor-arg name="mongoDbFactory" ref="factory" />
-        <constructor-arg name="mongoConverter" ref="mappingMongoConverter" />
+        <constructor-arg name="mongoDbFactory" ref="factory"/>
+        <constructor-arg name="mongoConverter" ref="mappingMongoConverter"/>
     </bean>
 
     <bean id="userDAO.impl.mongo" class="ru.forxy.auth.db.dao.mongo.UserDAO"
@@ -52,6 +58,10 @@
           p:mongoTemplate-ref="mongoTemplate"/>
 
     <bean id="clientDAO.impl.mongo" class="ru.forxy.auth.db.dao.mongo.ClientDAO"
+          autowire-candidate="false"
+          p:mongoTemplate-ref="mongoTemplate"/>
+
+    <bean id="groupDAO.impl.mongo" class="ru.forxy.auth.db.dao.mongo.GroupDAO"
           autowire-candidate="false"
           p:mongoTemplate-ref="mongoTemplate"/>
 

@@ -14,14 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import ru.forxy.auth.db.dao.IUserDAO;
+import ru.forxy.auth.exceptions.AuthServiceEventLogId;
 import ru.forxy.auth.rest.v1.UserServiceEndpoint;
+import ru.forxy.auth.rest.v1.pojo.User;
 import ru.forxy.auth.test.BaseUserServiceTest;
 import ru.forxy.common.exceptions.ServiceException;
 import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.common.pojo.SortDirection;
-import ru.forxy.auth.db.dao.IUserDAO;
-import ru.forxy.auth.exceptions.AuthServiceEventLogId;
-import ru.forxy.auth.rest.v1.pojo.User;
 
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
@@ -110,7 +110,8 @@ public class UserServiceImplTest extends BaseUserServiceTest {
         EasyMock.expect(userDAOMock.findAll(EasyMock.anyObject(Pageable.class), EasyMock.anyObject(User.class)))
                 .andReturn(new PageImpl<User>(users));
         EasyMock.replay(userDAOMock);
-        Response response = userService.getUsers(1, 10, SortDirection.ASC, "email", null, uriInfo, headers);
+        Response response = userService.getUsers(1, 10, SortDirection.ASC, "email", null, null, null, null, null,
+                uriInfo, headers);
         EasyMock.reset(userDAOMock);
         Assert.assertNotNull(response);
         Assert.assertNotNull(response.getEntity());

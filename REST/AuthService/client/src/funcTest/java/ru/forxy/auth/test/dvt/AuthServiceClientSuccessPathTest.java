@@ -33,31 +33,31 @@ public class AuthServiceClientSuccessPathTest extends BaseAuthServiceTest {
         // prepare test data
         String transactionGUID = UUID.randomUUID().toString();
         Client expectedClient = new Client();
-        expectedClient.setApplicationName("Test");
-        expectedClient.setClientSecret("secret");
-        expectedClient.setApplicationDescription("Description");
+        expectedClient.setName("Test");
+        expectedClient.setSecret("secret");
+        expectedClient.setDescription("Description");
         StatusEntity status;
         try {
             // creating auth
             status = authServiceClient.createClient(transactionGUID, expectedClient);
             Assert.assertEquals("200", status.getCode());
-            Client actualClient = authServiceClient.getClient(transactionGUID, expectedClient.getApplicationName());
-            Assert.assertEquals(expectedClient.getApplicationName(), actualClient.getApplicationName());
+            Client actualClient = authServiceClient.getClient(transactionGUID, expectedClient.getName());
+            Assert.assertEquals(expectedClient.getName(), actualClient.getName());
 
             // updating auth
-            expectedClient.setApplicationName("Test2");
+            expectedClient.setName("Test2");
             status = authServiceClient.updateClient(transactionGUID, expectedClient);
             Assert.assertEquals("200", status.getCode());
-            actualClient = authServiceClient.getClient(transactionGUID, expectedClient.getApplicationName());
-            Assert.assertEquals(expectedClient.getApplicationName(), actualClient.getApplicationName());
+            actualClient = authServiceClient.getClient(transactionGUID, expectedClient.getName());
+            Assert.assertEquals(expectedClient.getName(), actualClient.getName());
         } catch (Throwable th) {
             th.printStackTrace();
         } finally {
             // deleting auth
-            status = authServiceClient.deleteClient(transactionGUID, expectedClient.getApplicationName());
+            status = authServiceClient.deleteClient(transactionGUID, expectedClient.getName());
             Assert.assertEquals("200", status.getCode());
             try {
-                authServiceClient.getClient(transactionGUID, expectedClient.getApplicationName());
+                authServiceClient.getClient(transactionGUID, expectedClient.getName());
                 Assert.fail();
             } catch (ClientException e) {
                 Assert.assertNotNull(e.getErrorEntity());

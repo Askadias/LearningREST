@@ -1,7 +1,7 @@
 <div>
     <h1>Application</h1>
 
-    <form name="clientForm" class="form-horizontal">
+    <form name="client_form" class="form-horizontal">
         <div class="well well-small">
             <button class="btn btn-small btn-save btn-success" ng-disabled="isSaveDisabled()" ng-click="save()">
                 <span class="glyphicon glyphicon-ok-circle icon-white"></span>
@@ -17,15 +17,15 @@
         <tabset>
             <tab heading="General">
                 <div class="control-group"
-                     ng-class="{ 'has-error' : clientForm.applicationName.$invalid && !clientForm.applicationName.$pristine }">
-                    <label class="control-label" for="applicationName">Application Name:</label>
+                     ng-class="{ 'has-error' : client_form.name.$invalid && !client_form.name.$pristine }">
+                    <label class="control-label" for="name">Application Name:</label>
 
                     <div class="controls">
-                        <input id="applicationName" name="applicationName" type="text"
+                        <input id="name" name="name" type="text"
                                class="form-control ng-pristine ng-valid"
-                               ng-model="client.application_name" required/>
+                               ng-model="client.name" required/>
 
-                        <p ng-show="clientForm.applicationName.$invalid && !clientForm.applicationName.$pristine"
+                        <p ng-show="client_form.name.$invalid && !client_form.name.$pristine"
                            class="help-block">
                             Application Name is required.
                         </p>
@@ -33,10 +33,10 @@
                 </div>
 
                 <div class="control-group">
-                    <label class="control-label" for="clientID">Client ID:</label>
+                    <label class="control-label" for="client_id">Client ID:</label>
 
                     <div class="controls">
-                        <input id="clientID" name="clientID" type="text" class="form-control ng-pristine ng-valid"
+                        <input id="client_id" name="client_id" type="text" class="form-control ng-pristine ng-valid"
                                ng-model="client.client_id" ng-disabled="mode!='new'"/>
 
                         <p class="help-block">
@@ -50,14 +50,14 @@
                 </div>
 
                 <div class="control-group"
-                     ng-class="{ 'has-error' : clientForm.secret.$invalid && !clientForm.secret.$pristine }">
+                     ng-class="{ 'has-error' : client_form.secret.$invalid && !client_form.secret.$pristine }">
                     <label class="control-label" for="secret">Secret:</label>
 
                     <div class="controls">
                         <input id="secret" name="secret" type="password" class="form-control ng-pristine ng-valid"
-                               ng-model="client.client_secret" required/>
+                               ng-model="client.secret" required/>
 
-                        <p ng-show="clientForm.secret.$invalid && !clientForm.secret.$pristine"
+                        <p ng-show="client_form.secret.$invalid && !client_form.secret.$pristine"
                            class="help-block">
                             Client's Secret password is required.
                         </p>
@@ -65,14 +65,14 @@
                 </div>
 
                 <div class="control-group"
-                     ng-class="{ 'has-error' : clientForm.url.$invalid && !clientForm.url.$pristine }">
-                    <label class="control-label" for="url">Web URI:</label>
+                     ng-class="{ 'has-error' : client_form.web_uri.$invalid && !client_form.web_uri.$pristine }">
+                    <label class="control-label" for="web_uri">Web URI:</label>
 
                     <div class="controls">
-                        <input id="url" name="url" type="url" class="form-control ng-pristine ng-valid"
-                               ng-model="client.application_web_uri"/>
+                        <input id="web_uri" name="web_uri" type="url" class="form-control ng-pristine ng-valid"
+                               ng-model="client.web_uri"/>
 
-                        <p ng-show="clientForm.url.$invalid && !clientForm.url.$pristine"
+                        <p ng-show="client_form.web_uri.$invalid && !client_form.web_uri.$pristine"
                            class="help-block">
                             Client's Web Application URL is required
                         </p>
@@ -84,7 +84,7 @@
 
                     <div class="controls">
                         <textarea id="description" name="description" class="form-control ng-pristine ng-valid"
-                                  ng-model="client.application_description"></textarea>
+                                  ng-model="client.description"></textarea>
 
                         <p class="help-block">Human-readable text description</p>
                     </div>
@@ -92,11 +92,11 @@
 
 
                 <div class="control-group"
-                     ng-class="{ 'has-error' : clientForm.redirectUrl.$invalid && clientForm.redirectUrl.$dirty }">
-                    <label class="control-label" for="redirectUrl">Redirect URLs:</label>
+                     ng-class="{ 'has-error' : client_form.redirect_uri.$invalid && client_form.redirect_uri.$dirty }">
+                    <label class="control-label" for="redirect_uri">Redirect URIs:</label>
 
                     <div class="controls">
-                        <p ng-show="clientForm.redirectUrl.$invalid && clientForm.redirectUrl.$dirty"
+                        <p ng-show="client_form.redirect_uri.$invalid && client_form.redirect_uri.$dirty"
                            class="help-block">
                             Redirect URL should be valid URL address
                         </p>
@@ -104,13 +104,13 @@
                             <thead>
                             <tr>
                                 <th class="control-group">
-                                    <input id="redirectUrl" name="redirectUrl" class="form-control"
-                                           type="url" placeholder="https://" ng-model="newRedirectUrl"/>
+                                    <input id="redirect_uri" name="redirect_uri" class="form-control"
+                                           type="url" placeholder="https://" ng-model="newRedirectUri"/>
                                 </th>
                                 <th>
                                     <a href="" class="btn btn-success glyphicon glyphicon-plus-sign"
-                                       ng-disabled="clientForm.redirectUrl.$invalid || !newRedirectUrl"
-                                       ng-click="client.redirect_uris.push(newRedirectUrl); newRedirectUrl = null"></a>
+                                       ng-disabled="client_form.redirect_uri.$invalid || !newRedirectUri"
+                                       ng-click="client.redirect_uris.push(newRedirectUri); newRedirectUri = null"></a>
                                 </th>
                             </tr>
                             </thead>
@@ -128,7 +128,7 @@
             <tab heading="Access">
 
                 <div class="control-group"
-                     ng-class="{ 'has-error' : clientForm.scope.$invalid && clientForm.scope.$dirty }">
+                     ng-class="{ 'has-error' : client_form.scope.$invalid && client_form.scope.$dirty }">
                     <label class="control-label" for="scope">Scopes:</label>
 
                     <div class="controls row">
@@ -142,24 +142,24 @@
                                     </th>
                                     <th>
                                         <a href="" class="btn glyphicon glyphicon-plus-sign" style="color: #5cb85c"
-                                           ng-disabled="clientForm.scope.$invalid || !newScope"
-                                           ng-click="client.registered_scopes.push(newScope); newScope = null"></a>
+                                           ng-disabled="client_form.scope.$invalid || !newScope"
+                                           ng-click="client.scopes.push(newScope); newScope = null"></a>
                                     </th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
                                     <td colspan="2">
-                                        <p ng-show="clientForm.scope.$invalid && clientForm.scope.$dirty"
+                                        <p ng-show="client_form.scope.$invalid && client_form.scope.$dirty"
                                            class="help-block">
                                             Scope should not be empty
                                         </p>
                                     </td>
                                 </tr>
-                                <tr ng-repeat="scope in client.registered_scopes track by $index">
+                                <tr ng-repeat="scope in client.scopes track by $index">
                                     <td><span class="label label-success">{{scope}}</span></td>
                                     <td><a href="" class="btn glyphicon glyphicon-minus-sign"
-                                           ng-click="client.registered_scopes.splice($index, 1)"></a></td>
+                                           ng-click="client.scopes.splice($index, 1)"></a></td>
                                 </tr>
                                 </tbody>
                             </table>

@@ -1,18 +1,18 @@
 'use strict';
 
-angular.module('authServiceAdmin.controllers.client', ['ui.bootstrap'])
+angular.module('authServiceAdmin.controllers.group', ['ui.bootstrap'])
 
-    .controller('ClientsListCtrl', ['$scope', '$modal', '$stateParams', 'Client',
-        function ($scope, $modal, $stateParams, Client) {
+    .controller('GroupsListCtrl', ['$scope', '$modal', '$stateParams', 'Group',
+        function ($scope, $modal, $stateParams, Group) {
             $scope.totalPages = 0;
-            $scope.clientsCount = 0;
+            $scope.groupsCount = 0;
             $scope.headers = [
                 {
-                    title: 'ClientID',
-                    value: 'client_id'
+                    title: 'Code',
+                    value: 'code'
                 },
                 {
-                    title: 'Application Name',
+                    title: 'Group Name',
                     value: 'name'
                 },
                 {
@@ -41,14 +41,14 @@ angular.module('authServiceAdmin.controllers.client', ['ui.bootstrap'])
 
             //The function that is responsible of fetching the result from the server and setting the grid to the new result
             $scope.fetchResult = function () {
-                return Client.page($scope.filterCriteria).then(function (response) {
-                    $scope.clients = response.content;
+                return Group.page($scope.filterCriteria).then(function (response) {
+                    $scope.groups = response.content;
                     $scope.totalPages = Math.ceil(response.total / response.size);
-                    $scope.clientsCount = response.total;
+                    $scope.groupsCount = response.total;
                 }, function () {
-                    $scope.clients = [];
+                    $scope.groups = [];
                     $scope.totalPages = 0;
-                    $scope.clientsCount = 0;
+                    $scope.groupsCount = 0;
                 });
             };
 
@@ -77,8 +77,8 @@ angular.module('authServiceAdmin.controllers.client', ['ui.bootstrap'])
                     $scope.filterCriteria.page = 1;
                 });
             };
-            $scope.remove = function (client) {
-                Client.delete(client).then(function (response) {
+            $scope.remove = function (group) {
+                Group.delete(group).then(function (response) {
                     $scope.fetchResult();
                 }, function (response) {
                 });
@@ -88,38 +88,35 @@ angular.module('authServiceAdmin.controllers.client', ['ui.bootstrap'])
             $scope.selectPage(1);
         }])
 
-    .controller('ClientDetailsCtrl', ['$scope', '$state', '$stateParams', 'Client', 'AlertMgr',
-        function ($scope, $state, $stateParams, Client, AlertMgr) {
+    .controller('GroupDetailsCtrl', ['$scope', '$state', '$stateParams', 'Group', 'AlertMgr',
+        function ($scope, $state, $stateParams, Group, AlertMgr) {
             $scope.mode = $stateParams.mode;
 
-            $scope.client = {
+            $scope.group = {
                 name: '',
-                secret: '',
                 description: '',
-                web_uri: '',
-                redirect_uris: [],
                 scopes: []
             };
-            $scope.original = angular.copy($scope.client);
+            $scope.original = angular.copy($scope.group);
 
-            Client.get($stateParams.client_id).then(function (response) {
+            Group.get($stateParams.code).then(function (response) {
                 if (response) {
-                    $scope.client = response;
-                    $scope.original = angular.copy($scope.client)
+                    $scope.group = response;
+                    $scope.original = angular.copy($scope.group)
                 }
             }, function () {
             });
 
             $scope.discard = function () {
-                $scope.client = angular.copy($scope.original);
+                $scope.group = angular.copy($scope.original);
             };
 
             $scope.save = function () {
-                $scope.original = angular.copy($scope.client);
+                $scope.original = angular.copy($scope.group);
                 switch ($scope.mode) {
                     case 'new' :
-                        Client.add($scope.client).then(function (response) {
-                            $state.go('client.details', {client_id : $scope.client.client_id, mode : 'edit'});
+                        Group.add($scope.group).then(function (response) {
+                            $state.go('group.details', {code : $scope.group.code, mode : 'edit'});
                         }, function (error) {
                             error.data.messages.forEach(function (item) {
                                 AlertMgr.addAlert('danger', item)
@@ -127,18 +124,18 @@ angular.module('authServiceAdmin.controllers.client', ['ui.bootstrap'])
                         });
                         break;
                     case 'edit' :
-                        $scope.client.save();
+                        $scope.group.save();
                         break;
                 }
                 $scope.cancel();
             };
 
             $scope.isCancelDisabled = function () {
-                return angular.equals($scope.original, $scope.client);
+                return angular.equals($scope.original, $scope.group);
             };
 
             $scope.isSaveDisabled = function () {
-                return $scope.client_form.$invalid || angular.equals($scope.original, $scope.client);
+                return $scope.group_form.$invalid || angular.equals($scope.original, $scope.group);
             };
 
             $scope.discard();
