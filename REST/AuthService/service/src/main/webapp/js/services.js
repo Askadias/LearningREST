@@ -54,7 +54,7 @@ angular.module('authServiceAdmin.services', ['restangular'])
                 return Restangular.all('tokens').post(token);
             },
             save: function (token) {
-                return Restangular.one('tokens', token.tokenKey).put(token);
+                return Restangular.one('tokens', token.token_key).put(token);
             }
         }
     }])
@@ -74,10 +74,10 @@ angular.module('authServiceAdmin.services', ['restangular'])
                 return Restangular.all('clients').post(client);
             },
             save: function (client) {
-                return Restangular.one('clients', client.clientID).put(client);
+                return Restangular.one('clients', client.client_id).put(client);
             },
             delete: function (client) {
-                return Restangular.one('clients', client.clientID).remove();
+                return Restangular.one('clients', client.client_id).remove();
             }
         }
     }])

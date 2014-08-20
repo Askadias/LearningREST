@@ -27,11 +27,11 @@
         </td>
         <td>
             <input class="form-control" style="width: 100px" on-enter-blur placeholder="first name"
-                   on-blur-change="filterResult()" ng-model="filterCriteria.firstName">
+                   on-blur-change="filterResult()" ng-model="filterCriteria.first_name">
         </td>
         <td>
             <input class="form-control" style="width: 100px" on-enter-blur placeholder="last name"
-                   on-blur-change="filterResult()" ng-model="filterCriteria.lastName">
+                   on-blur-change="filterResult()" ng-model="filterCriteria.last_name">
         </td>
         <td>
             <select ng-change="filterResult()" class="form-control" style="width: 90px"
@@ -49,11 +49,11 @@
             {{user.email}}
         </a></td>
         <td>{{user.login}}</td>
-        <td>{{user.firstName}}</td>
-        <td>{{user.lastName}}</td>
+        <td>{{user.first_name}}</td>
+        <td>{{user.last_name}}</td>
         <td>{{user.gender}}</td>
-        <td>{{user.birthDate}}</td>
-        <td>{{user.createDate}}</td>
+        <td>{{user.update_date}}</td>
+        <td>{{user.create_date}}</td>
         <td>
             <div class="btn-group" style="width: 100px">
                 <a ui-sref="users.details({login: user.email, mode : 'view'})"

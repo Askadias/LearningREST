@@ -30,8 +30,8 @@ public class TokenGrantServiceEndpoint extends AbstractService {
     @GET
     public Response getTokens(@QueryParam("page") final Integer page,
                               @QueryParam("size") final Integer size,
-                              @QueryParam("sortDir") final SortDirection sortDirection,
-                              @QueryParam("sortedBy") final String sortedBy,
+                              @QueryParam("sort_dir") final SortDirection sortDirection,
+                              @QueryParam("sorted_by") final String sortedBy,
                               @QueryParam("") final Token filter,
                               @Context final UriInfo uriInfo,
                               @Context final HttpHeaders headers) {
@@ -42,11 +42,11 @@ public class TokenGrantServiceEndpoint extends AbstractService {
     }
 
     @GET
-    @Path("/{tokenID}/")
-    public Response getToken(@PathParam("tokenID") final String tokenID,
+    @Path("/{token_key}/")
+    public Response getToken(@PathParam("token_key") final String tokenKey,
                              @Context final UriInfo uriInfo,
                              @Context final HttpHeaders headers) {
-        return respondWith(tokenGrantServiceFacade.getToken(tokenID), uriInfo, headers).build();
+        return respondWith(tokenGrantServiceFacade.getToken(tokenKey), uriInfo, headers).build();
     }
 
     @POST
@@ -68,13 +68,13 @@ public class TokenGrantServiceEndpoint extends AbstractService {
     }
 
     @DELETE
-    @Path("/{tokenID}/")
-    public Response deleteToken(@PathParam("tokenID") final String tokenID,
+    @Path("/{token_key}/")
+    public Response deleteToken(@PathParam("token_key") final String tokenKey,
                                 @Context final UriInfo uriInfo,
                                 @Context final HttpHeaders headers) {
-        tokenGrantServiceFacade.deleteToken(tokenID);
+        tokenGrantServiceFacade.deleteToken(tokenKey);
         return Response.ok(new StatusEntity("200",
-                "Token with tokenID='" + tokenID + "' has been successfully removed")).build();
+                "Token with token_key='" + tokenKey + "' has been successfully removed")).build();
     }
 
     public void setTokenManager(ITokenManager tokenManager) {

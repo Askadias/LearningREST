@@ -19,18 +19,18 @@
     <tr>
         <td>
             <input class="form-control" on-enter-blur placeholder="client ID"
-                   on-blur-change="filterResult()" ng-model="filterCriteria.clientId"></td>
+                   on-blur-change="filterResult()" ng-model="filterCriteria.client_idd"></td>
         <td>
             <input class="form-control" on-enter-blur placeholder="application name"
-                   on-blur-change="filterResult()" ng-model="filterCriteria.applicationName">
+                   on-blur-change="filterResult()" ng-model="filterCriteria.application_name">
         </td>
         <td>
             <input class="form-control" on-enter-blur placeholder="updater"
-                   on-blur-change="filterResult()" ng-model="filterCriteria.updatedBy">
+                   on-blur-change="filterResult()" ng-model="filterCriteria.updated_by">
         </td>
         <td>
             <input class="form-control" on-enter-blur placeholder="creator"
-                   on-blur-change="filterResult()" ng-model="filterCriteria.createdBy">
+                   on-blur-change="filterResult()" ng-model="filterCriteria.created_by">
         </td>
         <td></td>
         <td></td>
@@ -38,13 +38,13 @@
     </tr>
     <tr ng-repeat="client in clients">
         <td><a ui-sref="clients.details({clientID: client.clientID, mode: 'edit'})">
-            {{client.clientID}}
+            {{client.client_id}}
         </a></td>
-        <td>{{client.applicationName}}</td>
-        <td>{{client.updatedBy}}</td>
-        <td>{{client.createdBy}}</td>
-        <td>{{client.updateDate}}</td>
-        <td>{{client.createDate}}</td>
+        <td>{{client.application_name}}</td>
+        <td>{{client.updated_by}}</td>
+        <td>{{client.created_by}}</td>
+        <td>{{client.update_date}}</td>
+        <td>{{client.create_date}}</td>
         <td>
             <div class="btn-group" style="width: 100px">
                 <a ui-sref="clients.details({clientID: client.clientID, mode: 'view'})"

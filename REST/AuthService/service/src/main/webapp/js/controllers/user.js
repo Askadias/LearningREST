@@ -17,11 +17,11 @@ angular.module('authServiceAdmin.controllers.user', ['ui.bootstrap'])
                 },
                 {
                     title: 'First Name',
-                    value: 'firstName'
+                    value: 'first_name'
                 },
                 {
                     title: 'Last Name',
-                    value: 'lastName'
+                    value: 'last_name'
                 },
                 {
                     title: 'Gender',
@@ -29,11 +29,11 @@ angular.module('authServiceAdmin.controllers.user', ['ui.bootstrap'])
                 },
                 {
                     title: 'Update Date',
-                    value: 'updateDate'
+                    value: 'update_date'
                 },
                 {
                     title: 'Create Date',
-                    value: 'createDate'
+                    value: 'create_date'
                 }
             ];
 
@@ -149,8 +149,8 @@ angular.module('authServiceAdmin.controllers.user', ['ui.bootstrap'])
                 email: '',
                 password: '',
                 login: '',
-                firstName: '',
-                lastName: '',
+                first_name: '',
+                last_name: '',
                 gender: null,
                 roles: []
             };
@@ -188,12 +188,6 @@ angular.module('authServiceAdmin.controllers.user', ['ui.bootstrap'])
                         break;
                 }
                 $scope.cancel();
-            };
-
-            $scope.addRole = function (role) {
-                if ($scope.user.roles.indexOf(role) == -1) {
-                    $scope.user.roles.push(role);
-                }
             };
 
             $scope.isCancelDisabled = function () {

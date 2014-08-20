@@ -7,10 +7,10 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.codehaus.jackson.map.JsonMappingException;
 import ru.forxy.common.exceptions.ValidationException;
+import ru.forxy.common.rest.client.transport.support.ObjectMapperProvider;
 import ru.forxy.common.support.Configuration;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.HttpMethod;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -30,18 +30,12 @@ public class JSONValidationProvider extends JacksonJsonProvider {
         IsObjectValidationEnabled
     }
 
-    private final static String PROFILE_REGISTER = "create";
-    private final static String PROFILE_DEFAULT = "default";
-    private final static String PROFILE_UPDATE = "update";
-
     private IValidator validator;
     private boolean isObjectValidationEnabled = false;
 
-    @Context
-    private HttpServletRequest servletRequest;
-
     public JSONValidationProvider() throws IOException {
         super();
+        setMapper(ObjectMapperProvider.getDefaultMapper());
     }
 
     @Override
@@ -51,26 +45,15 @@ public class JSONValidationProvider extends JacksonJsonProvider {
         final Object value;
         try {
             value = super.readFrom(type, genericType, annotations, mediaType, headers, is);
-        } catch (JsonParseException e) {
-            throw new ValidationException(e);
-        } catch (JsonMappingException e) {
+        } catch (JsonParseException | JsonMappingException e) {
             throw new ValidationException(e);
         }
 
         // Apply validation
         if (isObjectValidationEnabled) {
             try {
-                List<ConstraintViolation> violations = null;
-
-                if (servletRequest.getMethod().equals(HttpMethod.POST)) { // create
-
-                    violations = validator.validate(value, PROFILE_REGISTER, PROFILE_DEFAULT);
-
-                } else if (servletRequest.getMethod().equals(HttpMethod.PUT)) { // update
-
-                    violations = validator.validate(value, PROFILE_UPDATE, PROFILE_DEFAULT);
-
-                }
+                List<ConstraintViolation> violations;
+                violations = validator.validate(value);
                 if (violations != null && violations.size() > 0) {
 
                     final List<String> messages = new ArrayList<String>(violations.size());

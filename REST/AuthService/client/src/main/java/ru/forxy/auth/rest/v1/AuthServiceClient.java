@@ -56,7 +56,7 @@ public class AuthServiceClient extends RestServiceClientSupport implements IAuth
 
         // @formatter:off
         mapper = ObjectMapperProvider.getMapper(
-                ObjectMapperProvider.Config.newInstance().withoutPropertyNamingStrategy().
+                ObjectMapperProvider.Config.newInstance().
                         withDateFormat(SIMPLE_DATE_FORMAT).
                         writeEmptyArrays(true).writeNullMapValues(true)
         );

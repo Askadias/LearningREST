@@ -23,7 +23,7 @@
                     <div class="controls">
                         <input id="applicationName" name="applicationName" type="text"
                                class="form-control ng-pristine ng-valid"
-                               ng-model="client.applicationName" required/>
+                               ng-model="client.application_name" required/>
 
                         <p ng-show="clientForm.applicationName.$invalid && !clientForm.applicationName.$pristine"
                            class="help-block">
@@ -37,7 +37,7 @@
 
                     <div class="controls">
                         <input id="clientID" name="clientID" type="text" class="form-control ng-pristine ng-valid"
-                               ng-model="client.clientID" ng-disabled="mode!='new'"/>
+                               ng-model="client.client_id" ng-disabled="mode!='new'"/>
 
                         <p class="help-block">
                             Unique identifier.
@@ -55,7 +55,7 @@
 
                     <div class="controls">
                         <input id="secret" name="secret" type="password" class="form-control ng-pristine ng-valid"
-                               ng-model="client.clientSecret" required/>
+                               ng-model="client.client_secret" required/>
 
                         <p ng-show="clientForm.secret.$invalid && !clientForm.secret.$pristine"
                            class="help-block">
@@ -70,7 +70,7 @@
 
                     <div class="controls">
                         <input id="url" name="url" type="url" class="form-control ng-pristine ng-valid"
-                               ng-model="client.applicationWebUri"/>
+                               ng-model="client.application_web_uri"/>
 
                         <p ng-show="clientForm.url.$invalid && !clientForm.url.$pristine"
                            class="help-block">
@@ -84,7 +84,7 @@
 
                     <div class="controls">
                         <textarea id="description" name="description" class="form-control ng-pristine ng-valid"
-                                  ng-model="client.applicationDescription"></textarea>
+                                  ng-model="client.application_description"></textarea>
 
                         <p class="help-block">Human-readable text description</p>
                     </div>
@@ -110,15 +110,15 @@
                                 <th>
                                     <a href="" class="btn btn-success glyphicon glyphicon-plus-sign"
                                        ng-disabled="clientForm.redirectUrl.$invalid || !newRedirectUrl"
-                                       ng-click="client.redirectUris.push(newRedirectUrl); newRedirectUrl = null"></a>
+                                       ng-click="client.redirect_uris.push(newRedirectUrl); newRedirectUrl = null"></a>
                                 </th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="url in client.redirectUris track by $index">
+                            <tr ng-repeat="url in client.redirect_uris track by $index">
                                 <td><a ng-href="{{url}}">{{url}}</a></td>
                                 <td><a href="" class="btn btn-danger glyphicon glyphicon-minus-sign"
-                                       ng-click="client.redirectUris.splice($index, 1)"></a></td>
+                                       ng-click="client.redirect_uris.splice($index, 1)"></a></td>
                             </tr>
                             </tbody>
                         </table>
@@ -143,7 +143,7 @@
                                     <th>
                                         <a href="" class="btn glyphicon glyphicon-plus-sign" style="color: #5cb85c"
                                            ng-disabled="clientForm.scope.$invalid || !newScope"
-                                           ng-click="client.registeredScopes.push(newScope); newScope = null"></a>
+                                           ng-click="client.registered_scopes.push(newScope); newScope = null"></a>
                                     </th>
                                 </tr>
                                 </thead>
@@ -156,10 +156,10 @@
                                         </p>
                                     </td>
                                 </tr>
-                                <tr ng-repeat="scope in client.registeredScopes track by $index">
+                                <tr ng-repeat="scope in client.registered_scopes track by $index">
                                     <td><span class="label label-success">{{scope}}</span></td>
                                     <td><a href="" class="btn glyphicon glyphicon-minus-sign"
-                                           ng-click="client.registeredScopes.splice($index, 1)"></a></td>
+                                           ng-click="client.registered_scopes.splice($index, 1)"></a></td>
                                 </tr>
                                 </tbody>
                             </table>

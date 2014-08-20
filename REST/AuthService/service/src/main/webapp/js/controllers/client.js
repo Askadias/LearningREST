@@ -9,34 +9,34 @@ angular.module('authServiceAdmin.controllers.client', ['ui.bootstrap'])
             $scope.headers = [
                 {
                     title: 'ClientID',
-                    value: 'clientID'
+                    value: 'client_id'
                 },
                 {
                     title: 'Application Name',
-                    value: 'applicationName'
+                    value: 'application_name'
                 },
                 {
                     title: 'Updated By',
-                    value: 'updatedBy'
+                    value: 'updated_by'
                 },
                 {
                     title: 'Created By',
-                    value: 'createdBy'
+                    value: 'created_by'
                 },
                 {
                     title: 'Update Date',
-                    value: 'updateDate'
+                    value: 'update_date'
                 },
                 {
                     title: 'Create Date',
-                    value: 'createDate'
+                    value: 'create_date'
                 }
             ];
 
             $scope.filterCriteria = {
                 page: 1,
-                sortDir: 'ASC',
-                sortedBy: 'applicationName'
+                sort_dir: 'ASC',
+                sorted_by: 'application_name'
             };
 
             //The function that is responsible of fetching the result from the server and setting the grid to the new result
@@ -69,8 +69,8 @@ angular.module('authServiceAdmin.controllers.client', ['ui.bootstrap'])
 
             //call back function that we passed to our custom directive sortBy, will be called when clicking on any field to sort
             $scope.onSort = function (sortedBy, sortDir) {
-                $scope.filterCriteria.sortDir = sortDir;
-                $scope.filterCriteria.sortedBy = sortedBy;
+                $scope.filterCriteria.sort_dir = sortDir;
+                $scope.filterCriteria.sorted_by = sortedBy;
                 $scope.filterCriteria.page = 1;
                 $scope.fetchResult().then(function () {
                     //The request fires correctly but sometimes the ui doesn't update, that's a fix
@@ -92,14 +92,13 @@ angular.module('authServiceAdmin.controllers.client', ['ui.bootstrap'])
         function ($scope, $state, $stateParams, Client, AlertMgr) {
             $scope.mode = $stateParams.mode;
 
-            $scope.roles = ['reader', 'writer', 'admin'];
             $scope.client = {
-                applicationName: '',
-                clientSecret: '',
-                applicationDescription: '',
-                applicationWebUri: '',
-                redirectUris: [],
-                registeredScopes: []
+                application_name: '',
+                client_secret: '',
+                application_description: '',
+                application_web_uri: '',
+                redirect_uris: [],
+                registered_scopes: []
             };
             $scope.original = angular.copy($scope.client);
 
@@ -120,7 +119,7 @@ angular.module('authServiceAdmin.controllers.client', ['ui.bootstrap'])
                 switch ($scope.mode) {
                     case 'new' :
                         Client.add($scope.client).then(function (response) {
-                            $state.go('client.details', {clientID : $scope.client.clientID, mode : 'edit'});
+                            $state.go('client.details', {clientID : $scope.client.client_id, mode : 'edit'});
                         }, function (error) {
                             error.data.messages.forEach(function (item) {
                                 AlertMgr.addAlert('danger', item)
@@ -132,12 +131,6 @@ angular.module('authServiceAdmin.controllers.client', ['ui.bootstrap'])
                         break;
                 }
                 $scope.cancel();
-            };
-
-            $scope.addRole = function (role) {
-                if ($scope.client.allowedGrantTypes.indexOf(role) == -1) {
-                    $scope.client.allowedGrantTypes.push(role);
-                }
             };
 
             $scope.isCancelDisabled = function () {

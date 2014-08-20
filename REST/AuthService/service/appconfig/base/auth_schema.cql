@@ -4,16 +4,12 @@ CREATE KEYSPACE forxy WITH replication = {'class': 'SimpleStrategy', 'replicatio
 USE forxy;
 
 CREATE TABLE client (
-    clientID TEXT,
-    applicationName TEXT,
-    applicationDescription TEXT,
-    first_name TEXT,
-    last_name TEXT,
-    gender TEXT,
-    birth_date TIMESTAMP,
+    client_id TEXT,
+    application_name TEXT,
+    application_description TEXT,
     create_date timestamp,
     favorites SET<TEXT>,
-    PRIMARY KEY (tokenKey)
+    PRIMARY KEY (client_id)
 );
 //WITH CLUSTERING ORDER BY (create_date DESC);
 

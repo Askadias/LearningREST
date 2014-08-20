@@ -30,8 +30,8 @@ public class ClientServiceEndpoint extends AbstractService {
     @GET
     public Response getClients(@QueryParam("page") final Integer page,
                                @QueryParam("size") final Integer size,
-                               @QueryParam("sortDir") final SortDirection sortDirection,
-                               @QueryParam("sortedBy") final String sortedBy,
+                               @QueryParam("sort_dir") final SortDirection sortDirection,
+                               @QueryParam("sorted_by") final String sortedBy,
                                @QueryParam("") final Client filter,
                                @Context final UriInfo uriInfo,
                                @Context final HttpHeaders headers) {
@@ -42,8 +42,8 @@ public class ClientServiceEndpoint extends AbstractService {
     }
 
     @GET
-    @Path("/{clientID}/")
-    public Response getClient(@PathParam("clientID") final String clientID,
+    @Path("/{client_id}/")
+    public Response getClient(@PathParam("client_id") final String clientID,
                               @Context final UriInfo uriInfo,
                               @Context final HttpHeaders headers) {
         return respondWith(clientServiceFacade.getClient(clientID), uriInfo, headers).build();
@@ -68,13 +68,13 @@ public class ClientServiceEndpoint extends AbstractService {
     }
 
     @DELETE
-    @Path("/{clientID}/")
-    public Response deleteClient(@PathParam("clientID") final String clientID,
+    @Path("/{client_id}/")
+    public Response deleteClient(@PathParam("client_id") final String clientID,
                                  @Context final UriInfo uriInfo,
                                  @Context final HttpHeaders headers) {
         clientServiceFacade.deleteClient(clientID);
         return Response.ok(new StatusEntity("200",
-                "Client with clientID='" + clientID + "' has been successfully removed")).build();
+                "Client with ID='" + clientID + "' has been successfully removed")).build();
     }
 
     public void setClientServiceFacade(final IClientManager clientServiceFacade) {
