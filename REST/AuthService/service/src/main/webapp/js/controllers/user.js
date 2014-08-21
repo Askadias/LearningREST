@@ -39,8 +39,8 @@ angular.module('authServiceAdmin.controllers.user', ['ui.bootstrap'])
 
             $scope.filterCriteria = {
                 page: 1,
-                sortDir: 'ASC',
-                sortedBy: 'email',
+                sort_dir: 'ASC',
+                sorted_by: 'email',
                 gender: ''
             };
 

@@ -19,7 +19,8 @@
           p:passwordEncoder-ref="passwordEncoder"/>
 
     <bean id="clientManager.impl" class="ru.forxy.auth.logic.ClientManager"
-          p:clientDAO-ref="clientDAO.mongo.perf"/>
+          p:clientDAO-ref="clientDAO.mongo.perf"
+          p:passwordEncoder-ref="passwordEncoder"/>
 
     <bean id="groupManager.impl" class="ru.forxy.auth.logic.GroupManager"
           p:groupDAO-ref="groupDAO.mongo.perf"/>

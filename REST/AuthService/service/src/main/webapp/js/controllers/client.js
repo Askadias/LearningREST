@@ -9,7 +9,7 @@ angular.module('authServiceAdmin.controllers.client', ['ui.bootstrap'])
             $scope.headers = [
                 {
                     title: 'ClientID',
-                    value: 'client_id'
+                    value: '_id'
                 },
                 {
                     title: 'Application Name',

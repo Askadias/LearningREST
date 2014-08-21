@@ -3,6 +3,7 @@ package ru.forxy.auth.logic;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.forxy.auth.db.dao.IClientDAO;
 import ru.forxy.auth.exceptions.AuthServiceEventLogId;
 import ru.forxy.auth.rest.v1.pojo.Client;
@@ -23,6 +24,8 @@ public class ClientManager implements IClientManager {
     private static final int DEFAULT_PAGE_SIZE = 10;
 
     private IClientDAO clientDAO;
+
+    private PasswordEncoder passwordEncoder;
 
     public List<Client> getAllClients() {
         List<Client> allClients = new LinkedList<>();
@@ -75,6 +78,7 @@ public class ClientManager implements IClientManager {
             client.setClientID(UUID.randomUUID().toString());
         }
         client.setCreateDate(new Date());
+        client.setSecret(passwordEncoder.encode(client.getSecret()));
         if (!clientDAO.exists(client.getClientID())) {
             clientDAO.save(client);
         } else {
@@ -93,5 +97,9 @@ public class ClientManager implements IClientManager {
 
     public void setClientDAO(final IClientDAO clientDAO) {
         this.clientDAO = clientDAO;
+    }
+
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 }

@@ -31,8 +31,8 @@ public class UserServiceEndpoint extends AbstractService {
     @GET
     public Response getUsers(@QueryParam("page") final Integer page,
                              @QueryParam("size") final Integer size,
-                             @QueryParam("sortDir") final SortDirection sortDirection,
-                             @QueryParam("sortedBy") final String sortedBy,
+                             @QueryParam("sort_dir") final SortDirection sortDirection,
+                             @QueryParam("sorted_by") final String sortedBy,
                              @QueryParam("email") final String emailFilter,
                              @QueryParam("login") final String loginFilter,
                              @QueryParam("first_name") final String firstNameFilter,

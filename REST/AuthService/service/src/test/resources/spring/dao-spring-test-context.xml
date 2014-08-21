@@ -14,6 +14,11 @@
           factory-method="createNiceMock"
           c:toMock="ru.forxy.auth.db.dao.IClientDAO"/>
 
+    <bean id="groupDAO.impl.mongo"
+          class="org.easymock.EasyMock"
+          factory-method="createNiceMock"
+          c:toMock="ru.forxy.auth.db.dao.IGroupDAO"/>
+
     <bean id="tokenDAO.impl.mongo"
           class="org.easymock.EasyMock"
           factory-method="createNiceMock"

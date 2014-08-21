@@ -41,16 +41,16 @@ public class ClientDAO implements IClientDAO {
         Query query = Query.query(new Criteria()).with(pageable);
         if (filter != null) {
             if (StringUtils.isNotEmpty(filter.getClientID())) {
-                query.addCriteria(new Criteria("_id").regex(filter.getClientID(), "i"));
+                query.addCriteria(new Criteria("clientID").regex(filter.getClientID(), "i"));
             }
             if (StringUtils.isNotEmpty(filter.getName())) {
                 query.addCriteria(new Criteria("name").regex(filter.getName(), "i"));
             }
             if (StringUtils.isNotEmpty(filter.getUpdatedBy())) {
-                query.addCriteria(new Criteria("updated_by").regex(filter.getUpdatedBy(), "i"));
+                query.addCriteria(new Criteria("updatedBy").regex(filter.getUpdatedBy(), "i"));
             }
             if (StringUtils.isNotEmpty(filter.getCreatedBy())) {
-                query.addCriteria(new Criteria("created_by").regex(filter.getCreatedBy(), "i"));
+                query.addCriteria(new Criteria("createdBy").regex(filter.getCreatedBy(), "i"));
             }
         }
 
