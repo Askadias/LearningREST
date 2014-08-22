@@ -9,6 +9,7 @@ var authServiceAdmin = angular.module('authServiceAdmin', [
     'authServiceAdmin.controllers.token',
     'authServiceAdmin.services',
     'authServiceAdmin.directives',
+    'authServiceAdmin.filters',
     'restangular',
     'ngAnimate',
     'ui.router'

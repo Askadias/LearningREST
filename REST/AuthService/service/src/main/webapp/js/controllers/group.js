@@ -88,23 +88,33 @@ angular.module('authServiceAdmin.controllers.group', ['ui.bootstrap'])
             $scope.selectPage(1);
         }])
 
-    .controller('GroupDetailsCtrl', ['$scope', '$state', '$stateParams', 'Group', 'AlertMgr',
-        function ($scope, $state, $stateParams, Group, AlertMgr) {
+    .controller('GroupDetailsCtrl', ['$scope', '$state', '$stateParams', 'Group', 'AlertMgr', 'Client',
+        function ($scope, $state, $stateParams, Group, AlertMgr, Client) {
             $scope.mode = $stateParams.mode;
 
             $scope.group = {
                 name: '',
                 description: '',
-                scopes: []
+                scopes: {}
             };
+            $scope.clients = {};
             $scope.original = angular.copy($scope.group);
 
             Group.get($stateParams.code).then(function (response) {
                 if (response) {
                     $scope.group = response;
+                    $scope.group.scopes = $scope.group.scopes || {};
                     $scope.original = angular.copy($scope.group)
                 }
             }, function () {
+            });
+
+            Client.all().then(function (response) {
+                for (var i = 0; i < response.length; i++) {
+                    $scope.clients[response[i].client_id] = response[i];
+                }
+            }, function (){
+
             });
 
             $scope.discard = function () {
@@ -129,6 +139,28 @@ angular.module('authServiceAdmin.controllers.group', ['ui.bootstrap'])
                 }
                 $scope.cancel();
             };
+
+            $scope.addScope = function(client_id, scope) {
+                if (!$scope.group.scopes[client_id]) {
+                    $scope.group.scopes[client_id] = [];
+                }
+                $scope.group.scopes[client_id].push(scope);
+            };
+            $scope.removeScope = function(client_id, index) {
+                if (!!$scope.group.scopes[client_id]) {
+                    $scope.group.scopes[client_id].splice(index, 1);
+                    if ($scope.group.scopes[client_id].length == 0) {
+                        delete $scope.group.scopes[client_id];
+                    }
+                }
+            };
+            $scope.hasNoScopes = function() {
+                for (var key in $scope.group.scopes) {
+                    return false;
+                }
+                return true;
+            };
+
 
             $scope.isCancelDisabled = function () {
                 return angular.equals($scope.original, $scope.group);

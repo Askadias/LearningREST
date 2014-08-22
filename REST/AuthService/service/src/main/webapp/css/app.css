@@ -6178,9 +6178,11 @@ body .wrapper .navbar a {
 body .wrapper .submenu li a {
   text-transform: uppercase;
 }
-body .wrapper ul,
-body .wrapper ol {
-  margin-bottom: 0;
+.scopes ul {
+  list-style: none;
+}
+.scopes ul li {
+  margin-top: 10px;
 }
 label,
 input,

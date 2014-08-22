@@ -11,7 +11,9 @@ import ru.forxy.common.pojo.SimpleJacksonDateSerializer;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Document(collection = "group")
 public class Group implements Serializable {
@@ -24,7 +26,7 @@ public class Group implements Serializable {
     @Indexed(unique = true)
     private String name;
     private String description;
-    private List<String> scopes = new ArrayList<>();
+    private Map<String, List<String>> scopes = new HashMap<>();
 
     private Date updateDate = new Date();
 
@@ -67,11 +69,11 @@ public class Group implements Serializable {
         this.description = description;
     }
 
-    public List<String> getScopes() {
+    public Map<String, List<String>> getScopes() {
         return scopes;
     }
 
-    public void setScopes(final List<String> scopes) {
+    public void setScopes(final Map<String, List<String>> scopes) {
         this.scopes = scopes;
     }
 
