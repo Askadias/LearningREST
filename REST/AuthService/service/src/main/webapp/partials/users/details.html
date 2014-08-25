@@ -119,8 +119,8 @@
         </div>
 
         <div class="control-group"
-             ng-class="{ 'has-error' : userForm.role.$invalid && userForm.role.$dirty }">
-            <label class="control-label" for="role">Roles:</label>
+             ng-class="{ 'has-error' : userForm.group.$invalid && userForm.group.$dirty }">
+            <label class="control-label" for="group">Groups:</label>
 
             <div class="controls row">
                 <div class="col-md-4">
@@ -128,20 +128,21 @@
                         <thead>
                         <tr>
                             <th class="control-group">
-                                <input id="role" name="role" class="form-control ng-pristine ng-valid"
-                                       placeholder="role name" type="text" ng-model="newRole"/>
+                                <input id="group" name="group" class="form-control ng-pristine ng-valid"
+                                       placeholder="group name" type="text" ng-model="group"
+                                       typeahead="group as group.name for group in groups | filter:{name:$viewValue} | limitTo:8">
                             </th>
                             <th>
                                 <a href="" class="btn glyphicon glyphicon-plus-sign" style="color: #5cb85c"
-                                   ng-disabled="userForm.role.$invalid || !newRole"
-                                   ng-click="user.groups.push(newRole); newRole = null"></a>
+                                   ng-disabled="userForm.group.$invalid || !group.code"
+                                   ng-click="user.groups.push(group.code); group = null"></a>
                             </th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td colspan="2">
-                                <p ng-show="userForm.role.$invalid && userForm.role.$dirty"
+                                <p ng-show="userForm.group.$invalid && userForm.group.$dirty"
                                    class="help-block">
                                     Role should not be empty
                                 </p>

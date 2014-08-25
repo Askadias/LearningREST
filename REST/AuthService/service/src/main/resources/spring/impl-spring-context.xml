@@ -32,8 +32,13 @@
     <bean id="userServiceEndpoint" class="ru.forxy.auth.rest.v1.UserServiceEndpoint"
           p:userManager-ref="userManager.perf"/>
 
+    <bean id="discoveryInfo" class="ru.forxy.auth.rest.v1.pojo.DiscoveryInfo"
+          p:jwksUri="http://localhost:11080/AuthService/service/rest/v1/auth/cert">
+    </bean>
+
     <bean id="authServiceEndpoint" class="ru.forxy.auth.rest.v1.AuthServiceEndpoint"
-          p:userManager-ref="userManager.perf"/>
+          p:userManager-ref="userManager.perf"
+          p:discoveryInfo-ref="discoveryInfo"/>
 
     <bean id="tokenGrantServiceEndpoint" class="ru.forxy.auth.rest.v1.TokenGrantServiceEndpoint"
           p:tokenManager-ref="tokenManager.perf"/>

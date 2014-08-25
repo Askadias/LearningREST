@@ -131,17 +131,17 @@ angular.module('authServiceAdmin.controllers.user', ['ui.bootstrap'])
                 $modalInstance.dismiss('cancel');
             };
         }])
-/*
-    .controller('UserDetailsCtrl', ['$scope', '$stateParams', 'User',
-        function ($scope, $stateParams, User) {
-            User.get($stateParams.login).then(function (response) {
-                $scope.user = response;
-            }, function (response) {
-            });
-        }])*/
+    /*
+     .controller('UserDetailsCtrl', ['$scope', '$stateParams', 'User',
+     function ($scope, $stateParams, User) {
+     User.get($stateParams.login).then(function (response) {
+     $scope.user = response;
+     }, function (response) {
+     });
+     }])*/
 
-    .controller('UserDetailsCtrl', ['$scope', '$stateParams', 'User', '$state', 'AlertMgr',
-        function ($scope, $stateParams, User, $state, AlertMgr) {
+    .controller('UserDetailsCtrl', ['$scope', '$stateParams', 'User', 'Group', '$state', 'AlertMgr',
+        function ($scope, $stateParams, User, Group, $state, AlertMgr) {
             $scope.mode = $stateParams.mode;
 
             $scope.roles = ['user', 'admin'];
@@ -154,6 +154,7 @@ angular.module('authServiceAdmin.controllers.user', ['ui.bootstrap'])
                 gender: null,
                 groups: []
             };
+
             $scope.original = angular.copy($scope.user);
 
             if ($scope.mode === 'edit') {
@@ -166,6 +167,11 @@ angular.module('authServiceAdmin.controllers.user', ['ui.bootstrap'])
                 });
             }
 
+            Group.all().then(function (response) {
+                $scope.groups = response;
+            }, function () {
+            });
+
             $scope.discard = function () {
                 $scope.user = angular.copy($scope.original);
             };
@@ -173,21 +179,23 @@ angular.module('authServiceAdmin.controllers.user', ['ui.bootstrap'])
             $scope.save = function () {
                 $scope.user.gender = $scope.user.gender || null;
                 $scope.original = angular.copy($scope.user);
-                switch ($scope.mode) {
-                    case 'new' :
-                        User.add($scope.user).then(function (response) {
-                            $state.go('users.details', {login : $scope.user.email, mode : 'edit'});
-                        }, function (error) {
-                            error.data.messages.forEach(function (item) {
-                                AlertMgr.addAlert('danger', item)
-                            });
+                if ($scope.mode === 'new') {
+                    User.add($scope.user).then(function (response) {
+                        $state.go('users.details', {login: $scope.user.email, mode: 'edit'});
+                    }, function (error) {
+                        error.data.messages.forEach(function (item) {
+                            AlertMgr.addAlert('danger', item)
                         });
-                        break;
-                    case 'edit' :
-                        $scope.user.save();
-                        break;
+                    });
+                } else if ($scope.mode === 'edit') {
+                    $scope.user.save();
                 }
-                $scope.cancel();
+            };
+
+            $scope.onGroupSelect = function ($item, $model, $label) {
+                $scope.item = $item;
+                $scope.model = $model;
+                $scope.label = $label;
             };
 
             $scope.isCancelDisabled = function () {

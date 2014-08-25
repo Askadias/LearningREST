@@ -100,21 +100,23 @@ angular.module('authServiceAdmin.controllers.group', ['ui.bootstrap'])
             $scope.clients = {};
             $scope.original = angular.copy($scope.group);
 
-            Group.get($stateParams.code).then(function (response) {
-                if (response) {
-                    $scope.group = response;
-                    $scope.group.scopes = $scope.group.scopes || {};
-                    $scope.original = angular.copy($scope.group)
-                }
-            }, function () {
-            });
+            if ($scope.mode === 'edit') {
+                Group.get($stateParams.code).then(function (response) {
+                    if (response) {
+                        $scope.group = response;
+                        $scope.group.scopes = $scope.group.scopes || {};
+                        $scope.original = angular.copy($scope.group)
+                    }
+                }, function () {
+                });
+            }
 
             Client.all().then(function (response) {
-                for (var i = 0; i < response.length; i++) {
-                    $scope.clients[response[i].client_id] = response[i];
+                $scope.clients_list = response;
+                for (var i = 0; i < $scope.clients_list.length; i++) {
+                    $scope.clients[$scope.clients_list[i].client_id] = $scope.clients_list[i];
                 }
             }, function (){
-
             });
 
             $scope.discard = function () {
@@ -123,21 +125,17 @@ angular.module('authServiceAdmin.controllers.group', ['ui.bootstrap'])
 
             $scope.save = function () {
                 $scope.original = angular.copy($scope.group);
-                switch ($scope.mode) {
-                    case 'new' :
-                        Group.add($scope.group).then(function (response) {
-                            $state.go('group.details', {code : $scope.group.code, mode : 'edit'});
-                        }, function (error) {
-                            error.data.messages.forEach(function (item) {
-                                AlertMgr.addAlert('danger', item)
-                            });
+                if ($scope.mode === 'new') {
+                    Group.add($scope.group).then(function (response) {
+                        $state.go('group.details', {code: $scope.group.code, mode: 'edit'});
+                    }, function (error) {
+                        error.data.messages.forEach(function (item) {
+                            AlertMgr.addAlert('danger', item)
                         });
-                        break;
-                    case 'edit' :
-                        $scope.group.save();
-                        break;
+                    });
+                } else if ($scope.mode === 'edit') {
+                    $scope.group.save();
                 }
-                $scope.cancel();
             };
 
             $scope.addScope = function(client_id, scope) {
@@ -156,7 +154,7 @@ angular.module('authServiceAdmin.controllers.group', ['ui.bootstrap'])
             };
             $scope.hasNoScopes = function() {
                 for (var key in $scope.group.scopes) {
-                    return false;
+                    if (!!key) return false;
                 }
                 return true;
             };

@@ -2,9 +2,9 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:jaxrs="http://cxf.apache.org/jaxrs"
-       xsi:schemaLocation="
-        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://cxf.apache.org/jaxrs                 http://cxf.apache.org/schemas/jaxrs.xsd">
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://cxf.apache.org/jaxrs                 http://cxf.apache.org/schemas/jaxrs.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
@@ -80,6 +80,25 @@
         </jaxrs:providers>
     </jaxrs:server>-->
 
+    <bean id="authenticationFilter" class="ru.forxy.auth.rest.support.AuthenticationFilter"
+          p:groupManager-ref="groupManager.perf"
+          p:userManager-ref="userManager.perf">
+        <property name="exclude">
+            <util:list>
+                <value>auth/login</value>
+            </util:list>
+        </property>
+    </bean>
+
+    <bean id="usersAuthorizationInterceptor" class="org.apache.cxf.interceptor.security.SecureAnnotationsInterceptor"
+          p:securedObject-ref="userServiceEndpoint"/>
+    <bean id="clientsAuthorizationInterceptor" class="org.apache.cxf.interceptor.security.SecureAnnotationsInterceptor"
+          p:securedObject-ref="clientServiceEndpoint"/>
+    <bean id="groupsAuthorizationInterceptor" class="org.apache.cxf.interceptor.security.SecureAnnotationsInterceptor"
+          p:securedObject-ref="groupServiceEndpoint"/>
+    <bean id="tokensAuthorizationInterceptor" class="org.apache.cxf.interceptor.security.SecureAnnotationsInterceptor"
+          p:securedObject-ref="tokenGrantServiceEndpoint"/>
+
     <jaxrs:server id="authService.rest" address="/rest/v1">
         <jaxrs:serviceBeans>
             <ref bean="userServiceEndpoint"/>
@@ -88,12 +107,19 @@
             <ref bean="clientServiceEndpoint"/>
             <ref bean="groupServiceEndpoint"/>
         </jaxrs:serviceBeans>
+        <jaxrs:inInterceptors>
+            <ref bean="usersAuthorizationInterceptor"/>
+            <ref bean="clientsAuthorizationInterceptor"/>
+            <ref bean="groupsAuthorizationInterceptor"/>
+            <ref bean="tokensAuthorizationInterceptor"/>
+        </jaxrs:inInterceptors>
         <jaxrs:providers>
-            <!--<bean class="ru.forxy.auth.rest.support.SecurityContextFilter"/>-->
+            <bean class="ru.forxy.auth.rest.support.JWTProvider"/>
+            <ref bean="authenticationFilter"/>
             <bean class="ru.forxy.common.web.JSONValidationProvider">
                 <property name="configuration" ref="service.configuration"/>
                 <property name="validator" ref="payload.validator"/>
-            </bean>>
+            </bean>
             <ref bean="runtimeExceptionMapper"/>
         </jaxrs:providers>
     </jaxrs:server>

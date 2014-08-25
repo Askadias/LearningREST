@@ -58,30 +58,6 @@ angular.module('authServiceAdmin.directives', [])
         };
     })
 
-    .directive('input', function () {
-        return {
-            priority: 0,
-            require: '?ngModel',
-            restrict: 'E',
-            link: function ($scope, $element, $attrs, ngModelController) {
-                var inputType = angular.lowercase($attrs.type);
-
-                if (!ngModelController || inputType === 'radio' ||
-                    inputType === 'checkbox') {
-                    return;
-                }
-
-                ngModelController.$parsers.push(function (value) {
-                    if ((ngModelController.$invalid && angular.isUndefined(value)) || value === '') {
-                        return null;
-                    } else {
-                        return value;
-                    }
-                });
-            }
-        };
-    })
-
     .directive('formAutofillFix', function () {
         return function (scope, elem, attrs) {
             // Fixes Chrome bug: https://groups.google.com/forum/#!topic/angular/6NlucSskQjY

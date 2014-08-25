@@ -96,19 +96,19 @@
                             <div class="form-group">
                                 <div class="input-group">
                                     <input type="text" class="form-control" placeholder="client name"
-                                           ng-model="clientSearch">
+                                           ng-model="clientSearch.name">
                                     <span class="input-group-addon glyphicon glyphicon-search"></span>
                                 </div>
                             </div>
                             <ul class="list-unstyled">
-                                <li ng-repeat="(client_id, client) in clients | filter:clientSearch">
+                                <li ng-repeat="client in clients_list | filter:clientSearch:strict">
                                     <div class="well well-sm scopes">
                                         <span title="{{client_id}}">{{client.name}}</span>
                                         <ul>
-                                            <li ng-repeat="clientScope in client.scopes | exclude:group.scopes[client_id]">
+                                            <li ng-repeat="clientScope in client.scopes | exclude:group.scopes[client.client_id]">
                                                 <div class="row">
                                                     <a class="btn btn-sm label label-success"
-                                                       ng-click="addScope(client_id,clientScope)">{{clientScope}}</a>
+                                                       ng-click="addScope(client.client_id,clientScope)">{{clientScope}}</a>
                                                 </div>
                                             </li>
                                         </ul>

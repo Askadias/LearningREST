@@ -15,6 +15,7 @@ import ru.forxy.common.status.pojo.ComponentStatus;
 import ru.forxy.common.status.pojo.StatusType;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Mongo DB based data source for auths
@@ -55,6 +56,12 @@ public class GroupDAO implements IGroupDAO {
         }
 
         return new PageImpl<>(mongoTemplate.find(query, Group.class), pageable, count());
+    }
+
+    @Override
+    public List<Group> findAll(List<String> groupCodes) {
+        Query query = Query.query(new Criteria("_id").in(groupCodes));
+        return mongoTemplate.find(query, Group.class);
     }
 
     @Override

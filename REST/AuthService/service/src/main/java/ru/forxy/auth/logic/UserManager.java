@@ -47,7 +47,7 @@ public class UserManager implements IUserManager {
                 pageRequest = new PageRequest(page - 1, pageSize);
             }
             final Page<User> p = userDAO.findAll(pageRequest, filter);
-            return new EntityPage<User>(p.getContent(), p.getSize(), p.getNumber(), p.getTotalElements());
+            return new EntityPage<>(p.getContent(), p.getSize(), p.getNumber(), p.getTotalElements());
         } else {
             throw new ServiceException(AuthServiceEventLogId.InvalidPageNumber, page);
         }

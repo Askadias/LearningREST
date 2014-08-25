@@ -7,6 +7,7 @@ import ru.forxy.common.pojo.SortDirection;
 import ru.forxy.common.pojo.StatusEntity;
 import ru.forxy.common.rest.AbstractService;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -29,6 +30,7 @@ public class UserServiceEndpoint extends AbstractService {
     private IUserManager userServiceFacade;
 
     @GET
+    @RolesAllowed("users_get")
     public Response getUsers(@QueryParam("page") final Integer page,
                              @QueryParam("size") final Integer size,
                              @QueryParam("sort_dir") final SortDirection sortDirection,
@@ -48,6 +50,7 @@ public class UserServiceEndpoint extends AbstractService {
     }
 
     @GET
+    @RolesAllowed("users_get")
     @Path("/{email}/")
     public Response getUser(@PathParam("email") final String email,
                             @Context final UriInfo uriInfo,
@@ -56,6 +59,7 @@ public class UserServiceEndpoint extends AbstractService {
     }
 
     @POST
+    @RolesAllowed("users_manage")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createUser(final User user,
                                @Context final UriInfo uriInfo,
@@ -65,6 +69,7 @@ public class UserServiceEndpoint extends AbstractService {
     }
 
     @PUT
+    @RolesAllowed("users_manage")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateUser(final User user,
                                @Context final UriInfo uriInfo,
@@ -74,6 +79,7 @@ public class UserServiceEndpoint extends AbstractService {
     }
 
     @DELETE
+    @RolesAllowed("users_manage")
     @Path("/{email}/")
     public Response deleteUser(@PathParam("email") final String email,
                                @Context final UriInfo uriInfo,

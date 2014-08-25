@@ -7,11 +7,15 @@ import ru.forxy.auth.rest.v1.pojo.Client;
 import ru.forxy.auth.rest.v1.pojo.Group;
 import ru.forxy.common.status.ISystemStatusComponent;
 
+import java.util.List;
+
 /**
  * Data Access Object for Forxy database to manipulate Clients.
  */
 public interface IGroupDAO extends PagingAndSortingRepository<Group, String>, ISystemStatusComponent {
 
     Page<Group> findAll(final Pageable pageable, final Group filter);
+
+    List<Group> findAll(List<String> groupCodes);
 }
 

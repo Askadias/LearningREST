@@ -12,7 +12,8 @@ var authServiceAdmin = angular.module('authServiceAdmin', [
     'authServiceAdmin.filters',
     'restangular',
     'ngAnimate',
-    'ui.router'
+    'ui.router',
+    'ui.bootstrap'
 ])
     .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'RestangularProvider', 'OAuthProvider',
         function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, RestangularProvider, OAuthProvider) {

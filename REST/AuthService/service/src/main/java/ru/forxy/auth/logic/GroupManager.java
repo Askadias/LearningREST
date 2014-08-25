@@ -51,10 +51,15 @@ public class GroupManager implements IGroupManager {
     }
 
     @Override
-    public Group getGroup(final String groupID) {
-        Group group = groupDAO.findOne(groupID);
+    public List<Group> getGroups(List<String> groupCodes) {
+        return groupDAO.findAll(groupCodes);
+    }
+
+    @Override
+    public Group getGroup(final String groupCode) {
+        Group group = groupDAO.findOne(groupCode);
         if (group == null) {
-            throw new ServiceException(AuthServiceEventLogId.GroupNotFound, groupID);
+            throw new ServiceException(AuthServiceEventLogId.GroupNotFound, groupCode);
         }
         return group;
     }
@@ -79,11 +84,11 @@ public class GroupManager implements IGroupManager {
     }
 
     @Override
-    public void deleteGroup(final String groupID) {
-        if (groupDAO.exists(groupID)) {
-            groupDAO.delete(groupID);
+    public void deleteGroup(final String groupCode) {
+        if (groupDAO.exists(groupCode)) {
+            groupDAO.delete(groupCode);
         } else {
-            throw new ServiceException(AuthServiceEventLogId.GroupNotFound, groupID);
+            throw new ServiceException(AuthServiceEventLogId.GroupNotFound, groupCode);
         }
     }
 

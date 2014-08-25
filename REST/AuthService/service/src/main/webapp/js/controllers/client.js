@@ -102,13 +102,15 @@ angular.module('authServiceAdmin.controllers.client', ['ui.bootstrap'])
             };
             $scope.original = angular.copy($scope.client);
 
-            Client.get($stateParams.client_id).then(function (response) {
-                if (response) {
-                    $scope.client = response;
-                    $scope.original = angular.copy($scope.client)
-                }
-            }, function () {
-            });
+            if ($scope.mode === 'edit') {
+                Client.get($stateParams.client_id).then(function (response) {
+                    if (response) {
+                        $scope.client = response;
+                        $scope.original = angular.copy($scope.client)
+                    }
+                }, function () {
+                });
+            }
 
             $scope.discard = function () {
                 $scope.client = angular.copy($scope.original);
@@ -116,21 +118,17 @@ angular.module('authServiceAdmin.controllers.client', ['ui.bootstrap'])
 
             $scope.save = function () {
                 $scope.original = angular.copy($scope.client);
-                switch ($scope.mode) {
-                    case 'new' :
-                        Client.add($scope.client).then(function (response) {
-                            $state.go('client.details', {client_id : $scope.client.client_id, mode : 'edit'});
-                        }, function (error) {
-                            error.data.messages.forEach(function (item) {
-                                AlertMgr.addAlert('danger', item)
-                            });
+                if ($scope.mode === 'new') {
+                    Client.add($scope.client).then(function (response) {
+                        $state.go('client.details', {client_id: $scope.client.client_id, mode: 'edit'});
+                    }, function (error) {
+                        error.data.messages.forEach(function (item) {
+                            AlertMgr.addAlert('danger', item)
                         });
-                        break;
-                    case 'edit' :
-                        $scope.client.save();
-                        break;
+                    });
+                } else if ($scope.mode === 'edit') {
+                    $scope.client.save();
                 }
-                $scope.cancel();
             };
 
             $scope.isCancelDisabled = function () {
