@@ -148,116 +148,57 @@ public class User implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        final User other = (User) obj;
-        if (email == null) {
-            if (other.email != null) {
-                return false;
-            }
-        } else if (!email.equals(other.email)) {
-            return false;
-        }
-        if (password == null) {
-            if (other.password != null) {
-                return false;
-            }
-        } else if (!password.equals(other.password)) {
-            return false;
-        }
-        if (login == null) {
-            if (other.login != null) {
-                return false;
-            }
-        } else if (!login.equals(other.login)) {
-            return false;
-        }
-        if (firstName == null) {
-            if (other.firstName != null) {
-                return false;
-            }
-        } else if (!firstName.equals(other.firstName)) {
-            return false;
-        }
-        if (lastName == null) {
-            if (other.lastName != null) {
-                return false;
-            }
-        } else if (!lastName.equals(other.lastName)) {
-            return false;
-        }
-        if (gender == null) {
-            if (other.gender != null) {
-                return false;
-            }
-        } else if (!gender.equals(other.gender)) {
-            return false;
-        }
-        if (groups == null) {
-            if (other.groups != null) {
-                return false;
-            }
-        } else if (!groups.equals(other.groups)) {
-            return false;
-        }
-        if (updateDate == null) {
-            if (other.updateDate != null) {
-                return false;
-            }
-        } else if (!updateDate.equals(other.updateDate)) {
-            return false;
-        }
-        if (updatedBy == null) {
-            if (other.updatedBy != null) {
-                return false;
-            }
-        } else if (!updatedBy.equals(other.updatedBy)) {
-            return false;
-        }
-        if (createDate == null) {
-            if (other.createDate != null) {
-                return false;
-            }
-        } else if (!createDate.equals(other.createDate)) {
-            return false;
-        }
-        if (createdBy == null) {
-            if (other.createdBy != null) {
-                return false;
-            }
-        } else if (!createdBy.equals(other.createdBy)) {
-            return false;
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+
+        User user = (User) o;
+
+        if (!createDate.equals(user.createDate)) return false;
+        if (createdBy != null ? !createdBy.equals(user.createdBy) : user.createdBy != null) return false;
+        if (!email.equals(user.email)) return false;
+        if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
+        if (gender != user.gender) return false;
+        if (groups != null ? !groups.equals(user.groups) : user.groups != null) return false;
+        if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null) return false;
+        if (!login.equals(user.login)) return false;
+        if (!password.equals(user.password)) return false;
+        if (!updateDate.equals(user.updateDate)) return false;
+        if (updatedBy != null ? !updatedBy.equals(user.updatedBy) : user.updatedBy != null) return false;
+
         return true;
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((email == null) ? 0 : email.hashCode());
-        result = prime * result + ((password == null) ? 0 : password.hashCode());
-        result = prime * result + ((login == null) ? 0 : login.hashCode());
-        result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-        result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-        result = prime * result + ((gender == null) ? 0 : gender.hashCode());
-        result = prime * result + ((groups == null) ? 0 : groups.hashCode());
-        result = prime * result + ((updateDate == null) ? 0 : updateDate.hashCode());
-        result = prime * result + ((updatedBy == null) ? 0 : updatedBy.hashCode());
-        result = prime * result + ((createDate == null) ? 0 : createDate.hashCode());
-        result = prime * result + ((createdBy == null) ? 0 : createdBy.hashCode());
+        int result = email.hashCode();
+        result = 31 * result + password.hashCode();
+        result = 31 * result + login.hashCode();
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (gender != null ? gender.hashCode() : 0);
+        result = 31 * result + (groups != null ? groups.hashCode() : 0);
+        result = 31 * result + updateDate.hashCode();
+        result = 31 * result + (updatedBy != null ? updatedBy.hashCode() : 0);
+        result = 31 * result + createDate.hashCode();
+        result = 31 * result + (createdBy != null ? createdBy.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return String.format("{email=%s, login=%s, firstName=%s, lastName=%s, gender=%s, " +
-                        "updateDate=%s, updatedBy=%s, createDate=%s, createdBy=%s, groups=%s}",
-                email, login, firstName, lastName, gender, updateDate, updatedBy, createDate, createdBy, groups);
+        return "User{" +
+                "email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", login='" + login + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", gender=" + gender +
+                ", groups=" + groups +
+                ", updateDate=" + updateDate +
+                ", updatedBy='" + updatedBy + '\'' +
+                ", createDate=" + createDate +
+                ", createdBy='" + createdBy + '\'' +
+                '}';
     }
 }

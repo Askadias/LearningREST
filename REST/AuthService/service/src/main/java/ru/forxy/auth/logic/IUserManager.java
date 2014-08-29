@@ -22,6 +22,4 @@ public interface IUserManager {
     User createUser(final User user);
 
     void deleteUser(final String email);
-
-    User login(Credentials credentials);
 }

@@ -111,6 +111,17 @@
         </property>
     </bean>
 
+    <bean id="profileDAO.mongo.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
+          autowire-candidate="false"
+          p:proxyInterfaces="ru.forxy.auth.db.dao.IProfileDAO"
+          p:target-ref="profileDAO.impl.mongo">
+        <property name="interceptorNames">
+            <list>
+                <idref bean="performance.dao.loggingInterceptor"/>
+            </list>
+        </property>
+    </bean>
+
     <bean id="clientDAO.mongo.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
           autowire-candidate="false"
           p:proxyInterfaces="ru.forxy.auth.db.dao.IClientDAO"
@@ -175,6 +186,28 @@
           autowire-candidate="false"
           p:proxyInterfaces="ru.forxy.auth.logic.IUserManager"
           p:target-ref="userManager.impl">
+        <property name="interceptorNames">
+            <list>
+                <idref bean="impl.loggingInterceptor"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="jwtManager.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
+          autowire-candidate="false"
+          p:proxyInterfaces="ru.forxy.auth.security.IJWTManager"
+          p:target-ref="jwtManager.impl">
+        <property name="interceptorNames">
+            <list>
+                <idref bean="impl.loggingInterceptor"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="authenticationManager.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
+          autowire-candidate="false"
+          p:proxyInterfaces="ru.forxy.auth.logic.IAuthenticationManager"
+          p:target-ref="authenticationManager.impl">
         <property name="interceptorNames">
             <list>
                 <idref bean="impl.loggingInterceptor"/>

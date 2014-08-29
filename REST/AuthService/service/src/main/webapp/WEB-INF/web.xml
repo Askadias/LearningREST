@@ -24,7 +24,7 @@
 
     <!-- Web UI -->
 
-    <welcome-file-list>
+    <!--<welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
 
@@ -36,13 +36,13 @@
     <servlet-mapping>
         <servlet-name>StaticServlet</servlet-name>
         <url-pattern>/app/*</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>-->
 
     <!-- CXF -->
     <servlet>
         <servlet-name>CXFServlet</servlet-name>
         <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
-        <init-param>
+        <!--<init-param>
             <param-name>redirects-list</param-name>
             <param-value>/app/.*</param-value>
         </init-param>
@@ -53,13 +53,13 @@
         <init-param>
             <param-name>disable-address-updates</param-name>
             <param-value>true</param-value>
-        </init-param>
+        </init-param>-->
         <load-on-startup>1</load-on-startup>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>CXFServlet</servlet-name>
-        <url-pattern>/service/*</url-pattern>
+        <url-pattern>/*</url-pattern>
     </servlet-mapping>
 
     <!-- character encoding filter -->

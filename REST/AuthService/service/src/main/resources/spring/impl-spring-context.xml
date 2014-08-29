@@ -6,6 +6,8 @@
 
     <bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"/>
 
+    <bean id="jwtManager.impl" class="ru.forxy.auth.security.JWTManager"/>
+
     <!-- System Status component-->
     <bean id="systemStatusFacade" class="ru.forxy.auth.logic.SystemStatusFacade"
           p:userDAO-ref="userDAO.mongo.perf"/>
@@ -17,6 +19,14 @@
     <bean id="userManager.impl" class="ru.forxy.auth.logic.UserManager"
           p:userDAO-ref="userDAO.mongo.perf"
           p:passwordEncoder-ref="passwordEncoder"/>
+
+    <!-- business logic component-->
+    <bean id="authenticationManager.impl" class="ru.forxy.auth.logic.AuthenticationManager"
+          p:profileDAO-ref="profileDAO.mongo.perf"
+          p:userDAO-ref="userDAO.mongo.perf"
+          p:passwordEncoder-ref="passwordEncoder"
+          p:jwtManager-ref="jwtManager.perf"/>
+
 
     <bean id="clientManager.impl" class="ru.forxy.auth.logic.ClientManager"
           p:clientDAO-ref="clientDAO.mongo.perf"
@@ -37,7 +47,7 @@
     </bean>
 
     <bean id="authServiceEndpoint" class="ru.forxy.auth.rest.v1.AuthServiceEndpoint"
-          p:userManager-ref="userManager.perf"
+          p:authenticationManager-ref="authenticationManager.perf"
           p:discoveryInfo-ref="discoveryInfo"/>
 
     <bean id="tokenGrantServiceEndpoint" class="ru.forxy.auth.rest.v1.TokenGrantServiceEndpoint"

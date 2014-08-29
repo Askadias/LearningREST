@@ -1,34 +1,57 @@
 package ru.forxy.auth.rest.support;
 
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWSObject;
+import net.minidev.json.JSONObject;
 import org.apache.cxf.common.security.SimplePrincipal;
-import org.apache.cxf.common.util.Base64Exception;
-import org.apache.cxf.common.util.Base64Utility;
+import org.codehaus.jackson.map.ObjectMapper;
 import ru.forxy.auth.logic.IGroupManager;
 import ru.forxy.auth.logic.IUserManager;
 import ru.forxy.auth.rest.v1.pojo.Group;
 import ru.forxy.auth.rest.v1.pojo.User;
+import ru.forxy.auth.security.IJWTManager;
+import ru.forxy.common.rest.client.transport.support.ObjectMapperProvider;
 
+import javax.annotation.Priority;
+import javax.annotation.security.RolesAllowed;
+import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.ext.Provider;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.security.Principal;
+import java.text.ParseException;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+@Provider
+@Priority(Priorities.AUTHENTICATION)
 public class AuthenticationFilter implements ContainerRequestFilter {
 
     @Context
     private HttpHeaders headers;
 
+    @Context
+    private ResourceInfo resourceInfo;
+
     private IUserManager userManager;
 
     private IGroupManager groupManager;
 
+    private IJWTManager jwtManager;
+
     private List<String> exclude;
+
+    private ObjectMapper mapper = ObjectMapperProvider.getDefaultMapper();
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
@@ -56,27 +79,34 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             return;
         }
         String[] values = authValues.get(0).split(" ");
-        if (values.length != 2 || !"Basic".equals(values[0])) {
+        if (values.length != 2 || !"Bearer".equals(values[0])) {
             requestContext.abortWith(createFaultResponse());
             return;
         }
 
-        String decodedValue;
         try {
-            decodedValue = new String(Base64Utility.decode(values[1]));
-            String[] namePassword = decodedValue.split(":");
-            if (namePassword.length != 2) {
-                requestContext.abortWith(createFaultResponse());
-                return;
-            }
-            final User account = userManager.getUser(namePassword[0]);
-            if (account == null || !account.getPassword().equals(namePassword[1])) {
-                requestContext.abortWith(createFaultResponse());
-                return;
-            }
+            JWSObject jwt = jwtManager.fromJWT(values[1]);
+            JSONObject jwtBody = jwt.getPayload().toJSONObject();
+            final User account = userManager.getUser((String) jwtBody.get("sub"));
+
             setNewSecurityContext(requestContext, account);
 
-        } catch (Base64Exception ex) {
+            // Get method invoked.
+            Method methodInvoked = resourceInfo.getResourceMethod();
+
+            if (methodInvoked.isAnnotationPresent(RolesAllowed.class)) {
+                RolesAllowed rolesAllowedAnnotation = methodInvoked.getAnnotation(RolesAllowed.class);
+                Set<String> rolesAllowed = new HashSet<>(Arrays.asList(rolesAllowedAnnotation.value()));
+                sc = requestContext.getSecurityContext();
+                for (String role : rolesAllowed) {
+                    if (sc.isUserInRole(role)) {
+                        return;
+                    }
+                }
+                requestContext.abortWith(createFaultResponse());
+            }
+
+        } catch (ParseException | JOSEException ex) {
             requestContext.abortWith(createFaultResponse());
         }
     }
@@ -130,6 +160,10 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
     public void setGroupManager(IGroupManager groupManager) {
         this.groupManager = groupManager;
+    }
+
+    public void setJwtManager(IJWTManager jwtManager) {
+        this.jwtManager = jwtManager;
     }
 
     public void setExclude(List<String> exclude) {

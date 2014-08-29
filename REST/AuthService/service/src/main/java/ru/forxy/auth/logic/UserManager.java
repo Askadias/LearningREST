@@ -90,17 +90,6 @@ public class UserManager implements IUserManager {
         }
     }
 
-    @Override
-    public User login(Credentials credentials) {
-        User user = userDAO.findOne(credentials.getEmail());
-        if (user != null) {
-            if (passwordEncoder.matches(credentials.getPassword(), user.getPassword())) {
-                return user;
-            }
-        }
-        throw new ServiceException(AuthServiceEventLogId.NotAuthorized, credentials.getEmail());
-    }
-
     public void setUserDAO(final IUserDAO userDAO) {
         this.userDAO = userDAO;
     }

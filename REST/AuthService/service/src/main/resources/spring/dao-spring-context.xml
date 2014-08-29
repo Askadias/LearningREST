@@ -57,6 +57,10 @@
           autowire-candidate="false"
           p:mongoTemplate-ref="mongoTemplate"/>
 
+    <bean id="profileDAO.impl.mongo" class="ru.forxy.auth.db.dao.mongo.ProfileDAO"
+          autowire-candidate="false"
+          p:mongoTemplate-ref="mongoTemplate"/>
+
     <bean id="clientDAO.impl.mongo" class="ru.forxy.auth.db.dao.mongo.ClientDAO"
           autowire-candidate="false"
           p:mongoTemplate-ref="mongoTemplate"/>

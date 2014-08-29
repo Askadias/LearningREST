@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Document(collection = "group")
+@Document(collection = "scopes_group")
 public class Group implements Serializable {
 
     private static final long serialVersionUID = -6795472289012335081L;

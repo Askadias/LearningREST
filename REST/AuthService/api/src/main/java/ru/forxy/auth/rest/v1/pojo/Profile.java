@@ -11,27 +11,15 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
-@Document(collection = "profile")
-public class Profile implements Serializable {
+public class Profile extends User implements Serializable {
 
     private static final long serialVersionUID = -1828924339216439884L;
-
-    @Id
-    private String email;
 
     private Date birthDate;
 
     private Set<String> telephones;
 
     private Address address;
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     @JsonSerialize(using = SimpleJacksonDateSerializer.class)
     public Date getBirthDate() {
@@ -57,5 +45,38 @@ public class Profile implements Serializable {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Profile)) return false;
+        if (!super.equals(o)) return false;
+
+        Profile profile = (Profile) o;
+
+        if (address != null ? !address.equals(profile.address) : profile.address != null) return false;
+        if (birthDate != null ? !birthDate.equals(profile.birthDate) : profile.birthDate != null) return false;
+        if (telephones != null ? !telephones.equals(profile.telephones) : profile.telephones != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (birthDate != null ? birthDate.hashCode() : 0);
+        result = 31 * result + (telephones != null ? telephones.hashCode() : 0);
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Profile{" +
+                "birthDate=" + birthDate +
+                ", telephones=" + telephones +
+                ", address=" + address +
+                '}';
     }
 }
