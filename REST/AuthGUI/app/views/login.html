@@ -1,6 +1,6 @@
 <div class="login">
 
-    <form id="login-form" ng-show="!currentUser.isLoggedIn" name="loginForm" method="post"
+    <form id="login-form" ng-if="!$storage.user.isLoggedIn" name="loginForm" method="post"
           ng-submit="login(credentials)" role="form" class="login-form form-horizontal" form-autofill-fix>
         <div class="row">
 
@@ -24,7 +24,7 @@
             </div>
         </div>
     </form>
-    <form ng-show="currentUser.isLoggedIn" name="logoutForm" method="post" role="form"
+    <form ng-if="$storage.user.isLoggedIn" name="logoutForm" method="post" role="form"
           ng-submit="logout()" class="form-horizontal">
         <div class="form-group-lg">
             <span data-ng-class="{&quot;label-info&quot;: user.role.title == userRoles.user.title, &quot;label-success&quot;: user.role.title == userRoles.admin.title}"
