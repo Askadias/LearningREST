@@ -421,9 +421,9 @@ module.exports = function (grunt) {
 
     nginx: {
       options: {
-        //config: '/usr/local/etc/nginx/nginx.conf',
-        config: '/Users/Tiger/Work/Git/Pets/REST/AuthGUI/nginx.conf',
-        useSudo: true
+        config: 'd:\\Work\\Git\\LearningREST\\REST\\AuthGUI\\nginx.conf'
+        //config: '/Users/Tiger/Work/Git/Pets/REST/AuthGUI/nginx.conf',
+        //useSudo: true
         //prefix: './relative/path/nginx',
         //globals: ['pid /usr/local/var/run/nginx.pid', 'worker_processes 4']
       }

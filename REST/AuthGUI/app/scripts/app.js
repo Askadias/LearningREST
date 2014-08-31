@@ -19,12 +19,13 @@ angular.module('authServiceAdmin', [
   'restangular',
   'ngAnimate',
   'ui.router',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'mgcrea.ngStrap'
 ])
   .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'RestangularProvider', 'OAuthProvider',
     function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, RestangularProvider, OAuthProvider) {
 
-      //$httpProvider.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode('username:password');
+      //$httpProvider.defaults.headers.common['Authorization'] = 'Bearer ' + 'eyJhbGciOiJSUzI1NiJ9.eyJleHAiOjE0MDkzNTUyMjAsInN1YiI6ImFkbWluQGFkbWluLmNvbSIsIm5iZiI6MTQwOTM1NDYyMCwiYXVkIjpbImh0dHA6XC9cL2xvY2FsaG9zdDoxMTA4MFwvQXV0aFNlcnZpY2VcLyJdLCJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6MTEwODBcL0F1dGhTZXJ2aWNlXC8iLCJqdGkiOiI0N2U3NWFlZS0zMzk5LTQyZTQtOWEzNy1mMWQ5YTYzYWM3MDAiLCJpYXQiOjE0MDkzNTQ2MjB9.pvMmzmdcnsdaIOVf1EZLdx_rsSyQL3G0dVdRtOjZAl46xiPIoUu_MdP_O0MYkeQ0rIayLRe9qnmaNPjnuGeMXyf1HE5qfa9lkAhXljWMBBFC3sqmUvZj1S0Pd-c4dt7AiCDVPvTbK9_JMK8wKuCTNbyGSl-OScLIUl-yqfDTkis';
 
       RestangularProvider.setDefaultHeaders({
         'Content-Type': 'application/json',

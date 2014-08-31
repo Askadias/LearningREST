@@ -1,6 +1,6 @@
 'use strict';
 
 angular.module('services.config', [])
-  .constant('configuration', {
-    foo: '@@foo'
-  });
+    .constant('configuration', {
+        foo: '@@foo'
+    });

@@ -29,7 +29,7 @@
     "ignore": [
         "**/.*",
         "node_modules",
-        "components",
+        "bower_components",
         "tests"
     ]
 }

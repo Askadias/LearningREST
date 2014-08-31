@@ -119,15 +119,15 @@ service.factory('OAuthInterceptor', ['$rootScope', '$q', '$sessionStorage',
     var service = {};
 
     service.request = function (config) {
-      var token = $sessionStorage.token;
+      /*var token = $sessionStorage.token;
 
-      if (token) {
+      if (!!token) {
         config.headers.Authorization = 'Bearer ' + token.access_token;
       }
 
       if (token && expired(token)) {
         $rootScope.$broadcast('oauth:expired', token);
-      }
+      }*/
 
       return config;
     };
