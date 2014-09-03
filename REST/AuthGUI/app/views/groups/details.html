@@ -1,0 +1,33 @@
+<div>
+  <h1>Group</h1>
+
+  <form name="group_form" class="form-horizontal">
+    <div class="well well-sm">
+      <button class="btn btn-small btn-save btn-success" ng-disabled="isSaveDisabled()" ng-click="save()">
+        <i class="fa fa-check-circle fa-lg icon-white"></i>
+        Save
+      </button>
+      &nbsp;
+      <button class="btn btn-small btn-default" ng-disabled="isCancelDisabled()" ng-click="discard()">
+        <i class="fa fa-ban fa-lg"></i>
+        Discard changes
+      </button>
+    </div>
+
+
+    <div ng-model="tabs.activeTab" bs-tabs="tabs">
+    </div>
+
+    <div class="well well-sm control-group">
+      <button class="btn btn-small btn-save btn-success" ng-disabled="isSaveDisabled()" ng-click="save()">
+        <i class="fa fa-check-circle fa-lg icon-white"></i>
+        Save
+      </button>
+      &nbsp;
+      <button class="btn btn-small btn-default" ng-disabled="isCancelDisabled()" ng-click="discard()">
+        <i class="fa fa-ban fa-lg"></i>
+        Discard changes
+      </button>
+    </div>
+  </form>
+</div>
