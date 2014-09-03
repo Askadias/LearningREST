@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('controllers.group', ['ui.bootstrap'])
+angular.module('controllers.group', [])
 
   .controller('GroupsListCtrl', ['$scope', '$modal', '$stateParams', 'Group',
     function ($scope, $modal, $stateParams, Group) {
@@ -91,6 +91,18 @@ angular.module('controllers.group', ['ui.bootstrap'])
   .controller('GroupDetailsCtrl', ['$scope', '$state', '$stateParams', 'Group', 'AlertMgr', 'Client',
     function ($scope, $state, $stateParams, Group, AlertMgr, Client) {
       $scope.mode = $stateParams.mode;
+
+      $scope.tabs = [
+        {
+          title: 'General',
+          template: 'views/groups/tab.general.html'
+        },
+        {
+          title: 'Access',
+          template: 'views/groups/tab.access.html'
+        }
+      ];
+      $scope.tabs.activeTab = 0;
 
       $scope.group = {
         name: '',

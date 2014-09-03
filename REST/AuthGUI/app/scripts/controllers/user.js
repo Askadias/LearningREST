@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('controllers.user', ['ui.bootstrap'])
+angular.module('controllers.user', [])
 
   .controller('UsersListCtrl', ['$scope', '$modal', 'User',
     function ($scope, $modal, User) {
@@ -155,7 +155,7 @@ angular.module('controllers.user', ['ui.bootstrap'])
       };
 
       $scope.groups = {};
-      $scope.group = '';
+      $scope.group = null;
       $scope.original = angular.copy($scope.user);
 
       if ($scope.mode === 'edit') {
@@ -176,6 +176,13 @@ angular.module('controllers.user', ['ui.bootstrap'])
         }
       }, function () {
       });
+      /*$scope.getGroups = function(name) {
+        return Group.page({page: 1, size: 8, name: name}).then(function (response) {
+          return response.content;
+        }, function () {
+          return [];
+        });
+      };*/
 
       $scope.discard = function () {
         $scope.user = angular.copy($scope.original);

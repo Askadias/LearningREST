@@ -1,4 +1,11 @@
-@import "../components/bootstrap/less/bootstrap.less";
+@import "../bower_components/bootstrap/less/bootstrap.less";
+@import "../bower_components/bootstrap-additions/src/bootstrap-additions.less";
+@import "../bower_components/font-awesome/less/font-awesome.less";
+@import "../bower_components/angular-motion/src/fade/fade.less";
+@import "../bower_components/angular-motion/src/fade-and-slide/fade-and-slide.less";
+@import "../bower_components/angular-motion/src/fade-and-scale/fade-and-scale.less";
+@import "../bower_components/angular-motion/src/flip/flip.less";
+@import "../bower_components/angular-motion/src/slide/slide.less";
 @import "variables.less";
 
 p {
@@ -86,7 +93,7 @@ textarea {
 .nav-list > .active > a:focus {
   background-color: #eeeeee;
 }
-
+/*
 .anim.ng-enter {
   transition: opacity 1s;
   opacity: 0.0;
@@ -98,7 +105,7 @@ textarea {
 
 .anim.ng-leave {
   display: none;
-}
+}*/
 
 .login-form {
   max-width: 500px;
@@ -106,7 +113,7 @@ textarea {
   padding: 30px 50px 20px;
   border: 1px solid #b3b3b3;
   border-radius: 4px;
-  margin: 100px auto 0;
+  margin: 150px auto 0;
   box-shadow: 0 1px 10px #a7a7a7, inset 0 1px 0 #fff;
   background: #fcfcfc;
 }
@@ -188,7 +195,7 @@ textarea {
   -moz-animation: shake 400ms ease-in-out;
   animation: shake 400ms ease-in-out;
 }
-
+/*
 .alert-list {
   position: absolute;
   left: 50%;
@@ -199,6 +206,10 @@ textarea {
 .alert-pupup {
   position: relative;
   left: -50%;
+}*/
+
+.alert {
+  margin-top: 30px;
 }
 
 .alert-pupup.ng-enter,

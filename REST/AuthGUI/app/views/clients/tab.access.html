@@ -1,0 +1,39 @@
+<div class="control-group"
+     ng-class="{ 'has-error' : client_form.scope.$invalid && client_form.scope.$dirty }">
+  <label class="control-label" for="scope">Scopes:</label>
+
+  <div class="controls row">
+    <div class="col-md-4">
+      <table class="table-hover table-responsive">
+        <thead>
+        <tr>
+          <th class="control-group">
+            <input id="scope" name="scope" class="form-control ng-pristine ng-valid"
+                   placeholder="scope name" type="text" ng-model="newScope"/>
+          </th>
+          <th>
+            <a href="" class="btn fa fa-plus-circle fa-lg" style="color: #5cb85c"
+               ng-disabled="client_form.scope.$invalid || !newScope"
+               ng-click="client.scopes.push(newScope); newScope = null"></a>
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td colspan="2">
+            <p ng-show="client_form.scope.$invalid && client_form.scope.$dirty"
+               class="help-block">
+              Scope should not be empty
+            </p>
+          </td>
+        </tr>
+        <tr ng-repeat="scope in client.scopes track by $index">
+          <td><span class="label label-success">{{scope}}</span></td>
+          <td><a href="" class="btn  fa fa-minus-circle fa-lg"
+                 ng-click="client.scopes.splice($index, 1)"></a></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

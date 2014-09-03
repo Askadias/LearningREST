@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('services.auth', ['restangular'])
-  .factory('Auth', ['Restangular', '$sessionStorage', '$http',
-    function (Restangular, $sessionStorage, $http) {
+  .factory('Auth', ['Restangular', '$sessionStorage', '$localStorage', '$http',
+    function (Restangular, $sessionStorage, $localStorage, $http) {
 
       var guest = {
         firstName: 'Guest',
@@ -11,12 +11,10 @@ angular.module('services.auth', ['restangular'])
       };
       var accessLevels = routingConfig.accessLevels;
       var userRoles = routingConfig.userRoles;
-      $http.defaults.headers.common.Authorization = !!$sessionStorage.token ? 'Bearer ' + $sessionStorage.token : null;
-      $sessionStorage.user = $sessionStorage.user || guest;
+      $sessionStorage.token = $sessionStorage.token || $localStorage.token || null;
+      $sessionStorage.user = $sessionStorage.user || $localStorage.user || guest;
 
-      function changeUser(user) {
-        $sessionStorage.user = user;
-      }
+      $http.defaults.headers.common.Authorization = !!$sessionStorage.token ? 'Bearer ' + $sessionStorage.token : null;
 
       return {
         authorize: function (accessLevel, role) {
@@ -31,19 +29,24 @@ angular.module('services.auth', ['restangular'])
           }
           return isAuthorized;
         },
-        login: function (credentials, success, error) {
+        login: function (credentials, rememberMe, success, error) {
           return Restangular.oneUrl('auth/login').customPOST(
             $.param(credentials),
             undefined,
             undefined,
             {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}).
             then(function (token) {
-              $sessionStorage.token = token;
+
               $http.defaults.headers.common.Authorization = 'Bearer ' + token;
               var jwtBody = JSON.parse(window.atob(token.split('.')[1]));
               Restangular.one('auth/profile', jwtBody.sub).get().then(function (user) {
                 user.isLoggedIn = true;
-                changeUser(user);
+                $sessionStorage.user = user;
+                $sessionStorage.token = token;
+                if (rememberMe) {
+                  $localStorage.user = user;
+                  $localStorage.token = token;
+                }
                 success(user);
               }, function (response) {
                 error(response);
@@ -57,7 +60,10 @@ angular.module('services.auth', ['restangular'])
         },
         logout: function () {
           $http.defaults.headers.common.Authorization = null;
-          changeUser(guest);
+          $localStorage.user = guest;
+          $localStorage.token = null;
+          $sessionStorage.user = guest;
+          $sessionStorage.token = null;
         },
         isLoggedIn: function (user) {
           if (user === undefined) {
@@ -212,8 +218,8 @@ angular.module('services.auth', ['restangular'])
         }
 
         /*if (token) {
-          config.headers.Authorization = 'Bearer ' + token.access_token;
-        }*/
+         config.headers.Authorization = 'Bearer ' + token.access_token;
+         }*/
 
         if (token && expired(token))
           $rootScope.$broadcast('oauth:expired', token);

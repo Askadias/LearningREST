@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('controllers.client', ['ui.bootstrap'])
+angular.module('controllers.client', [])
 
   .controller('ClientsListCtrl', ['$scope', '$modal', '$stateParams', 'Client',
     function ($scope, $modal, $stateParams, Client) {
@@ -91,6 +91,22 @@ angular.module('controllers.client', ['ui.bootstrap'])
   .controller('ClientDetailsCtrl', ['$scope', '$state', '$stateParams', 'Client', 'AlertMgr',
     function ($scope, $state, $stateParams, Client, AlertMgr) {
       $scope.mode = $stateParams.mode;
+
+      $scope.tabs = [
+        {
+          title: 'General',
+          template: 'views/clients/tab.general.html'
+        },
+        {
+          title: 'Access',
+          template: 'views/clients/tab.access.html'
+        },
+        {
+          title: 'Tokens',
+          content: 'TBD'
+        }
+      ];
+      $scope.tabs.activeTab = 0;
 
       $scope.client = {
         name: '',

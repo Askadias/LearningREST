@@ -2,5 +2,5 @@
 
 angular.module('services.config', [])
   .constant('configuration', {
-    foo: 'bar'
+    authEndpoint: 'http://localhost:11080/AuthService'
   });

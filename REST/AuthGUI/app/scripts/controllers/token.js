@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('controllers.token', ['ui.bootstrap'])
+angular.module('controllers.token', [])
 
   .controller('TokensListCtrl', ['$scope', '$modal', 'Token',
     function ($scope, $modal, Token) {

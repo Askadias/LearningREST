@@ -18,12 +18,13 @@ angular.module('authServiceAdmin', [
   'filters',
   'restangular',
   'ngAnimate',
-  'ui.router',
   'ui.bootstrap',
-  'mgcrea.ngStrap'
+  'mgcrea.ngStrap',
+  'ui.router',
+  'ngSanitize'
 ])
-  .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'RestangularProvider', 'OAuthProvider',
-    function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, RestangularProvider, OAuthProvider) {
+  .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'RestangularProvider', 'OAuthProvider', 'configuration',
+    function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, RestangularProvider, OAuthProvider, configuration) {
 
       //$httpProvider.defaults.headers.common['Authorization'] = 'Bearer ' + 'eyJhbGciOiJSUzI1NiJ9.eyJleHAiOjE0MDkzNTUyMjAsInN1YiI6ImFkbWluQGFkbWluLmNvbSIsIm5iZiI6MTQwOTM1NDYyMCwiYXVkIjpbImh0dHA6XC9cL2xvY2FsaG9zdDoxMTA4MFwvQXV0aFNlcnZpY2VcLyJdLCJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6MTEwODBcL0F1dGhTZXJ2aWNlXC8iLCJqdGkiOiI0N2U3NWFlZS0zMzk5LTQyZTQtOWEzNy1mMWQ5YTYzYWM3MDAiLCJpYXQiOjE0MDkzNTQ2MjB9.pvMmzmdcnsdaIOVf1EZLdx_rsSyQL3G0dVdRtOjZAl46xiPIoUu_MdP_O0MYkeQ0rIayLRe9qnmaNPjnuGeMXyf1HE5qfa9lkAhXljWMBBFC3sqmUvZj1S0Pd-c4dt7AiCDVPvTbK9_JMK8wKuCTNbyGSl-OScLIUl-yqfDTkis';
 
@@ -40,7 +41,7 @@ angular.module('authServiceAdmin', [
         scope: 'readClients writeClients readTokens updateTokens'
       });
 
-      RestangularProvider.setBaseUrl('http://localhost:11080/AuthService');
+      RestangularProvider.setBaseUrl(configuration.authEndpoint);
 
       var access = routingConfig.accessLevels;
 

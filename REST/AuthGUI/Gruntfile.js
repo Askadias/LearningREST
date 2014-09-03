@@ -14,6 +14,11 @@ module.exports = function (grunt) {
   var urlRewrite = require('grunt-connect-rewrite');
   var modRewrite = require('connect-modrewrite');
 
+  var corsMiddleware = function(req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    next();
+  };
+
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
 
@@ -89,17 +94,33 @@ module.exports = function (grunt) {
         hostname: 'localhost',
         livereload: 35729
       },
+      server: {
+        options: {
+          middleware: function(connect, options) {
+            return [
+              // Serve static files
+              connect.static(options.base),
+              // Make empty directories browsable
+              connect.directory(options.base),
+              // CORS support
+              corsMiddleware
+            ];
+          }
+        }
+      },
       livereload: {
         options: {
           open: true,
           middleware: function (connect) {
             return [
+              // CORS support
+              corsMiddleware,
               modRewrite(['!\\.html|\\.js|\\.svg|\\.css|\\.png$ /index.html [L]']),
               connect.static('.tmp'),
 
               connect().use(
-                '/app/components',
-                connect.static('./app/components')
+                '/app/bower_components',
+                connect.static('./app/bower_components')
               ),
               connect.static(appConfig.app)
             ];
@@ -114,8 +135,8 @@ module.exports = function (grunt) {
               connect.static('.tmp'),
               connect.static('test'),
               connect().use(
-                '/app/components',
-                connect.static('./app/components')
+                '/app/bower_components',
+                connect.static('./app/bower_components')
               ),
               connect.static(appConfig.app)
             ];
@@ -383,7 +404,7 @@ module.exports = function (grunt) {
           src: ['generated/*']
         }, {
           expand: true,
-          cwd: 'app/components/bootstrap/dist',
+          cwd: 'app/bower_components/bootstrap/dist',
           src: 'fonts/*',
           dest: '<%= yeoman.dist %>'
         }]
@@ -421,9 +442,9 @@ module.exports = function (grunt) {
 
     nginx: {
       options: {
-        config: 'd:\\Work\\Git\\LearningREST\\REST\\AuthGUI\\nginx.conf'
-        //config: '/Users/Tiger/Work/Git/Pets/REST/AuthGUI/nginx.conf',
-        //useSudo: true
+        //config: 'd:\\Work\\Git\\LearningREST\\REST\\AuthGUI\\nginx.conf'
+        config: '/Users/Tiger/Work/Git/Pets/REST/AuthGUI/nginx.conf',
+        useSudo: true
         //prefix: './relative/path/nginx',
         //globals: ['pid /usr/local/var/run/nginx.pid', 'worker_processes 4']
       }

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('controllers.common', ['ui.bootstrap'])
+angular.module('controllers.common', ['ngAnimate'])
   .controller('MainCtrl', ['$scope', '$rootScope', '$state',
     function ($scope, $rootScope, $state) {
       $scope.tabs = [
@@ -32,21 +32,34 @@ angular.module('controllers.common', ['ui.bootstrap'])
       };
     }])
 
-  .controller('LoginCtrl', ['$scope', '$state', 'AlertMgr', '$location', 'Auth', '$stateParams', '$sessionStorage', '$animate',
-    function ($scope, $state, AlertMgr, $location, Auth, $stateParams, $sessionStorage, $animate) {
+  .controller('LoginCtrl', ['$scope', '$state', 'AlertMgr', '$location', 'Auth', '$stateParams', '$sessionStorage', '$animate', '$alert',
+    function ($scope, $state, AlertMgr, $location, Auth, $stateParams, $sessionStorage, $animate, $alert) {
       $scope.redirrectUrl = $location.search().redirect_url;
       $scope.$storage = $sessionStorage;
       $scope.credentials = {};
+      $scope.rememberMe = false;
+      $scope.alert = null;
       var loginForm = $('#login-form');
 
-      $scope.login = function (credentials) {
-        Auth.login(credentials, function () {
-          //$httpProvider.defaults.headers.common['Authorization'] = 'Bearer ' + response;
+      $scope.login = function () {
+        Auth.login($scope.credentials, $scope.rememberMe, function () {
           var returnUrl = $stateParams.redirect_url ? $stateParams.redirect_url : '/';
           $location.url(returnUrl);
         }, function (error) {
+          if (!!$scope.alert) {
+            $scope.alert.hide();
+          }
           error.data.messages.forEach(function (item) {
-            AlertMgr.addAlert('danger', item);
+            $scope.alert = $alert({
+              animation: 'alert-pupup',
+              title: 'Authentication error',
+              content: item,
+              container: '#alerts-container',
+              duration: 3,
+              type: 'danger',
+              keyboard: true,
+              show: true
+            });
           });
           $animate.addClass(loginForm, 'shake', function () {
             $animate.removeClass(loginForm, 'shake');
