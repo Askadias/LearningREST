@@ -6,16 +6,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import ru.forxy.common.status.pojo.ComponentStatus;
 import ru.forxy.common.status.pojo.StatusType;
-import ru.forxy.fraud.db.dao.IFraudDAO;
+import ru.forxy.fraud.db.dao.ITransactionDAO;
 import ru.forxy.fraud.db.dao.cassandra.client.ICassandraClient;
-import ru.forxy.fraud.rest.pojo.Transaction;
+import ru.forxy.fraud.rest.v1.Transaction;
 
 import java.util.Date;
 
 /**
  * Cassandra DB based data source for frauds
  */
-public class FraudDAO implements IFraudDAO {
+public class FraudDAO implements ITransactionDAO {
 
     private ICassandraClient<Transaction> cassandraClient;
 	

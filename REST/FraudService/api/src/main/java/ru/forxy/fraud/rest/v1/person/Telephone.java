@@ -1,6 +1,6 @@
-package ru.forxy.fraud.rest.pojo.person;
+package ru.forxy.fraud.rest.v1.person;
 
-import ru.forxy.fraud.rest.pojo.Entity;
+import ru.forxy.fraud.rest.v1.Entity;
 
 public class Telephone extends Entity {
     protected String areaCode;

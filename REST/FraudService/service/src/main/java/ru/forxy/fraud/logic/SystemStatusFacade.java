@@ -5,7 +5,7 @@ import ru.forxy.common.status.pojo.ComponentStatus;
 import ru.forxy.common.status.pojo.StatusType;
 import ru.forxy.common.status.pojo.SystemStatus;
 import ru.forxy.common.support.SystemProperties;
-import ru.forxy.fraud.db.dao.IFraudDAO;
+import ru.forxy.fraud.db.dao.ITransactionDAO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class SystemStatusFacade implements ISystemStatusFacade {
 
-    private IFraudDAO fraudDAO;
+    private ITransactionDAO fraudDAO;
 
     @Override
     public SystemStatus getStatus() {
@@ -47,7 +47,7 @@ public class SystemStatusFacade implements ISystemStatusFacade {
         return theWorstStatus;
     }
 
-    public void setFraudDAO(final IFraudDAO fraudDAO) {
+    public void setFraudDAO(final ITransactionDAO fraudDAO) {
         this.fraudDAO = fraudDAO;
     }
 }

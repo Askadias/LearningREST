@@ -1,7 +1,7 @@
-package ru.forxy.fraud.rest.pojo.product;
+package ru.forxy.fraud.rest.v1.product;
 
-import ru.forxy.fraud.rest.pojo.Entity;
-import ru.forxy.fraud.rest.pojo.payment.Amount;
+import ru.forxy.fraud.rest.v1.Entity;
+import ru.forxy.fraud.rest.v1.payment.Amount;
 
 public class Product extends Entity {
 

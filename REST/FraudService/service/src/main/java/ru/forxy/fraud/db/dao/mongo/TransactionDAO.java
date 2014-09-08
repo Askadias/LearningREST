@@ -11,15 +11,15 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import ru.forxy.common.status.pojo.ComponentStatus;
 import ru.forxy.common.status.pojo.StatusType;
-import ru.forxy.fraud.db.dao.IFraudDAO;
-import ru.forxy.fraud.rest.pojo.Transaction;
+import ru.forxy.fraud.db.dao.ITransactionDAO;
+import ru.forxy.fraud.rest.v1.Transaction;
 
 import java.util.Date;
 
 /**
  * Mongo DB based data source for transactions
  */
-public class FraudDAO implements IFraudDAO {
+public class TransactionDAO implements ITransactionDAO {
 
     private MongoTemplate mongoTemplate;
 

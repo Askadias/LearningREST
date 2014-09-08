@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.forxy.fraud.db.dao.mongo.CurrencyExchangeDAO;
-import ru.forxy.fraud.rest.pojo.Transaction;
+import ru.forxy.fraud.rest.v1.Transaction;
 import ru.forxy.fraud.test.BaseFraudServiceTest;
 
 import ru.forxy.fraud.test.utils.data.TravelDataGenerator;

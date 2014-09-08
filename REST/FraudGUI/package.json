@@ -4,8 +4,8 @@
   "dependencies": {},
   "devDependencies": {
     "connect-modrewrite": "^0.7.9",
-    "grunt": "^0.4.1",
-    "grunt-autoprefixer": "^0.7.3",
+    "grunt": "^0.4.5",
+    "grunt-autoprefixer": "^1.0.1",
     "grunt-concurrent": "^0.5.0",
     "grunt-connect-rewrite": "^0.2.1",
     "grunt-contrib-clean": "^0.5.0",
@@ -29,13 +29,10 @@
     "grunt-svgmin": "^0.4.0",
     "grunt-usemin": "^2.1.1",
     "grunt-wiredep": "^1.7.0",
-    "jshint-stylish": "^0.2.0",
-    "karma": "^0.12.23",
-    "karma-jasmine": "^0.1.5",
-    "karma-phantomjs-launcher": "^0.1.4",
-    "load-grunt-tasks": "^0.4.0",
-    "nginx": "0.0.0",
-    "time-grunt": "^0.3.1"
+    "jshint-stylish": "^0.4.0",
+    "load-grunt-tasks": "^0.6.0",
+    "phantomjs": "^1.9.7-15",
+    "time-grunt": "^1.0.0"
   },
   "engines": {
     "node": ">=0.10.0"

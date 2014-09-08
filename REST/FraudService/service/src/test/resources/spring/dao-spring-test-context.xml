@@ -8,7 +8,7 @@
     <bean id="ru.forxy.fraud.db.dao.FraudDAO.mongo"
           class="org.easymock.EasyMock"
           factory-method="createNiceMock"
-          c:toMock="ru.forxy.fraud.db.dao.IFraudDAO"/>
+          c:toMock="ru.forxy.fraud.db.dao.ITransactionDAO"/>
 
     <bean id="ru.forxy.fraud.db.dao.CurrencyExchangeDAO.mongo"
               class="org.easymock.EasyMock"
@@ -18,5 +18,5 @@
     <bean id="ru.forxy.fraud.db.dao.FraudDAO.cassandra"
           class="org.easymock.EasyMock"
           factory-method="createNiceMock"
-          c:toMock="ru.forxy.fraud.db.dao.IFraudDAO"/>
+          c:toMock="ru.forxy.fraud.db.dao.ITransactionDAO"/>
 </beans>

@@ -4,9 +4,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import ru.forxy.common.exceptions.ServiceException;
 import ru.forxy.common.pojo.EntityPage;
-import ru.forxy.fraud.db.dao.IFraudDAO;
+import ru.forxy.fraud.db.dao.ITransactionDAO;
 import ru.forxy.fraud.exceptions.FraudServiceEventLogId;
-import ru.forxy.fraud.rest.pojo.Transaction;
+import ru.forxy.fraud.rest.v1.Transaction;
 
 /**
  * Implementation class for FraudService business logic
@@ -15,7 +15,7 @@ public class FraudServiceFacade implements IFraudServiceFacade {
 
     private static final int DEFAULT_PAGE_SIZE = 10;
 
-    private IFraudDAO fraudDAO;
+    private ITransactionDAO fraudDAO;
 
     @Override
     public Boolean check(final Transaction transaction) {
@@ -42,7 +42,7 @@ public class FraudServiceFacade implements IFraudServiceFacade {
         return new EntityPage<Transaction>(p.getContent(), p.getSize(), p.getNumber(), p.getTotalElements());
     }
 
-    public void setFraudDAO(final IFraudDAO fraudDAO) {
+    public void setFraudDAO(final ITransactionDAO fraudDAO) {
         this.fraudDAO = fraudDAO;
     }
 }

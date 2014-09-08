@@ -1,7 +1,7 @@
 package ru.forxy.fraud.db.dao;
 
 import ru.forxy.common.status.ISystemStatusComponent;
-import ru.forxy.fraud.rest.pojo.list.BlackListItem;
+import ru.forxy.fraud.rest.v1.list.BlackListItem;
 
 import java.util.List;
 

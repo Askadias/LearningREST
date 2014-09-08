@@ -1,7 +1,7 @@
 package ru.forxy.fraud.logic;
 
 import ru.forxy.common.pojo.EntityPage;
-import ru.forxy.fraud.rest.pojo.Transaction;
+import ru.forxy.fraud.rest.v1.Transaction;
 
 /**
  * Entry point into fraud service business logic

@@ -5,14 +5,14 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="ru.forxy.fraud.logic.SystemStatusFacade" class="ru.forxy.fraud.logic.SystemStatusFacade"
-          p:fraudDAO-ref="ru.forxy.fraud.db.dao.FraudDAO.mongo"/>
+          p:fraudDAO-ref="transactionDAO.mongo"/>
 
     <bean id="ru.forxy.common.rest.SystemStatusServiceEndpoint" class="ru.forxy.common.rest.SystemStatusServiceEndpoint"
           p:systemStatusFacade-ref="ru.forxy.fraud.logic.SystemStatusFacade"/>
 
     <bean id="ru.forxy.fraud.logic.FraudServiceFacade.impl" class="ru.forxy.fraud.logic.FraudServiceFacade"
           autowire-candidate="false"
-          p:fraudDAO-ref="ru.forxy.fraud.db.dao.FraudDAO.mongo"/>
+          p:fraudDAO-ref="transactionDAO.mongo"/>
 
     <bean id="ru.forxy.fraud.rest.FraudServiceImpl" class="ru.forxy.fraud.rest.FraudServiceImpl"
           p:fraudServiceFacade-ref="ru.forxy.fraud.logic.FraudServiceFacade"/>

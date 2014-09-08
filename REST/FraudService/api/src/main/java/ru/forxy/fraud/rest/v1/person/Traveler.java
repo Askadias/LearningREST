@@ -1,4 +1,4 @@
-package ru.forxy.fraud.rest.pojo.person;
+package ru.forxy.fraud.rest.v1.person;
 
 public class Traveler extends Person {
     protected Boolean isPrimary;

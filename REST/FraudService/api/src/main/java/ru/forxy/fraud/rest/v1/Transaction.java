@@ -1,8 +1,8 @@
-package ru.forxy.fraud.rest.pojo;
+package ru.forxy.fraud.rest.v1;
 
-import ru.forxy.fraud.rest.pojo.payment.Payment;
-import ru.forxy.fraud.rest.pojo.person.Account;
-import ru.forxy.fraud.rest.pojo.product.Product;
+import ru.forxy.fraud.rest.v1.payment.Payment;
+import ru.forxy.fraud.rest.v1.person.Account;
+import ru.forxy.fraud.rest.v1.product.Product;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;

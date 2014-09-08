@@ -1,8 +1,8 @@
-package ru.forxy.fraud.rest.pojo.product.travel;
+package ru.forxy.fraud.rest.v1.product.travel;
 
-import ru.forxy.fraud.rest.pojo.location.Location;
-import ru.forxy.fraud.rest.pojo.person.Traveler;
-import ru.forxy.fraud.rest.pojo.product.Product;
+import ru.forxy.fraud.rest.v1.location.Location;
+import ru.forxy.fraud.rest.v1.person.Traveler;
+import ru.forxy.fraud.rest.v1.product.Product;
 
 import java.util.Date;
 import java.util.List;

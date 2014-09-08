@@ -1,6 +1,6 @@
-package ru.forxy.fraud.rest.pojo.payment;
+package ru.forxy.fraud.rest.v1.payment;
 
-import ru.forxy.fraud.rest.pojo.Entity;
+import ru.forxy.fraud.rest.v1.Entity;
 
 public class Amount extends Entity {
     protected double value;

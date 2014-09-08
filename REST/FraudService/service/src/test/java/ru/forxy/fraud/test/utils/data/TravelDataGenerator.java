@@ -1,15 +1,15 @@
 package ru.forxy.fraud.test.utils.data;
 
 import ru.forxy.common.test.utils.gen.AbstractGenerator;
-import ru.forxy.fraud.rest.pojo.Transaction;
-import ru.forxy.fraud.rest.pojo.payment.Amount;
-import ru.forxy.fraud.rest.pojo.payment.Payment;
-import ru.forxy.fraud.rest.pojo.person.Account;
-import ru.forxy.fraud.rest.pojo.person.Person;
-import ru.forxy.fraud.rest.pojo.person.Telephone;
-import ru.forxy.fraud.rest.pojo.person.Traveler;
-import ru.forxy.fraud.rest.pojo.product.Product;
-import ru.forxy.fraud.rest.pojo.product.travel.TravelProduct;
+import ru.forxy.fraud.rest.v1.Transaction;
+import ru.forxy.fraud.rest.v1.payment.Amount;
+import ru.forxy.fraud.rest.v1.payment.Payment;
+import ru.forxy.fraud.rest.v1.person.Account;
+import ru.forxy.fraud.rest.v1.person.Person;
+import ru.forxy.fraud.rest.v1.person.Telephone;
+import ru.forxy.fraud.rest.v1.person.Traveler;
+import ru.forxy.fraud.rest.v1.product.Product;
+import ru.forxy.fraud.rest.v1.product.travel.TravelProduct;
 
 import java.util.ArrayList;
 import java.util.List;

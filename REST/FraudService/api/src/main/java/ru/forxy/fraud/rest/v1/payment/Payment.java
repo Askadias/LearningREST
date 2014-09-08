@@ -1,7 +1,7 @@
-package ru.forxy.fraud.rest.pojo.payment;
+package ru.forxy.fraud.rest.v1.payment;
 
-import ru.forxy.fraud.rest.pojo.Entity;
-import ru.forxy.fraud.rest.pojo.person.Person;
+import ru.forxy.fraud.rest.v1.Entity;
+import ru.forxy.fraud.rest.v1.person.Person;
 
 public class Payment extends Entity {
     protected Amount amount;

@@ -1,58 +1,27 @@
-apply plugin: 'war'
-
-// ========= Environment ================================================
-
-import org.apache.tools.ant.filters.ReplaceTokens
-
-if (project.hasProperty('env')) {
-    def env = project.getProperty("env")
-
-    task copyEnvConfigApp(type: Copy) {
-        from 'appconfig'
-        into "$System.env.TOMCAT_HOME/conf/appconfig"
-        include '**/*.properties'
-        include '**/*.drl'
-        include '**/*.xml'
-        exclude '**/*.bat'
-        exclude '**/*.sh'
-    }
-
-    task copyEnvConfigTomcat(type: Copy) {
-        from "appconfig/env/$env"
-        into "$System.env.TOMCAT_HOME/bin"
-        include '**/*.bat'
-        include '**/*.sh'
-    }
-
-    task copyWebContextConfig(type: Copy) {
-        from "appconfig/FraudService.xml"
-        into "$System.env.TOMCAT_HOME/conf/Catalina/localhost"
-        filter(ReplaceTokens, tokens: [war: war.archiveName])
-    }
-
-    task setupEnv {
-        dependsOn copyEnvConfigApp, copyEnvConfigTomcat, copyWebContextConfig
-    }
-}
-
 // ========== Deploy ====================================================
-war {
-    manifest {
-        attributes(
-                'Product': rootProject.name,
-                'Version': version,
-                'Built-On': new Date().format('yyyy-mm-dd HH:MM:ss')
-        )
+
+buildscript {
+    repositories {
+        maven {
+            url uri("file://$System.env.OUTPUT_ROOT/deliverables/")
+        }
+    }
+    dependencies {
+        classpath "forxy:ru.forxy.common.deploy:$rev_forxy_common"
     }
 }
 
-task deploy(type: Copy) {
-    dependsOn war
-    if (project.hasProperty('env')) {
-        Task.dependsOn setupEnv
-    }
-    from war
-    into "$System.env.TOMCAT_HOME/warfiles"
+apply plugin: 'deploy'
+
+deploy {
+    serviceName = 'FraudService'
+    basePort = 12000
+    useSSL = true
+    keyAlias = 'oauth'
+    keystoreFile = 'conf/FraudService/appconfig/oauth.jks'
+    keystorePass = '5ecret0AUTHPa55word'
+    truststoreFile = 'conf/FraudService/appconfig/oauth.jks'
+    truststorePass = '5ecret0AUTHPa55word'
 }
 
 // ========== Clean Deployment Configuration ============================
@@ -104,7 +73,6 @@ dependencies {
     //compile "com.datastax.cassandra:cassandra-driver-core:${rev_cassandra_datastax}"
     compile "com.valchkou.datastax:cassandra-driver-mapping:${rev_cassandra_jpa}"
 
-
     // --------------------- SPRING --------------------------------------
     compile "org.springframework:spring-core:${rev_spring}"
     compile "org.springframework:spring-beans:${rev_spring}"
@@ -113,6 +81,10 @@ dependencies {
     compile "org.springframework:spring-aop:${rev_spring}"
     compile "org.springframework:spring-web:${rev_spring}"
     compile "org.springframework:spring-orm:${rev_spring}"
+
+    // --------------------- ENCRYPTION ----------------------------------
+    compile "org.jasypt:jasypt:${rev_jasypt}"
+    compile "org.jasypt:jasypt-spring3:${rev_jasypt}"
 
     // --------------------- DROOLS --------------------------------------
     compile "org.drools:drools-core:${rev_drools}"

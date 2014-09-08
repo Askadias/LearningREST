@@ -1,4 +1,4 @@
-package ru.forxy.fraud.rest.pojo.list;
+package ru.forxy.fraud.rest.v1.list;
 
 /**
  * Enumeration defines different types of black lists

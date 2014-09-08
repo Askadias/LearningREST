@@ -1,4 +1,4 @@
-package ru.forxy.fraud.rest.pojo.rs;
+package ru.forxy.fraud.rest.v1;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

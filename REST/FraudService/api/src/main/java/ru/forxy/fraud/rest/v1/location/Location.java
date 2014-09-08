@@ -1,6 +1,6 @@
-package ru.forxy.fraud.rest.pojo.location;
+package ru.forxy.fraud.rest.v1.location;
 
-import ru.forxy.fraud.rest.pojo.Entity;
+import ru.forxy.fraud.rest.v1.Entity;
 
 public class Location extends Entity {
     protected String city;

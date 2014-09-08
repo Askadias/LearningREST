@@ -2,23 +2,33 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:p="http://www.springframework.org/schema/p"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans     http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:c="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
-          p:ignoreResourceNotFound="true"
-          p:nullValue="{null}">
-        <property name="locations">
-            <list>
-                <value>file:${catalina.base}/conf/appconfig/base/ru.forxy.fraud.properties</value>
-                <value>file:${catalina.base}/conf/appconfig/env/${env}/ru.forxy.fraud.properties</value>
-            </list>
-        </property>
-    </bean>
-
-    <import resource="classpath:spring/rest-spring-context.xml"/>
     <import resource="classpath:spring/drools-spring-context.xml"/>
+    <import resource="classpath:spring/rest-spring-context.xml"/>
     <import resource="classpath:spring/impl-spring-context.xml"/>
     <import resource="classpath:spring/dao-spring-context.xml"/>
     <import resource="classpath:spring/log-spring-context.xml"/>
 
+    <bean id="encryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
+        <property name="config">
+            <bean class="org.jasypt.encryption.pbe.config.SimpleStringPBEConfig"
+                  p:algorithm="PBEWithMD5AndDES"
+                  p:password="secret"
+                  p:providerName="org.bouncycastle.jce.provider.BouncyCastleProvider"/>
+        </property>
+    </bean>
+
+    <bean id="placeholderConfigurer" class="org.jasypt.spring3.properties.EncryptablePreferencesPlaceholderConfigurer"
+          c:stringEncryptor-ref="encryptor"
+          p:ignoreResourceNotFound="false"
+          p:nullValue="{null}">
+        <property name="locations">
+            <list>
+                <value>file:${config.dir}/FraudService/appconfig/base/ru.forxy.fraud.properties</value>
+                <value>file:${config.dir}/FraudService/appconfig/env/${env}/ru.forxy.fraud.properties</value>
+            </list>
+        </property>
+    </bean>
 </beans>

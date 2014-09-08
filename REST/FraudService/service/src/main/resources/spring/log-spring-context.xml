@@ -99,7 +99,7 @@
           p:exceptionHandler-ref="ru.forxy.common.logging.exceptions.DatabaseExceptionHandler"/>
 
     <bean id="ru.forxy.fraud.db.dao.FraudDAO.mongo" class="org.springframework.aop.framework.ProxyFactoryBean"
-          p:proxyInterfaces="ru.forxy.fraud.db.dao.IFraudDAO"
+          p:proxyInterfaces="ru.forxy.fraud.db.dao.ITransactionDAO"
           p:target-ref="ru.forxy.fraud.db.dao.FraudDAO.impl.mongo">
         <property name="interceptorNames">
             <list>

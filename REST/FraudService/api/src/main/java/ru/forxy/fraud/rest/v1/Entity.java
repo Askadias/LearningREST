@@ -1,4 +1,4 @@
-package ru.forxy.fraud.rest.pojo;
+package ru.forxy.fraud.rest.v1;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -10,9 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import ru.forxy.fraud.db.dao.IFraudDAO;
+import ru.forxy.fraud.db.dao.ITransactionDAO;
 import ru.forxy.fraud.rest.IFraudService;
-import ru.forxy.fraud.rest.pojo.Transaction;
+import ru.forxy.fraud.rest.v1.Transaction;
 import ru.forxy.fraud.test.BaseFraudServiceTest;
 
 import javax.ws.rs.core.HttpHeaders;
@@ -28,7 +28,7 @@ public class FraudServiceImplTest extends BaseFraudServiceTest {
 
     @Autowired
     @Qualifier("ru.forxy.fraud.db.dao.FraudDAO.mongo")
-    IFraudDAO fraudDAOMock;
+    ITransactionDAO fraudDAOMock;
 
     @Test
     public void testFraudCheck() {

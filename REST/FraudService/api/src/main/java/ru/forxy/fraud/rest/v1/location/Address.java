@@ -1,4 +1,4 @@
-package ru.forxy.fraud.rest.pojo.location;
+package ru.forxy.fraud.rest.v1.location;
 
 public class Address extends Location {
 
