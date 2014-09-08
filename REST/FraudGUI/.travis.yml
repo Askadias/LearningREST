@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+  - '0.10'
+before_script:
+  - 'sudo npm install -g bower grunt-cli'
+  - 'sudo bower install'
+  - 'sudo npm install -g grunt-connect-rewrite --save-dev'
+  - 'sudo npm install -g connect-modrewrite'
+  - 'sudo npm install -g grunt-replace --save-dev'
+  - 'sudo npm install -g nginx'
+  - 'sudo npm install -g grunt-nginx'
+  - 'sudo npm install -g generator-env-config'
+  - 'sudo npm install -g grunt-contrib-less'
+

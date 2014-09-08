@@ -32,13 +32,13 @@ angular.module('controllers.common', ['ngAnimate'])
       };
     }])
 
-  .controller('LoginCtrl', ['$scope', '$state', 'AlertMgr', '$location', 'Auth', '$stateParams', '$sessionStorage', '$animate', '$alert',
-    function ($scope, $state, AlertMgr, $location, Auth, $stateParams, $sessionStorage, $animate, $alert) {
+  .controller('LoginCtrl', ['$scope', '$state', 'AlertMgr', '$location', 'Auth', '$stateParams', '$sessionStorage', '$animate',
+    function ($scope, $state, AlertMgr, $location, Auth, $stateParams, $sessionStorage, $animate) {
       $scope.redirrectUrl = $location.search().redirect_url;
       $scope.$storage = $sessionStorage;
       $scope.credentials = {};
       $scope.rememberMe = false;
-      $scope.alert = null;
+      $scope.alerts = [];
       var loginForm = $('#login-form');
 
       $scope.login = function () {
@@ -46,19 +46,11 @@ angular.module('controllers.common', ['ngAnimate'])
           var returnUrl = $stateParams.redirect_url ? $stateParams.redirect_url : '/';
           $location.url(returnUrl);
         }, function (error) {
-          if (!!$scope.alert) {
-            $scope.alert.hide();
-          }
+          $scope.alerts = [];
           error.data.messages.forEach(function (item) {
-            $scope.alert = $alert({
-              animation: 'alert-pupup',
-              title: 'Authentication error',
-              content: item,
-              container: '#alerts-container',
-              duration: 3,
-              type: 'danger',
-              keyboard: true,
-              show: true
+            $scope.alerts.push({
+              msg: item,
+              type: 'danger'
             });
           });
           $animate.addClass(loginForm, 'shake', function () {

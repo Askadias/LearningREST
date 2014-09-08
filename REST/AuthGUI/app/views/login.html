@@ -32,7 +32,9 @@
       <div class="btn-group-lg">
         <button type="submit" class="btn btn-default btn-block">Log in</button>
       </div>
-      <div id="alerts-container"></div>
+      <div id="alerts-container">
+        <alert ng-repeat="alert in alerts" class="alert-pupup" type="{{alert.type}}" close="alerts.splice($index, 1)">{{alert.msg}}</alert>
+      </div>
     </div>
   </form>
   <form ng-if="$storage.user.isLoggedIn" name="logoutForm" method="post" role="form"

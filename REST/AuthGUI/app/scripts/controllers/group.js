@@ -92,18 +92,6 @@ angular.module('controllers.group', [])
     function ($scope, $state, $stateParams, Group, AlertMgr, Client) {
       $scope.mode = $stateParams.mode;
 
-      $scope.tabs = [
-        {
-          title: 'General',
-          template: 'views/groups/tab.general.html'
-        },
-        {
-          title: 'Access',
-          template: 'views/groups/tab.access.html'
-        }
-      ];
-      $scope.tabs.activeTab = 0;
-
       $scope.group = {
         name: '',
         description: '',

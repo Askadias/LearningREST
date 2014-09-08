@@ -101,7 +101,9 @@ dependencies {
     compile "org.mongodb:mongo-java-driver:${rev_mongo}"
 
     // --------------------- CASSANDRA -----------------------------------
-    compile "com.datastax.cassandra:cassandra-driver-core:${rev_cassandra_datastax}"
+    //compile "com.datastax.cassandra:cassandra-driver-core:${rev_cassandra_datastax}"
+    compile "com.valchkou.datastax:cassandra-driver-mapping:${rev_cassandra_jpa}"
+
 
     // --------------------- SPRING --------------------------------------
     compile "org.springframework:spring-core:${rev_spring}"

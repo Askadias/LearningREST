@@ -92,22 +92,6 @@ angular.module('controllers.client', [])
     function ($scope, $state, $stateParams, Client, AlertMgr) {
       $scope.mode = $stateParams.mode;
 
-      $scope.tabs = [
-        {
-          title: 'General',
-          template: 'views/clients/tab.general.html'
-        },
-        {
-          title: 'Access',
-          template: 'views/clients/tab.access.html'
-        },
-        {
-          title: 'Tokens',
-          content: 'TBD'
-        }
-      ];
-      $scope.tabs.activeTab = 0;
-
       $scope.client = {
         name: '',
         secret: '',

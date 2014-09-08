@@ -7,4 +7,7 @@ dependencies {
 
     // --------------------- MONGO ---------------------------------------
     compile "org.springframework.data:spring-data-mongodb:${rev_spring_mongo}"
+
+    // --------------------- JPA -----------------------------------------
+    compile "org.eclipse.persistence:javax.persistence:${rev_eclipse_jpa}"
 }

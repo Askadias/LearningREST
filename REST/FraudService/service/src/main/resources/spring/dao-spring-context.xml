@@ -28,7 +28,7 @@
 
     <mongo:db-factory dbname='fraud' mongo-ref='mongo'/>
 
-    <mongo:repositories base-package='ru.forxy.db.dao.mongo'/>
+    <mongo:repositories base-package='ru.forxy.fraud.db.dao.mongo'/>
 
     <bean id='mongoTemplate' class='org.springframework.data.mongodb.core.MongoTemplate'>
         <constructor-arg ref='mongo'/>
