@@ -20,13 +20,11 @@
           p:userDAO-ref="userDAO.mongo.perf"
           p:passwordEncoder-ref="passwordEncoder"/>
 
-    <!-- business logic component-->
     <bean id="authenticationManager.impl" class="ru.forxy.auth.logic.AuthenticationManager"
           p:profileDAO-ref="profileDAO.mongo.perf"
           p:userDAO-ref="userDAO.mongo.perf"
           p:passwordEncoder-ref="passwordEncoder"
           p:jwtManager-ref="jwtManager.perf"/>
-
 
     <bean id="clientManager.impl" class="ru.forxy.auth.logic.ClientManager"
           p:clientDAO-ref="clientDAO.mongo.perf"

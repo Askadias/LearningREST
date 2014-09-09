@@ -5,13 +5,13 @@ import ru.forxy.common.pojo.EntityPage;
 import ru.forxy.common.rest.AbstractService;
 import ru.forxy.fraud.exceptions.FraudServiceEventLogId;
 import ru.forxy.fraud.logic.IFraudServiceFacade;
-import ru.forxy.fraud.rest.v1.Transaction;
+import ru.forxy.fraud.rest.v1.check.Transaction;
 
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-public class FraudServiceImpl extends AbstractService{
+public class FraudServiceEndpoint extends AbstractService{
 
     private IFraudServiceFacade fraudServiceFacade;
 

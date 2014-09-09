@@ -2,11 +2,13 @@ dependencies {
     // --------------------- FORXY ---------------------------------------
     compile "forxy:ru.forxy.common.rest.api:${rev_forxy_common}"
 
-    // --------------------- CXF -----------------------------------------
-    compile "org.apache.cxf:cxf-bundle-jaxrs:${rev_cxf}"
-
-    // --------------------- MONGO ---------------------------------------
-    compile "org.springframework.data:spring-data-mongodb:${rev_spring_mongo}"
+    // --------------------- DATA ----------------------------------------
+    compile ("org.springframework.data:spring-data-mongodb:${rev_spring_data}") {
+        transitive = false
+    }
+    compile ("org.springframework.data:spring-data-commons:${rev_spring_data}") {
+        transitive = false
+    }
 
     // --------------------- JPA -----------------------------------------
     compile "org.eclipse.persistence:javax.persistence:${rev_eclipse_jpa}"

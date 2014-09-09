@@ -1,12 +1,13 @@
-package ru.forxy.fraud.rest.v1.product;
+package ru.forxy.fraud.rest.v1.check.product;
 
-import ru.forxy.fraud.rest.v1.Entity;
-import ru.forxy.fraud.rest.v1.payment.Amount;
+import ru.forxy.fraud.rest.v1.check.Entity;
+import ru.forxy.fraud.rest.v1.check.payment.Amount;
 
 public class Product extends Entity {
 
-    protected Integer id;
+    private static final long serialVersionUID = 2378160794520350582L;
 
+    protected Integer id;
     protected Amount price;
 
     public Integer getId() {

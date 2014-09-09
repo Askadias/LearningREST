@@ -14,7 +14,11 @@ public enum FraudServiceEventLogId implements EventLogBase {
 
     TransactionNotFound(FraudServiceEventLogId.BASE_EVENT_LOG_ID + 1, 400,
             "Transaction with id %1$l is not found.",
-            EventType.InvalidInput);
+            EventType.InvalidInput),
+
+    InvalidPageNumber(FraudServiceEventLogId.BASE_EVENT_LOG_ID + 2, 400,
+            "Invalid page number provided: '%1$s'",
+                      EventType.InvalidInput);
 
     public static final int BASE_EVENT_LOG_ID = 20000;
 

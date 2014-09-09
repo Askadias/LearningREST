@@ -1,8 +1,11 @@
-package ru.forxy.fraud.rest.v1.person;
+package ru.forxy.fraud.rest.v1.check.person;
 
 public class Account extends Person {
+
+    private static final long serialVersionUID = 1935391474832166380L;
+
     protected String login;
-    protected byte[] password;
+    protected String password;
     protected Statistics statistics;
 
     public String getLogin() {
@@ -13,11 +16,11 @@ public class Account extends Person {
         this.login = login;
     }
 
-    public byte[] getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(byte[] password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 

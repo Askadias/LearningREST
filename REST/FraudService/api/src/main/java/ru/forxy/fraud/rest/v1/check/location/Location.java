@@ -1,8 +1,11 @@
-package ru.forxy.fraud.rest.v1.location;
+package ru.forxy.fraud.rest.v1.check.location;
 
-import ru.forxy.fraud.rest.v1.Entity;
+import ru.forxy.fraud.rest.v1.check.Entity;
 
 public class Location extends Entity {
+
+    private static final long serialVersionUID = 8039993149241780665L;
+
     protected String city;
     protected String country;
     protected Integer postalCode;

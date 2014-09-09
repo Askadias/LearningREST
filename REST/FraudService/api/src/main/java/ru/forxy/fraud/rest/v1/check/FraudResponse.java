@@ -1,4 +1,4 @@
-package ru.forxy.fraud.rest.v1;
+package ru.forxy.fraud.rest.v1.check;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

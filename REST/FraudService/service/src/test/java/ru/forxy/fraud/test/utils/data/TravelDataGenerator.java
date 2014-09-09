@@ -1,15 +1,15 @@
 package ru.forxy.fraud.test.utils.data;
 
 import ru.forxy.common.test.utils.gen.AbstractGenerator;
-import ru.forxy.fraud.rest.v1.Transaction;
-import ru.forxy.fraud.rest.v1.payment.Amount;
-import ru.forxy.fraud.rest.v1.payment.Payment;
-import ru.forxy.fraud.rest.v1.person.Account;
-import ru.forxy.fraud.rest.v1.person.Person;
-import ru.forxy.fraud.rest.v1.person.Telephone;
-import ru.forxy.fraud.rest.v1.person.Traveler;
-import ru.forxy.fraud.rest.v1.product.Product;
-import ru.forxy.fraud.rest.v1.product.travel.TravelProduct;
+import ru.forxy.fraud.rest.v1.check.Transaction;
+import ru.forxy.fraud.rest.v1.check.payment.Amount;
+import ru.forxy.fraud.rest.v1.check.payment.Payment;
+import ru.forxy.fraud.rest.v1.check.person.Account;
+import ru.forxy.fraud.rest.v1.check.person.Person;
+import ru.forxy.fraud.rest.v1.check.person.Telephone;
+import ru.forxy.fraud.rest.v1.check.person.Traveler;
+import ru.forxy.fraud.rest.v1.check.product.Product;
+import ru.forxy.fraud.rest.v1.check.product.travel.TravelProduct;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +58,7 @@ public abstract class TravelDataGenerator extends AbstractGenerator {
         Payment payment = new Payment();
         payment.setAmount(generateAmount(generateInt(300, 20000)));
         payment.setFormOfPayment("CreditCard");
-        payment.setOwner(owner);
+        payment.setPayer(owner);
         return payment;
     }
 

@@ -1,12 +1,15 @@
-package ru.forxy.fraud.rest.v1.payment;
+package ru.forxy.fraud.rest.v1.check.payment;
 
-import ru.forxy.fraud.rest.v1.Entity;
-import ru.forxy.fraud.rest.v1.person.Person;
+import ru.forxy.fraud.rest.v1.check.Entity;
+import ru.forxy.fraud.rest.v1.check.person.Person;
 
 public class Payment extends Entity {
+
+    private static final long serialVersionUID = 5493500173255604561L;
+
     protected Amount amount;
     protected String formOfPayment;
-    protected Person owner;
+    protected Person payer;
 
     public Amount getAmount() {
         return amount;
@@ -24,11 +27,11 @@ public class Payment extends Entity {
         this.formOfPayment = formOfPayment;
     }
 
-    public Person getOwner() {
-        return owner;
+    public Person getPayer() {
+        return payer;
     }
 
-    public void setOwner(Person owner) {
-        this.owner = owner;
+    public void setPayer(Person payer) {
+        this.payer = payer;
     }
 }

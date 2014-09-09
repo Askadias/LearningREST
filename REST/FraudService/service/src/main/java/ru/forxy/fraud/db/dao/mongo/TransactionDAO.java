@@ -1,6 +1,5 @@
 package ru.forxy.fraud.db.dao.mongo;
 
-import com.mongodb.CommandResult;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -12,12 +11,12 @@ import org.springframework.data.mongodb.core.query.Query;
 import ru.forxy.common.status.pojo.ComponentStatus;
 import ru.forxy.common.status.pojo.StatusType;
 import ru.forxy.fraud.db.dao.ITransactionDAO;
-import ru.forxy.fraud.rest.v1.Transaction;
+import ru.forxy.fraud.rest.v1.check.Transaction;
 
 import java.util.Date;
 
 /**
- * Mongo DB based data source for transactions
+ * Mongo DB based data source for auths
  */
 public class TransactionDAO implements ITransactionDAO {
 
@@ -30,35 +29,52 @@ public class TransactionDAO implements ITransactionDAO {
 
     @Override
     public Page<Transaction> findAll(final Pageable pageable) {
-        /*int size = pageable.getPageSize();
-        int offset = pageable.getOffset();
-        mongoTemplate.find(Query.query(new Criteria()).with(pageable), Transaction.class);
-        List<Transaction> transactions = mongoTemplate.find(Query.query(new Criteria()).limit(size).skip(offset), Transaction.class);*/
-        return new PageImpl<Transaction>(
+        return new PageImpl<>(
                 mongoTemplate.find(Query.query(new Criteria()).with(pageable), Transaction.class),
                 pageable, count()
         );
     }
 
     @Override
-    public <S extends Transaction> S save(final S transaction) {
-        mongoTemplate.save(transaction);
-        return transaction;
+    public Page<Transaction> findAll(final Pageable pageable, final Transaction filter) {
+        Query query = Query.query(new Criteria()).with(pageable);
+        /*if (filter != null) {
+            if (StringUtils.isNotEmpty(filter.getID())) {
+                query.addCriteria(new Criteria("TransactionID").regex(filter.getTransactionID(), "i"));
+            }
+            if (StringUtils.isNotEmpty(filter.getName())) {
+                query.addCriteria(new Criteria("name").regex(filter.getName(), "i"));
+            }
+            if (StringUtils.isNotEmpty(filter.getUpdatedBy())) {
+                query.addCriteria(new Criteria("updatedBy").regex(filter.getUpdatedBy(), "i"));
+            }
+            if (StringUtils.isNotEmpty(filter.getCreatedBy())) {
+                query.addCriteria(new Criteria("createdBy").regex(filter.getCreatedBy(), "i"));
+            }
+        }*/
+
+        return new PageImpl<>(mongoTemplate.find(query, Transaction.class), pageable, count());
     }
 
     @Override
-    public <S extends Transaction> Iterable<S> save(final Iterable<S> transactions) {
+    public <S extends Transaction> S save(final S Transaction) {
+        mongoTemplate.save(Transaction);
+        return Transaction;
+    }
+
+    @Override
+    public <S extends Transaction> Iterable<S> save(final Iterable<S> Transactions) {
         throw null;
     }
 
     @Override
-    public Transaction findOne(final Long id) {
-        return mongoTemplate.findOne(Query.query(Criteria.where("id").is(id)), Transaction.class);
+    public Transaction findOne(final String TransactionID) {
+        return mongoTemplate.findOne(Query.query(Criteria.where("TransactionID").is(TransactionID)), Transaction.class);
     }
 
     @Override
-    public boolean exists(final Long id) {
-        return mongoTemplate.findOne(Query.query(Criteria.where("id").is(id)), Transaction.class) != null;
+    public boolean exists(final String TransactionID) {
+        return mongoTemplate.findOne(Query.query(Criteria.where("TransactionID").is(TransactionID)), Transaction.class) != null;
     }
 
     @Override
@@ -67,8 +83,8 @@ public class TransactionDAO implements ITransactionDAO {
     }
 
     @Override
-    public Iterable<Transaction> findAll(final Iterable<Long> ids) {
-        return mongoTemplate.find(Query.query(Criteria.where("id").in(ids)), Transaction.class);
+    public Iterable<Transaction> findAll(final Iterable<String> TransactionIDs) {
+        return mongoTemplate.find(Query.query(Criteria.where("TransactionID").in(TransactionIDs)), Transaction.class);
     }
 
     @Override
@@ -77,19 +93,19 @@ public class TransactionDAO implements ITransactionDAO {
     }
 
     @Override
-    public void delete(final Long id) {
-        mongoTemplate.remove(Query.query(Criteria.where("id").is(id)), Transaction.class);
+    public void delete(final String TransactionID) {
+        mongoTemplate.remove(Query.query(Criteria.where("TransactionID").is(TransactionID)), Transaction.class);
     }
 
     @Override
-    public void delete(final Transaction transaction) {
-        mongoTemplate.remove(transaction);
+    public void delete(final Transaction Transaction) {
+        mongoTemplate.remove(Transaction);
     }
 
     @Override
-    public void delete(final Iterable<? extends Transaction> transactions) {
-        for (Transaction transaction : transactions) {
-            mongoTemplate.remove(transaction);
+    public void delete(final Iterable<? extends Transaction> Transactions) {
+        for (Transaction Transaction : Transactions) {
+            mongoTemplate.remove(Transaction);
         }
     }
 
@@ -115,13 +131,6 @@ public class TransactionDAO implements ITransactionDAO {
             long timeStart = new Date().getTime();
             try {
                 mongoTemplate.count(null, Transaction.class);
-                CommandResult lastError = mongoTemplate.getDb().getLastError();
-                //noinspection ThrowableResultOfMethodCallIgnored
-                if (lastError.getException() != null) {
-                    exceptionMessage = lastError.getErrorMessage();
-                    exceptionDetails = ExceptionUtils.getStackTrace(lastError.getException());
-                    statusType = StatusType.YELLOW;
-                }
             } catch (final Exception e) {
                 exceptionMessage = e.getMessage();
                 exceptionDetails = ExceptionUtils.getStackTrace(e);
@@ -134,7 +143,7 @@ public class TransactionDAO implements ITransactionDAO {
         } else {
             statusType = StatusType.RED;
         }
-        return new ComponentStatus("Fraud DAO", location, statusType, null, ComponentStatus.ComponentType.DB,
+        return new ComponentStatus("Transaction DAO", location, statusType, null, ComponentStatus.ComponentType.DB,
                 responseTime, null, exceptionMessage, exceptionDetails);
     }
 }

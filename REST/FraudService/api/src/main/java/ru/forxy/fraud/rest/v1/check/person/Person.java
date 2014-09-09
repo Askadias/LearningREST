@@ -1,12 +1,15 @@
-package ru.forxy.fraud.rest.v1.person;
+package ru.forxy.fraud.rest.v1.check.person;
 
-import ru.forxy.fraud.rest.v1.Entity;
-import ru.forxy.fraud.rest.v1.location.Address;
+import ru.forxy.fraud.rest.v1.check.Entity;
+import ru.forxy.fraud.rest.v1.check.location.Address;
 
 import java.util.Date;
 import java.util.List;
 
 public class Person extends Entity {
+
+    private static final long serialVersionUID = -7530992855054231964L;
+
     protected String prefixName;
     protected String firstName;
     protected String middleName;

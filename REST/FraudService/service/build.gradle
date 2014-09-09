@@ -24,35 +24,19 @@ deploy {
     truststorePass = '5ecret0AUTHPa55word'
 }
 
-// ========== Clean Deployment Configuration ============================
-
-task cleanTomcat(type: Delete) {
-    FileTree tree = fileTree("$System.env.TOMCAT_HOME") {
-        include "conf/Catalina/localhost/FraudService.xml",
-                "warfiles/ru.forxy.fraud*.war",
-                "conf/appconfig/**/ru.forxy.fraud*.properties"
-    }
-    delete tree
-}
-
-// ========== Tests =====================================================
-
-test {
-    reports.html.enabled = true
-    maxParallelForks = 8
-}
-
 // ========== Dependencies ==============================================
 
 dependencies {
     // --------------------- FORXY ---------------------------------------
     compile project(":ru.forxy.fraud.api")
-    compile "forxy:ru.forxy.fraud.api"
     compile "forxy:ru.forxy.common.rest:${rev_forxy_common}"
     compile "forxy:ru.forxy.common.utils:${rev_forxy_common}"
     compile "forxy:ru.forxy.common.status:${rev_forxy_common}"
     compile "forxy:ru.forxy.common.logging:${rev_forxy_common}"
-    testCompile "forxy:ru.forxy.common.test.utils:${rev_forxy_common}"
+
+    // --------------------- CXF -----------------------------------------
+    compile "org.apache.cxf:cxf-rt-frontend-jaxrs:${rev_cxf}"
+    compile "org.apache.cxf:cxf-rt-rs-service-description:${rev_cxf}"
 
     // --------------------- JAX-WS --------------------------------------
     compile "org.apache.cxf:cxf-rt-frontend-jaxws:${rev_cxf}"
@@ -60,14 +44,12 @@ dependencies {
 
     // --------------------- COMMON --------------------------------------
     compile "commons-collections:commons-collections:${rev_common_collections}"
-    compile "org.slf4j:slf4j-api:${rev_slf4j}"
     compile "ch.qos.logback:logback-core:${rev_logback}"
-    compile "ch.qos.logback:logback-classic:${rev_logback}"
     compile "quartz:quartz:${rev_quartz}"
-
 
     // --------------------- MONGO ---------------------------------------
     compile "org.mongodb:mongo-java-driver:${rev_mongo}"
+    compile "org.springframework.data:spring-data-mongodb:${rev_spring_data}"
 
     // --------------------- CASSANDRA -----------------------------------
     //compile "com.datastax.cassandra:cassandra-driver-core:${rev_cassandra_datastax}"
@@ -92,10 +74,12 @@ dependencies {
     compile "org.drools:drools-spring:${rev_drools}"
 
     // --------------------- JSON ----------------------------------------
+    // for currency exchange rates parsing
     compile "org.json:json:${rev_org_json}"
 
     // ===================== TEST ========================================
     testCompile "org.springframework:spring-test:${rev_spring}"
     testCompile "junit:junit:${rev_junit}"
     testCompile "org.easymock:easymock:${rev_easymock}"
+    testCompile "forxy:ru.forxy.common.test.utils:${rev_forxy_common}"
 }

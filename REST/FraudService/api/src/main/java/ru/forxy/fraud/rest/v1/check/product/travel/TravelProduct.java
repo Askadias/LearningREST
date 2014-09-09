@@ -1,13 +1,16 @@
-package ru.forxy.fraud.rest.v1.product.travel;
+package ru.forxy.fraud.rest.v1.check.product.travel;
 
-import ru.forxy.fraud.rest.v1.location.Location;
-import ru.forxy.fraud.rest.v1.person.Traveler;
-import ru.forxy.fraud.rest.v1.product.Product;
+import ru.forxy.fraud.rest.v1.check.location.Location;
+import ru.forxy.fraud.rest.v1.check.person.Traveler;
+import ru.forxy.fraud.rest.v1.check.product.Product;
 
 import java.util.Date;
 import java.util.List;
 
 public class TravelProduct extends Product {
+
+    private static final long serialVersionUID = 2855753139175583339L;
+
     protected List<Traveler> travelers;
     protected Date dateStart;
     protected Date dateEnd;

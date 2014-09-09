@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import ru.forxy.fraud.db.dao.ITransactionDAO;
 import ru.forxy.fraud.rest.IFraudService;
-import ru.forxy.fraud.rest.v1.Transaction;
+import ru.forxy.fraud.rest.v1.check.Transaction;
 import ru.forxy.fraud.test.BaseFraudServiceTest;
 
 import javax.ws.rs.core.HttpHeaders;

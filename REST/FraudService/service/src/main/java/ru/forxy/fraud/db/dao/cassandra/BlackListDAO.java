@@ -3,6 +3,7 @@ package ru.forxy.fraud.db.dao.cassandra;
 import ru.forxy.common.status.pojo.ComponentStatus;
 import ru.forxy.fraud.db.dao.IBlackListDAO;
 import ru.forxy.fraud.rest.v1.list.BlackListItem;
+import ru.forxy.fraud.rest.v1.list.ListPartitionKey;
 
 import java.util.List;
 
@@ -14,6 +15,11 @@ public class BlackListDAO extends BaseCassandraDAO implements IBlackListDAO {
     @Override
     public List<BlackListItem> getAll() {
         return mappingSession.getByQuery(BlackListItem.class, "select value, type from blacklist");
+    }
+
+    @Override
+    public boolean isInBlackList(ListPartitionKey key) {
+        return mappingSession.get(BlackListItem.class, key) != null;
     }
 
     @Override

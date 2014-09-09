@@ -21,7 +21,7 @@ import java.util.Date;
  */
 public class ClientDAO implements IClientDAO {
 
-    MongoTemplate mongoTemplate;
+    private MongoTemplate mongoTemplate;
 
     @Override
     public Iterable<Client> findAll(final Sort sort) {

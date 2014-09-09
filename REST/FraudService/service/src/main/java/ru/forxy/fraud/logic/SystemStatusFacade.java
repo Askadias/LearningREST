@@ -15,14 +15,14 @@ import java.util.List;
  */
 public class SystemStatusFacade implements ISystemStatusFacade {
 
-    private ITransactionDAO fraudDAO;
+    private ITransactionDAO transactionDAO;
 
     @Override
     public SystemStatus getStatus() {
         StatusType systemStatusType = null;
         List<ComponentStatus> componentStatuses = new ArrayList<ComponentStatus>();
-        if (fraudDAO != null) {
-            componentStatuses.add(fraudDAO.getStatus());
+        if (transactionDAO != null) {
+            componentStatuses.add(transactionDAO.getStatus());
         } else {
             systemStatusType = StatusType.RED;
         }
@@ -47,7 +47,7 @@ public class SystemStatusFacade implements ISystemStatusFacade {
         return theWorstStatus;
     }
 
-    public void setFraudDAO(final ITransactionDAO fraudDAO) {
-        this.fraudDAO = fraudDAO;
+    public void setTransactionDAO(final ITransactionDAO transactionDAO) {
+        this.transactionDAO = transactionDAO;
     }
 }

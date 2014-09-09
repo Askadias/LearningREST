@@ -5,7 +5,7 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import org.springframework.beans.factory.InitializingBean;
-import ru.forxy.fraud.rest.v1.Transaction;
+import ru.forxy.fraud.rest.v1.check.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;

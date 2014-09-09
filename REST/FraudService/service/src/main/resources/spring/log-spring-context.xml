@@ -3,7 +3,7 @@
        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns:c="http://www.springframework.org/schema/c"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="ru.forxy.common.support.Configuration.performance" class="ru.forxy.common.support.Configuration">
         <property name="settings">
@@ -29,29 +29,31 @@
         </property>
     </bean>
 
-    <bean id="ru.forxy.fraud.performance.logger.request"
-          class="ru.forxy.common.logging.writer.LogWriter" c:name="fraud.performance.request"/>
-    <bean id="ru.forxy.fraud.performance.logger.response"
-          class="ru.forxy.common.logging.writer.LogWriter" c:name="fraud.performance.response"/>
+    <bean id="performance.logger.request"
+          class="ru.forxy.common.logging.writer.LogWriter" c:name="user.performance.request"/>
+    <bean id="performance.logger.response"
+          class="ru.forxy.common.logging.writer.LogWriter" c:name="user.performance.response"/>
 
-    <bean id="ru.forxy.fraud.service.performance.loggingFilter"
+    <bean id="performance.loggingFilter"
           class="ru.forxy.common.logging.LoggingServletFilter"
           p:configuration-ref="ru.forxy.common.support.Configuration.performance.endpoint"
-          p:requestWriter-ref="ru.forxy.fraud.performance.logger.request"
-          p:responseWriter-ref="ru.forxy.fraud.performance.logger.response">
+          p:requestWriter-ref="performance.logger.request"
+          p:responseWriter-ref="performance.logger.response">
         <property name="requestFieldExtractors">
             <bean class="ru.forxy.common.logging.extractor.SpringELFieldExtractor">
                 <property name="extractRules">
                     <map>
-                        <entry key="Fraudname"
-                               value="#request.getParameter('client_id')?:#requestHeaders['client-id']?:null"/>
+                        <entry key="Username"
+                               value="#request.getParameter('transaction_id')?:#requestHeaders['transaction-id']?:null"/>
                         <entry key="TransactionGUID"
                                value="#request.getParameter('transaction_guid')?:#requestHeaders['transaction-guid']?:null"/>
                         <entry key="MessageGUID"
                                value="#request.getParameter('message_guid')?:#requestHeaders['message-guid']?:null"/>
-                        <entry key="OperationName" value="#request.requestURI.matches('.*/transactions[/\d+]+') and #request.getMethod().equals('GET') ? 'GetTransactionsPage' :
-                                                          #request.requestURI.matches('.*/transaction/?') and #request.getMethod().equals('GET') ? 'GetTransaction' :
-                                                          #request.requestURI.matches('.*/?') and #request.getMethod().equals('GET') ? 'FraudCheck' :
+                        <entry key="OperationName" value="#request.requestURI.matches('.*/users[/\d+]+') and #request.getMethod().equals('GET') ? 'GetUsersPage' :
+                                                          #request.requestURI.matches('.*/users/login/?') and #request.getMethod().equals('POST') ? 'Login' :
+                                                          #request.requestURI.matches('.*/users/?') and #request.getMethod().equals('GET') ? 'GetUser' :
+                                                          #request.requestURI.matches('.*/users/?') and #request.getMethod().equals('POST') ? 'UpdateUser' :
+                                                          #request.requestURI.matches('.*/users/?') and #request.getMethod().equals('DELETE') ? 'DeleteUser' :
                                                           #request.requestURI.matches('.*/status/?') and #request.getMethod().equals('GET') ? 'SystemStatus' :
                                                           null"/>
                     </map>
@@ -64,7 +66,7 @@
                     <map>
                         <entry key="TransactionGUID" value="#responseHeaders['Transaction-GUID']"/>
                         <entry key="MessageGUID" value="#responseHeaders['Message-GUID']"/>
-                        <entry key="FraudEmail"
+                        <entry key="UserEmail"
                                value="#payload.indexOf('&quot;tokenKey&quot;')&gt;=0 ? #payload.replaceAll('.*?&quot;tokenKey&quot;:\s*?&quot;([a-zA-Z0-9!#$%&amp;''*+/=?^_`{|}~-]+(\.[a-zA-Z0-9!#$%&amp;''*+/=?^_`{|}~-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*)&quot;.*','$1') : null"/>
                         <entry key="StatusCode">
                             <value>(#response.responseStatus==200 or #response.responseStatus==201 or
@@ -82,65 +84,79 @@
 
     <!-- ================= DAO ===================================================================================== -->
 
-    <bean id="ru.forxy.common.support.Configuration.performance.dao" class="ru.forxy.common.support.Configuration"
+    <bean id="configuration.performance.dao" class="ru.forxy.common.support.Configuration"
           parent="ru.forxy.common.support.Configuration.performance"/>
 
-    <bean id="ru.forxy.common.logging.exceptions.DatabaseExceptionHandler"
+    <bean id="databaseExceptionHandler"
           class="ru.forxy.common.logging.exceptions.DatabaseExceptionHandler"
           p:databaseHost="${ru.forxy.fraud.MongoTemplate/host}:${ru.forxy.fraud.MongoTemplate/port}"/>
 
     <bean id="ru.forxy.fraud.performance.logger.dao"
-          class="ru.forxy.common.logging.writer.LogWriter" c:name="fraud.performance.dao"/>
+          class="ru.forxy.common.logging.writer.LogWriter" c:name="user.performance.dao"/>
 
-    <bean id="payment.scoring.performance.dao.loggingInterceptor"
+    <bean id="performance.dao.loggingInterceptor"
           class="ru.forxy.common.logging.LoggingInterceptor"
-          p:configuration-ref="ru.forxy.common.support.Configuration.performance.dao"
+          p:configuration-ref="configuration.performance.dao"
           p:responseWriter-ref="ru.forxy.fraud.performance.logger.dao"
-          p:exceptionHandler-ref="ru.forxy.common.logging.exceptions.DatabaseExceptionHandler"/>
+          p:exceptionHandler-ref="databaseExceptionHandler"/>
 
-    <bean id="ru.forxy.fraud.db.dao.FraudDAO.mongo" class="org.springframework.aop.framework.ProxyFactoryBean"
+    <bean id="transactionDAO.mongo.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
+          autowire-candidate="false"
           p:proxyInterfaces="ru.forxy.fraud.db.dao.ITransactionDAO"
-          p:target-ref="ru.forxy.fraud.db.dao.FraudDAO.impl.mongo">
+          p:target-ref="transactionDAO.impl.mongo">
         <property name="interceptorNames">
             <list>
-                <idref bean="payment.scoring.performance.dao.loggingInterceptor"/>
+                <idref bean="performance.dao.loggingInterceptor"/>
             </list>
         </property>
     </bean>
 
-    <!--<bean id="ru.forxy.fraud.db.dao.FraudDAO.cassandra" class="org.springframework.aop.framework.ProxyFactoryBean"
-          p:proxyInterfaces="IFraudDAO"
-          p:target-ref="ru.forxy.fraud.db.dao.FraudDAO.impl.cassandra">
+    <bean id="blackListDAO.cassandra.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
+          autowire-candidate="false"
+          p:proxyInterfaces="ru.forxy.fraud.db.dao.IBlackListDAO"
+          p:target-ref="blackListDAO.impl.cassandra">
         <property name="interceptorNames">
             <list>
-                <idref bean="payment.scoring.performance.dao.loggingInterceptor"/>
+                <idref bean="performance.dao.loggingInterceptor"/>
             </list>
         </property>
-    </bean>-->
+    </bean>
 
     <!-- ================= IMPLEMENTATION ========================================================================== -->
 
-    <bean id="ru.forxy.common.support.Configuration.performance.impl" class="ru.forxy.common.support.Configuration"
+    <bean id="configuration.performance.impl" class="ru.forxy.common.support.Configuration"
           parent="ru.forxy.common.support.Configuration.performance"/>
 
-    <bean id="ru.forxy.common.logging.exceptions.ServiceExceptionHandler"
+    <bean id="serviceExceptionHandler"
           class="ru.forxy.common.logging.exceptions.ServiceExceptionHandler"/>
 
-    <bean id="ru.forxy.fraud.performance.logger.service.impl"
+    <bean id="performance.logger.impl"
           class="ru.forxy.common.logging.writer.LogWriter" c:name="fraud.performance.service.impl"/>
 
-    <bean id="payment.scoring.performance.service.impl.loggingInterceptor"
+    <bean id="impl.loggingInterceptor"
           class="ru.forxy.common.logging.LoggingInterceptor"
-          p:configuration-ref="ru.forxy.common.support.Configuration.performance.impl"
-          p:responseWriter-ref="ru.forxy.fraud.performance.logger.service.impl"
-          p:exceptionHandler-ref="ru.forxy.common.logging.exceptions.ServiceExceptionHandler"/>
+          p:configuration-ref="configuration.performance.impl"
+          p:responseWriter-ref="performance.logger.impl"
+          p:exceptionHandler-ref="serviceExceptionHandler"/>
 
-    <bean id="ru.forxy.fraud.logic.FraudServiceFacade" class="org.springframework.aop.framework.ProxyFactoryBean"
+    <bean id="fraudServiceFacade.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
+          autowire-candidate="false"
           p:proxyInterfaces="ru.forxy.fraud.logic.IFraudServiceFacade"
-          p:target-ref="ru.forxy.fraud.logic.FraudServiceFacade.impl">
+          p:target-ref="fraudServiceFacade.impl">
         <property name="interceptorNames">
             <list>
-                <idref bean="payment.scoring.performance.service.impl.loggingInterceptor"/>
+                <idref bean="impl.loggingInterceptor"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="blackListManager.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
+          autowire-candidate="false"
+          p:proxyInterfaces="ru.forxy.fraud.logic.IBlackListManager"
+          p:target-ref="blackListManager.impl">
+        <property name="interceptorNames">
+            <list>
+                <idref bean="impl.loggingInterceptor"/>
             </list>
         </property>
     </bean>

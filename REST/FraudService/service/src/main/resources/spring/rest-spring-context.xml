@@ -31,7 +31,7 @@
 
     <jaxrs:server id="ru.forxy.FraudService.rest" address="/rest/v1">
         <jaxrs:serviceBeans>
-            <ref bean="ru.forxy.fraud.rest.FraudServiceImpl"/>
+            <ref bean="ru.forxy.fraud.rest.FraudServiceEndpoint"/>
             <ref bean="ru.forxy.common.rest.SystemStatusServiceEndpoint"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>

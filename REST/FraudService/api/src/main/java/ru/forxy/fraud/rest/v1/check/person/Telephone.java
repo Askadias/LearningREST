@@ -1,8 +1,11 @@
-package ru.forxy.fraud.rest.v1.person;
+package ru.forxy.fraud.rest.v1.check.person;
 
-import ru.forxy.fraud.rest.v1.Entity;
+import ru.forxy.fraud.rest.v1.check.Entity;
 
 public class Telephone extends Entity {
+
+    private static final long serialVersionUID = 9145586471000106257L;
+
     protected String areaCode;
     protected String countryAccessCode;
     protected String phoneNumber;
