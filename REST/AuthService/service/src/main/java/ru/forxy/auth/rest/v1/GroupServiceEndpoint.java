@@ -25,7 +25,7 @@ import javax.ws.rs.core.UriInfo;
 @Produces(MediaType.APPLICATION_JSON)
 public class GroupServiceEndpoint extends AbstractService {
 
-    private IGroupManager groupServiceFacade;
+    private IGroupManager groupManager;
 
     @GET
     public Response getGroups(@QueryParam("page") final Integer page,
@@ -39,8 +39,8 @@ public class GroupServiceEndpoint extends AbstractService {
                                @Context final UriInfo uriInfo,
                                @Context final HttpHeaders headers) {
         return respondWith(page == null && size == null ?
-                        groupServiceFacade.getAllGroups() :
-                        groupServiceFacade.getGroups(page, size, sortDirection, sortedBy,
+                        groupManager.getAllGroups() :
+                        groupManager.getGroups(page, size, sortDirection, sortedBy,
                                 new Group(idFilter, nameFilter, updatedByFilter, createdByFilter)),
                 uriInfo, headers).build();
     }
@@ -50,7 +50,7 @@ public class GroupServiceEndpoint extends AbstractService {
     public Response getGroup(@PathParam("code") final String code,
                               @Context final UriInfo uriInfo,
                               @Context final HttpHeaders headers) {
-        return respondWith(groupServiceFacade.getGroup(code), uriInfo, headers).build();
+        return respondWith(groupManager.getGroup(code), uriInfo, headers).build();
     }
 
     @POST
@@ -58,7 +58,7 @@ public class GroupServiceEndpoint extends AbstractService {
     public Response registerGroup(final Group group,
                                    @Context final UriInfo uriInfo,
                                    @Context final HttpHeaders headers) {
-        groupServiceFacade.createGroup(group);
+        groupManager.createGroup(group);
         return Response.ok(new StatusEntity("200", uriInfo.getAbsolutePath() + "/" + group.getCode())).build();
     }
 
@@ -67,7 +67,7 @@ public class GroupServiceEndpoint extends AbstractService {
     public Response updateGroup(final Group group,
                                  @Context final UriInfo uriInfo,
                                  @Context final HttpHeaders headers) {
-        groupServiceFacade.updateGroup(group);
+        groupManager.updateGroup(group);
         return Response.ok(new StatusEntity("200", uriInfo.getAbsolutePath() + "/" + group.getCode())).build();
     }
 
@@ -76,12 +76,12 @@ public class GroupServiceEndpoint extends AbstractService {
     public Response deleteGroup(@PathParam("code") final String code,
                                  @Context final UriInfo uriInfo,
                                  @Context final HttpHeaders headers) {
-        groupServiceFacade.deleteGroup(code);
+        groupManager.deleteGroup(code);
         return Response.ok(new StatusEntity("200",
                 "Group with code='" + code + "' has been successfully removed")).build();
     }
 
-    public void setGroupServiceFacade(final IGroupManager groupServiceFacade) {
-        this.groupServiceFacade = groupServiceFacade;
+    public void setGroupManager(final IGroupManager groupManager) {
+        this.groupManager = groupManager;
     }
 }

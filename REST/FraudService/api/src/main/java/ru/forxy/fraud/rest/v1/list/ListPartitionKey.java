@@ -9,14 +9,14 @@ public class ListPartitionKey implements Serializable {
 
     private static final long serialVersionUID = 3445922380692875758L;
 
-    private String value;
     private String type;
+    private String value;
 
-    public String getValue() {
-        return value;
+    public ListPartitionKey() {
     }
 
-    public void setValue(String value) {
+    public ListPartitionKey(String type, String value) {
+        this.type = type;
         this.value = value;
     }
 
@@ -26,5 +26,13 @@ public class ListPartitionKey implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 }

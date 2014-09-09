@@ -20,7 +20,10 @@
           p:blackListDAO-ref="blackListDAO.cassandra.perf"/>
 
     <!-- service endpoints definitions-->
-    <bean id="fraudServiceEndpoint" class="ru.forxy.fraud.rest.FraudServiceEndpoint"
+    <bean id="fraudServiceEndpoint" class="ru.forxy.fraud.rest.v1.FraudServiceEndpoint"
           p:fraudServiceFacade-ref="fraudServiceFacade.perf"/>
+
+    <bean id="blackListsEndpoint" class="ru.forxy.fraud.rest.v1.BlackListsEndpoint"
+          p:blackListManager-ref="blackListManager.perf"/>
 
 </beans>

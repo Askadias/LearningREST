@@ -1,5 +1,6 @@
 package ru.forxy.fraud.rest.v1.velocity;
 
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -14,7 +15,9 @@ public class VelocityMetric implements Serializable {
 
     @EmbeddedId
     private VelocityPartitionKey key;
+    @Column(name = "metric_type")
     private String metricType;
+    @Column(name = "aggregation_type")
     private AggregationType aggregationType;
     private Double value;
 

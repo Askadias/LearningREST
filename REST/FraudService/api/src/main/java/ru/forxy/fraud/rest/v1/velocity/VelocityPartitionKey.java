@@ -1,5 +1,6 @@
 package ru.forxy.fraud.rest.v1.velocity;
 
+import javax.persistence.Column;
 import java.io.Serializable;
 
 /**
@@ -9,6 +10,7 @@ public class VelocityPartitionKey implements Serializable {
 
     private static final long serialVersionUID = -7509974707407062638L;
 
+    @Column(name = "metric_type")
     private String metricType;
     private String value;
 

@@ -7,12 +7,7 @@ import com.datastax.driver.mapping.MappingSession;
  */
 public abstract class BaseCassandraDAO {
 
-    CassandraSessionFactory sessionFactory;
     MappingSession mappingSession;
-
-    public void setSessionFactory(CassandraSessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
 
     public void setMappingSession(MappingSession mappingSession) {
         this.mappingSession = mappingSession;

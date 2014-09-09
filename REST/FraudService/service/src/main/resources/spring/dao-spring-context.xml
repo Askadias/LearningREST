@@ -3,6 +3,7 @@
        xmlns:context='http://www.springframework.org/schema/context'
        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
        xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
        xmlns:mongo='http://www.springframework.org/schema/data/mongo'
        xsi:schemaLocation="
         http://www.springframework.org/schema/beans         http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -61,21 +62,20 @@
     <!-- =========================================================================================
                                    Cassandra Data Source
     ========================================================================================== -->
-    <!--<bean id="cassandraClusterBuilder" class="com.datastax.driver.core.Cluster" factory-method="builder"/>
+
+    <bean id="cassandraClusterBuilder" class="com.datastax.driver.core.Cluster" factory-method="builder"/>
     <bean id="cassandraClusterBuilder.withHost" factory-bean="cassandraClusterBuilder" factory-method="addContactPoint"
-          c:address="localhost"/>
+          c:address="${cassandra.nodes}"/>
 
     <bean id="cassandraCluster" factory-bean="cassandraClusterBuilder.withHost" factory-method="build"/>
 
-    <bean id="cassandraSession" factory-bean="cassandraCluster" factory-method="connect"
-          c:keyspace="forxy"/>
+    <bean id="cassandraSession" factory-bean="cassandraCluster" factory-method="connect"/>
 
-    <bean id="ru.forxy.fraud.db.dao.cassandra.client.CassandraUserClient"
-          class="ru.forxy.fraud.db.dao.cassandra.client.CassandraUserClient"
-          p:session-ref="cassandraSession"/>
+    <bean id="mappingSession" class="com.datastax.driver.mapping.MappingSession"
+          c:keyspace="${cassandra.keyspace}"
+          c:session-ref="cassandraSession"/>
 
-    <bean id="ru.forxy.fraud.db.dao.UserDAO.impl.cassandra" class="ru.forxy.fraud.db.dao.cassandra.UserDAO"
-          autowire-candidate="false"
-          p:cassandraClient-ref="ru.forxy.fraud.db.dao.cassandra.client.CassandraUserClient"/>-->
+    <bean id="blackListDAO.impl.cassandra" class="ru.forxy.fraud.db.dao.cassandra.BlackListDAO"
+          p:mappingSession-ref="mappingSession"/>
 
 </beans>

@@ -27,32 +27,4 @@ public class AggregationConfig implements Serializable {
     public void setPeriod(Long period) {
         this.period = period;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof AggregationConfig)) return false;
-
-        AggregationConfig that = (AggregationConfig) o;
-
-        if (period != null ? !period.equals(that.period) : that.period != null) return false;
-        if (type != that.type) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = type != null ? type.hashCode() : 0;
-        result = 31 * result + (period != null ? period.hashCode() : 0);
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "AggregationConfig{" +
-                "type=" + type +
-                ", period=" + period +
-                '}';
-    }
 }

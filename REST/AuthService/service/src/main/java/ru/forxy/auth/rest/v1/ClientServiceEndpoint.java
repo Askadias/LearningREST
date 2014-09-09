@@ -25,7 +25,7 @@ import javax.ws.rs.core.UriInfo;
 @Produces(MediaType.APPLICATION_JSON)
 public class ClientServiceEndpoint extends AbstractService {
 
-    private IClientManager clientServiceFacade;
+    private IClientManager clientManager;
 
     @GET
     public Response getClients(@QueryParam("page") final Integer page,
@@ -39,8 +39,8 @@ public class ClientServiceEndpoint extends AbstractService {
                                @Context final UriInfo uriInfo,
                                @Context final HttpHeaders headers) {
         return respondWith(page == null && size == null ?
-                        clientServiceFacade.getAllClients() :
-                        clientServiceFacade.getClients(page, size, sortDirection, sortedBy,
+                        clientManager.getAllClients() :
+                        clientManager.getClients(page, size, sortDirection, sortedBy,
                                 new Client(idFilter, nameFilter, updatedByFilter, createdByFilter)),
                 uriInfo, headers).build();
     }
@@ -50,7 +50,7 @@ public class ClientServiceEndpoint extends AbstractService {
     public Response getClient(@PathParam("client_id") final String clientID,
                               @Context final UriInfo uriInfo,
                               @Context final HttpHeaders headers) {
-        return respondWith(clientServiceFacade.getClient(clientID), uriInfo, headers).build();
+        return respondWith(clientManager.getClient(clientID), uriInfo, headers).build();
     }
 
     @POST
@@ -58,7 +58,7 @@ public class ClientServiceEndpoint extends AbstractService {
     public Response registerClient(final Client client,
                                    @Context final UriInfo uriInfo,
                                    @Context final HttpHeaders headers) {
-        clientServiceFacade.createClient(client);
+        clientManager.createClient(client);
         return Response.ok(new StatusEntity("200", uriInfo.getAbsolutePath() + "/" + client.getClientID())).build();
     }
 
@@ -67,7 +67,7 @@ public class ClientServiceEndpoint extends AbstractService {
     public Response updateClient(final Client client,
                                  @Context final UriInfo uriInfo,
                                  @Context final HttpHeaders headers) {
-        clientServiceFacade.updateClient(client);
+        clientManager.updateClient(client);
         return Response.ok(new StatusEntity("200", uriInfo.getAbsolutePath() + "/" + client.getClientID())).build();
     }
 
@@ -76,12 +76,12 @@ public class ClientServiceEndpoint extends AbstractService {
     public Response deleteClient(@PathParam("client_id") final String clientID,
                                  @Context final UriInfo uriInfo,
                                  @Context final HttpHeaders headers) {
-        clientServiceFacade.deleteClient(clientID);
+        clientManager.deleteClient(clientID);
         return Response.ok(new StatusEntity("200",
                 "Client with ID='" + clientID + "' has been successfully removed")).build();
     }
 
-    public void setClientServiceFacade(final IClientManager clientServiceFacade) {
-        this.clientServiceFacade = clientServiceFacade;
+    public void setClientManager(final IClientManager clientManager) {
+        this.clientManager = clientManager;
     }
 }

@@ -142,9 +142,9 @@ public abstract class PersonGenerator extends AbstractGenerator {
         return DateGenerator.generateDateInPast(age * 365, (age + 1) * 365);
     }
 
-    public static byte[] generatePasswordData() {
+    public static String generatePasswordData() {
         byte[] password = new byte[32];
         RAND.nextBytes(password);
-        return password;
+        return new String(password);
     }
 }

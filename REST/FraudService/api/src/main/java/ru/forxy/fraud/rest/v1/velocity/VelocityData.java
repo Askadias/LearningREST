@@ -1,5 +1,6 @@
 package ru.forxy.fraud.rest.v1.velocity;
 
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -15,8 +16,10 @@ public class VelocityData implements Serializable {
 
     @EmbeddedId
     private VelocityPartitionKey key;
+    @Column(name = "metric_type")
     private String metricType;
-    private Date timestamp;
+    @Column(name = "create_date")
+    private Date createDate;
     private String value;
 
     public VelocityPartitionKey getKey() {
@@ -35,12 +38,12 @@ public class VelocityData implements Serializable {
         this.metricType = metricType;
     }
 
-    public Date getTimestamp() {
-        return timestamp;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
     public String getValue() {

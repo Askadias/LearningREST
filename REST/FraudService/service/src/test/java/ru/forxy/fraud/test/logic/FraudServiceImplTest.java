@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import ru.forxy.fraud.db.dao.ITransactionDAO;
-import ru.forxy.fraud.rest.IFraudService;
+import ru.forxy.fraud.rest.v1.FraudServiceEndpoint;
 import ru.forxy.fraud.rest.v1.check.Transaction;
 import ru.forxy.fraud.test.BaseFraudServiceTest;
 
@@ -24,7 +24,7 @@ public class FraudServiceImplTest extends BaseFraudServiceTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(FraudServiceImplTest.class);
 
     @Autowired
-    IFraudService fraudService;
+    FraudServiceEndpoint fraudService;
 
     @Autowired
     @Qualifier("ru.forxy.fraud.db.dao.FraudDAO.mongo")

@@ -11,6 +11,7 @@ import ru.forxy.fraud.rest.v1.check.person.Traveler;
 import ru.forxy.fraud.rest.v1.check.product.Product;
 import ru.forxy.fraud.rest.v1.check.product.travel.TravelProduct;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,8 +86,8 @@ public abstract class TravelDataGenerator extends AbstractGenerator {
 
     private static <T extends Amount> T fillAmountData(final T amount, final double value) {
         amount.setCurrency(generateCurrencyCode());
-        amount.setValue(value);
-        amount.setUsdValue(value);
+        amount.setValue(new BigDecimal(value));
+        amount.setUsdValue(new BigDecimal(value));
         return amount;
     }
 

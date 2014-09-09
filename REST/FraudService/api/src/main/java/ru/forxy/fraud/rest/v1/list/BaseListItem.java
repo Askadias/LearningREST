@@ -1,5 +1,6 @@
 package ru.forxy.fraud.rest.v1.list;
 
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import java.io.Serializable;
 import java.util.Date;
@@ -13,11 +14,25 @@ public class BaseListItem implements Serializable {
 
     @EmbeddedId
     private ListPartitionKey key;
+    @Column(name = "is_active")
     private Boolean isActive;
+    @Column(name = "create_date")
     private Date createDate;
+    @Column(name = "created_by")
     private String createdBy;
+    @Column(name = "update_date")
     private Date updateDate;
+    @Column(name = "updated_by")
     private String updatedBy;
+
+    public BaseListItem() {
+    }
+
+    public BaseListItem(String type, String value) {
+        this.key = new ListPartitionKey(type, value);
+        this.createDate = new Date();
+        this.updateDate = new Date();
+    }
 
     public ListPartitionKey getKey() {
         return key;

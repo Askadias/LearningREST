@@ -6,11 +6,21 @@ USE fraud;
 CREATE TABLE IF NOT EXISTS blacklist (
     value TEXT,
     type TEXT,
-    PRIMARY KEY ((value,type))
+    is_active BOOLEAN,
+    create_date TIMESTAMP,
+    created_by TEXT,
+    update_date TIMESTAMP,
+    updated_by TEXT,
+    PRIMARY KEY ((type, value))
 );
 
 CREATE TABLE IF NOT EXISTS whitelist (
     value TEXT,
     type TEXT,
-    PRIMARY KEY ((value,type))
+    is_active BOOLEAN,
+    create_date TIMESTAMP,
+    created_by TEXT,
+    update_date TIMESTAMP,
+    updated_by TEXT,
+    PRIMARY KEY ((type, value))
 );

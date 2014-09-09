@@ -9,4 +9,12 @@ import javax.persistence.Table;
 public class BlackListItem extends BaseListItem {
 
     private static final long serialVersionUID = 8002490918713648931L;
+
+    public BlackListItem() {
+        super();
+    }
+
+    public BlackListItem(String type, String value) {
+        super(type, value);
+    }
 }

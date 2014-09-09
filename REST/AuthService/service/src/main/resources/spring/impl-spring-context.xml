@@ -52,10 +52,10 @@
           p:tokenManager-ref="tokenManager.perf"/>
 
     <bean id="clientServiceEndpoint" class="ru.forxy.auth.rest.v1.ClientServiceEndpoint"
-          p:clientServiceFacade-ref="clientManager.perf"/>
+          p:clientManager-ref="clientManager.perf"/>
 
     <bean id="groupServiceEndpoint" class="ru.forxy.auth.rest.v1.GroupServiceEndpoint"
-          p:groupServiceFacade-ref="groupManager.perf"/>
+          p:groupManager-ref="groupManager.perf"/>
 
     <!-- OAuth business logic component-->
     <!--<bean id="oauthProvider" class="ru.forxy.auth.logic.OAuthManager"
