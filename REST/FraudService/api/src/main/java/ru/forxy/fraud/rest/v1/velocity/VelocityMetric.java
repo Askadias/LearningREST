@@ -14,26 +14,16 @@ public class VelocityMetric implements Serializable {
     private static final long serialVersionUID = -7204065035725819278L;
 
     @EmbeddedId
-    private VelocityCompositeKey key;
-    @Column(name = "aggregation_type")
-    private AggregationType aggregationType;
+    private CompositeKey key;
     @Column(name = "aggregated_value")
     private Double aggregatedValue;
 
-    public VelocityCompositeKey getKey() {
+    public CompositeKey getKey() {
         return key;
     }
 
-    public void setKey(VelocityCompositeKey key) {
+    public void setKey(CompositeKey key) {
         this.key = key;
-    }
-
-    public AggregationType getAggregationType() {
-        return aggregationType;
-    }
-
-    public void setAggregationType(AggregationType aggregationType) {
-        this.aggregationType = aggregationType;
     }
 
     public Double getAggregatedValue() {
@@ -42,5 +32,48 @@ public class VelocityMetric implements Serializable {
 
     public void setAggregatedValue(Double aggregatedValue) {
         this.aggregatedValue = aggregatedValue;
+    }
+
+    public class CompositeKey implements Serializable {
+
+        private static final long serialVersionUID = -3245065035725879278L;
+
+        @EmbeddedId
+        private VelocityPartitionKey id;
+        @Column(name = "related_metric_type")
+        private String relatedMetricType;
+        @Column(name = "aggregation_type")
+        private AggregationType aggregationType;
+
+        public CompositeKey() {
+        }
+
+        public CompositeKey(VelocityPartitionKey id) {
+            this.id = id;
+        }
+
+        public VelocityPartitionKey getId() {
+            return id;
+        }
+
+        public void setId(VelocityPartitionKey id) {
+            this.id = id;
+        }
+
+        public String getRelatedMetricType() {
+            return relatedMetricType;
+        }
+
+        public void setRelatedMetricType(String relatedMetricType) {
+            this.relatedMetricType = relatedMetricType;
+        }
+
+        public AggregationType getAggregationType() {
+            return aggregationType;
+        }
+
+        public void setAggregationType(AggregationType aggregationType) {
+            this.aggregationType = aggregationType;
+        }
     }
 }

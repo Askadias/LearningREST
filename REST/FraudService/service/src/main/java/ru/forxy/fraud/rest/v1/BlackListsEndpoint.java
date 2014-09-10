@@ -13,6 +13,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -26,18 +27,18 @@ public class BlackListsEndpoint extends AbstractService {
     private IBlackListManager blackListManager;
 
     @GET
-    @Path("/blacklists/{type}/{value}")
-    public Response getBlackLists(@PathParam("type") final String type,
-                                  @PathParam("value") final String value,
+    @Path("/blacklists/")
+    public Response getBlackLists(@QueryParam("type") final String type,
+                                  @QueryParam("value") final String value,
                                   @Context final UriInfo uriInfo,
                                   @Context final HttpHeaders headers) {
         return respondWith(blackListManager.getMoreItemsFrom(type, value), uriInfo, headers).build();
     }
 
     @GET
-    @Path("/blacklist/{type}/{value}")
-    public Response getBlackListItem(@PathParam("type") final String type,
-                                     @PathParam("value") final String value,
+    @Path("/blacklist/")
+    public Response getBlackListItem(@QueryParam("type") final String type,
+                                     @QueryParam("value") final String value,
                                      @Context final UriInfo uriInfo,
                                      @Context final HttpHeaders headers) {
         return respondWith(blackListManager.get(type, value), uriInfo, headers).build();
@@ -50,8 +51,9 @@ public class BlackListsEndpoint extends AbstractService {
                                    @Context final UriInfo uriInfo,
                                    @Context final HttpHeaders headers) {
         blackListManager.add(blackListItem);
-        return Response.ok(new StatusEntity("200", uriInfo.getAbsolutePath() + "/" + blackListItem.getKey().getType()
-                + "/" + blackListItem.getKey().getValue())).build();
+        return Response.ok(new StatusEntity("200", uriInfo.getAbsolutePath()
+                + "?type=" + blackListItem.getKey().getType()
+                + "&value=" + blackListItem.getKey().getValue())).build();
     }
 
     @PUT
@@ -61,14 +63,15 @@ public class BlackListsEndpoint extends AbstractService {
                                     @Context final UriInfo uriInfo,
                                     @Context final HttpHeaders headers) {
         blackListManager.update(blackListItem);
-        return Response.ok(new StatusEntity("200", uriInfo.getAbsolutePath() + "/" + blackListItem.getKey().getType()
-                + "/" + blackListItem.getKey().getValue())).build();
+        return Response.ok(new StatusEntity("200", uriInfo.getAbsolutePath()
+                + "?type=" + blackListItem.getKey().getType()
+                + "&value=" + blackListItem.getKey().getValue())).build();
     }
 
     @DELETE
-    @Path("/blacklist/{type}/{value}")
-    public Response deleteBlackList(@PathParam("type") final String type,
-                                    @PathParam("value") final String value,
+    @Path("/blacklist/")
+    public Response deleteBlackList(@QueryParam("type") final String type,
+                                    @QueryParam("value") final String value,
                                     @Context final UriInfo uriInfo,
                                     @Context final HttpHeaders headers) {
         blackListManager.delete(new BlackListItem());

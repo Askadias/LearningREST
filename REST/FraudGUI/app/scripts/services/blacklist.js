@@ -1,26 +1,20 @@
 'use strict';
 
-angular.module('services.client', ['restangular'])
+angular.module('services.blacklist', ['restangular'])
 
   .factory('BlackList', ['Restangular', function (Restangular) {
     return {
-      all: function () {
-        return Restangular.all('blacklists').getList();
+      page: function (startFrom) {
+        return Restangular.all('blacklists').getList(startFrom);
       },
-      page: function (query) {
-        return Restangular.one('blacklists').get(query);
+      get: function (type, value) {
+        return Restangular.one('blacklist', type, value).get();
       },
-      get: function (client_id) {
-        return Restangular.one('blacklists', client_id).get();
+      save: function (item) {
+        return Restangular.all('blacklist').post(item);
       },
-      add: function (client) {
-        return Restangular.all('blacklists').post(client);
-      },
-      save: function (client) {
-        return Restangular.one('blacklists', client.client_id).put(client);
-      },
-      delete: function (client) {
-        return Restangular.one('blacklists', client.client_id).remove();
+      delete: function (item) {
+        return Restangular.one('blacklist', item.type, item.value).remove();
       }
     }
   }]);

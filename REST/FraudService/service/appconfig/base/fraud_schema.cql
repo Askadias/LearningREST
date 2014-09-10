@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS velocity (
     related_metric_type TEXT,
     aggregation_type TEXT,
     aggregated_value double,
-    PRIMARY KEY ((metric_type, metric_value), related_metric_type)
+    PRIMARY KEY ((metric_type, metric_value), related_metric_type, aggregation_type)
 );
 
 DROP TABLE IF EXISTS velocity_data;
@@ -44,5 +44,5 @@ CREATE TABLE IF NOT EXISTS velocity_data (
     related_metric_type TEXT,
     create_date TIMESTAMP,
     related_metric_value TEXT,
-    PRIMARY KEY ((metric_type, metric_value), related_metric_type)
+    PRIMARY KEY ((metric_type, metric_value), related_metric_type, create_date)
 );

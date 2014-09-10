@@ -1,40 +1,6 @@
-<div role="navigation" class="navbar navbar-fixed-top" ng-controller="LoginCtrl">
+<div role="navigation" class="navbar navbar-fixed-top">
   <div class="navbar-header">
-    <a title="Fraud Service admin tool" ui-sref="users.list" class="navbar-brand">FraudService Admin Tool</a>
-  </div>
-
-  <div class="collapse navbar-collapse navbar-ex1-collapse">
-    <form class="navbar-form navbar-right">
-      <div class="form-group">
-        <div ng-if="!!$storage.user">
-          <button type="submit" ng-click="logout()" class="btn btn-default">Log out</button>
-        </div>
-        <div ng-if="!$storage.user">
-          <input type="email" ng-model="credentials.email" class="form-control" placeholder="Email"
-                 required>
-          <input type="password" ng-model="credentials.password" class="form-control"
-                 placeholder="Password"
-                 required>
-          <button type="submit" ng-click="login(credentials)" class="btn btn-default">Log in</button>
-          <button type="button" ng-click="register(credentials)" class="btn btn-default">Register</button>
-        </div>
-      </div>
-    </form>
-
-    <div class="navbar-text navbar-right">
-      <div ng-if="!!$storage.user">
-        <ul class="list-inline">
-          <li>{{$storage.user.login}}</li>
-          <li ng-repeat="role in $storage.user.groups">
-            <label class="label label-success">{{role}}</label>
-          </li>
-        </ul>
-      </div>
-      <div ng-if="!$storage.user">
-        <span class="label label-default">guest</span>
-      </div>
-    </div>
-
+    <a title="Fraud 2.0" ui-sref="blacklist" class="navbar-brand">Fraud 2.0</a>
   </div>
 </div>
 
@@ -44,13 +10,34 @@
     <div class="col-md-2">
       <div class="well sidebar-nav">
         <ul class="nav nav-list">
-          <li class="nav-header">Lists</li>
-          <li ng-class="{active: ('blacklists.list' | includedByState)}">
+          <li class="nav-header">Exclusions</li>
+          <li ng-class="{active: ('blacklist.list' | includedByState)}">
             <a ui-sref="blacklists.list">
-              Black Lists
+              Black List
+            </a>
+          </li>
+          <li ng-class="{active: ('whitelist.list' | includedByState)}">
+            <a ui-sref="whitelist.list">
+              White List
             </a>
           </li>
           <li class="divider"></li>
+          <li class="nav-header">Velocity</li>
+          <li ng-class="{active: ('velocity.metrics.list' | includedByState)}">
+            <a ui-sref="velocity.metrics.list">
+              Velocity Metrics
+            </a>
+          </li>
+          <li ng-class="{active: ('velocity.data.list' | includedByState)}">
+            <a ui-sref="velocity.data.list">
+              Velocity Data
+            </a>
+          </li>
+          <li ng-class="{active: ('velocity.config.list' | includedByState)}">
+            <a ui-sref="velocity.config.list">
+              Velocity Config
+            </a>
+          </li>
         </ul>
       </div>
     </div>

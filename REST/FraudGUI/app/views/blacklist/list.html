@@ -1,0 +1,45 @@
+<div class="well well-sm">
+  <a href="#" class="btn btn-success">
+    <i class="fa fa-plus-circle fa-lg"></i>
+    Add
+  </a>
+</div>
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>List Type</th>
+    <th>Subject</th>
+    <th>Active</th>
+    <th>Updated By</th>
+    <th>Created By</th>
+    <th>Update Date</th>
+    <th>Create Date</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr ng-repeat="item in blacklist">
+    <td>{{item.key.type}}</td>
+    <td>{{item.key.value}}</td>
+    <td>{{item.is_active}}</td>
+    <td>{{item.updated_by}}</td>
+    <td>{{item.created_by}}</td>
+    <td>{{item.update_date}}</td>
+    <td>{{item.create_date}}</td>
+    <td>
+      <div class="btn-group" style="width: 100px">
+        <button type="button" class="btn btn-danger btn-sm" ng-click="remove(item)">
+          <i class="fa fa-trash-o"></i>
+        </button>
+      </div>
+    </td>
+  </tr>
+  <tr ng-show="!blacklist || blacklist.length == 0">
+    <td colspan="8">
+      <div class="alert alert-info">
+        Black List is empty
+      </div>
+    </td>
+  </tr>
+  </tbody>
+</table>

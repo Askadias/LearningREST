@@ -11,7 +11,6 @@ module.exports = function (grunt) {
 
   // Load grunt tasks automatically
   require('load-grunt-tasks')(grunt);
-  var urlRewrite = require('grunt-connect-rewrite');
   var modRewrite = require('connect-modrewrite');
 
   var corsMiddleware = function(req, res, next) {

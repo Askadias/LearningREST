@@ -2,5 +2,6 @@
 
 angular.module('services.config', [])
   .constant('config', {
-    authEndpoint: '@@authEndpoint'
+    authEndpoint: '@@authEndpoint',
+    fraudEndpoint: '@@fraudEndpoint'
   });

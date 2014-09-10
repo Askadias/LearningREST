@@ -1,7 +1,6 @@
 package ru.forxy.fraud.db.dao;
 
 import ru.forxy.common.status.ISystemStatusComponent;
-import ru.forxy.fraud.rest.v1.velocity.VelocityCompositeKey;
 import ru.forxy.fraud.rest.v1.velocity.VelocityData;
 import ru.forxy.fraud.rest.v1.velocity.VelocityMetric;
 import ru.forxy.fraud.rest.v1.velocity.VelocityPartitionKey;
@@ -21,9 +20,9 @@ public interface IVelocityDAO extends ISystemStatusComponent {
 
     VelocityData getData(final VelocityPartitionKey id);
 
-    VelocityMetric getMetric(final VelocityCompositeKey key);
+    VelocityMetric getMetric(final VelocityMetric.CompositeKey key);
 
-    VelocityData getData(final VelocityCompositeKey key);
+    VelocityData getData(final VelocityData.CompositeKey key);
 
     void saveMetric(final VelocityMetric metric);
 

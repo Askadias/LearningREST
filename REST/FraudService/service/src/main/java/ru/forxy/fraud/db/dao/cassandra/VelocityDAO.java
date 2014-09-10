@@ -2,7 +2,6 @@ package ru.forxy.fraud.db.dao.cassandra;
 
 import ru.forxy.common.status.pojo.ComponentStatus;
 import ru.forxy.fraud.db.dao.IVelocityDAO;
-import ru.forxy.fraud.rest.v1.velocity.VelocityCompositeKey;
 import ru.forxy.fraud.rest.v1.velocity.VelocityData;
 import ru.forxy.fraud.rest.v1.velocity.VelocityMetric;
 import ru.forxy.fraud.rest.v1.velocity.VelocityPartitionKey;
@@ -44,21 +43,21 @@ public class VelocityDAO extends BaseCassandraDAO implements IVelocityDAO {
 
     @Override
     public VelocityMetric getMetric(VelocityPartitionKey id) {
-        return getMetric(new VelocityCompositeKey(id));
+        return getMetric(new VelocityMetric().new CompositeKey(id));
     }
 
     @Override
     public VelocityData getData(VelocityPartitionKey id) {
-        return getData(new VelocityCompositeKey(id));
+        return getData(new VelocityData().new CompositeKey(id));
     }
 
     @Override
-    public VelocityMetric getMetric(VelocityCompositeKey key) {
+    public VelocityMetric getMetric(VelocityMetric.CompositeKey key) {
         return mappingSession.get(VelocityMetric.class, key);
     }
 
     @Override
-    public VelocityData getData(VelocityCompositeKey key) {
+    public VelocityData getData(VelocityData.CompositeKey key) {
         return mappingSession.get(VelocityData.class, key);
     }
 

@@ -8,181 +8,34 @@ angular.module('fraudAdmin', [
   'ui.bootstrap',
   'ui.router',
   'controllers.common',
-  'controllers.user',
-  'controllers.client',
-  'controllers.group',
-  'controllers.token',
-  'services.common',
-  'services.user',
-  'services.client',
-  'services.group',
-  'services.token',
-  'services.auth',
+  'controllers.blacklist',
+  'services.blacklist',
   'services.config',
   'directives',
   'filters'
 ])
-  .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'RestangularProvider', 'OAuthProvider', 'config',
-    function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, RestangularProvider, OAuthProvider, config) {
-
-      //$httpProvider.defaults.headers.common['Authorization'] = 'Bearer ' + 'eyJhbGciOiJSUzI1NiJ9.eyJleHAiOjE0MDkzNTUyMjAsInN1YiI6ImFkbWluQGFkbWluLmNvbSIsIm5iZiI6MTQwOTM1NDYyMCwiYXVkIjpbImh0dHA6XC9cL2xvY2FsaG9zdDoxMTA4MFwvQXV0aFNlcnZpY2VcLyJdLCJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6MTEwODBcL0F1dGhTZXJ2aWNlXC8iLCJqdGkiOiI0N2U3NWFlZS0zMzk5LTQyZTQtOWEzNy1mMWQ5YTYzYWM3MDAiLCJpYXQiOjE0MDkzNTQ2MjB9.pvMmzmdcnsdaIOVf1EZLdx_rsSyQL3G0dVdRtOjZAl46xiPIoUu_MdP_O0MYkeQ0rIayLRe9qnmaNPjnuGeMXyf1HE5qfa9lkAhXljWMBBFC3sqmUvZj1S0Pd-c4dt7AiCDVPvTbK9_JMK8wKuCTNbyGSl-OScLIUl-yqfDTkis';
+  .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'RestangularProvider', 'config',
+    function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, RestangularProvider, config) {
 
       RestangularProvider.setDefaultHeaders({
         'Content-Type': 'application/json',
         'X-Requested-With': 'XMLHttpRequest'
       });
 
-      /*OAuthProvider.extendConfig({
-        authenticationEndpoint: 'http://localhost:11080/AuthService/app/login/',
-        authorizationEndpoint: 'http://localhost:11080/AuthService/service/oauth/authorize/',
-        client_id: '53cab7ca3004c4a709c985c3',
-        client_secret: 'secret',
-        scope: 'readClients writeClients readTokens updateTokens'
-      });*/
+      RestangularProvider.setBaseUrl(config.fraudEndpoint);
 
-      RestangularProvider.setBaseUrl(config.authEndpoint);
-
-      var access = routingConfig.accessLevels;
-
-      $urlRouterProvider.otherwise('/clients/');
+      $urlRouterProvider.otherwise('/blacklist/');
 
       $stateProvider
-        .state('login', {
-          url: '/login/?redirect_url',
-          templateUrl: 'views/login.html',
-          controller: 'LoginCtrl',
-          data: {
-            access: access.public
-          }
-        })
-        .state('authorize', {
-          url: '/authorize/',
-          templateUrl: 'views/authorization.html',
-          controller: 'AuthController',
-          data: {
-            access: access.user
-          }
-        })
-        .state('auth', {
-          abstract: true,
-          url: '/auth/',
-          templateUrl: 'views/auth.html',
-          controller: 'AuthController',
-          data: {
-            access: access.user
-          }
-        })
-        .state('auth.success', {
-          url: '/auth/success/',
-          templateUrl: 'views/auth/success.html',
-          controller: 'AuthController',
-          data: {
-            access: access.user
-          }
-        })
-        .state('auth.failure', {
-          url: '/auth/failure/',
-          templateUrl: 'views/auth/failure.html',
-          controller: 'AuthController',
-          data: {
-            access: access.user
-          }
-        })
-        .state('users', {
+        .state('blacklist', {
           abstract: true,
           templateUrl: 'views/layout.html',
-          controller: 'MainCtrl',
-          data: {
-            access: access.public
-          }
+          controller: 'MainCtrl'
         })
-        .state('users.list', {
-          url: '/users/',
-          templateUrl: 'views/users/list.html',
-          controller: 'UsersListCtrl',
-          data: {
-            access: access.user
-          }
-        })
-        .state('users.details', {
-          url: '/users/:login/:mode/',
-          templateUrl: 'views/users/details.html',
-          controller: 'UserDetailsCtrl',
-          data: {
-            access: access.admin
-          }
-        })
-        .state('clients', {
-          abstract: true,
-          templateUrl: 'views/layout.html',
-          controller: 'MainCtrl',
-          data: {
-            access: access.user
-          }
-        })
-        .state('clients.list', {
-          url: '/clients/',
-          templateUrl: 'views/clients/list.html',
-          controller: 'ClientsListCtrl',
-          data: {
-            access: access.user
-          }
-        })
-        .state('clients.details', {
-          url: '/clients/:client_id/:mode/',
-          templateUrl: 'views/clients/details.html',
-          controller: 'ClientDetailsCtrl',
-          data: {
-            access: access.admin
-          }
-        })
-        .state('groups', {
-          abstract: true,
-          templateUrl: 'views/layout.html',
-          controller: 'MainCtrl',
-          data: {
-            access: access.user
-          }
-        })
-        .state('groups.list', {
-          url: '/groups/',
-          templateUrl: 'views/groups/list.html',
-          controller: 'GroupsListCtrl',
-          data: {
-            access: access.user
-          }
-        })
-        .state('groups.details', {
-          url: '/groups/:code/:mode/',
-          templateUrl: 'views/groups/details.html',
-          controller: 'GroupDetailsCtrl',
-          data: {
-            access: access.admin
-          }
-        })
-        .state('tokens', {
-          abstract: true,
-          templateUrl: 'views/layout.html',
-          controller: 'MainCtrl',
-          data: {
-            access: access.user
-          }
-        })
-        .state('tokens.list', {
-          url: '/tokens/',
-          templateUrl: 'views/tokens/list.html',
-          controller: 'TokensListCtrl',
-          data: {
-            access: access.user
-          }
-        })
-        .state('tokens.details', {
-          url: '/tokens/:token_key/:mode/',
-          templateUrl: 'views/tokens/details.html',
-          controller: 'TokenDetailsCtrl',
-          data: {
-            access: access.admin
-          }
+        .state('blacklist.list', {
+          url: '/blacklist/',
+          templateUrl: 'views/blacklist/list.html',
+          controller: 'BlackListsCtrl'
         });
 
       // FIX for trailing slashes. Gracefully "borrowed" from https://github.com/angular-ui/ui-router/issues/50
@@ -214,70 +67,4 @@ angular.module('fraudAdmin', [
       });
 
       $locationProvider.html5Mode(true);
-
-      $httpProvider.interceptors.push('OAuthInterceptor');
-      $httpProvider.interceptors.push(['$location', '$q', '$injector', function ($location, $q, $injector) {
-        function success(response) {
-          return response;
-        }
-
-        function error(response) {
-          if (response.status === 401 || response.status === 403) {
-            $injector.get('$state').transitionTo('login');
-            return $q.reject(response);
-          }
-          else {
-            return $q.reject(response);
-          }
-        }
-
-        return function (promise) {
-          return promise.then(success, error);
-        };
-      }]);
-    }])
-  /*.run(['$rootScope', '$state', 'Auth', '$location', 'AlertMgr',
-   function ($rootScope, $state, Auth, $location, AlertMgr) {
-   $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
-   if (!Auth.authorize(toState.data.access)) {
-   AlertMgr.addAlert('danger', "Seems like you tried accessing a route you don`t have access to...");
-
-   event.preventDefault();
-
-   if (fromState.url === '^') {
-   if (Auth.isLoggedIn()) {
-   $rootScope.alerts = [];
-   $state.go('clients.list');
-   } else {
-   $state.transitionTo('login', {redirect_url: $location.url()});
-   }
-   }
-   } else {
-   AlertMgr.clearAlerts();
-   }
-   });
-   }])*/
-  /*.run(['$rootScope', '$window', 'OAuth',
-   function ($rootScope, $window, OAuth) {
-   //$rootScope.session = sessionService;
-   $window.app = {
-   authState: function (state, user) {
-   $rootScope.$apply(function () {
-   switch (state) {
-   case 'success':
-   OAuth.verifyAsync(user);
-   break;
-   case 'failure':
-   $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
-   break;
-   }
-
-   });
-   }
-   };
-
-   if ($window.user !== null) {
-   alert('Authentication succeeded');
-   //sessionService.authSuccess($window.user);
-   }
-   }])*/;
+    }]);
