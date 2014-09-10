@@ -14,27 +14,18 @@ public class VelocityMetric implements Serializable {
     private static final long serialVersionUID = -7204065035725819278L;
 
     @EmbeddedId
-    private VelocityPartitionKey key;
-    @Column(name = "metric_type")
-    private String metricType;
+    private VelocityCompositeKey key;
     @Column(name = "aggregation_type")
     private AggregationType aggregationType;
-    private Double value;
+    @Column(name = "aggregated_value")
+    private Double aggregatedValue;
 
-    public VelocityPartitionKey getKey() {
+    public VelocityCompositeKey getKey() {
         return key;
     }
 
-    public void setKey(VelocityPartitionKey key) {
+    public void setKey(VelocityCompositeKey key) {
         this.key = key;
-    }
-
-    public String getMetricType() {
-        return metricType;
-    }
-
-    public void setMetricType(String metricType) {
-        this.metricType = metricType;
     }
 
     public AggregationType getAggregationType() {
@@ -45,11 +36,11 @@ public class VelocityMetric implements Serializable {
         this.aggregationType = aggregationType;
     }
 
-    public Double getValue() {
-        return value;
+    public Double getAggregatedValue() {
+        return aggregatedValue;
     }
 
-    public void setValue(Double value) {
-        this.value = value;
+    public void setAggregatedValue(Double aggregatedValue) {
+        this.aggregatedValue = aggregatedValue;
     }
 }

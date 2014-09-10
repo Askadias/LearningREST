@@ -15,27 +15,18 @@ public class VelocityData implements Serializable {
     private static final long serialVersionUID = 6850650473701192980L;
 
     @EmbeddedId
-    private VelocityPartitionKey key;
-    @Column(name = "metric_type")
-    private String metricType;
+    private VelocityCompositeKey key;
     @Column(name = "create_date")
     private Date createDate;
-    private String value;
+    @Column(name = "related_metric_value")
+    private String relatedMetricValue;
 
-    public VelocityPartitionKey getKey() {
+    public VelocityCompositeKey getKey() {
         return key;
     }
 
-    public void setKey(VelocityPartitionKey key) {
+    public void setKey(VelocityCompositeKey key) {
         this.key = key;
-    }
-
-    public String getMetricType() {
-        return metricType;
-    }
-
-    public void setMetricType(String metricType) {
-        this.metricType = metricType;
     }
 
     public Date getCreateDate() {
@@ -46,11 +37,11 @@ public class VelocityData implements Serializable {
         this.createDate = createDate;
     }
 
-    public String getValue() {
-        return value;
+    public String getRelatedMetricValue() {
+        return relatedMetricValue;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setRelatedMetricValue(String relatedMetricValue) {
+        this.relatedMetricValue = relatedMetricValue;
     }
 }

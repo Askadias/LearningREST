@@ -18,12 +18,21 @@ public class VelocityConfig implements Serializable {
 
     @Id
     private String metricType;
-    private Date timeToLeave;
+    private Date timeToLive;
     private Map<String, Set<AggregationConfig>> metricsAggregationConfig;
     private Date createDate;
     private String createdBy;
     private Date updateDate;
     private String updatedBy;
+
+    public VelocityConfig() {
+    }
+
+    public VelocityConfig(String metricType, String updatedBy, String createdBy) {
+        this.metricType = metricType;
+        this.updatedBy = updatedBy;
+        this.createdBy = createdBy;
+    }
 
     public String getMetricType() {
         return metricType;
@@ -33,12 +42,12 @@ public class VelocityConfig implements Serializable {
         this.metricType = metricType;
     }
 
-    public Date getTimeToLeave() {
-        return timeToLeave;
+    public Date getTimeToLive() {
+        return timeToLive;
     }
 
-    public void setTimeToLeave(Date timeToLeave) {
-        this.timeToLeave = timeToLeave;
+    public void setTimeToLive(Date timeToLive) {
+        this.timeToLive = timeToLive;
     }
 
     public Map<String, Set<AggregationConfig>> getMetricsAggregationConfig() {

@@ -19,26 +19,32 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-@Path("/blacklists/")
+@Path("/")
 @Produces(MediaType.APPLICATION_JSON)
 public class BlackListsEndpoint extends AbstractService {
 
     private IBlackListManager blackListManager;
 
     @GET
-    public Response getBlackLists(@Context final UriInfo uriInfo, @Context final HttpHeaders headers) {
-        return respondWith(blackListManager.getAllBlackLists(), uriInfo, headers).build();
+    @Path("/blacklists/{type}/{value}")
+    public Response getBlackLists(@PathParam("type") final String type,
+                                  @PathParam("value") final String value,
+                                  @Context final UriInfo uriInfo,
+                                  @Context final HttpHeaders headers) {
+        return respondWith(blackListManager.getMoreItemsFrom(type, value), uriInfo, headers).build();
     }
 
     @GET
-    @Path("/{type}/{value}")
-    public Response getBlackListItem(@PathParam("type") final String type, @PathParam("value") final String value,
+    @Path("/blacklist/{type}/{value}")
+    public Response getBlackListItem(@PathParam("type") final String type,
+                                     @PathParam("value") final String value,
                                      @Context final UriInfo uriInfo,
                                      @Context final HttpHeaders headers) {
         return respondWith(blackListManager.get(type, value), uriInfo, headers).build();
     }
 
     @POST
+    @Path("/blacklist/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addToBlackList(final BlackListItem blackListItem,
                                    @Context final UriInfo uriInfo,
@@ -49,6 +55,7 @@ public class BlackListsEndpoint extends AbstractService {
     }
 
     @PUT
+    @Path("/blacklist/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateBlackList(final BlackListItem blackListItem,
                                     @Context final UriInfo uriInfo,
@@ -59,7 +66,7 @@ public class BlackListsEndpoint extends AbstractService {
     }
 
     @DELETE
-    @Path("/{type}/{value}")
+    @Path("/blacklist/{type}/{value}")
     public Response deleteBlackList(@PathParam("type") final String type,
                                     @PathParam("value") final String value,
                                     @Context final UriInfo uriInfo,

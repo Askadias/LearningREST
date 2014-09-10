@@ -13,22 +13,23 @@ import java.util.List;
 public class BlackListDAO extends BaseCassandraDAO implements IBlackListDAO {
 
     @Override
-    public List<BlackListItem> getAll() {
-        return mappingSession.getByQuery(BlackListItem.class, "select * from blacklist");
-    }
-
-    @Override
     public boolean isInBlackList(ListPartitionKey key) {
-        return mappingSession.get(BlackListItem.class, key) != null;
+        BlackListItem item = mappingSession.get(BlackListItem.class, key);
+        return item != null && item.getIsActive();
     }
 
     @Override
-    public List<BlackListItem> getMore(BlackListItem start, int limit) {
-        return mappingSession.getByQuery(BlackListItem.class,
-                "select * from blacklist " +
-                        "where token (value, type) > " +
-                        "token(" + start.getKey().getValue() + "," + start.getKey().getType() + ") " +
-                        "limit " + limit);
+    public List<BlackListItem> getList(final String type, final String value, int limit) {
+        if (type != null && value != null) {
+            return mappingSession.getByQuery(BlackListItem.class,
+                    "select * from blacklist " +
+                            "where token (type, value) > " +
+                            "token('" + type + "','" + value + "') " +
+                            "limit " + limit);
+        } else {
+            return mappingSession.getByQuery(BlackListItem.class,
+                    "select * from blacklist limit " + limit);
+        }
     }
 
     @Override

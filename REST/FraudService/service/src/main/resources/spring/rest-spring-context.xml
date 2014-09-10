@@ -36,6 +36,8 @@
             <ref bean="systemStatusServiceEndpoint"/>
             <ref bean="fraudServiceEndpoint"/>
             <ref bean="blackListsEndpoint"/>
+            <ref bean="velocityEndpoint"/>
+            <ref bean="velocityConfigEndpoint"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <bean class="ru.forxy.common.web.JSONValidationProvider">

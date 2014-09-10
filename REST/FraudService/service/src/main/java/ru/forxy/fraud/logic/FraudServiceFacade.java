@@ -10,10 +10,8 @@ import ru.forxy.fraud.db.dao.ITransactionDAO;
 import ru.forxy.fraud.exceptions.FraudServiceEventLogId;
 import ru.forxy.fraud.rest.v1.check.Transaction;
 
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Implementation class for FraudService business logic
@@ -40,7 +38,7 @@ public class FraudServiceFacade implements IFraudServiceFacade {
 
     @Override
     public EntityPage<Transaction> getTransactions(final Integer page, final Integer size, final SortDirection sortDirection,
-                                         final String sortedBy, final Transaction filter) {
+                                                   final String sortedBy, final Transaction filter) {
         if (page >= 1) {
             int pageSize = size == null ? DEFAULT_PAGE_SIZE : size;
             PageRequest pageRequest;

@@ -7,6 +7,8 @@ class DeployExtension {
     def String host = 'localhost'
     def String serviceName = 'Catalina'
     def Boolean reloadableWar = true
+    def Set<String> configIncludes = []
+    def Set<String> configExcludes = []
 
     // --------- Generating Tomcat server.xml -------------------------
     def Boolean useSSL = false

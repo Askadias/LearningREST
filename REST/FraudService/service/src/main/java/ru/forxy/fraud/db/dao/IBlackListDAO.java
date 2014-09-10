@@ -11,11 +11,9 @@ import java.util.List;
  */
 public interface IBlackListDAO extends ISystemStatusComponent {
 
-    List<BlackListItem> getAll();
-
     boolean isInBlackList(ListPartitionKey key);
 
-    List<BlackListItem> getMore(final BlackListItem start, final int limit);
+    List<BlackListItem> getList(final String type, final String value, final int limit);
 
     BlackListItem get(final ListPartitionKey id);
 

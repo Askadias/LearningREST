@@ -111,10 +111,32 @@
         </property>
     </bean>
 
+    <bean id="velocityConfigDAO.mongo.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
+          autowire-candidate="false"
+          p:proxyInterfaces="ru.forxy.fraud.db.dao.IVelocityConfigDAO"
+          p:target-ref="velocityConfigDAO.impl.mongo">
+        <property name="interceptorNames">
+            <list>
+                <idref bean="performance.dao.loggingInterceptor"/>
+            </list>
+        </property>
+    </bean>
+
     <bean id="blackListDAO.cassandra.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
           autowire-candidate="false"
           p:proxyInterfaces="ru.forxy.fraud.db.dao.IBlackListDAO"
           p:target-ref="blackListDAO.impl.cassandra">
+        <property name="interceptorNames">
+            <list>
+                <idref bean="performance.dao.loggingInterceptor"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="velocityDAO.cassandra.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
+          autowire-candidate="false"
+          p:proxyInterfaces="ru.forxy.fraud.db.dao.IVelocityDAO"
+          p:target-ref="velocityDAO.impl.cassandra">
         <property name="interceptorNames">
             <list>
                 <idref bean="performance.dao.loggingInterceptor"/>
@@ -154,6 +176,28 @@
           autowire-candidate="false"
           p:proxyInterfaces="ru.forxy.fraud.logic.blacklist.IBlackListManager"
           p:target-ref="blackListManager.impl">
+        <property name="interceptorNames">
+            <list>
+                <idref bean="impl.loggingInterceptor"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="velocityManager.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
+          autowire-candidate="false"
+          p:proxyInterfaces="ru.forxy.fraud.logic.velocity.IVelocityManager"
+          p:target-ref="velocityManager.impl">
+        <property name="interceptorNames">
+            <list>
+                <idref bean="impl.loggingInterceptor"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="velocityConfigManager.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
+          autowire-candidate="false"
+          p:proxyInterfaces="ru.forxy.fraud.logic.velocity.IVelocityConfigManager"
+          p:target-ref="velocityConfigManager.impl">
         <property name="interceptorNames">
             <list>
                 <idref bean="impl.loggingInterceptor"/>

@@ -14,7 +14,7 @@
                                    Mongo Data Source
     ========================================================================================== -->
     <context:annotation-config/>
-    <context:component-scan base-package='ru.forxy.fraud.rest.v1.check'/>
+    <context:component-scan base-package='ru.forxy.fraud.rest.v1'/>
 
     <mongo:mongo id="mongo" host='${ru.forxy.fraud.MongoTemplate/host}' port='${ru.forxy.fraud.MongoTemplate/port}'>
         <mongo:options
@@ -58,6 +58,10 @@
           autowire-candidate="false"
           p:mongoTemplate-ref="mongoTemplate"/>
 
+    <bean id="velocityConfigDAO.impl.mongo" class="ru.forxy.fraud.db.dao.mongo.VelocityConfigDAO"
+          autowire-candidate="false"
+          p:mongoTemplate-ref="mongoTemplate"/>
+
 
     <!-- =========================================================================================
                                    Cassandra Data Source
@@ -76,6 +80,9 @@
           c:session-ref="cassandraSession"/>
 
     <bean id="blackListDAO.impl.cassandra" class="ru.forxy.fraud.db.dao.cassandra.BlackListDAO"
+          p:mappingSession-ref="mappingSession"/>
+
+    <bean id="velocityDAO.impl.cassandra" class="ru.forxy.fraud.db.dao.cassandra.VelocityDAO"
           p:mappingSession-ref="mappingSession"/>
 
 </beans>

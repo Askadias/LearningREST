@@ -3,9 +3,10 @@ CREATE KEYSPACE IF NOT EXISTS fraud
 
 USE fraud;
 
+DROP TABLE IF EXISTS blacklist;
 CREATE TABLE IF NOT EXISTS blacklist (
-    value TEXT,
     type TEXT,
+    value TEXT,
     is_active BOOLEAN,
     create_date TIMESTAMP,
     created_by TEXT,
@@ -14,13 +15,34 @@ CREATE TABLE IF NOT EXISTS blacklist (
     PRIMARY KEY ((type, value))
 );
 
+DROP TABLE IF EXISTS whitelist;
 CREATE TABLE IF NOT EXISTS whitelist (
-    value TEXT,
     type TEXT,
+    value TEXT,
     is_active BOOLEAN,
     create_date TIMESTAMP,
     created_by TEXT,
     update_date TIMESTAMP,
     updated_by TEXT,
     PRIMARY KEY ((type, value))
+);
+
+DROP TABLE IF EXISTS velocity;
+CREATE TABLE IF NOT EXISTS velocity (
+    metric_type TEXT,
+    metric_value TEXT,
+    related_metric_type TEXT,
+    aggregation_type TEXT,
+    aggregated_value double,
+    PRIMARY KEY ((metric_type, metric_value), related_metric_type)
+);
+
+DROP TABLE IF EXISTS velocity_data;
+CREATE TABLE IF NOT EXISTS velocity_data (
+    metric_type TEXT,
+    metric_value TEXT,
+    related_metric_type TEXT,
+    create_date TIMESTAMP,
+    related_metric_value TEXT,
+    PRIMARY KEY ((metric_type, metric_value), related_metric_type)
 );

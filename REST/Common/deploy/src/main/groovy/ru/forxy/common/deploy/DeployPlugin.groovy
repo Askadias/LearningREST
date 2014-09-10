@@ -27,6 +27,8 @@ class DeployPlugin implements Plugin<Project> {
             include '**/*.xml'
             exclude '**/*.bat'
             exclude '**/*.sh'
+            include { project.deploy.configIncludes }
+            exclude { project.deploy.configExcludes }
         }
 
         project.task('copyEnvConfigTomcat', type: Copy) {

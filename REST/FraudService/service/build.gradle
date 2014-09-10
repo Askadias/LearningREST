@@ -22,6 +22,7 @@ deploy {
     keystorePass = '5ecret0AUTHPa55word'
     truststoreFile = 'conf/FraudService/appconfig/oauth.jks'
     truststorePass = '5ecret0AUTHPa55word'
+    configIncludes = ['**/*.drl']
 }
 
 // ========== Dependencies ==============================================
@@ -53,6 +54,7 @@ dependencies {
 
     // --------------------- CASSANDRA -----------------------------------
     //compile "com.datastax.cassandra:cassandra-driver-core:${rev_cassandra_datastax}"
+    //compile "com.datastax.cassandra:cassandra-driver-mapping:${rev_cassandra_datastax}"
     compile "com.valchkou.datastax:cassandra-driver-mapping:${rev_cassandra_jpa}"
 
     // --------------------- SPRING --------------------------------------

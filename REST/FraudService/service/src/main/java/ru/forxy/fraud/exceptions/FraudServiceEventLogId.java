@@ -18,7 +18,23 @@ public enum FraudServiceEventLogId implements EventLogBase {
 
     InvalidPageNumber(FraudServiceEventLogId.BASE_EVENT_LOG_ID + 2, 400,
             "Invalid page number provided: '%1$s'",
-                      EventType.InvalidInput);
+                      EventType.InvalidInput),
+
+    IsInBlackListAlready(FraudServiceEventLogId.BASE_EVENT_LOG_ID + 3, 400,
+            "%1$s with value= '%2$s' is in black list already",
+                      EventType.InvalidInput),
+
+    BlackListItemIsNotExist(FraudServiceEventLogId.BASE_EVENT_LOG_ID + 4, 400,
+            "%1$s with value= '%2$s' is not exist",
+            EventType.InvalidInput),
+
+    VelocityConfigNotFound(FraudServiceEventLogId.BASE_EVENT_LOG_ID + 5, 404,
+            "VelocityConfig for metric '%1$s' is not found.",
+            EventType.InvalidInput),
+
+    VelocityConfigAlreadyExists(FraudServiceEventLogId.BASE_EVENT_LOG_ID + 6, 400,
+            "VelocityConfig for metric '%1$s' already exists.",
+            EventType.InvalidInput);
 
     public static final int BASE_EVENT_LOG_ID = 20000;
 

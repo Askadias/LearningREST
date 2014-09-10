@@ -9,11 +9,9 @@ import java.util.List;
  */
 public interface IBlackListManager {
 
-    List<BlackListItem> getAllBlackLists();
+    List<BlackListItem> getMoreItemsFrom(final String type, final String value);
 
-    List<BlackListItem> getMoreItems(final BlackListItem start);
-
-    List<BlackListItem> getMoreItems(final BlackListItem start, final int limit);
+    List<BlackListItem> getMoreItemsFrom(final String type, final String value, final int limit);
 
     BlackListItem get(final String type, final String value);
 

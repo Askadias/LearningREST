@@ -19,11 +19,23 @@
     <bean id="blackListManager.impl" class="ru.forxy.fraud.logic.blacklist.BlackListManager"
           p:blackListDAO-ref="blackListDAO.cassandra.perf"/>
 
+    <bean id="velocityManager.impl" class="ru.forxy.fraud.logic.velocity.VelocityManager"
+          p:velocityDAO-ref="velocityDAO.cassandra.perf"/>
+
+    <bean id="velocityConfigManager.impl" class="ru.forxy.fraud.logic.velocity.VelocityConfigManager"
+          p:velocityConfigDAO-ref="velocityConfigDAO.mongo.perf"/>
+
     <!-- service endpoints definitions-->
     <bean id="fraudServiceEndpoint" class="ru.forxy.fraud.rest.v1.FraudServiceEndpoint"
           p:fraudServiceFacade-ref="fraudServiceFacade.perf"/>
 
     <bean id="blackListsEndpoint" class="ru.forxy.fraud.rest.v1.BlackListsEndpoint"
           p:blackListManager-ref="blackListManager.perf"/>
+
+    <bean id="velocityEndpoint" class="ru.forxy.fraud.rest.v1.VelocityEndpoint"
+          p:velocityManager-ref="velocityManager.perf"/>
+
+    <bean id="velocityConfigEndpoint" class="ru.forxy.fraud.rest.v1.VelocityConfigEndpoint"
+          p:velocityConfigManager-ref="velocityConfigManager.perf"/>
 
 </beans>

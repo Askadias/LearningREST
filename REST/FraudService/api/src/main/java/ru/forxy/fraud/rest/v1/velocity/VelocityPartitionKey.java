@@ -14,6 +14,14 @@ public class VelocityPartitionKey implements Serializable {
     private String metricType;
     private String value;
 
+    public VelocityPartitionKey() {
+    }
+
+    public VelocityPartitionKey(String metricType, String value) {
+        this.metricType = metricType;
+        this.value = value;
+    }
+
     public String getMetricType() {
         return metricType;
     }

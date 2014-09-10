@@ -1,5 +1,6 @@
 package ru.forxy.fraud.rest.v1.list;
 
+import javax.persistence.Column;
 import java.io.Serializable;
 
 /**
@@ -9,7 +10,9 @@ public class ListPartitionKey implements Serializable {
 
     private static final long serialVersionUID = 3445922380692875758L;
 
+    @Column (name = "type")
     private String type;
+    @Column (name = "value")
     private String value;
 
     public ListPartitionKey() {
