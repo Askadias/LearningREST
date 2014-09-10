@@ -1,10 +1,12 @@
 package ru.forxy.fraud.rest.v1.list;
 
+import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
  * Denial item
  */
+@Entity
 @Table(name = "blacklist")
 public class BlackListItem extends BaseListItem {
 

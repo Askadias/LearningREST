@@ -152,7 +152,7 @@
 
     <bean id="blackListManager.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
           autowire-candidate="false"
-          p:proxyInterfaces="ru.forxy.fraud.logic.IBlackListManager"
+          p:proxyInterfaces="ru.forxy.fraud.logic.blacklist.IBlackListManager"
           p:target-ref="blackListManager.impl">
         <property name="interceptorNames">
             <list>

@@ -19,7 +19,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-@Path("/blackLists/")
+@Path("/blacklists/")
 @Produces(MediaType.APPLICATION_JSON)
 public class BlackListsEndpoint extends AbstractService {
 

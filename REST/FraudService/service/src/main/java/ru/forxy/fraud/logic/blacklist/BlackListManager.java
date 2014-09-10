@@ -2,6 +2,7 @@ package ru.forxy.fraud.logic.blacklist;
 
 import ru.forxy.fraud.db.dao.IBlackListDAO;
 import ru.forxy.fraud.rest.v1.list.BlackListItem;
+import ru.forxy.fraud.rest.v1.list.ListPartitionKey;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class BlackListManager implements IBlackListManager {
 
     @Override
     public BlackListItem get(String type, String value) {
-        return null;
+        return blackListDAO.get(new ListPartitionKey(type, value));
     }
 
     @Override

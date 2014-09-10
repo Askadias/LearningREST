@@ -14,7 +14,7 @@ public class BlackListDAO extends BaseCassandraDAO implements IBlackListDAO {
 
     @Override
     public List<BlackListItem> getAll() {
-        return mappingSession.getByQuery(BlackListItem.class, "select value, type from blacklist");
+        return mappingSession.getByQuery(BlackListItem.class, "select * from blacklist");
     }
 
     @Override
@@ -25,10 +25,15 @@ public class BlackListDAO extends BaseCassandraDAO implements IBlackListDAO {
     @Override
     public List<BlackListItem> getMore(BlackListItem start, int limit) {
         return mappingSession.getByQuery(BlackListItem.class,
-                "select value, type from blacklist " +
+                "select * from blacklist " +
                         "where token (value, type) > " +
                         "token(" + start.getKey().getValue() + "," + start.getKey().getType() + ") " +
                         "limit " + limit);
+    }
+
+    @Override
+    public BlackListItem get(final ListPartitionKey id) {
+        return mappingSession.get(BlackListItem.class, id);
     }
 
     @Override

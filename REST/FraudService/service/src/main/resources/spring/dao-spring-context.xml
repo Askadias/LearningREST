@@ -14,7 +14,7 @@
                                    Mongo Data Source
     ========================================================================================== -->
     <context:annotation-config/>
-    <context:component-scan base-package='ru.forxy.fraud.rest.v1'/>
+    <context:component-scan base-package='ru.forxy.fraud.rest.v1.check'/>
 
     <mongo:mongo id="mongo" host='${ru.forxy.fraud.MongoTemplate/host}' port='${ru.forxy.fraud.MongoTemplate/port}'>
         <mongo:options

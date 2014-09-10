@@ -17,6 +17,8 @@ public interface IBlackListDAO extends ISystemStatusComponent {
 
     List<BlackListItem> getMore(final BlackListItem start, final int limit);
 
+    BlackListItem get(final ListPartitionKey id);
+
     void save(final BlackListItem item);
 
     void delete(final BlackListItem item);

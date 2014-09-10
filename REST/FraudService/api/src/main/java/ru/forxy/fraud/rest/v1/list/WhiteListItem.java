@@ -1,10 +1,12 @@
 package ru.forxy.fraud.rest.v1.list;
 
+import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
  * Bypass item
  */
+@Entity
 @Table(name = "whitelist")
 public class WhiteListItem extends BaseListItem {
 
