@@ -62,6 +62,63 @@
           autowire-candidate="false"
           p:mongoTemplate-ref="mongoTemplate"/>
 
+    <bean id="currencyExchangeDAO.impl.mongo" class="ru.forxy.fraud.db.dao.mongo.CurrencyExchangeDAO"
+          autowire-candidate="false"
+          p:mongoTemplate-ref="mongoTemplate"/>
+
+    <!-- ================================================================= -->
+    <!-- Currency Exchange Rate update                                     -->
+    <!-- ================================================================= -->
+    <bean id="currencyExchangeScheduler"
+          class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+          p:autoStartup="true">
+        <property name="triggers">
+            <bean class="org.springframework.scheduling.quartz.CronTriggerFactoryBean"
+                  p:misfireInstructionName="MISFIRE_INSTRUCTION_DO_NOTHING"
+                  p:cronExpression="${ru.forxy.fraud.MongoTemplate/scheduledCurrencUpdateCronExpression}">
+                <property name="jobDetail">
+                    <bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+                          p:targetObject-ref="currencyExchangeDAO.impl.mongo"
+                          p:targetMethod="performScheduledCurrencyUpdate"/>
+                </property>
+            </bean>
+        </property>
+        <property name="quartzProperties">
+            <props>
+                <prop key="org.quartz.threadPool.threadCount">1</prop>
+                <prop key="org.quartz.threadPool.threadPriority">5</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- ================================================================= -->
+    <!-- Configuration Data update                                         -->
+    <!-- ================================================================= -->
+    <bean id="operationalDataStorage" class="ru.forxy.fraud.util.OperationalDataStorage"
+          p:velocityConfigDAO-ref="velocityConfigDAO.impl.mongo"/>
+
+    <bean id="configurationDataScheduler"
+          class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+          p:autoStartup="true">
+        <property name="triggers">
+            <bean class="org.springframework.scheduling.quartz.CronTriggerFactoryBean"
+                  p:misfireInstructionName="MISFIRE_INSTRUCTION_DO_NOTHING"
+                  p:cronExpression="${ru.forxy.fraud.MongoTemplate/scheduledConfigurationUpdateCronExpression}">
+                <property name="jobDetail">
+                    <bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+                          p:targetObject-ref="operationalDataStorage"
+                          p:targetMethod="invalidate"/>
+                </property>
+            </bean>
+        </property>
+        <property name="quartzProperties">
+            <props>
+                <prop key="org.quartz.threadPool.threadCount">1</prop>
+                <prop key="org.quartz.threadPool.threadPriority">5</prop>
+            </props>
+        </property>
+    </bean>
+
 
     <!-- =========================================================================================
                                    Cassandra Data Source

@@ -1,15 +1,21 @@
 package ru.forxy.fraud.logic.velocity;
 
 import ru.forxy.fraud.db.dao.IVelocityDAO;
+import ru.forxy.fraud.rest.v1.velocity.AggregationConfig;
 import ru.forxy.fraud.rest.v1.velocity.AggregationType;
+import ru.forxy.fraud.rest.v1.velocity.VelocityConfig;
 import ru.forxy.fraud.rest.v1.velocity.VelocityData;
 import ru.forxy.fraud.rest.v1.velocity.VelocityDataCompositeKey;
 import ru.forxy.fraud.rest.v1.velocity.VelocityMetric;
 import ru.forxy.fraud.rest.v1.velocity.VelocityMetricCompositeKey;
 import ru.forxy.fraud.rest.v1.velocity.VelocityPartitionKey;
+import ru.forxy.fraud.util.OperationalDataStorage;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Implementation class for BlackListService business logic
@@ -19,6 +25,30 @@ public class VelocityManager implements IVelocityManager {
     private static final int DEFAULT_PAGE_SIZE = 10;
 
     private IVelocityDAO velocityDAO;
+    private OperationalDataStorage operationalDataStorage;
+
+    @Override
+    public List<VelocityMetric> check(Map<String, String> metrics) {
+        List<VelocityMetric> resultMetrics = new ArrayList<>();
+
+        for (Map.Entry<String, String> metric : metrics.entrySet()) {
+            resultMetrics.addAll(velocityDAO.getMetrics(new VelocityPartitionKey(metric.getKey(), metric.getValue())));
+        }
+
+        Map<String, VelocityConfig> configs = operationalDataStorage.getConfigsByMetricType();
+        for (String metricType : metrics.keySet()) {
+            VelocityConfig config = configs.get(metricType);
+            if (config != null) {
+                Map<String, Set<AggregationConfig>> relatedMetrics = config.getMetricsAggregationConfig();
+                if (relatedMetrics != null) {
+                    for (String relatedMetricType : relatedMetrics.keySet()) {
+
+                    }
+                }
+            }
+        }
+        return resultMetrics;
+    }
 
     @Override
     public List<VelocityMetric> getMoreMetricsFrom(final String metricType, final String value) {
@@ -86,5 +116,9 @@ public class VelocityManager implements IVelocityManager {
 
     public void setVelocityDAO(final IVelocityDAO velocityDAO) {
         this.velocityDAO = velocityDAO;
+    }
+
+    public void setOperationalDataStorage(OperationalDataStorage operationalDataStorage) {
+        this.operationalDataStorage = operationalDataStorage;
     }
 }

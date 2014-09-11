@@ -3,7 +3,9 @@ package ru.forxy.fraud.rest.v1;
 import ru.forxy.common.rest.AbstractService;
 import ru.forxy.fraud.logic.velocity.IVelocityManager;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -12,12 +14,21 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.Map;
 
 @Path("/velocity/")
 @Produces(MediaType.APPLICATION_JSON)
 public class VelocityEndpoint extends AbstractService {
 
     private IVelocityManager velocityManager;
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response check(final Map<String, String> metrics,
+                               @Context final UriInfo uriInfo,
+                               @Context final HttpHeaders headers) {
+        return respondWith(velocityManager.check(metrics), uriInfo, headers).build();
+    }
 
     @GET
     @Path("/metrics/")

@@ -20,7 +20,8 @@
           p:blackListDAO-ref="blackListDAO.cassandra.perf"/>
 
     <bean id="velocityManager.impl" class="ru.forxy.fraud.logic.velocity.VelocityManager"
-          p:velocityDAO-ref="velocityDAO.cassandra.perf"/>
+          p:velocityDAO-ref="velocityDAO.cassandra.perf"
+          p:operationalDataStorage-ref="operationalDataStorage"/>
 
     <bean id="velocityConfigManager.impl" class="ru.forxy.fraud.logic.velocity.VelocityConfigManager"
           p:velocityConfigDAO-ref="velocityConfigDAO.mongo.perf"/>

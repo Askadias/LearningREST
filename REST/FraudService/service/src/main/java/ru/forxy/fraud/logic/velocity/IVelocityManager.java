@@ -6,11 +6,14 @@ import ru.forxy.fraud.rest.v1.velocity.VelocityMetric;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Black lists manipulation logic API
  */
 public interface IVelocityManager {
+
+    List<VelocityMetric> check(Map<String, String> metrics);
 
     List<VelocityMetric> getMoreMetricsFrom(final String metricType, final String metricValue);
 
