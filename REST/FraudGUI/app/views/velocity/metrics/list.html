@@ -1,0 +1,27 @@
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Metric Type</th>
+    <th>Metric Value</th>
+    <th>Related Metric</th>
+    <th>Aggregation Type</th>
+    <th>Aggregated Value</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr ng-repeat="metric in metrics">
+    <td>{{metric.key.id.metric_type}}</td>
+    <td>{{metric.key.id.metric_value}}</td>
+    <td>{{metric.key.related_metric_type}}</td>
+    <td>{{metric.key.aggregation_type}}</td>
+    <td>{{metric.aggregated_value}}</td>
+  </tr>
+  <tr ng-show="!metrics || metrics.length == 0">
+    <td colspan="5">
+      <div class="alert alert-info">
+        There are no any metrics yet
+      </div>
+    </td>
+  </tr>
+  </tbody>
+</table>

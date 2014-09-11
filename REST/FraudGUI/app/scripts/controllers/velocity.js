@@ -140,4 +140,74 @@ angular.module('controllers.velocity', [])
       $scope.isSaveDisabled = function () {
         return $scope.velocity_config_form.$invalid || angular.equals($scope.original, $scope.velocity_config);
       };
+    }])
+
+  .controller('VelocityMetricsCtrl', ['$scope', '$modal', '$stateParams', 'Velocity',
+    function ($scope, $modal, $stateParams, Velocity) {
+      $scope.startFrom = {metric_type : null, metric_value: null};
+      $scope.metrics = [];
+
+      $scope.loadFrom = function(startFrom) {
+        Velocity.metricsPage(startFrom).then(function (response) {
+          $scope.metrics.push.apply($scope.metrics, response);
+        }, function () {
+          $scope.metrics = [];
+        });
+      };
+
+      $scope.loadFrom($scope.startFrom);
+    }])
+
+  .controller('VelocityDataCtrl', ['$scope', '$modal', '$stateParams', 'Velocity', 'VelocityConfig',
+    function ($scope, $modal, $stateParams, Velocity, VelocityConfig) {
+      $scope.startFrom = {metric_type : null, metric_value: null};
+      $scope.data_list = [];
+      $scope.configs = {};
+
+      VelocityConfig.all().then(function (response) {
+        var configs_list = response;
+        for (var i in configs_list) {
+          $scope.configs[configs_list[i].metric_type] = configs_list[i];
+        }
+      }, function () {
+        $scope.configs = {};
+      });
+
+      $scope.loadFrom = function(startFrom) {
+        Velocity.dataPage(startFrom).then(function (response) {
+          $scope.data_list.push.apply($scope.data_list, response);
+        }, function () {
+          $scope.data_list = [];
+        });
+      };
+      $scope.expiresIn = function(date, metric_type) {
+        var ttl_sec = $scope.configs[metric_type].time_to_live;
+        var now_millis = new Date().getTime();
+        var create_date_millis = new Date(date).getTime();
+        return msToTime(Math.floor(create_date_millis + (ttl_sec * 1000)- now_millis));
+      };
+
+      $scope.loadFrom($scope.startFrom);
+    }])
+
+  .controller('VelocityCheckCtrl', ['$scope', '$modal', '$stateParams', 'Velocity', 'VelocityConfig',
+    function ($scope, $modal, $stateParams, Velocity, VelocityConfig) {
+      $scope.test_data = {};
+
+      VelocityConfig.all().then(function (response) {
+        $scope.configs = response;
+        for (var conf in configs) {
+          $scope.test_data[conf.metric_type] = null;
+        }
+      }, function () {
+        $scope.configs = [];
+      });
+
+      $scope.check = function() {
+        Velocity.check($scope.test_data).then(function (response) {
+          $scope.metrics = response
+        }, function () {
+          $scope.metrics = null;
+        });
+      };
     }]);

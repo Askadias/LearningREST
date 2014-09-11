@@ -84,8 +84,12 @@ public class CurrencyExchangeDAO implements ICurrencyExchangeDAO, InitializingBe
             Date maxUpdateDate = new Date(0);
             for (Currency currency : currencies) {
                 currencyExchangeRatesToUSD.put(currency.getSymbol(), currency);
-                if (maxUpdateDate.getTime() < currency.getUpdateDate().getTime()) {
-                    maxUpdateDate = currency.getUpdateDate();
+                if (currency.getUpdateDate() != null) {
+                    if (maxUpdateDate.getTime() < currency.getUpdateDate().getTime()) {
+                        maxUpdateDate = currency.getUpdateDate();
+                    }
+                } else {
+                    updateCurrencyExchangeRates();
                 }
             }
             lastUpdateDate = maxUpdateDate;

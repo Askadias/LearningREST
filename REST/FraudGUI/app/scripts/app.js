@@ -58,6 +58,36 @@ angular.module('fraudAdmin', [
           url: '/velocity/config/:metric_type/:mode/',
           templateUrl: 'views/velocity/config/details.html',
           controller: 'VelocityConfigDetailsCtrl'
+        })
+        .state('velocity.metrics', {
+          abstract: true,
+          templateUrl: 'views/velocity/stumb.html',
+          controller: 'MainCtrl'
+        })
+        .state('velocity.metrics.list', {
+          url: '/velocity/metrics/',
+          templateUrl: 'views/velocity/metrics/list.html',
+          controller: 'VelocityMetricsCtrl'
+        })
+        .state('velocity.data', {
+          abstract: true,
+          templateUrl: 'views/velocity/stumb.html',
+          controller: 'MainCtrl'
+        })
+        .state('velocity.data.list', {
+          url: '/velocity/data/',
+          templateUrl: 'views/velocity/data/list.html',
+          controller: 'VelocityDataCtrl'
+        })
+        .state('velocity.test', {
+          abstract: true,
+          templateUrl: 'views/velocity/stumb.html',
+          controller: 'MainCtrl'
+        })
+        .state('velocity.test.check', {
+          url: '/velocity/test/',
+          templateUrl: 'views/velocity/test/check.html',
+          controller: 'VelocityCheckCtrl'
         });
 
       // FIX for trailing slashes. Gracefully "borrowed" from https://github.com/angular-ui/ui-router/issues/50

@@ -23,4 +23,18 @@ angular.module('services.velocity', ['restangular'])
         return Restangular.one('velocity_config', config.metric_type).remove();
       }
     }
+  }])
+
+  .factory('Velocity', ['Restangular', function (Restangular) {
+    return {
+      metricsPage: function (startFrom) {
+        return Restangular.all('velocity/metrics').getList(startFrom);
+      },
+      dataPage: function (startFrom) {
+        return Restangular.all('velocity/data_list').getList(startFrom);
+      },
+      check: function (metrics) {
+        return Restangular.all('velocity').post(metrics);
+      }
+    }
   }]);
