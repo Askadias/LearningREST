@@ -9,8 +9,10 @@ angular.module('fraudAdmin', [
   'ui.router',
   'controllers.common',
   'controllers.blacklist',
-  'services.blacklist',
+  'controllers.velocity',
   'services.config',
+  'services.blacklist',
+  'services.velocity',
   'directives',
   'filters'
 ])
@@ -36,6 +38,26 @@ angular.module('fraudAdmin', [
           url: '/blacklist/',
           templateUrl: 'views/blacklist/list.html',
           controller: 'BlackListsCtrl'
+        })
+        .state('velocity', {
+          abstract: true,
+          templateUrl: 'views/layout.html',
+          controller: 'MainCtrl'
+        })
+        .state('velocity.config', {
+          abstract: true,
+          templateUrl: 'views/velocity/stumb.html',
+          controller: 'MainCtrl'
+        })
+        .state('velocity.config.list', {
+          url: '/velocity/config/',
+          templateUrl: 'views/velocity/config/list.html',
+          controller: 'VelocityConfigsListCtrl'
+        })
+        .state('velocity.config.details', {
+          url: '/velocity/config/:metric_type/:mode/',
+          templateUrl: 'views/velocity/config/details.html',
+          controller: 'VelocityConfigDetailsCtrl'
         });
 
       // FIX for trailing slashes. Gracefully "borrowed" from https://github.com/angular-ui/ui-router/issues/50

@@ -18,7 +18,7 @@ public class VelocityConfig implements Serializable {
 
     @Id
     private String metricType;
-    private Date timeToLive;
+    private Long timeToLive;
     private Map<String, Set<AggregationConfig>> metricsAggregationConfig;
     private Date createDate;
     private String createdBy;
@@ -42,11 +42,11 @@ public class VelocityConfig implements Serializable {
         this.metricType = metricType;
     }
 
-    public Date getTimeToLive() {
+    public Long getTimeToLive() {
         return timeToLive;
     }
 
-    public void setTimeToLive(Date timeToLive) {
+    public void setTimeToLive(Long timeToLive) {
         this.timeToLive = timeToLive;
     }
 

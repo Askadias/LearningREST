@@ -1,12 +1,22 @@
 package ru.forxy.fraud.db.dao.cassandra;
 
+import com.datastax.driver.core.querybuilder.QueryBuilder;
+import com.datastax.driver.mapping.EntityTypeParser;
+import com.datastax.driver.mapping.meta.EntityFieldMetaData;
+import com.datastax.driver.mapping.meta.EntityTypeMetadata;
 import ru.forxy.common.status.pojo.ComponentStatus;
 import ru.forxy.fraud.db.dao.IVelocityDAO;
 import ru.forxy.fraud.rest.v1.velocity.VelocityData;
+import ru.forxy.fraud.rest.v1.velocity.VelocityDataCompositeKey;
 import ru.forxy.fraud.rest.v1.velocity.VelocityMetric;
+import ru.forxy.fraud.rest.v1.velocity.VelocityMetricCompositeKey;
 import ru.forxy.fraud.rest.v1.velocity.VelocityPartitionKey;
 
 import java.util.List;
+
+import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
+import static com.datastax.driver.core.querybuilder.QueryBuilder.gt;
+import static com.datastax.driver.core.querybuilder.QueryBuilder.token;
 
 /**
  * BlackLists DAO implementation
@@ -14,50 +24,66 @@ import java.util.List;
 public class VelocityDAO extends BaseCassandraDAO implements IVelocityDAO {
 
     @Override
-    public List<VelocityMetric> getMoreMetrics(String metricType, String value, int limit) {
-        if (metricType != null && value != null) {
+    public List<VelocityMetric> getMoreMetrics(String metricType, String metricValue, int limit) {
+        EntityTypeMetadata emeta = EntityTypeParser.getEntityMetadata(VelocityMetric.class);
+        if (metricType != null && metricValue != null) {
+            EntityFieldMetaData typeMeta = emeta.getFieldMetadata("metricType");
+            EntityFieldMetaData valueMeta = emeta.getFieldMetadata("metricValue");
             return mappingSession.getByQuery(VelocityMetric.class,
-                    "select * from velocity " +
-                            "where token (metric_type, value) > " +
-                            "token('" + metricType + "','" + value + "') " +
-                            "limit " + limit);
+                    QueryBuilder.select().all().from(mappingSession.getKeyspace(), emeta.getTableName())
+                            .where(gt(token(typeMeta.getColumnName(), valueMeta.getColumnName()),
+                                    token(metricType, metricValue))).limit(limit));
         } else {
             return mappingSession.getByQuery(VelocityMetric.class,
-                    "select * from velocity limit " + limit);
+                    QueryBuilder.select().all().from(mappingSession.getKeyspace(), emeta.getTableName()).limit(limit));
         }
     }
 
     @Override
-    public List<VelocityData> getMoreData(String metricType, String value, int limit) {
-        if (metricType != null && value != null) {
+    public List<VelocityData> getMoreData(String metricType, String metricValue, int limit) {
+        EntityTypeMetadata emeta = EntityTypeParser.getEntityMetadata(VelocityData.class);
+        if (metricType != null && metricValue != null) {
+            EntityFieldMetaData typeMeta = emeta.getFieldMetadata("metricType");
+            EntityFieldMetaData valueMeta = emeta.getFieldMetadata("metricValue");
             return mappingSession.getByQuery(VelocityData.class,
-                    "select * from velocity_data " +
-                            "where token (metric_type, value) > " +
-                            "token('" + metricType + "','" + value + "') " +
-                            "limit " + limit);
+                    QueryBuilder.select().all().from(mappingSession.getKeyspace(), emeta.getTableName())
+                            .where(gt(token(typeMeta.getColumnName(), valueMeta.getColumnName()),
+                                    token(metricType, metricValue))).limit(limit));
         } else {
             return mappingSession.getByQuery(VelocityData.class,
-                    "select * from velocity limit " + limit);
+                    QueryBuilder.select().all().from(mappingSession.getKeyspace(), emeta.getTableName()).limit(limit));
         }
     }
 
     @Override
-    public VelocityMetric getMetric(VelocityPartitionKey id) {
-        return getMetric(new VelocityMetric().new CompositeKey(id));
+    public List<VelocityMetric> getMetrics(VelocityPartitionKey id) {
+        EntityTypeMetadata emeta = EntityTypeParser.getEntityMetadata(VelocityMetric.class);
+        EntityFieldMetaData typeMeta = emeta.getFieldMetadata("metricType");
+        EntityFieldMetaData valueMeta = emeta.getFieldMetadata("metricValue");
+        return mappingSession.getByQuery(VelocityMetric.class,
+                QueryBuilder.select().all().from(mappingSession.getKeyspace(), emeta.getTableName())
+                        .where(eq(typeMeta.getColumnName(), id.getMetricType()))
+                        .and(eq(valueMeta.getColumnName(), id.getMetricValue())));
     }
 
     @Override
-    public VelocityData getData(VelocityPartitionKey id) {
-        return getData(new VelocityData().new CompositeKey(id));
+    public List<VelocityData> getDataList(VelocityPartitionKey id) {
+        EntityTypeMetadata emeta = EntityTypeParser.getEntityMetadata(VelocityData.class);
+        EntityFieldMetaData typeMeta = emeta.getFieldMetadata("metricType");
+        EntityFieldMetaData valueMeta = emeta.getFieldMetadata("metricValue");
+        return mappingSession.getByQuery(VelocityData.class,
+                QueryBuilder.select().all().from(mappingSession.getKeyspace(), emeta.getTableName())
+                        .where(eq(typeMeta.getColumnName(), id.getMetricType()))
+                        .and(eq(valueMeta.getColumnName(), id.getMetricValue())));
     }
 
     @Override
-    public VelocityMetric getMetric(VelocityMetric.CompositeKey key) {
+    public VelocityMetric getMetric(VelocityMetricCompositeKey key) {
         return mappingSession.get(VelocityMetric.class, key);
     }
 
     @Override
-    public VelocityData getData(VelocityData.CompositeKey key) {
+    public VelocityData getData(VelocityDataCompositeKey key) {
         return mappingSession.get(VelocityData.class, key);
     }
 

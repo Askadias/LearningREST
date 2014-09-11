@@ -12,14 +12,15 @@ public class VelocityPartitionKey implements Serializable {
 
     @Column(name = "metric_type")
     private String metricType;
-    private String value;
+    @Column(name = "metric_value")
+    private String metricValue;
 
     public VelocityPartitionKey() {
     }
 
-    public VelocityPartitionKey(String metricType, String value) {
+    public VelocityPartitionKey(String metricType, String metricValue) {
         this.metricType = metricType;
-        this.value = value;
+        this.metricValue = metricValue;
     }
 
     public String getMetricType() {
@@ -30,11 +31,11 @@ public class VelocityPartitionKey implements Serializable {
         this.metricType = metricType;
     }
 
-    public String getValue() {
-        return value;
+    public String getMetricValue() {
+        return metricValue;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setMetricValue(String metricValue) {
+        this.metricValue = metricValue;
     }
 }

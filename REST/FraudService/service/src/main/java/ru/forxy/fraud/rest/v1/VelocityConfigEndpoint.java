@@ -54,7 +54,7 @@ public class VelocityConfigEndpoint extends AbstractService {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response registerVelocityConfig(final VelocityConfig velocityConfig,
+    public Response addVelocityConfig(final VelocityConfig velocityConfig,
                                            @Context final UriInfo uriInfo,
                                            @Context final HttpHeaders headers) {
         velocityConfigManager.createVelocityConfig(velocityConfig);

@@ -1,0 +1,155 @@
+<div>
+  <h1>Velocity Metric Config</h1>
+
+  <form name="velocity_config_form" class="form-horizontal">
+    <div class="well well-sm">
+      <button class="btn btn-small btn-save btn-success" ng-disabled="isSaveDisabled()" ng-click="save()">
+        <i class="fa fa-check-circle fa-lg icon-white"></i>
+        Save
+      </button>
+      &nbsp;
+      <button class="btn btn-small btn-default" ng-disabled="isCancelDisabled()" ng-click="discard()">
+        <i class="fa fa-ban fa-lg"></i>
+        Discard changes
+      </button>
+    </div>
+
+    <tabset>
+      <tab heading="General">
+        <div class="control-group"
+             ng-class="{ 'has-error' : velocity_config_form.metric_type.$invalid && !velocity_config_form.metric_type.$pristine }">
+          <label class="control-label" for="metric_type">Metric Type:</label>
+
+          <div class="controls">
+            <input id="metric_type" name="metric_type" type="text" class="form-control ng-pristine ng-valid"
+                   ng-model="velocity_config.metric_type" ng-disabled="mode!='new'" required/>
+
+            <p ng-show="velocity_config_form.metric_type.$invalid && !velocity_config_form.metric_type.$pristine" class="help-block">
+              Metric Type is required.
+            </p>
+
+            <p class="help-block">
+              Short metric type code.
+            </p>
+          </div>
+        </div>
+
+        <div class="control-group"
+             ng-class="{ 'has-error' : velocity_config_form.name.$invalid && !velocity_config_form.name.$pristine }">
+          <label class="control-label" for="ttl">Time To Live:</label>
+
+          <div class="controls">
+            <input id="ttl" name="ttl" type="number"
+                   class="form-control ng-pristine ng-valid"
+                   ng-model="velocity_config.time_to_live"/>
+
+            <p ng-show="velocity_config_form.name.$invalid && !velocity_config_form.name.$pristine"
+               class="help-block">
+              Data expiration time in seconds. (Infinite if not set)
+            </p>
+          </div>
+        </div>
+      </tab>
+
+      <tab heading="Aggregation">
+        <div class="control-group"
+             ng-class="{ 'has-error' : velocity_config_form.related_metrics.$invalid && velocity_config_form.related_metrics.$dirty }">
+          <label class="control-label">Related metric:</label>
+
+          <div class="controls row">
+            <div class="col-md-4">
+              <table class="table-hover table-responsive">
+                <thead>
+                <tr>
+                  <th class="control-group">
+                    <input id="related_metrics" name="related_metrics" class="form-control ng-pristine ng-valid"
+                           placeholder="Metric Code" type="text" ng-model="newMetric"/>
+                  </th>
+                  <th>
+                    <a href="" class="btn fa fa-plus-circle fa-lg" style="color: #5cb85c"
+                       ng-disabled="velocity_config_form.related_metrics.$invalid || !newMetric"
+                       ng-click="velocity_config.metrics_aggregation_config[newMetric] = []; newMetric = null"></a>
+                  </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td colspan="2">
+                    <p ng-show="velocity_config_form.related_metrics.$invalid && velocity_config_form.related_metrics.$dirty"
+                       class="help-block">
+                      New Related Metric Type should not be empty
+                    </p>
+                  </td>
+                </tr>
+                <tr ng-repeat="(metric, aggregations) in velocity_config.metrics_aggregation_config">
+                  <td>
+                    <div class="panel panel-default">
+                      <div class="panel-heading">
+                        <h3 class="panel-title">{{metric}}</h3>
+                      </div>
+                      <div class="panel-body">
+                        <table class="table-hover table-responsive">
+                          <thead>
+                          <tr>
+                            <th class="control-group" colspan="2">
+                              <label class="control-label">Aggregations:</label>
+                            </th>
+                            <th>
+                              <a href="" class="btn fa fa-plus-circle fa-lg" style="color: #5cb85c"
+                                 ng-click="aggregations.push({type: 'Count', period: 2592000000})"></a>
+                            </th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                          <tr ng-repeat="aggregation in aggregations track by $index">
+                            <td>
+                              <select class="form-control" style="width: 90px"
+                                      ng-model="aggregation.type">
+                                <option value="Count">Count</option>
+                                <option value="UniqueCount">Unique Count</option>
+                                <option value="Avg">Average</option>
+                                <option value="Max">Maximum</option>
+                                <option value="Min">Minimum</option>
+                                <option value="Sum">Sum</option>
+                              </select>
+                            </td>
+                            <td>
+                              <input id="period" name="period" type="number"
+                                     class="form-control ng-pristine ng-valid"
+                                     placeholder="period in sec"
+                                     ng-model="aggregation.period"/>
+                            </td>
+                            <td>
+                              <a href="" class="btn  fa fa-minus-circle fa-lg"
+                                 ng-click="aggregations.splice($index, 1)"></a>
+                            </td>
+                          </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </td>
+                  <td><a href="" class="btn  fa fa-minus-circle fa-lg"
+                         ng-click="removeMetric(metric)"></a></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </tab>
+    </tabset>
+
+    <div class="well well-sm control-group">
+      <button class="btn btn-small btn-save btn-success" ng-disabled="isSaveDisabled()" ng-click="save()">
+        <i class="fa fa-check-circle fa-lg icon-white"></i>
+        Save
+      </button>
+      &nbsp;
+      <button class="btn btn-small btn-default" ng-disabled="isCancelDisabled()" ng-click="discard()">
+        <i class="fa fa-ban fa-lg"></i>
+        Discard changes
+      </button>
+    </div>
+  </form>
+</div>
