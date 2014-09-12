@@ -29,9 +29,11 @@ public interface IVelocityManager {
     void updateMetric(final VelocityMetric metric);
 
 
-    List<VelocityData> getMoreDataFrom(final String metricType, final String metricValue);
+    List<VelocityData> getMoreDataFrom(final String metricType, final String metricValue,
+                                       final String relatedMetricType, final Date createDate);
 
-    List<VelocityData> getMoreDataFrom(final String metricType, final String metricValue, final int limit);
+    List<VelocityData> getMoreDataFrom(final String metricType, final String metricValue,
+                                       final String relatedMetricType, final Date createDate, final int limit);
 
     List<VelocityData> getDataList(final String metricType, final String metricValue);
 

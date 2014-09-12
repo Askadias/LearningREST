@@ -12,6 +12,7 @@ import ru.forxy.fraud.rest.v1.velocity.VelocityMetric;
 import ru.forxy.fraud.rest.v1.velocity.VelocityMetricCompositeKey;
 import ru.forxy.fraud.rest.v1.velocity.VelocityPartitionKey;
 
+import java.util.Date;
 import java.util.List;
 
 import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
@@ -24,7 +25,7 @@ import static com.datastax.driver.core.querybuilder.QueryBuilder.token;
 public class VelocityDAO extends BaseCassandraDAO implements IVelocityDAO {
 
     @Override
-    public List<VelocityMetric> getMoreMetrics(String metricType, String metricValue, int limit) {
+    public List<VelocityMetric> getMoreMetrics(final String metricType, final String metricValue, final int limit) {
         EntityTypeMetadata emeta = EntityTypeParser.getEntityMetadata(VelocityMetric.class);
         if (metricType != null && metricValue != null) {
             EntityFieldMetaData typeMeta = emeta.getFieldMetadata("metricType");
@@ -40,15 +41,22 @@ public class VelocityDAO extends BaseCassandraDAO implements IVelocityDAO {
     }
 
     @Override
-    public List<VelocityData> getMoreData(String metricType, String metricValue, int limit) {
+    public List<VelocityData> getMoreData(final String metricType, final String metricValue,
+                                          final String relatedMetricType, final Date createDate, final int limit) {
         EntityTypeMetadata emeta = EntityTypeParser.getEntityMetadata(VelocityData.class);
-        if (metricType != null && metricValue != null) {
-            EntityFieldMetaData typeMeta = emeta.getFieldMetadata("metricType");
+        if (metricType != null && metricValue != null && relatedMetricType != null && createDate != null) {
+            return mappingSession.getByQuery(VelocityData.class,
+                    "select * from velocity_data " +
+                            "where token(metric_type,metric_value) >= token('"+metricType+"','"+metricValue+"') " +
+                            "and related_metric_type = '" + relatedMetricType + "' " +
+                            "and create_date > " + createDate.getTime() + " " +
+                            "limit " + limit + " allow filtering");
+            /*EntityFieldMetaData typeMeta = emeta.getFieldMetadata("metricType");
             EntityFieldMetaData valueMeta = emeta.getFieldMetadata("metricValue");
             return mappingSession.getByQuery(VelocityData.class,
                     QueryBuilder.select().all().from(mappingSession.getKeyspace(), emeta.getTableName())
                             .where(gt(token(typeMeta.getColumnName(), valueMeta.getColumnName()),
-                                    token(metricType, metricValue))).limit(limit));
+                                    token(metricType, metricValue))).limit(limit));*/
         } else {
             return mappingSession.getByQuery(VelocityData.class,
                     QueryBuilder.select().all().from(mappingSession.getKeyspace(), emeta.getTableName()).limit(limit));
@@ -56,7 +64,7 @@ public class VelocityDAO extends BaseCassandraDAO implements IVelocityDAO {
     }
 
     @Override
-    public List<VelocityMetric> getMetrics(VelocityPartitionKey id) {
+    public List<VelocityMetric> getMetrics(final VelocityPartitionKey id) {
         EntityTypeMetadata emeta = EntityTypeParser.getEntityMetadata(VelocityMetric.class);
         EntityFieldMetaData typeMeta = emeta.getFieldMetadata("metricType");
         EntityFieldMetaData valueMeta = emeta.getFieldMetadata("metricValue");
@@ -67,7 +75,7 @@ public class VelocityDAO extends BaseCassandraDAO implements IVelocityDAO {
     }
 
     @Override
-    public List<VelocityData> getDataList(VelocityPartitionKey id) {
+    public List<VelocityData> getDataList(final VelocityPartitionKey id) {
         EntityTypeMetadata emeta = EntityTypeParser.getEntityMetadata(VelocityData.class);
         EntityFieldMetaData typeMeta = emeta.getFieldMetadata("metricType");
         EntityFieldMetaData valueMeta = emeta.getFieldMetadata("metricValue");
@@ -78,22 +86,39 @@ public class VelocityDAO extends BaseCassandraDAO implements IVelocityDAO {
     }
 
     @Override
-    public VelocityMetric getMetric(VelocityMetricCompositeKey key) {
+    public VelocityMetric getMetric(final VelocityMetricCompositeKey key) {
         return mappingSession.get(VelocityMetric.class, key);
     }
 
     @Override
-    public VelocityData getData(VelocityDataCompositeKey key) {
+    public VelocityData getData(final VelocityDataCompositeKey key) {
         return mappingSession.get(VelocityData.class, key);
     }
 
     @Override
-    public void saveMetric(VelocityMetric metric) {
+    public List<VelocityData> getMetricDataForPeriod(final VelocityPartitionKey id, final String relatedMetricType,
+                                         final Long period) {
+        EntityTypeMetadata emeta = EntityTypeParser.getEntityMetadata(VelocityData.class);
+        EntityFieldMetaData typeMeta = emeta.getFieldMetadata("metricType");
+        EntityFieldMetaData valueMeta = emeta.getFieldMetadata("metricValue");
+        EntityFieldMetaData relatedMetricTypeMeta = emeta.getFieldMetadata("relatedMetricType");
+        EntityFieldMetaData createDateMeta = emeta.getFieldMetadata("createDate");
+        Date startDate = new Date(new Date().getTime() - period);
+        return mappingSession.getByQuery(VelocityData.class,
+                QueryBuilder.select().all().from(mappingSession.getKeyspace(), emeta.getTableName())
+                        .where(eq(typeMeta.getColumnName(), id.getMetricType()))
+                        .and(eq(valueMeta.getColumnName(), id.getMetricValue()))
+                        .and(eq(relatedMetricTypeMeta.getColumnName(), relatedMetricType))
+                        .and(gt(createDateMeta.getColumnName(), startDate)));
+    }
+
+    @Override
+    public void saveMetric(final VelocityMetric metric) {
         mappingSession.save(metric);
     }
 
     @Override
-    public void saveData(VelocityData data) {
+    public void saveData(final VelocityData data) {
         mappingSession.save(data);
     }
 

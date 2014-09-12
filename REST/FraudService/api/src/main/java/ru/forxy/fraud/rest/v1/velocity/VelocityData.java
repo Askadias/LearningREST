@@ -19,6 +19,14 @@ public class VelocityData implements Serializable {
     @Column(name = "related_metric_value")
     private String relatedMetricValue;
 
+    public VelocityData() {
+    }
+
+    public VelocityData(final VelocityDataCompositeKey key, final String relatedMetricValue) {
+        this.key = key;
+        this.relatedMetricValue = relatedMetricValue;
+    }
+
     public VelocityDataCompositeKey getKey() {
         return key;
     }

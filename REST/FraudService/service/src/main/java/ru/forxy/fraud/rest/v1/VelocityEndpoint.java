@@ -14,6 +14,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.Date;
 import java.util.Map;
 
 @Path("/velocity/")
@@ -43,9 +44,13 @@ public class VelocityEndpoint extends AbstractService {
     @Path("/data_list/")
     public Response getDataList(@QueryParam("metric_type") final String metricType,
                                 @QueryParam("metric_value") final String metricValue,
+                                @QueryParam("related_metric_type") final String relatedMetricType,
+                                @QueryParam("create_date") final Long createDateMillis,
                                 @Context final UriInfo uriInfo,
                                 @Context final HttpHeaders headers) {
-        return respondWith(velocityManager.getMoreDataFrom(metricType, metricValue), uriInfo, headers).build();
+        Date createDate = createDateMillis != null ? new Date(createDateMillis) : null;
+        return respondWith(velocityManager.getMoreDataFrom(metricType, metricValue, relatedMetricType, createDate),
+                uriInfo, headers).build();
     }
 
     @GET

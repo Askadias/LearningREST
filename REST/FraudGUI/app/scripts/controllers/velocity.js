@@ -128,7 +128,7 @@ angular.module('controllers.velocity', [])
         }
       };
 
-      $scope.removeMetric = function(metric) {
+      $scope.removeMetric = function (metric) {
         delete $scope.velocity_config.metrics_aggregation_config[metric];
       };
 
@@ -144,10 +144,10 @@ angular.module('controllers.velocity', [])
 
   .controller('VelocityMetricsCtrl', ['$scope', '$modal', '$stateParams', 'Velocity',
     function ($scope, $modal, $stateParams, Velocity) {
-      $scope.startFrom = {metric_type : null, metric_value: null};
+      $scope.startFrom = {metric_type: null, metric_value: null};
       $scope.metrics = [];
 
-      $scope.loadFrom = function(startFrom) {
+      $scope.loadFrom = function (startFrom) {
         Velocity.metricsPage(startFrom).then(function (response) {
           $scope.metrics.push.apply($scope.metrics, response);
         }, function () {
@@ -160,7 +160,13 @@ angular.module('controllers.velocity', [])
 
   .controller('VelocityDataCtrl', ['$scope', '$modal', '$stateParams', 'Velocity', 'VelocityConfig',
     function ($scope, $modal, $stateParams, Velocity, VelocityConfig) {
-      $scope.startFrom = {metric_type : null, metric_value: null};
+      $scope.startFrom = {
+        key: {
+          id: {metric_type: null, metric_value: null},
+          related_metric_type: null,
+          create_date: null
+        }
+      };
       $scope.data_list = [];
       $scope.configs = {};
 
@@ -173,18 +179,23 @@ angular.module('controllers.velocity', [])
         $scope.configs = {};
       });
 
-      $scope.loadFrom = function(startFrom) {
-        Velocity.dataPage(startFrom).then(function (response) {
+      $scope.loadFrom = function (startFrom) {
+        Velocity.dataPage({
+          metric_type : startFrom.key.id.metric_type,
+          metric_value : startFrom.key.id.metric_value,
+          related_metric_type : startFrom.key.related_metric_type,
+          create_date : !startFrom.key.create_date ? null : new Date(startFrom.key.create_date).getTime()
+        }).then(function (response) {
           $scope.data_list.push.apply($scope.data_list, response);
-        }, function () {
+        }, function (error) {
           $scope.data_list = [];
         });
       };
-      $scope.expiresIn = function(date, metric_type) {
+      $scope.expiresIn = function (date, metric_type) {
         var ttl_sec = $scope.configs[metric_type].time_to_live;
         var now_millis = new Date().getTime();
         var create_date_millis = new Date(date).getTime();
-        return msToTime(Math.floor(create_date_millis + (ttl_sec * 1000)- now_millis));
+        return msToTime(Math.floor(create_date_millis + (ttl_sec * 1000) - now_millis));
       };
 
       $scope.loadFrom($scope.startFrom);
@@ -203,7 +214,7 @@ angular.module('controllers.velocity', [])
         $scope.configs = [];
       });
 
-      $scope.check = function() {
+      $scope.check = function () {
         Velocity.check($scope.test_data).then(function (response) {
           $scope.metrics = response
         }, function () {

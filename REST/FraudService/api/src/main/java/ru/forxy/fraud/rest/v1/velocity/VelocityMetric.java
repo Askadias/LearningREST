@@ -18,6 +18,14 @@ public class VelocityMetric implements Serializable {
     @Column(name = "aggregated_value")
     private Double aggregatedValue;
 
+    public VelocityMetric() {
+    }
+
+    public VelocityMetric(final VelocityMetricCompositeKey key, final Double aggregatedValue) {
+        this.key = key;
+        this.aggregatedValue = aggregatedValue;
+    }
+
     public VelocityMetricCompositeKey getKey() {
         return key;
     }

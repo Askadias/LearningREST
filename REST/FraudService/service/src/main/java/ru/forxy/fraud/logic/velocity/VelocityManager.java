@@ -22,7 +22,7 @@ import java.util.Set;
  */
 public class VelocityManager implements IVelocityManager {
 
-    private static final int DEFAULT_PAGE_SIZE = 10;
+    private static final int DEFAULT_PAGE_SIZE = 30;
 
     private IVelocityDAO velocityDAO;
     private OperationalDataStorage operationalDataStorage;
@@ -36,13 +36,28 @@ public class VelocityManager implements IVelocityManager {
         }
 
         Map<String, VelocityConfig> configs = operationalDataStorage.getConfigsByMetricType();
-        for (String metricType : metrics.keySet()) {
-            VelocityConfig config = configs.get(metricType);
+        for (Map.Entry<String, String> metric : metrics.entrySet()) {
+            VelocityConfig config = configs.get(metric.getKey());
             if (config != null) {
                 Map<String, Set<AggregationConfig>> relatedMetrics = config.getMetricsAggregationConfig();
                 if (relatedMetrics != null) {
-                    for (String relatedMetricType : relatedMetrics.keySet()) {
+                    for (Map.Entry<String, Set<AggregationConfig>> aggConfigs : relatedMetrics.entrySet()) {
+                        String relatedMetricType = aggConfigs.getKey();
+                        String relatedMetricValue = metrics.get(relatedMetricType);
+                        VelocityPartitionKey key = new VelocityPartitionKey(metric.getKey(), metric.getValue());
+                        velocityDAO.saveData(new VelocityData(
+                                new VelocityDataCompositeKey(key, relatedMetricType, new Date()), relatedMetricValue));
 
+                        if (aggConfigs.getValue() != null) {
+                            for (AggregationConfig aggregationConfig : aggConfigs.getValue()) {
+                                List<VelocityData> data = velocityDAO.getMetricDataForPeriod(key, relatedMetricType,
+                                        aggregationConfig.getPeriod());
+                                Double aggregationResult = aggregationConfig.getType().apply(data);
+                                velocityDAO.saveMetric(new VelocityMetric(
+                                        new VelocityMetricCompositeKey(key, relatedMetricType,
+                                                aggregationConfig.getType()), aggregationResult));
+                            }
+                        }
                     }
                 }
             }
@@ -73,13 +88,15 @@ public class VelocityManager implements IVelocityManager {
     }
 
     @Override
-    public List<VelocityData> getMoreDataFrom(final String metricType, final String value) {
-        return getMoreDataFrom(metricType, value, DEFAULT_PAGE_SIZE);
+    public List<VelocityData> getMoreDataFrom(final String metricType, final String value,
+                                              final String relatedMetricType, final Date createDate) {
+        return getMoreDataFrom(metricType, value, relatedMetricType, createDate, DEFAULT_PAGE_SIZE);
     }
 
     @Override
-    public List<VelocityData> getMoreDataFrom(final String metricType, final String value, final int limit) {
-        return velocityDAO.getMoreData(metricType, value, limit);
+    public List<VelocityData> getMoreDataFrom(final String metricType, final String value,
+                                              final String relatedMetricType, final Date createDate, final int limit) {
+        return velocityDAO.getMoreData(metricType, value, relatedMetricType, createDate, limit);
     }
 
     @Override
