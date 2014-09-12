@@ -31,27 +31,33 @@ public class VelocityManager implements IVelocityManager {
     public List<VelocityMetric> check(Map<String, String> metrics) {
         List<VelocityMetric> resultMetrics = new ArrayList<>();
 
-        for (Map.Entry<String, String> metric : metrics.entrySet()) {
-            resultMetrics.addAll(velocityDAO.getMetrics(new VelocityPartitionKey(metric.getKey(), metric.getValue())));
-        }
 
         Map<String, VelocityConfig> configs = operationalDataStorage.getConfigsByMetricType();
+
         for (Map.Entry<String, String> metric : metrics.entrySet()) {
+
             VelocityConfig config = configs.get(metric.getKey());
+
             if (config != null) {
                 Map<String, Set<AggregationConfig>> relatedMetrics = config.getMetricsAggregationConfig();
+
                 if (relatedMetrics != null) {
+
                     for (Map.Entry<String, Set<AggregationConfig>> aggConfigs : relatedMetrics.entrySet()) {
+
                         String relatedMetricType = aggConfigs.getKey();
                         String relatedMetricValue = metrics.get(relatedMetricType);
                         VelocityPartitionKey key = new VelocityPartitionKey(metric.getKey(), metric.getValue());
+
                         velocityDAO.saveData(new VelocityData(
                                 new VelocityDataCompositeKey(key, relatedMetricType, new Date()), relatedMetricValue));
 
                         if (aggConfigs.getValue() != null) {
                             for (AggregationConfig aggregationConfig : aggConfigs.getValue()) {
+
                                 List<VelocityData> data = velocityDAO.getMetricDataForPeriod(key, relatedMetricType,
                                         aggregationConfig.getPeriod());
+
                                 Double aggregationResult = aggregationConfig.getType().apply(data);
                                 velocityDAO.saveMetric(new VelocityMetric(
                                         new VelocityMetricCompositeKey(key, relatedMetricType,
@@ -62,6 +68,11 @@ public class VelocityManager implements IVelocityManager {
                 }
             }
         }
+
+        for (Map.Entry<String, String> metric : metrics.entrySet()) {
+            resultMetrics.addAll(velocityDAO.getMetrics(new VelocityPartitionKey(metric.getKey(), metric.getValue())));
+        }
+        // return
         return resultMetrics;
     }
 
