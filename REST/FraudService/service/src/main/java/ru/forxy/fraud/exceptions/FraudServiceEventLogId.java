@@ -34,7 +34,11 @@ public enum FraudServiceEventLogId implements EventLogBase {
 
     VelocityConfigAlreadyExists(FraudServiceEventLogId.BASE_EVENT_LOG_ID + 6, 400,
             "VelocityConfig for metric '%1$s' already exists.",
-            EventType.InvalidInput);
+            EventType.InvalidInput),
+
+    UnexpectedErrorDuringVelocityComputation(FraudServiceEventLogId.BASE_EVENT_LOG_ID + 7, 500,
+            "Unexpected error during velocity metric '%1$s' computation.",
+            EventType.InternalError);
 
     public static final int BASE_EVENT_LOG_ID = 20000;
 

@@ -91,6 +91,7 @@ angular.module('controllers.velocity', [])
   .controller('VelocityConfigDetailsCtrl', ['$scope', '$state', '$stateParams', 'VelocityConfig',
     function ($scope, $state, $stateParams, VelocityConfig) {
       $scope.mode = $stateParams.mode;
+      $scope.configs = [];
 
       $scope.velocity_config = {
         metric_type: '',
@@ -103,12 +104,17 @@ angular.module('controllers.velocity', [])
         VelocityConfig.get($stateParams.metric_type).then(function (response) {
           if (response) {
             $scope.velocity_config = response;
-            $scope.velocity_config.metrics_aggregation_config = $scope.config.metrics_aggregation_config || {};
+            $scope.velocity_config.metrics_aggregation_config = $scope.velocity_config.metrics_aggregation_config || {};
             $scope.original = angular.copy($scope.velocity_config);
           }
         }, function () {
         });
       }
+
+      VelocityConfig.all().then(function (response) {
+        $scope.configs = response;
+      }, function () {
+      });
 
       $scope.discard = function () {
         $scope.velocity_config = angular.copy($scope.original);

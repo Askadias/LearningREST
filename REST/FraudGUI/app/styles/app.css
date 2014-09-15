@@ -9135,6 +9135,10 @@ legend + .control-group {
 .form-horizontal .controls:first-child {
   *padding-left: 180px;
 }
+.controls .panel {
+  margin-top: 30px;
+  margin-bottom: 0;
+}
 .form-horizontal .help-block {
   margin-bottom: 0;
 }

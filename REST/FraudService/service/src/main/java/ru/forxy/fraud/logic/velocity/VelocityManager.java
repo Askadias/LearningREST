@@ -1,7 +1,11 @@
 package ru.forxy.fraud.logic.velocity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.forxy.common.exceptions.ServiceException;
 import ru.forxy.fraud.db.dao.IVelocityDAO;
-import ru.forxy.fraud.rest.v1.velocity.AggregationConfig;
+import ru.forxy.fraud.exceptions.FraudServiceEventLogId;
+import ru.forxy.fraud.logic.velocity.concurrency.RelatedMetricsComputationTask;
 import ru.forxy.fraud.rest.v1.velocity.AggregationType;
 import ru.forxy.fraud.rest.v1.velocity.VelocityConfig;
 import ru.forxy.fraud.rest.v1.velocity.VelocityData;
@@ -15,9 +19,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.RecursiveTask;
 
 /**
  * Implementation class for BlackListService business logic
@@ -26,70 +29,50 @@ public class VelocityManager implements IVelocityManager {
 
     private static final int DEFAULT_PAGE_SIZE = 30;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(VelocityManager.class);
+
     private IVelocityDAO velocityDAO;
     private OperationalDataStorage operationalDataStorage;
 
-    private final ForkJoinPool fjp = new ForkJoinPool(128);
+    private final ForkJoinPool fjp = new ForkJoinPool(32);
 
     @Override
-    public List<VelocityMetric> check(Map<String, String> metrics) {
+    public List<VelocityMetric> check(final Map<String, String> metrics) {
         List<VelocityMetric> resultMetrics = new ArrayList<>();
         List<VelocityData> velocityDataToSave = new ArrayList<>();
 
         // getting velocity configuration from cache
-        Map<String, VelocityConfig> configs = operationalDataStorage.getConfigsByMetricType();
+        final Map<String, VelocityConfig> configs = operationalDataStorage.getConfigsByMetricType();
 
-        /*Map<VelocityMetric, List<VelocityData>> result =
-                fjp.invoke(new RecursiveTask<Map<VelocityMetric, List<VelocityData>>>() {
-                    private static final long serialVersionUID = 3382633942346203823L;
-
-                    @Override
-                    protected Map<VelocityMetric, List<VelocityData>> compute() {
-                        return null;
-                    }
-                });*/
-
+        List<RelatedMetricsComputationTask> velocityDataUpdateTasks = new ArrayList<>();
         for (Map.Entry<String, String> metric : metrics.entrySet()) {
 
-            VelocityConfig config = configs.get(metric.getKey());
+            final VelocityConfig config = configs.get(metric.getKey());
 
             // if incoming metric has configuration then retrieve it's related metrics configuration
             if (config != null) {
-                Map<String, Set<AggregationConfig>> relatedMetrics = config.getMetricsAggregationConfig();
-
-                if (relatedMetrics != null) {
-                    // creating single partition key for metric and it's data
-                    VelocityPartitionKey key = new VelocityPartitionKey(metric.getKey(), metric.getValue());
-
-
-                    for (Map.Entry<String, Set<AggregationConfig>> aggregationConfigs : relatedMetrics.entrySet()) {
-
-                        String relatedMetricType = aggregationConfigs.getKey();
-                        String relatedMetricValue = metrics.get(relatedMetricType);
-
-                        // prepare velocity data for deferred batch insert
-                        VelocityData newVelocityData = new VelocityData(
-                                new VelocityDataCompositeKey(key, relatedMetricType, new Date()), relatedMetricValue);
-                        velocityDataToSave.add(newVelocityData);
-
-                        if (aggregationConfigs.getValue() != null) {
-                            // for each aggregation configuration calculate and update aggregation metric
-                            for (AggregationConfig aggregationConfig : aggregationConfigs.getValue()) {
-
-                                List<VelocityData> data = velocityDAO.getMetricDataForPeriod(key, relatedMetricType,
-                                        aggregationConfig.getPeriod());
-                                // add new data for aggregation
-                                data.add(newVelocityData);
-
-                                // apply aggregation function and add metric to result set
-                                Double aggregationResult = aggregationConfig.getType().apply(data);
-                                resultMetrics.add(new VelocityMetric(
-                                        new VelocityMetricCompositeKey(key, relatedMetricType,
-                                                aggregationConfig.getType()), aggregationResult));
-                            }
-                        }
+                RelatedMetricsComputationTask dataUpdateTask = new RelatedMetricsComputationTask(config,
+                        metric.getKey(),
+                        metric.getValue(),
+                        metrics,
+                        velocityDAO);
+                velocityDataUpdateTasks.add(dataUpdateTask);
+                fjp.submit(dataUpdateTask);
+            }
+        }
+        for (RelatedMetricsComputationTask dataUpdateTask : velocityDataUpdateTasks) {
+            try {
+                for (Map.Entry<VelocityPartitionKey, Map<VelocityData, List<VelocityMetric>>> metricResults :
+                        dataUpdateTask.get().entrySet()) {
+                    for (Map.Entry<VelocityData, List<VelocityMetric>> metric : metricResults.getValue().entrySet()) {
+                        velocityDataToSave.add(metric.getKey());
+                        resultMetrics.addAll(metric.getValue());
                     }
                 }
+            } catch (InterruptedException | ExecutionException e) {
+                new ServiceException(e,
+                        FraudServiceEventLogId.UnexpectedErrorDuringVelocityComputation,
+                        dataUpdateTask.getMetricType()).log(LOGGER);
             }
         }
 
