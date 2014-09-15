@@ -16,6 +16,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.RecursiveTask;
 
 /**
  * Implementation class for BlackListService business logic
@@ -27,39 +29,61 @@ public class VelocityManager implements IVelocityManager {
     private IVelocityDAO velocityDAO;
     private OperationalDataStorage operationalDataStorage;
 
+    private final ForkJoinPool fjp = new ForkJoinPool(128);
+
     @Override
     public List<VelocityMetric> check(Map<String, String> metrics) {
         List<VelocityMetric> resultMetrics = new ArrayList<>();
+        List<VelocityData> velocityDataToSave = new ArrayList<>();
 
-
+        // getting velocity configuration from cache
         Map<String, VelocityConfig> configs = operationalDataStorage.getConfigsByMetricType();
+
+        /*Map<VelocityMetric, List<VelocityData>> result =
+                fjp.invoke(new RecursiveTask<Map<VelocityMetric, List<VelocityData>>>() {
+                    private static final long serialVersionUID = 3382633942346203823L;
+
+                    @Override
+                    protected Map<VelocityMetric, List<VelocityData>> compute() {
+                        return null;
+                    }
+                });*/
 
         for (Map.Entry<String, String> metric : metrics.entrySet()) {
 
             VelocityConfig config = configs.get(metric.getKey());
 
+            // if incoming metric has configuration then retrieve it's related metrics configuration
             if (config != null) {
                 Map<String, Set<AggregationConfig>> relatedMetrics = config.getMetricsAggregationConfig();
 
                 if (relatedMetrics != null) {
+                    // creating single partition key for metric and it's data
+                    VelocityPartitionKey key = new VelocityPartitionKey(metric.getKey(), metric.getValue());
 
-                    for (Map.Entry<String, Set<AggregationConfig>> aggConfigs : relatedMetrics.entrySet()) {
 
-                        String relatedMetricType = aggConfigs.getKey();
+                    for (Map.Entry<String, Set<AggregationConfig>> aggregationConfigs : relatedMetrics.entrySet()) {
+
+                        String relatedMetricType = aggregationConfigs.getKey();
                         String relatedMetricValue = metrics.get(relatedMetricType);
-                        VelocityPartitionKey key = new VelocityPartitionKey(metric.getKey(), metric.getValue());
 
-                        velocityDAO.saveData(new VelocityData(
-                                new VelocityDataCompositeKey(key, relatedMetricType, new Date()), relatedMetricValue));
+                        // prepare velocity data for deferred batch insert
+                        VelocityData newVelocityData = new VelocityData(
+                                new VelocityDataCompositeKey(key, relatedMetricType, new Date()), relatedMetricValue);
+                        velocityDataToSave.add(newVelocityData);
 
-                        if (aggConfigs.getValue() != null) {
-                            for (AggregationConfig aggregationConfig : aggConfigs.getValue()) {
+                        if (aggregationConfigs.getValue() != null) {
+                            // for each aggregation configuration calculate and update aggregation metric
+                            for (AggregationConfig aggregationConfig : aggregationConfigs.getValue()) {
 
                                 List<VelocityData> data = velocityDAO.getMetricDataForPeriod(key, relatedMetricType,
                                         aggregationConfig.getPeriod());
+                                // add new data for aggregation
+                                data.add(newVelocityData);
 
+                                // apply aggregation function and add metric to result set
                                 Double aggregationResult = aggregationConfig.getType().apply(data);
-                                velocityDAO.saveMetric(new VelocityMetric(
+                                resultMetrics.add(new VelocityMetric(
                                         new VelocityMetricCompositeKey(key, relatedMetricType,
                                                 aggregationConfig.getType()), aggregationResult));
                             }
@@ -69,9 +93,13 @@ public class VelocityManager implements IVelocityManager {
             }
         }
 
-        for (Map.Entry<String, String> metric : metrics.entrySet()) {
-            resultMetrics.addAll(velocityDAO.getMetrics(new VelocityPartitionKey(metric.getKey(), metric.getValue())));
+        if (resultMetrics.size() > 0) {
+            velocityDAO.saveBatchOfMetrics(resultMetrics);
         }
+        if (velocityDataToSave.size() > 0) {
+            velocityDAO.saveBatchOfData(velocityDataToSave);
+        }
+
         // return
         return resultMetrics;
     }

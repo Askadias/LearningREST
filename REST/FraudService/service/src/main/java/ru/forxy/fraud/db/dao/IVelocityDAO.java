@@ -33,6 +33,10 @@ public interface IVelocityDAO extends ISystemStatusComponent {
 
     void saveMetric(final VelocityMetric metric);
 
+    void saveBatchOfMetrics(final List<VelocityMetric> metrics);
+
     void saveData(final VelocityData data);
+
+    void saveBatchOfData(final List<VelocityData> dataList);
 }
 

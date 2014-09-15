@@ -2,6 +2,7 @@ package ru.forxy.fraud.db.dao.cassandra;
 
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.driver.mapping.EntityTypeParser;
+import com.datastax.driver.mapping.MappingSession;
 import com.datastax.driver.mapping.meta.EntityFieldMetaData;
 import com.datastax.driver.mapping.meta.EntityTypeMetadata;
 import ru.forxy.common.status.pojo.ComponentStatus;
@@ -118,8 +119,26 @@ public class VelocityDAO extends BaseCassandraDAO implements IVelocityDAO {
     }
 
     @Override
+    public void saveBatchOfMetrics(final List<VelocityMetric> metrics) {
+        MappingSession.BatchExecutor batchExecutor = mappingSession.withBatch();
+        for (VelocityMetric metric : metrics) {
+            batchExecutor.save(metric);
+        }
+        batchExecutor.executeAsync();
+    }
+
+    @Override
     public void saveData(final VelocityData data) {
         mappingSession.save(data);
+    }
+
+    @Override
+    public void saveBatchOfData(final List<VelocityData> dataList) {
+        MappingSession.BatchExecutor batchExecutor = mappingSession.withBatch();
+        for (VelocityData data : dataList) {
+            batchExecutor.save(data);
+        }
+        batchExecutor.executeAsync();
     }
 
     @Override
