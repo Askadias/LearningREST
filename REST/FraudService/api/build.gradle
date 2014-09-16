@@ -12,4 +12,7 @@ dependencies {
 
     // --------------------- JPA -----------------------------------------
     compile "org.eclipse.persistence:javax.persistence:${rev_eclipse_jpa}"
+
+    // --------------------- GROOVY --------------------------------------
+    compile 'org.codehaus.groovy:groovy-all:2.3.+'
 }

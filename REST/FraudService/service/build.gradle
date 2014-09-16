@@ -45,10 +45,12 @@ dependencies {
 
     // --------------------- COMMON --------------------------------------
     compile "commons-collections:commons-collections:${rev_common_collections}"
-    compile "ch.qos.logback:logback-core:${rev_logback}"
+    compile "ch.qos.logback:logback-classic:${rev_logback}"
     //compile "quartz:quartz:${rev_quartz}"
     compile "org.quartz-scheduler:quartz:${rev_quartz}"
 
+    // --------------------- GROOVY --------------------------------------
+    compile "org.codehaus.gpars:gpars:${rev_gpars}"
 
     // --------------------- MONGO ---------------------------------------
     compile "org.mongodb:mongo-java-driver:${rev_mongo}"
