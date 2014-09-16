@@ -1,11 +1,16 @@
 package ru.forxy.fraud.rest.v1.velocity
 
+import groovy.transform.EqualsAndHashCode
+import groovy.transform.ToString
+
 import javax.persistence.Column
 import javax.persistence.EmbeddedId
 
 /**
  * Composite cluster+partition key for velocity
  */
+@ToString
+@EqualsAndHashCode
 class VelocityMetricCompositeKey implements Serializable {
     @EmbeddedId
     VelocityPartitionKey id;

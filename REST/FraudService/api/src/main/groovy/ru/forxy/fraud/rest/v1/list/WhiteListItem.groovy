@@ -1,5 +1,8 @@
 package ru.forxy.fraud.rest.v1.list
 
+import groovy.transform.EqualsAndHashCode
+import groovy.transform.ToString
+
 import javax.persistence.Column
 import javax.persistence.EmbeddedId
 import javax.persistence.Entity
@@ -10,6 +13,8 @@ import javax.persistence.Table
  */
 @Entity
 @Table(name = "whitelist")
+@ToString
+@EqualsAndHashCode
 class WhiteListItem {
     @EmbeddedId
     ListPartitionKey key;

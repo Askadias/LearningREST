@@ -1,5 +1,10 @@
-package ru.forxy.fraud.rest.v1.check.location;
+package ru.forxy.fraud.rest.v1.check.location
 
+import groovy.transform.EqualsAndHashCode
+import groovy.transform.ToString;
+
+@ToString
+@EqualsAndHashCode(callSuper = true)
 class Address extends Location {
     String addressLine;
 }

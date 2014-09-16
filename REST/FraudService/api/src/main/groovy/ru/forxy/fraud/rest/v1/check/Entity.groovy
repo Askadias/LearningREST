@@ -1,5 +1,10 @@
 package ru.forxy.fraud.rest.v1.check
 
+import groovy.transform.EqualsAndHashCode
+import groovy.transform.ToString
+
+@ToString
+@EqualsAndHashCode
 abstract class Entity implements Serializable {
     Map<String, Object> attributes = new HashMap<String, Object>();
 

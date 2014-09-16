@@ -1,7 +1,7 @@
-package ru.forxy.fraud.exceptions;
+package ru.forxy.fraud.exceptions
 
-import ru.forxy.common.exceptions.EventLogBase;
-import ru.forxy.common.exceptions.EventType;
+import ru.forxy.common.exceptions.EventLogBase
+import ru.forxy.common.exceptions.EventType
 
 enum FraudServiceEventLogId implements EventLogBase {
 
@@ -18,11 +18,11 @@ enum FraudServiceEventLogId implements EventLogBase {
 
     InvalidPageNumber(BASE_EVENT_LOG_ID + 2, 400,
             'Invalid page number provided: \'%1$s\'',
-                      EventType.InvalidInput),
+            EventType.InvalidInput),
 
     IsInBlackListAlready(BASE_EVENT_LOG_ID + 3, 400,
             '%1$s with value= \'%2$s\' is in black list already',
-                      EventType.InvalidInput),
+            EventType.InvalidInput),
 
     BlackListItemIsNotExist(BASE_EVENT_LOG_ID + 4, 400,
             '%1$s with value= \'%2$s\' is not exist',
@@ -48,12 +48,14 @@ enum FraudServiceEventLogId implements EventLogBase {
     int responseId;
     EventType eventType;
 
-    private FraudServiceEventLogId(final int eventId, final int responseId, final String formatString, final EventType eventType) {
+    private FraudServiceEventLogId(
+            final int eventId, final int responseId, final String formatString, final EventType eventType) {
         this(eventId, responseId, EventLogBase.Level.ERROR, formatString, eventType);
     }
 
-    private FraudServiceEventLogId(final int eventId, final int responseId, final EventLogBase.Level level, final String formatString,
-                                   final EventType eventType) {
+    private FraudServiceEventLogId(
+            final int eventId, final int responseId, final EventLogBase.Level level, final String formatString,
+            final EventType eventType) {
         this.eventId = eventId;
         this.responseId = responseId;
         logLevel = level;
