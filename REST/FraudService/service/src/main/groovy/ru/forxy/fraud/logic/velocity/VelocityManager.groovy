@@ -12,7 +12,7 @@ import ru.forxy.fraud.util.OperationalDataStorage
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.ForkJoinPool
 
-import static groovyx.gpars.GParsPool.runForkJoin
+import static groovyx.gpars.GParsPool.withExistingPool
 import static groovyx.gpars.GParsPool.withPool
 
 /**
@@ -56,8 +56,8 @@ class VelocityManager implements IVelocityManager {
             try {
                 it.get().each { VelocityPartitionKey key, Map<VelocityData, List<VelocityMetric>> resultsMap ->
                     resultsMap.each { VelocityData data, List<VelocityMetric> metricList ->
-                        velocityDataToSave.add(data)
-                        resultMetrics.addAll(metricList)
+                        velocityDataToSave << data
+                        resultMetrics += metricList
                     }
                 }
             } catch (InterruptedException | ExecutionException e) {
@@ -78,70 +78,72 @@ class VelocityManager implements IVelocityManager {
         resultMetrics
     }
 
-    List<VelocityMetric> checkGPar(final Map<String, String> metrics) {
+    List<VelocityMetric> checkGPars(final Map<String, String> metrics) {
         List<VelocityMetric> resultMetrics = []
         List<VelocityData> velocityDataToSave = []
 
-        // getting velocity configuration from cache
-        final Map<String, VelocityConfig> configs = operationalDataStorage.configsByMetricType
+        withPool { jsr166y.ForkJoinPool pool ->
+            Map<String, Map<VelocityData, List<VelocityMetric>>> result =
+                    metrics.collectParallel { metricType, metricValue ->
+                        withExistingPool(pool) {
+                            def id = new VelocityPartitionKey(metricType: metricType, metricValue: metricValue)
+                            final Map<String, VelocityConfig> configs = operationalDataStorage.configsByMetricType
+                            Map<VelocityData, List<VelocityMetric>> dataListMap =
+                                    configs[metricType]?.metricsAggregationConfig?.collectParallel {
+                                        relatedMetricType, aggregations ->
+                                            withExistingPool(pool) {
 
+                                                def newData = new VelocityData(
+                                                        key: new VelocityDataCompositeKey(
+                                                                id: id,
+                                                                relatedMetricType: relatedMetricType,
+                                                                createDate: new Date()),
+                                                        relatedMetricValue: metrics[relatedMetricType])
 
-        withPool {
-            metrics.eachParallel { metricType, metricValue ->
-                def id = new VelocityPartitionKey(metricType: metricType, metricValue: metricValue)
-                withPool {
-                    configs[metricType]?.metricsAggregationConfig?.eachParallel { relatedMetricType, aggregation ->
-                        withPool {
-                            aggregation.eachParallel {
-                                List<VelocityData> data = velocityDAO.getMetricDataForPeriod(id, relatedMetricType, it.period);
-
-                                def newData = new VelocityData(
-                                        key: new VelocityDataCompositeKey(
-                                                id: id,
-                                                relatedMetricType: relatedMetricType,
-                                                createDate: new Date()),
-                                        relatedMetricValue: metrics[relatedMetricType])
-
-                                velocityDataToSave << newData
-                                data << newData
-
-                                resultMetrics << new VelocityMetric(
-                                        key: new VelocityMetricCompositeKey(
-                                                id: id,
-                                                relatedMetricType: relatedMetricType,
-                                                aggregationType: it.type
-                                        ),
-                                        aggregatedValue: it.type.apply(data)
-                                )
-                            }
+                                                List<VelocityMetric> dataMetrics = aggregations.collectParallel {
+                                                    List<VelocityData> data = velocityDAO
+                                                            .getMetricDataForPeriod(id, relatedMetricType, it.period) + newData;
+                                                    //data << newData
+                                                    return new VelocityMetric(
+                                                            key: new VelocityMetricCompositeKey(
+                                                                    id: id,
+                                                                    relatedMetricType: relatedMetricType,
+                                                                    aggregationType: it.type
+                                                            ),
+                                                            aggregatedValue: it.type.apply(data)
+                                                    )
+                                                }
+                                                return [(newData): dataMetrics]
+                                            }
+                                    }?.parallelArray?.reduce { a, b ->
+                                        b.keySet().each {
+                                            a[it] ? a[it].addAll(b[it]) : a[it].put(b[it])
+                                        }
+                                    }
+                            return [(metricType): dataListMap]
+                        }
+                    }?.parallelArray?.reduce { a, b ->
+                        b.keySet().each {
+                            a[it] ? a[it].addAll(b[it]) : a[it].put(b[it])
                         }
                     }
-                }
+            resultMetrics = result?.values()?.collect { it?.values() }
+            velocityDataToSave = result?.values()?.collect { it?.keySet() }
+            if (resultMetrics) {
+                velocityDAO.saveBatchOfMetrics(resultMetrics)
             }
-        }
-        if (resultMetrics) {
-            velocityDAO.saveBatchOfMetrics(resultMetrics)
-        }
-        if (velocityDataToSave) {
-            velocityDAO.saveBatchOfData(velocityDataToSave)
+            if (velocityDataToSave) {
+                velocityDAO.saveBatchOfData(velocityDataToSave)
+            }
+
         }
 
         return resultMetrics
-        withPool {
-            runForkJoin(0, numbers) { index, list ->
-                def groups = list.groupBy { it <=> list[list.size().intdiv(2)] }
-                if ((list.size() < 2) || (groups.size() == 1)) {
-                    return [index: index, list: list.clone()]
-                }
-                (-1..1).each { forkOffChild(it, groups[it] ?: []) }
-                return [index: index, list: childrenResults.sort { it.index }.sum { it.list }]
-            }.list
-        }
     }
 
     @Override
     List<VelocityMetric> check2(final Map<String, String> metrics) {
-        return checkGPar(metrics);
+        return checkGPars(metrics);
         List<VelocityMetric> resultMetrics = []
         List<VelocityData> velocityDataToSave = []
 

@@ -39,14 +39,16 @@ public abstract class TravelDataGenerator extends AbstractGenerator {
         transaction.setMachineGUID(generateGUID());
 
         int productsCount = generateInt(1, 4);
-        List<Product> products = new ArrayList<Product>(productsCount);
+        List<Product> products = new ArrayList<>(productsCount);
         for (int i = 0; i < productsCount; i++) {
-            products.add(generateTravelProduct(TravelProduct.Type.values()[RAND.nextInt(4)], generateInt(100, 10000)));
+            products.add(generateTravelProduct(
+                    (TravelProduct.Type) TravelProduct.Type.values()[RAND.nextInt(4)],
+                    generateInt(100, 10000)));
         }
         transaction.setProducts(products);
 
         int paymentsCount = generateInt(1, 2);
-        List<Payment> payments = new ArrayList<Payment>(paymentsCount);
+        List<Payment> payments = new ArrayList<>(paymentsCount);
         for (int i = 0; i < paymentsCount; i++) {
             payments.add(generatePayment(transaction.getAccount()));
         }
@@ -127,7 +129,7 @@ public abstract class TravelDataGenerator extends AbstractGenerator {
                 telephone.setAreaCode(generateNumber(3));
                 telephone.setCountryAccessCode(generateNumber(2));
                 telephone.setPhoneNumber(generateNumber(5, false));
-                telephone.setType(Telephone.Type.values()[RAND.nextInt(3)]);
+                telephone.setType((Telephone.Type) Telephone.Type.values()[RAND.nextInt(3)]);
                 telephones.add(telephone);
             }
             person.setTelephones(telephones);

@@ -15,7 +15,7 @@ class TravelProduct extends Product {
     List<Location> locations;
     Type type;
 
-    enum Type {
+    public enum Type {
         Air,
         Hotel,
         DestinationExperience,

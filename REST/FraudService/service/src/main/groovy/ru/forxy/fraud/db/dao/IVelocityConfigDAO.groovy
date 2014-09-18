@@ -12,5 +12,7 @@ import ru.forxy.fraud.rest.v1.velocity.VelocityConfig
 interface IVelocityConfigDAO extends PagingAndSortingRepository<VelocityConfig, String>, ISystemStatusComponent {
 
     Page<VelocityConfig> findAll(final Pageable pageable, final VelocityConfig filter)
+
+    VelocityConfig saveConfig(final VelocityConfig velocityConfig);
 }
 

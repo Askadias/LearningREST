@@ -17,7 +17,7 @@ class VelocityEndpoint extends AbstractService {
     Response check(final Map<String, String> metrics,
                    @Context final UriInfo uriInfo,
                    @Context final HttpHeaders headers) {
-        respondWith(velocityManager.check2(metrics), uriInfo, headers).build()
+        respondWith(velocityManager.check(metrics), uriInfo, headers).build()
     }
 
     @GET

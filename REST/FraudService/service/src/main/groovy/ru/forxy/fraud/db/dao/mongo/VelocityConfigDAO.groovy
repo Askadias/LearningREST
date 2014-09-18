@@ -22,12 +22,12 @@ class VelocityConfigDAO implements IVelocityConfigDAO {
     private MongoTemplate mongoTemplate
 
     @Override
-    Iterable<VelocityConfig> findAll(final Sort sort) {
+    public Iterable<VelocityConfig> findAll(final Sort sort) {
         mongoTemplate.find(Query.query(new Criteria()).with(sort), VelocityConfig.class)
     }
 
     @Override
-    Page<VelocityConfig> findAll(final Pageable pageable) {
+    public Page<VelocityConfig> findAll(final Pageable pageable) {
         new PageImpl<>(
                 mongoTemplate.find(Query.query(new Criteria()).with(pageable), VelocityConfig.class),
                 pageable, count()
@@ -35,7 +35,7 @@ class VelocityConfigDAO implements IVelocityConfigDAO {
     }
 
     @Override
-    Page<VelocityConfig> findAll(final Pageable pageable, final VelocityConfig filter) {
+    public Page<VelocityConfig> findAll(final Pageable pageable, final VelocityConfig filter) {
         Query query = Query.query(new Criteria()).with(pageable)
         if (filter != null) {
             if (StringUtils.isNotEmpty(filter.getMetricType())) {
@@ -53,60 +53,66 @@ class VelocityConfigDAO implements IVelocityConfigDAO {
     }
 
     @Override
-    <S extends VelocityConfig> S save(final S velocityConfig) {
+    public <S extends VelocityConfig> S save(final S velocityConfig) {
         mongoTemplate.save(velocityConfig)
         velocityConfig
     }
 
     @Override
-    <S extends VelocityConfig> Iterable<S> save(final Iterable<S> velocityConfigs) {
+    public VelocityConfig saveConfig(final VelocityConfig velocityConfig) {
+        mongoTemplate.save(velocityConfig)
+        velocityConfig
+    }
+
+    @Override
+    public <S extends VelocityConfig> Iterable<S> save(final Iterable<S> velocityConfigs) {
         throw null
     }
 
     @Override
-    VelocityConfig findOne(final String metricType) {
+    public VelocityConfig findOne(final String metricType) {
         mongoTemplate.findOne(Query.query(Criteria.where('metricType').is(metricType)), VelocityConfig.class)
     }
 
     @Override
-    boolean exists(final String metricType) {
+    public boolean exists(final String metricType) {
         mongoTemplate.findOne(Query.query(Criteria.where('metricType').is(metricType)), VelocityConfig.class) != null
     }
 
     @Override
-    Iterable<VelocityConfig> findAll() {
+    public Iterable<VelocityConfig> findAll() {
         mongoTemplate.findAll(VelocityConfig.class)
     }
 
     @Override
-    Iterable<VelocityConfig> findAll(final Iterable<String> metricTypes) {
+    public Iterable<VelocityConfig> findAll(final Iterable<String> metricTypes) {
         mongoTemplate.find(Query.query(Criteria.where('metricType').in(metricTypes)), VelocityConfig.class)
     }
 
     @Override
-    long count() {
+    public long count() {
         mongoTemplate.count(null, VelocityConfig.class)
     }
 
     @Override
-    void delete(final String metricType) {
+    public void delete(final String metricType) {
         mongoTemplate.remove(Query.query(Criteria.where('metricType').is(metricType)), VelocityConfig.class)
     }
 
     @Override
-    void delete(final VelocityConfig velocityConfig) {
+    public void delete(final VelocityConfig velocityConfig) {
         mongoTemplate.remove(velocityConfig)
     }
 
     @Override
-    void delete(final Iterable<? extends VelocityConfig> velocityConfigs) {
+    public void delete(final Iterable<? extends VelocityConfig> velocityConfigs) {
         for (VelocityConfig velocityConfig : velocityConfigs) {
             mongoTemplate.remove(velocityConfig)
         }
     }
 
     @Override
-    void deleteAll() {
+    public void deleteAll() {
         mongoTemplate.remove(null, VelocityConfig.class)
     }
 

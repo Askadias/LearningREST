@@ -52,6 +52,11 @@ dependencies {
     // --------------------- GROOVY --------------------------------------
     compile "org.codehaus.gpars:gpars:${rev_gpars}"
 
+    // --------------------- GRAILS-DB -----------------------------------
+    compile("org.springframework.boot:spring-boot-starter-web:1.1.+")
+    compile("org.grails:gorm-mongodb-spring-boot:1.1.+")
+    runtime("org.springframework.boot:spring-boot-starter-data-mongodb:1.1.+")
+
     // --------------------- MONGO ---------------------------------------
     compile "org.mongodb:mongo-java-driver:${rev_mongo}"
     //compile "org.springframework.data:spring-data-mongodb:${rev_spring_data_mongo}"
@@ -60,6 +65,10 @@ dependencies {
     //compile "com.datastax.cassandra:cassandra-driver-core:${rev_cassandra_datastax}"
     //compile "com.datastax.cassandra:cassandra-driver-mapping:${rev_cassandra_datastax}"
     compile "com.valchkou.datastax:cassandra-driver-mapping:${rev_cassandra_jpa}"
+
+    // --------------------- REDIS ---------------------------------------
+    compile "redis.clients:jedis:${rev_jedis}"
+
 
     // --------------------- SPRING --------------------------------------
     compile "org.springframework:spring-core:${rev_spring}"

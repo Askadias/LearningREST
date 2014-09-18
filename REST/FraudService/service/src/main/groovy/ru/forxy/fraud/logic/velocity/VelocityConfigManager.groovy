@@ -55,7 +55,7 @@ class VelocityConfigManager implements IVelocityConfigManager {
     @Override
     void updateVelocityConfig(final VelocityConfig velocityConfig) {
         if (velocityConfigDAO.exists(velocityConfig.getMetricType())) {
-            velocityConfigDAO.save(velocityConfig)
+            velocityConfigDAO.saveConfig(velocityConfig)
         } else {
             throw new ServiceException(FraudServiceEventLogId.VelocityConfigNotFound, velocityConfig.getMetricType())
         }
@@ -65,7 +65,7 @@ class VelocityConfigManager implements IVelocityConfigManager {
     void createVelocityConfig(final VelocityConfig velocityConfig) {
         velocityConfig.setCreateDate(new Date())
         if (!velocityConfigDAO.exists(velocityConfig.getMetricType())) {
-            velocityConfigDAO.save(velocityConfig)
+            velocityConfigDAO.saveConfig(velocityConfig)
         } else {
             throw new ServiceException(FraudServiceEventLogId.VelocityConfigAlreadyExists, velocityConfig.getMetricType())
         }
