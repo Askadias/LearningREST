@@ -3,7 +3,7 @@
 buildscript {
     repositories {
         maven {
-            url uri("file://$System.env.OUTPUT_ROOT/deliverables/")
+            url "file://$System.env.OUTPUT_ROOT/deliverables/"
         }
     }
     dependencies {
