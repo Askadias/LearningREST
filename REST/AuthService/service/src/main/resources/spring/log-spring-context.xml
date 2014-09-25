@@ -174,7 +174,7 @@
           class="ru.forxy.common.logging.exceptions.ServiceExceptionHandler"/>
 
     <bean id="performance.logger.impl"
-          class="ru.forxy.common.logging.writer.LogWriter" c:name="auth.performance.service.impl"/>
+          class="ru.forxy.common.logging.writer.LogWriter" c:name="auth.performance.velocity.impl"/>
 
     <bean id="impl.loggingInterceptor"
           class="ru.forxy.common.logging.LoggingInterceptor"

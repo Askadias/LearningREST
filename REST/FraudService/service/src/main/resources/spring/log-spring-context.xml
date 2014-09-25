@@ -30,9 +30,9 @@
     </bean>
 
     <bean id="performance.logger.request"
-          class="ru.forxy.common.logging.writer.LogWriter" c:name="user.performance.request"/>
+          class="ru.forxy.common.logging.writer.LogWriter" c:name="fraud.performance.request"/>
     <bean id="performance.logger.response"
-          class="ru.forxy.common.logging.writer.LogWriter" c:name="user.performance.response"/>
+          class="ru.forxy.common.logging.writer.LogWriter" c:name="fraud.performance.response"/>
 
     <bean id="performance.loggingFilter"
           class="ru.forxy.common.logging.LoggingServletFilter"
@@ -43,19 +43,18 @@
             <bean class="ru.forxy.common.logging.extractor.SpringELFieldExtractor">
                 <property name="extractRules">
                     <map>
-                        <entry key="Username"
-                               value="#request.getParameter('transaction_id')?:#requestHeaders['transaction-id']?:null"/>
+                        <entry key="Client"
+                               value="#request.getParameter('client_id')?:#requestHeaders['client-id']?:null"/>
                         <entry key="TransactionGUID"
                                value="#request.getParameter('transaction_guid')?:#requestHeaders['transaction-guid']?:null"/>
                         <entry key="MessageGUID"
                                value="#request.getParameter('message_guid')?:#requestHeaders['message-guid']?:null"/>
-                        <entry key="OperationName" value="#request.requestURI.matches('.*/users[/\d+]+') and #request.getMethod().equals('GET') ? 'GetUsersPage' :
-                                                          #request.requestURI.matches('.*/users/login/?') and #request.getMethod().equals('POST') ? 'Login' :
-                                                          #request.requestURI.matches('.*/users/?') and #request.getMethod().equals('GET') ? 'GetUser' :
-                                                          #request.requestURI.matches('.*/users/?') and #request.getMethod().equals('POST') ? 'UpdateUser' :
-                                                          #request.requestURI.matches('.*/users/?') and #request.getMethod().equals('DELETE') ? 'DeleteUser' :
-                                                          #request.requestURI.matches('.*/status/?') and #request.getMethod().equals('GET') ? 'SystemStatus' :
-                                                          null"/>
+                        <entry key="OperationName" value="#request.requestURI.matches('.*/velocity/?') and #request.getMethod().equals('POST') ? 'VelocityCheck' :
+                                #request.requestURI.matches('.*/velocity/metrics/[?metric_type=\w+&amp;metric_value=\w+]?') and #request.getMethod().equals('GET') ? 'GetVelocityMetrics' :
+                                #request.requestURI.matches('.*/velocity/data_list/[?metric_type=\w+&amp;metric_value=\w+].*') and #request.getMethod().equals('GET') ? 'GetVelocityDataLog' :
+                                #request.requestURI.matches('.*/velocity/metric/[?metric_type=\w+&amp;metric_value=\w+]?') and #request.getMethod().equals('GET') ? 'GetVelocityMetric' :
+                                #request.requestURI.matches('.*/velocity/data/[?metric_type=\w+&amp;metric_value=\w+]?') and #request.getMethod().equals('GET') ? 'GetVelocityData' :
+                                null"/>
                     </map>
                 </property>
             </bean>
@@ -66,8 +65,6 @@
                     <map>
                         <entry key="TransactionGUID" value="#responseHeaders['Transaction-GUID']"/>
                         <entry key="MessageGUID" value="#responseHeaders['Message-GUID']"/>
-                        <entry key="UserEmail"
-                               value="#payload.indexOf('&quot;tokenKey&quot;')&gt;=0 ? #payload.replaceAll('.*?&quot;tokenKey&quot;:\s*?&quot;([a-zA-Z0-9!#$%&amp;''*+/=?^_`{|}~-]+(\.[a-zA-Z0-9!#$%&amp;''*+/=?^_`{|}~-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*)&quot;.*','$1') : null"/>
                         <entry key="StatusCode">
                             <value>(#response.responseStatus==200 or #response.responseStatus==201 or
                                 #response.responseStatus==204) ? '0' :
@@ -153,7 +150,7 @@
           class="ru.forxy.common.logging.exceptions.ServiceExceptionHandler"/>
 
     <bean id="performance.logger.impl"
-          class="ru.forxy.common.logging.writer.LogWriter" c:name="fraud.performance.service.impl"/>
+          class="ru.forxy.common.logging.writer.LogWriter" c:name="fraud.performance.velocity.impl"/>
 
     <bean id="impl.loggingInterceptor"
           class="ru.forxy.common.logging.LoggingInterceptor"

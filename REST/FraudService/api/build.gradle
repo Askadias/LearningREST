@@ -11,8 +11,10 @@ dependencies {
     }
 
     // --------------------- JPA -----------------------------------------
-    compile "org.eclipse.persistence:javax.persistence:${rev_eclipse_jpa}"
+    //compile "org.eclipse.persistence:javax.persistence:${rev_eclipse_jpa}"
+    compile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
+
 
     // --------------------- GROOVY --------------------------------------
-    compile 'org.codehaus.groovy:groovy-all:2.3.+'
+    compile "org.codehaus.groovy:groovy-all:${rev_groovy}"
 }

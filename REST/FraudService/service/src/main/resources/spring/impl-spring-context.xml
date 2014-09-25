@@ -21,6 +21,7 @@
 
     <bean id="velocityManager.impl" class="ru.forxy.fraud.logic.velocity.VelocityManager"
           p:velocityDAO-ref="velocityDAO.cassandra.perf"
+          p:redisVelocityDAO-ref="velocityDAO.impl.redis"
           p:operationalDataStorage-ref="operationalDataStorage"/>
 
     <bean id="velocityConfigManager.impl" class="ru.forxy.fraud.logic.velocity.VelocityConfigManager"

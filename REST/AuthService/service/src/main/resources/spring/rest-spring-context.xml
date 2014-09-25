@@ -120,7 +120,7 @@
         <jaxrs:providers>
             <ref bean="authenticationFilter"/>
             <bean class="ru.forxy.common.web.JSONValidationProvider">
-                <property name="configuration" ref="service.configuration"/>
+                <property name="configuration" ref="velocity.configuration"/>
                 <property name="validator" ref="payload.validator"/>
             </bean>
             <ref bean="runtimeExceptionMapper"/>

@@ -17,7 +17,20 @@ class VelocityEndpoint extends AbstractService {
     Response check(final Map<String, String> metrics,
                    @Context final UriInfo uriInfo,
                    @Context final HttpHeaders headers) {
-        respondWith(velocityManager.check(metrics), uriInfo, headers).build()
+        //respondWith(velocityManager.checkSync(metrics), uriInfo, headers).build()
+        //respondWith(velocityManager.checkFJP(metrics), uriInfo, headers).build()
+        //respondWith(velocityManager.checkGPars(metrics), uriInfo, headers).build()
+        respondWith(velocityManager.checkAsync(metrics), uriInfo, headers).build()
+    }
+
+    @POST
+    @Path('/rcheck/')
+    @Consumes(MediaType.APPLICATION_JSON)
+    Response rcheck(final Map<String, String> metrics,
+                   @Context final UriInfo uriInfo,
+                   @Context final HttpHeaders headers) {
+        respondWith(velocityManager.checkRedisGParsAsync(metrics), uriInfo, headers).build()
+        //respondWith(velocityManager.checkRedisGPars(metrics), uriInfo, headers).build()
     }
 
     @GET

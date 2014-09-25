@@ -31,8 +31,11 @@ class VelocityMetricComputationTask extends RecursiveTask<List<VelocityMetric>> 
         List<AggregationTask> aggregationTasks = new ArrayList<>(aggregationConfigs.size())
         aggregationConfigs.each {
             List<VelocityData> data = velocityDAO.getMetricDataForPeriod(key, relatedMetricType, it.period)
-            // add new incoming data for aggregation:
-            data.add(newVelocityData)
+
+            if (newVelocityData.relatedMetricValue) {
+                // add new incoming data for aggregation:
+                data << newVelocityData
+            }
 
             // apply aggregation function:
             aggregationTasks.add(new AggregationTask(

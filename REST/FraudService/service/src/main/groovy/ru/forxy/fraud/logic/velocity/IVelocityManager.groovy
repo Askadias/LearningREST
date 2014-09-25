@@ -3,15 +3,19 @@ package ru.forxy.fraud.logic.velocity
 import ru.forxy.fraud.rest.v1.velocity.AggregationType
 import ru.forxy.fraud.rest.v1.velocity.VelocityData
 import ru.forxy.fraud.rest.v1.velocity.VelocityMetric
+import ru.forxy.fraud.rest.v1.velocity.redis.VMetric
 
 /**
  * Black lists manipulation logic API
  */
 interface IVelocityManager {
 
-    List<VelocityMetric> check(final Map<String, String> metrics)
-
-    List<VelocityMetric> check2(final Map<String, String> metrics)
+    List<VelocityMetric> checkAsync(final Map<String, String> metrics)
+    List<VelocityMetric> checkFJP(final Map<String, String> metrics)
+    List<VelocityMetric> checkSync(final Map<String, String> metrics)
+    List<VelocityMetric> checkGPars(final Map<String, String> metrics)
+    List<VMetric> checkRedisGPars(final Map<String, String> metrics)
+    List<VMetric> checkRedisGParsAsync(final Map<String, String> metrics)
 
     List<VelocityMetric> getMoreMetricsFrom(final String metricType, final String metricValue)
 

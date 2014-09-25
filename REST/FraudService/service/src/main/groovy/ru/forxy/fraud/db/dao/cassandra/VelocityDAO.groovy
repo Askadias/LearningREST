@@ -105,7 +105,7 @@ class VelocityDAO extends BaseCassandraDAO implements IVelocityDAO {
 
     @Override
     void saveMetric(final VelocityMetric metric) {
-        mappingSession.save(metric)
+        mappingSession.saveAsync(metric)
     }
 
     @Override
@@ -117,7 +117,7 @@ class VelocityDAO extends BaseCassandraDAO implements IVelocityDAO {
 
     @Override
     void saveData(final VelocityData data) {
-        mappingSession.save(data)
+        mappingSession.saveAsync(data)
     }
 
     @Override

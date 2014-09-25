@@ -4,6 +4,8 @@ import org.springframework.beans.factory.InitializingBean
 import ru.forxy.fraud.db.dao.IVelocityConfigDAO
 import ru.forxy.fraud.rest.v1.velocity.VelocityConfig
 
+import java.util.concurrent.ConcurrentHashMap
+
 /**
  * Shared storage for operational data
  */
@@ -14,13 +16,7 @@ class OperationalDataStorage implements InitializingBean {
     Map<String, VelocityConfig> configsByMetricType
 
     void invalidate() {
-        configsByMetricType = new HashMap<>()
-        if (velocityConfigDAO != null) {
-            Iterable<VelocityConfig> configs = velocityConfigDAO.findAll()
-            if (configs != null) {
-                configs.each { configsByMetricType.put(it.getMetricType(), it) }
-            }
-        }
+        configsByMetricType = velocityConfigDAO?.findAll()?.groupBy { it.metricType } as Map<String, VelocityConfig>
     }
 
     @Override

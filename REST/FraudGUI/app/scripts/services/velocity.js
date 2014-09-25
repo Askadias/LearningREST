@@ -5,22 +5,22 @@ angular.module('services.velocity', ['restangular'])
   .factory('VelocityConfig', ['Restangular', function (Restangular) {
     return {
       all: function () {
-        return Restangular.all('velocity_config').getList();
+        return Restangular.all('configs').getList();
       },
       page: function (query) {
-        return Restangular.one('velocity_config').get(query);
+        return Restangular.one('configs').get(query);
       },
       get: function (code) {
-        return Restangular.one('velocity_config', code).get();
+        return Restangular.one('configs', code).get();
       },
       add: function (config) {
-        return Restangular.all('velocity_config').post(config);
+        return Restangular.all('configs').post(config);
       },
       save: function (config) {
-        return Restangular.one('velocity_config').put(config);
+        return Restangular.one('configs').put(config);
       },
       delete: function (config) {
-        return Restangular.one('velocity_config', config.metric_type).remove();
+        return Restangular.one('configs', config.metric_type).remove();
       }
     }
   }])
