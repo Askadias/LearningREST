@@ -1,0 +1,19 @@
+language: node_js
+node_js:
+  - '0.10'
+before_script:
+  - 'sudo npm install -g bower grunt-cli'
+  - 'sudo npm install -g grunt --save-dev'
+  - 'sudo bower install'
+  - 'sudo npm install load-grunt-tasks --save-dev'
+  - 'sudo npm install grunt-connect-rewrite --save-dev'
+  - 'sudo npm install connect-modrewrite'
+  - 'sudo npm install grunt-replace --save-dev'
+  - 'sudo npm install nginx --save-dev'
+  - 'sudo npm install grunt-nginx --save-dev'
+  - 'sudo npm install generator-env-config --save-dev'
+  - 'sudo npm install grunt-contrib-less --save-dev'
+  - 'sudo npm install time-grunt --save-dev'
+  - 'sudo npm install jshint-stylish --save-dev'
+
+
