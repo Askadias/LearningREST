@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- System Status component-->
+    <bean id="systemStatusFacade" class="fraud.logic.SystemStatusFacade"
+          p:transactionDAO-ref="transactionDAO.mongo.perf"/>
+
+    <bean id="systemStatusServiceEndpoint" class="common.rest.SystemStatusServiceEndpoint"
+          p:systemStatusFacade-ref="systemStatusFacade"/>
+
+    <!-- business logic component-->
+
+    <bean id="fraudServiceFacade.impl" class="fraud.logic.FraudServiceFacade"
+          p:transactionDAO-ref="transactionDAO.mongo.perf"/>
+
+    <bean id="blackListManager.impl" class="fraud.logic.blacklist.BlackListManager"
+          p:blackListDAO-ref="blackListDAO.cassandra.perf"/>
+
+    <bean id="velocityManager.impl" class="fraud.logic.velocity.VelocityManager"
+          p:velocityDAO-ref="velocityDAO.cassandra.perf"
+          p:redisVelocityDAO-ref="velocityDAO.impl.redis"
+          p:operationalDataStorage-ref="operationalDataStorage"/>
+
+    <bean id="velocityConfigManager.impl" class="fraud.logic.velocity.VelocityConfigManager"
+          p:velocityConfigDAO-ref="velocityConfigDAO.mongo.perf"/>
+
+    <!-- service endpoints definitions-->
+    <bean id="fraudServiceEndpoint" class="fraud.rest.v1.FraudServiceEndpoint"
+          p:fraudServiceFacade-ref="fraudServiceFacade.perf"/>
+
+    <bean id="blackListsEndpoint" class="fraud.rest.v1.BlackListsEndpoint"
+          p:blackListManager-ref="blackListManager.perf"/>
+
+    <bean id="velocityEndpoint" class="fraud.rest.v1.VelocityEndpoint"
+          p:velocityManager-ref="velocityManager.perf"/>
+
+    <bean id="velocityConfigEndpoint" class="fraud.rest.v1.VelocityConfigEndpoint"
+          p:velocityConfigManager-ref="velocityConfigManager.perf"/>
+
+</beans>
