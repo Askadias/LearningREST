@@ -1,8 +1,0 @@
-// ========== Dependencies ==============================================
-
-dependencies {
-    // --------------------- PROJECTS ------------------------------------
-    compile project(":ru.forxy.common.soap:ru.forxy.common.soap.api")
-    compile project(":ru.forxy.common.utils")
-    compile project(":ru.forxy.common.status")
-}

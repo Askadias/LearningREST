@@ -1,3 +1,0 @@
-artifacts {
-    'default' file: file('src/xsd/v1/ru.forxy.common.types.v1.xsd'), name: 'ru.forxy.common.types.v1', type: 'xsd'
-}

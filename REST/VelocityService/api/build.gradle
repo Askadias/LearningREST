@@ -1,6 +1,0 @@
-apply plugin: 'groovy'
-
-dependencies {
-    // --------------------- FORXY ---------------------------------------
-    //compile "forxy:ru.forxy.common.rest.api:${rev_forxy_common}"
-}
