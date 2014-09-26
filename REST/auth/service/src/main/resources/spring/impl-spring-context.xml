@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"/>
+
+    <bean id="jwtManager.impl" class="auth.security.JWTManager"/>
+
+    <!-- System Status component-->
+    <bean id="systemStatusFacade" class="auth.logic.SystemStatusFacade"
+          p:userDAO-ref="userDAO.mongo.perf"/>
+
+    <bean id="systemStatusServiceEndpoint" class="common.rest.SystemStatusServiceEndpoint"
+          p:systemStatusFacade-ref="systemStatusFacade"/>
+
+    <!-- business logic component-->
+    <bean id="userManager.impl" class="auth.logic.UserManager"
+          p:userDAO-ref="userDAO.mongo.perf"
+          p:passwordEncoder-ref="passwordEncoder"/>
+
+    <bean id="authenticationManager.impl" class="auth.logic.AuthenticationManager"
+          p:profileDAO-ref="profileDAO.mongo.perf"
+          p:userDAO-ref="userDAO.mongo.perf"
+          p:passwordEncoder-ref="passwordEncoder"
+          p:jwtManager-ref="jwtManager.perf"/>
+
+    <bean id="clientManager.impl" class="auth.logic.ClientManager"
+          p:clientDAO-ref="clientDAO.mongo.perf"
+          p:passwordEncoder-ref="passwordEncoder"/>
+
+    <bean id="groupManager.impl" class="auth.logic.GroupManager"
+          p:groupDAO-ref="groupDAO.mongo.perf"/>
+
+    <bean id="tokenManager.impl" class="auth.logic.TokenManager"
+          p:tokenDAO-ref="tokenDAO.mongo.perf"/>
+
+    <!-- service endpoints definitions-->
+    <bean id="userServiceEndpoint" class="auth.rest.v1.UserServiceEndpoint"
+          p:userManager-ref="userManager.perf"/>
+
+    <bean id="discoveryInfo" class="auth.rest.v1.pojo.DiscoveryInfo"
+          p:jwksUri="http://localhost:11080/AuthService/service/rest/v1/auth/cert">
+    </bean>
+
+    <bean id="authServiceEndpoint" class="auth.rest.v1.AuthServiceEndpoint"
+          p:authenticationManager-ref="authenticationManager.perf"
+          p:discoveryInfo-ref="discoveryInfo"/>
+
+    <bean id="tokenGrantServiceEndpoint" class="auth.rest.v1.TokenGrantServiceEndpoint"
+          p:tokenManager-ref="tokenManager.perf"/>
+
+    <bean id="clientServiceEndpoint" class="auth.rest.v1.ClientServiceEndpoint"
+          p:clientManager-ref="clientManager.perf"/>
+
+    <bean id="groupServiceEndpoint" class="auth.rest.v1.GroupServiceEndpoint"
+          p:groupManager-ref="groupManager.perf"/>
+
+    <!-- OAuth business logic component-->
+    <!--<bean id="oauthProvider" class="auth.logic.OAuthManager"
+          p:clientManager-ref="clientManager.impl"
+          p:tokenManager-ref="tokenManager.impl"/>-->
+</beans>
