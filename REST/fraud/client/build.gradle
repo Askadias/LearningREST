@@ -53,4 +53,5 @@ dependencies {
 
     // ===================== TEST ========================================
     testCompile "junit:junit:${rev_junit}"
+    testCompile "org.springframework:spring-test:${rev_spring}"
 }

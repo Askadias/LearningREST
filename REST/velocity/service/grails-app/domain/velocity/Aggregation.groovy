@@ -2,7 +2,6 @@ package velocity
 
 enum Aggregation {
     Max{
-        @Override
         Double apply(List<String> data) {
             Double max = Double.MIN_VALUE;
             data.each {
@@ -19,7 +18,6 @@ enum Aggregation {
         }
     },
     Min{
-        @Override
         Double apply(List<String> data) {
             Double min = Double.MAX_VALUE;
             data.each {
@@ -36,7 +34,6 @@ enum Aggregation {
         }
     },
     Avg{
-        @Override
         Double apply(List<String> data) {
             Double sum = 0.0;
             if (data.size() > 0) {
@@ -54,7 +51,6 @@ enum Aggregation {
         }
     },
     Sum{
-        @Override
         Double apply(List<String> data) {
             Double sum = 0.0;
             data.each {
@@ -68,19 +64,13 @@ enum Aggregation {
         }
     },
     Count{
-        @Override
         Double apply(List<String> data) {
             return (double) data.size();
         }
     },
     UniqueCount{
-        @Override
         Double apply(List<String> data) {
-            Set<String> noDupSet = new HashSet<>();
-            data.each {
-                noDupSet.add(it);
-            }
-            return (double) noDupSet.size();
+            return (double) data.toSet().size();
         }
     };
 

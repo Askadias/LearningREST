@@ -20,7 +20,7 @@ class VelocityEndpoint extends AbstractService {
         //respondWith(velocityManager.checkSync(metrics), uriInfo, headers).build()
         //respondWith(velocityManager.checkFJP(metrics), uriInfo, headers).build()
         //respondWith(velocityManager.checkGPars(metrics), uriInfo, headers).build()
-        respondWith(velocityManager.checkAsync(metrics), uriInfo, headers).build()
+        respondWith(velocityManager.checkCassandraAsync(metrics), uriInfo, headers).build()
     }
 
     @POST
@@ -29,8 +29,8 @@ class VelocityEndpoint extends AbstractService {
     Response rcheck(final Map<String, String> metrics,
                     @Context final UriInfo uriInfo,
                     @Context final HttpHeaders headers) {
-        respondWith(velocityManager.checkRedisGParsAsync(metrics), uriInfo, headers).build()
-        //respondWith(velocityManager.checkRedisGPars(metrics), uriInfo, headers).build()
+        respondWith(velocityManager.checkRedisAsync(metrics), uriInfo, headers).build()
+        //respondWith(velocityManager.checkRedisSync(metrics), uriInfo, headers).build()
     }
 
     @GET

@@ -8838,136 +8838,31 @@ button.close {
     transform: translateX(-100%);
   }
 }
-@keyframes shake {
-  0% {
-    transform: translateX(0);
-  }
-  12.5% {
-    transform: translateX(-6px) rotateY(-5deg);
-  }
-  37.5% {
-    transform: translateX(5px) rotateY(4deg);
-  }
-  62.5% {
-    transform: translateX(-3px) rotateY(-2deg);
-  }
-  87.5% {
-    transform: translateX(2px) rotateY(1deg);
-  }
-  100% {
-    transform: translateX(0);
-  }
+.view-content {
+  -webkit-transition: ease-in-out 0.1s;
+  -moz-transition: ease-in-out 0.1s;
+  -o-transition: ease-in-out 0.1s;
+  transition: ease-in-out 0.1s;
 }
-@-webkit-keyframes shake {
-  0% {
-    -webkit-transform: translateX(0);
-  }
-  12.5% {
-    -webkit-transform: translateX(-6px) rotateY(-5deg);
-  }
-  37.5% {
-    -webkit-transform: translateX(5px) rotateY(4deg);
-  }
-  62.5% {
-    -webkit-transform: translateX(-3px) rotateY(-2deg);
-  }
-  87.5% {
-    -webkit-transform: translateX(2px) rotateY(1deg);
-  }
-  100% {
-    -webkit-transform: translateX(0);
-  }
-}
-@-moz-keyframes shake {
-  0% {
-    -moz-transform: translateX(0);
-  }
-  12.5% {
-    -moz-transform: translateX(-6px) rotateY(-5deg);
-  }
-  37.5% {
-    -moz-transform: translateX(5px) rotateY(4deg);
-  }
-  62.5% {
-    -moz-transform: translateX(-3px) rotateY(-2deg);
-  }
-  87.5% {
-    -moz-transform: translateX(2px) rotateY(1deg);
-  }
-  100% {
-    -moz-transform: translateX(0);
-  }
-}
-.shake {
-  -webkit-animation: shake 400ms ease-in-out;
-  -moz-animation: shake 400ms ease-in-out;
-  animation: shake 400ms ease-in-out;
-}
-.alert-pupup.ng-enter,
-.alert-pupup.ng-leave {
-  -webkit-transition: 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75) all;
-  -moz-transition: 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75) all;
-  -ms-transition: 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75) all;
-  -o-transition: 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75) all;
-  transition: 200ms cubic-bezier(0.25, 0.25, 0.75, 0.75) all;
-  position: relative;
-  display: block;
-}
-.alert-pupup.ng-leave.ng-leave-active,
-.alert-pupup.ng-enter {
-  -webkit-transform: rotateX(-180deg) translatez(30px);
-  -moz-transform: rotateX(-180deg) translatez(30px);
-  -ms-transform: rotateX(-180deg) translatez(30px);
-  -o-transform: rotateX(-180deg) translatez(30px);
-  transform: rotateX(-180deg) translatez(30px);
+.view-content.ng-enter,
+.view-content.ng-leave-active,
+.ng-hide {
   opacity: 0;
   height: 0px;
 }
-.alert-pupup.ng-enter.ng-enter-active,
-.alert-pupup.ng-leave {
-  -webkit-transform: rotateX(0deg) translatez(30px);
-  -moz-transform: rotateX(0deg) translatez(30px);
-  -ms-transform: rotateX(0deg) translatez(30px);
-  -o-transform: rotateX(0deg) translatez(30px);
-  transform: rotateX(0deg) translatez(30px);
+.ng-enter-active,
+.ng-leave {
   opacity: 1;
-  height: 30px;
 }
-.view-content.ng-enter,
-.view-content.ng-leave {
-  position: absolute;
-  left: 0;
-  right: 0;
-  -webkit-transition: all 0.5s ease-in-out;
-  -moz-transition: all 0.5s ease-in-out;
-  -o-transition: all 0.5s ease-in-out;
-  transition: all 0.5s ease-in-out;
+.fade-in {
+  background-color: transparent;
+  transition: background-color 600ms;
 }
-.view-content.ng-enter {
-  opacity: 0;
-  -webkit-transform: scale3d(0.5, 0.5, 0.5);
-  -moz-transform: scale3d(0.5, 0.5, 0.5);
-  transform: scale3d(0.5, 0.5, 0.5);
+.nav-list li:hover .fade-in {
+  background-color: #dddddd;
 }
-.view-content.ng-enter-active {
-  opacity: 1;
-  -webkit-transform: scale3d(1, 1, 1);
-  -moz-transform: scale3d(1, 1, 1);
-  transform: scale3d(1, 1, 1);
-}
-.view-content.ng-leave {
-  opacity: 1;
-  /*padding-left: 0px;*/
-  -webkit-transform: translate3d(0, 0, 0);
-  -moz-transform: translate3d(0, 0, 0);
-  transform: translate3d(0, 0, 0);
-}
-.view-content.ng-leave-active {
-  opacity: 0;
-  /*padding-left: 100px;*/
-  -webkit-transform: translate3d(100px, 0, 0);
-  -moz-transform: translate3d(100px, 0, 0);
-  transform: translate3d(100px, 0, 0);
+.nav-list a:hover {
+  color: #ffffff;
 }
 p {
   margin: 20px 0;
@@ -9036,7 +8931,7 @@ th a,
 .nav-list > .active > a,
 .nav-list > .active > a:hover,
 .nav-list > .active > a:focus {
-  background-color: #eeeeee;
+  background-color: #dddddd;
 }
 /*
 .anim.ng-enter {

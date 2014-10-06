@@ -1,37 +1,44 @@
 package fraud.db.dao.redis
 
-import org.springframework.data.redis.core.RedisTemplate
 import fraud.rest.v1.velocity.redis.Aggregation
-import fraud.rest.v1.velocity.redis.VData
-import fraud.rest.v1.velocity.redis.VKey
+import org.joda.time.DateTime
+import org.springframework.data.redis.core.StringRedisTemplate
+import org.springframework.transaction.annotation.Transactional
 
 /**
  * Created by Tiger on 24.09.14.
  */
 class VelocityDAO implements IRedisVelocityDAO {
-    RedisTemplate<String, VData> velocityData;
-    RedisTemplate<String, Double> velocityMetrics;
+    StringRedisTemplate redis;
 
-    void logData(VKey k, String relatedMetricData) {
-        Long now = new Date().time
-        velocityData.opsForZSet().add(toKey(k),
-                new VData(value: relatedMetricData, timestamp: now), now);
+    @Transactional
+    void logData(String key, String relatedMetricData) {
+        Long now = DateTime.now().millis
+        String id = redis.opsForValue().get("$key:nextId".toString())
+        if (!id) {
+            id = '1'
+            redis.opsForValue().set("$key:nextId".toString(), id)
+        }
+        redis.opsForValue().set("$key:data:$id".toString(), relatedMetricData)
+        redis.opsForValue().increment("$key:nextId".toString(), 1)
+        redis.opsForZSet().add("$key:history".toString(), id, now)
     }
 
-    List<String> getHistoricalData(VKey k, Long period) {
-        Long now = new Date().time
-        velocityData.opsForZSet().rangeByScore(toKey(k), now - period, now).collect { it.value }
+    List<String> getHistoricalData(String key, Long period) {
+        Long now = DateTime.now().millis
+        Set<String> historyIDs = redis.opsForZSet().rangeByScore("$key:history".toString(), now - period, now)
+        return !historyIDs ? [] : redis.opsForValue().multiGet(historyIDs.collect { "$key:data:$it".toString() })
     }
 
-    void saveMetric(VKey k, Aggregation type, Double aggregatedValue) {
-        velocityMetrics.opsForHash().put("${toKey(k)}:metrics", type, aggregatedValue)
+    void saveMetric(String key, Aggregation type, Double aggregatedValue) {
+        redis.opsForHash().put("$key:metrics".toString(), type as String, aggregatedValue as String)
     }
 
-    Map<Aggregation, Double> getMetrics(VKey k) {
-        velocityMetrics.opsForHash().entries("${toKey(k)}:metrics")
-    }
-
-    private static String toKey(VKey k) {
-        "$k.metricType:$k.metricValue:$k.relatedMetricType"
+    Map<Aggregation, Double> getMetrics(String key) {
+        def metrics = [:]
+        redis.opsForHash().entries("$key:metrics".toString()).each { k, v ->
+            metrics << [(Aggregation.valueOf(k.toString())): Double.valueOf(v.toString())]
+        }
+        return metrics
     }
 }

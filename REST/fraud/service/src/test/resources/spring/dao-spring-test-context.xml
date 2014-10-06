@@ -40,10 +40,10 @@
           factory-method="createNiceMock"
           c:toMock="fraud.db.dao.IVelocityDAO"/>
 
-    <bean id="operationalDataStorage"
+    <bean id="dbCache"
           class="org.easymock.EasyMock"
           factory-method="createNiceMock"
-          c:toMock="fraud.util.OperationalDataStorage"/>
+          c:toMock="fraud.util.DBCache"/>
 
 
 </beans>

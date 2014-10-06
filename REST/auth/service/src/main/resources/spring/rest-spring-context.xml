@@ -119,7 +119,7 @@
         </jaxrs:inInterceptors>-->
         <jaxrs:providers>
             <ref bean="authenticationFilter"/>
-            <bean class="JSONValidationProvider">
+            <bean class="common.web.JSONValidationProvider">
                 <property name="configuration" ref="velocity.configuration"/>
                 <property name="validator" ref="payload.validator"/>
             </bean>

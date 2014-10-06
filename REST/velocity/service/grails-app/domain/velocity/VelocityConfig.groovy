@@ -4,21 +4,24 @@ import grails.rest.Resource
 
 @Resource(uri = "/configs", formats = ['json'])
 class VelocityConfig {
-
-    String metricType;
-    Long timeToLive;
-    Map<String, Set<Aggregation>> metricsAggregationConfig;
+    Set<String> primaryMetrics;
+    Long period;
+    Long expiresIn;
+    Set<AggregationConfig> aggregationConfigs;
     Date createDate;
     String createdBy;
     Date updateDate;
     String updatedBy;
 
     static constraints = {
-        metricType blank: false
-        timeToLive nullable: true
-        metricsAggregationConfig nullable: true
+        id blank: false
+        period min: 1L
+        expiresIn nullable: true
+        createDate nullable: true
         createdBy nullable: true
-        updatedBy nullable: true
+        updateDate nullable: true
+        updatedBy blank: false
     }
+    static embedded = ['aggregationConfigs']
     static mapWith = "mongo"
 }

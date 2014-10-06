@@ -7,14 +7,15 @@ import fraud.rest.v1.velocity.VelocityConfig
 /**
  * Shared storage for operational data
  */
-class OperationalDataStorage implements InitializingBean {
+class DBCache implements InitializingBean {
 
     IVelocityConfigDAO velocityConfigDAO
 
-    Map<String, VelocityConfig> configsByMetricType
+    Map<String, VelocityConfig> velocityConfigs
 
     void invalidate() {
-        configsByMetricType = velocityConfigDAO?.findAll()?.groupBy { it.metricType } as Map<String, VelocityConfig>
+        velocityConfigs = new HashMap<String, VelocityConfig>()
+        velocityConfigDAO?.findAll()?.each { this.@velocityConfigs << [(it.metricType): it] }
     }
 
     @Override

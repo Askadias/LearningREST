@@ -10,12 +10,12 @@ import fraud.rest.v1.velocity.redis.VMetric
  */
 interface IVelocityManager {
 
-    List<VelocityMetric> checkAsync(final Map<String, String> metrics)
+    List<VelocityMetric> checkCassandraAsync(final Map<String, String> metrics)
     List<VelocityMetric> checkFJP(final Map<String, String> metrics)
     List<VelocityMetric> checkSync(final Map<String, String> metrics)
     List<VelocityMetric> checkGPars(final Map<String, String> metrics)
-    List<VMetric> checkRedisGPars(final Map<String, String> metrics)
-    List<VMetric> checkRedisGParsAsync(final Map<String, String> metrics)
+    List<VMetric> checkRedisSync(final Map<String, String> metrics)
+    List<VMetric> checkRedisAsync(final Map<String, String> metrics)
 
     List<VelocityMetric> getMoreMetricsFrom(final String metricType, final String metricValue)
 

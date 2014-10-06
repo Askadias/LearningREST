@@ -1,7 +1,5 @@
 package fraud.logic.velocity
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import common.exceptions.ServiceException
 import fraud.db.dao.IVelocityDAO
 import fraud.db.dao.redis.IRedisVelocityDAO
@@ -9,12 +7,14 @@ import fraud.exceptions.FraudServiceEventLogId
 import fraud.logic.velocity.concurrency.RelatedMetricsComputationTask
 import fraud.rest.v1.velocity.*
 import fraud.rest.v1.velocity.redis.Aggregation
-import fraud.rest.v1.velocity.redis.VKey
 import fraud.rest.v1.velocity.redis.VMetric
-import fraud.util.OperationalDataStorage
+import fraud.util.DBCache
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.ForkJoinPool
+import java.util.concurrent.Future
 import java.util.concurrent.RecursiveAction
 
 import static groovyx.gpars.GParsPool.withExistingPool
@@ -31,7 +31,7 @@ class VelocityManager implements IVelocityManager {
 
     IVelocityDAO velocityDAO
     IRedisVelocityDAO redisVelocityDAO;
-    OperationalDataStorage operationalDataStorage
+    DBCache dbCache
 
     private static final ForkJoinPool FJP = new ForkJoinPool(32)
 
@@ -41,7 +41,7 @@ class VelocityManager implements IVelocityManager {
         List<VelocityData> velocityDataToSave = []
 
         // getting velocity configuration from cache
-        final Map<String, VelocityConfig> configs = operationalDataStorage.configsByMetricType
+        final Map<String, VelocityConfig> configs = dbCache.velocityConfigs
 
         List<RelatedMetricsComputationTask> velocityDataUpdateTasks = []
         metrics.each { key, value ->
@@ -76,10 +76,10 @@ class VelocityManager implements IVelocityManager {
         }
 
         if (resultMetrics) {
-            //velocityDAO.saveBatchOfMetrics(resultMetrics)
+            velocityDAO.saveBatchOfMetrics(resultMetrics)
         }
         if (velocityDataToSave) {
-            //velocityDAO.saveBatchOfData(velocityDataToSave)
+            velocityDAO.saveBatchOfData(velocityDataToSave)
         }
 
         // return
@@ -87,7 +87,7 @@ class VelocityManager implements IVelocityManager {
     }
 
     @Override
-    List<VelocityMetric> checkAsync(final Map<String, String> metrics) {
+    List<VelocityMetric> checkCassandraAsync(final Map<String, String> metrics) {
         List<VelocityMetric> result = []
         metrics.each { metricType, metricValue ->
             result += velocityDAO.getMetrics(new VelocityPartitionKey(
@@ -102,11 +102,11 @@ class VelocityManager implements IVelocityManager {
                 List<VelocityData> velocityDataToSave = []
 
                 // getting velocity configuration from cache
-                final Map<String, VelocityConfig> configs = operationalDataStorage.configsByMetricType
+                final Map<String, VelocityConfig> configs = dbCache.velocityConfigs
 
                 List<RelatedMetricsComputationTask> velocityDataUpdateTasks = []
                 metrics.each { key, value ->
-                    final VelocityConfig config = configs[key]
+                    final VelocityConfig config = configs[(key)]
                     // if incoming metric has configuration then retrieve it's related metrics configuration
                     if (config != null) {
                         RelatedMetricsComputationTask dataUpdateTask = new RelatedMetricsComputationTask(
@@ -135,10 +135,10 @@ class VelocityManager implements IVelocityManager {
                 }
 
                 if (resultMetrics) {
-                    //velocityDAO.saveBatchOfMetrics(resultMetrics)
+                    velocityDAO.saveBatchOfMetrics(resultMetrics)
                 }
                 if (velocityDataToSave) {
-                    //velocityDAO.saveBatchOfData(velocityDataToSave)
+                    velocityDAO.saveBatchOfData(velocityDataToSave)
                 }
             }
         })
@@ -146,116 +146,60 @@ class VelocityManager implements IVelocityManager {
     }
 
     @Override
-    List<VMetric> checkRedisGParsAsync(final Map<String, String> metrics) {
-        List<VMetric> resultMetrics = []
-        final Map<String, VelocityConfig> configs = operationalDataStorage.configsByMetricType
-
+    List<VMetric> checkRedisSync(Map<String, String> velocityRQ) {
+        final def velocityMetrics = []
         withPool { jsr166y.ForkJoinPool pool ->
-            metrics.each { metricType, metricValue ->
-                VMetric newMetric = new VMetric(
-                        metricType: metricType,
-                        metricValue: metricValue,
-                        aggregations: new HashMap<String, Map<Aggregation, Double>>()
-                )
-                configs[metricType]?.metricsAggregationConfig?.each {
-                    it.each { relatedMetricType, aggregations ->
-                        newMetric.aggregations << [(relatedMetricType): redisVelocityDAO.getMetrics(new VKey(
-                                metricType: metricType,
-                                metricValue: metricValue,
-                                relatedMetricType: relatedMetricType
-                        ))]
+            velocityRQ.eachParallel { final metricType, final metricValue ->
+                final def newMetric = new VMetric(type: metricType, value: metricValue, metrics: [:])
+                withExistingPool(pool) {
+                    velocityRQ.eachParallel { final secondaryMetricType, final secondaryMetricValue ->
+                        if (metricType != secondaryMetricType) {
+                            redisVelocityDAO.logData("$metricType:$metricValue:$secondaryMetricType", secondaryMetricValue)
+                        }
                     }
-                    /*it.collectParallel { relatedMetricType, aggregations ->
-                        withExistingPool(pool) {
-                            final VKey key = new VKey(
-                                    metricType: metricType,
-                                    metricValue: metricValue,
-                                    relatedMetricType: relatedMetricType
-                            )
-                            String newData = metrics[relatedMetricType] ?: null;
-                            def metricsAggregation = aggregations.collectParallel {
-                                List<String> data = redisVelocityDAO.getHistoricalData(key, it.period)
-                                if (newData) data += newData
-                                Aggregation aggregation = Aggregation.valueOf(it.type.toString());
-                                return [aggregation, aggregation.apply(data)]
+                    dbCache.velocityConfigs[(metricType)]?.metricsAggregationConfig?.eachParallel {
+                        relatedMetricType, aggregations ->
+                            newMetric.metrics << [(relatedMetricType): [:]]
+                            aggregations?.each { def conf ->
+                                String key = "$metricType:$metricValue:$relatedMetricType"
+                                List<String> history = redisVelocityDAO.getHistoricalData(key, conf.period as Long)
+                                def aggregation = Aggregation.valueOf(conf.type.toString())
+                                Double aggregationResult = aggregation.apply history
+                                redisVelocityDAO.saveMetric(key, aggregation, aggregationResult)
+                                newMetric.metrics[(relatedMetricType)] << [(aggregation): aggregationResult]
                             }
-                            redisVelocityDAO.logData(key, newData);
-                            [relatedMetricType, metricsAggregation]
-                        }
-                    }?.each {
-                        String relatedMetricType = it[0] as String
-                        newMetric.aggregations << [(relatedMetricType): new HashMap<Aggregation, Double>()]
-                        it[1].each {
-                            newMetric.aggregations[(relatedMetricType)] << [(it[0]): it[1]]
-                            redisVelocityDAO.saveMetric(new VKey(
-                                    metricType: newMetric.metricType,
-                                    metricValue: newMetric.metricValue,
-                                    relatedMetricType: relatedMetricType
-                            ), it[0], it[1])
-                        }
-                    }*/
+                    }
+                    velocityMetrics << newMetric
                 }
-                resultMetrics << newMetric
             }
         }
-
-        return resultMetrics
+        return velocityMetrics
     }
 
     @Override
-    List<VMetric> checkRedisGPars(final Map<String, String> metrics) {
-        List<VMetric> resultMetrics = []
-        final Map<String, VelocityConfig> configs = operationalDataStorage.configsByMetricType
-
-        withPool { jsr166y.ForkJoinPool pool ->
-            metrics.each { metricType, metricValue ->
-                VMetric newMetric = new VMetric(
-                        metricType: metricType,
-                        metricValue: metricValue,
-                        aggregations: new HashMap<String, Map<Aggregation, Double>>()
-                )
-                configs[metricType]?.metricsAggregationConfig?.each {
-                    it.collectParallel { relatedMetricType, aggregations ->
-                        withExistingPool(pool) {
-                            final VKey key = new VKey(
-                                    metricType: metricType,
-                                    metricValue: metricValue,
-                                    relatedMetricType: relatedMetricType
-                            )
-                            String newData = metrics[relatedMetricType] ?: null;
-                            def metricsAggregation = aggregations.collectParallel {
-                                List<String> data = redisVelocityDAO.getHistoricalData(key, it.period)
-                                if (newData) data += newData
-                                Aggregation aggregation = Aggregation.valueOf(it.type.toString());
-                                return [aggregation, aggregation.apply(data)]
-                            }
-                            redisVelocityDAO.logData(key, newData);
-                            [relatedMetricType, metricsAggregation]
-                        }
-                    }?.each {
-                        String relatedMetricType = it[0] as String
-                        newMetric.aggregations << [(relatedMetricType): new HashMap<Aggregation, Double>()]
-                        it[1].each {
-                            newMetric.aggregations[(relatedMetricType)] << [(it[0]): it[1]]
-                            redisVelocityDAO.saveMetric(new VKey(
-                                    metricType: newMetric.metricType,
-                                    metricValue: newMetric.metricValue,
-                                    relatedMetricType: relatedMetricType
-                            ), it[0], it[1])
-                        }
-                    }
-                }
-                resultMetrics << newMetric
+    List<VMetric> checkRedisAsync(Map<String, String> velocityRQ) {
+        def velocityMetrics = []
+        velocityRQ.each { metricType, metricValue ->
+            def velocity = new VMetric(type: metricType, value: metricValue, metrics: [:])
+            dbCache.velocityConfigs[(metricType)]?.metricsAggregationConfig?.each { relatedMetricType, aggregations ->
+                velocity.metrics <<
+                        [(relatedMetricType): redisVelocityDAO.getMetrics("$metricType:$metricValue:$relatedMetricType")]
             }
+            velocityMetrics << velocity
         }
-
-        return resultMetrics
+        FJP.submit(new RecursiveAction() {
+            @Override
+            protected void compute() {
+                checkRedisSync(velocityRQ)
+            }
+        })
+        return velocityMetrics
     }
 
     @Override
     List<VelocityMetric> checkGPars(final Map<String, String> metrics) {
         List<VelocityMetric> resultMetrics = []
-        final Map<String, VelocityConfig> configs = operationalDataStorage.configsByMetricType
+        final Map<String, VelocityConfig> configs = dbCache.velocityConfigs
 
         withPool { jsr166y.ForkJoinPool pool ->
             metrics.each { metricType, metricValue ->
@@ -272,7 +216,7 @@ class VelocityManager implements IVelocityManager {
                                                 relatedMetricType: relatedMetricType,
                                                 createDate: new Date()),
                                         relatedMetricValue: metrics[relatedMetricType])
-                                //velocityDAO.saveData(newData)
+                                velocityDAO.saveData(newData)
                             }
 
                             return aggregations.collectParallel {
@@ -287,7 +231,7 @@ class VelocityManager implements IVelocityManager {
                                         ),
                                         aggregatedValue: it.type.apply(data)
                                 ) as List<VelocityMetric>
-                                //velocityDAO.saveBatchOfMetrics(newMetrics)
+                                velocityDAO.saveBatchOfMetrics(newMetrics)
                                 return newMetrics
                             }
                         }
@@ -308,7 +252,7 @@ class VelocityManager implements IVelocityManager {
         List<VelocityData> velocityDataToSave = []
 
         // getting velocity configuration from cache
-        final Map<String, VelocityConfig> configs = operationalDataStorage.configsByMetricType
+        final Map<String, VelocityConfig> configs = dbCache.velocityConfigs
 
         metrics.each { metricType, metricValue ->
             def id = new VelocityPartitionKey(metricType: metricType, metricValue: metricValue)
@@ -342,10 +286,10 @@ class VelocityManager implements IVelocityManager {
             }
         }
         if (resultMetrics) {
-            //velocityDAO.saveBatchOfMetrics(resultMetrics)
+            velocityDAO.saveBatchOfMetrics(resultMetrics)
         }
         if (velocityDataToSave) {
-            //velocityDAO.saveBatchOfData(velocityDataToSave)
+            velocityDAO.saveBatchOfData(velocityDataToSave)
         }
 
         return resultMetrics

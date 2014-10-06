@@ -8,7 +8,7 @@
 
     <!-- Loading Service settings from MANIFEST.MF-->
     <listener>
-        <listener-class>SystemPropertiesSupportListener</listener-class>
+        <listener-class>common.web.SystemPropertiesSupportListener</listener-class>
     </listener>
 
     <!-- Spring -->

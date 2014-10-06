@@ -1,6 +1,6 @@
 <div role="navigation" class="navbar navbar-fixed-top">
   <div class="navbar-header">
-    <a title="Fraud 2.0" ui-sref="blacklist" class="navbar-brand">Fraud 2.0</a>
+    <a title="Fraud 2.0" ui-sref="blacklist" class="navbar-brand">Velocity</a>
   </div>
 </div>
 
@@ -10,36 +10,36 @@
     <div class="col-md-2">
       <div class="well sidebar-nav">
         <ul class="nav nav-list">
-          <li class="nav-header">Exclusions</li>
+          <!--<li class="nav-header">Exclusions</li>
           <li ng-class="{active: ('blacklist.list' | includedByState)}">
-            <a ui-sref="blacklist.list">
+            <a ui-sref="blacklist.list" class="fade-in">
               Black List
             </a>
           </li>
           <li ng-class="{active: ('whitelist.list' | includedByState)}">
-            <a ui-sref="whitelist.list">
+            <a ui-sref="whitelist.list" class="fade-in">
               White List
             </a>
           </li>
-          <li class="divider"></li>
+          <li class="divider"></li>-->
           <li class="nav-header">Velocity</li>
           <li ng-class="{active: ('velocity.metrics.list' | includedByState)}">
-            <a ui-sref="velocity.metrics.list">
+            <a ui-sref="velocity.metrics.list" class="fade-in">
               Velocity Metrics
             </a>
           </li>
           <li ng-class="{active: ('velocity.data.list' | includedByState)}">
-            <a ui-sref="velocity.data.list">
+            <a ui-sref="velocity.data.list" class="fade-in">
               Velocity Data
             </a>
           </li>
           <li ng-class="{active: ('velocity.config.list' | includedByState)}">
-            <a ui-sref="velocity.config.list">
+            <a ui-sref="velocity.config.list" class="fade-in" ng-focus="focused = true" ng-blur="focused = false">
               Velocity Config
             </a>
           </li>
           <li ng-class="{active: ('velocity.test.check' | includedByState)}">
-            <a ui-sref="velocity.test.check">
+            <a ui-sref="velocity.test.check" class="fade-in">
               Velocity Test
             </a>
           </li>

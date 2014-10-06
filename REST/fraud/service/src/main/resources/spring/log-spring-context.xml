@@ -49,7 +49,8 @@
                                value="#request.getParameter('transaction_guid')?:#requestHeaders['transaction-guid']?:null"/>
                         <entry key="MessageGUID"
                                value="#request.getParameter('message_guid')?:#requestHeaders['message-guid']?:null"/>
-                        <entry key="OperationName" value="#request.requestURI.matches('.*/velocity/?') and #request.getMethod().equals('POST') ? 'VelocityCheck' :
+                        <entry key="OperationName" value="#request.requestURI.matches('.*/velocity/?') and #request.getMethod().equals('POST') ? 'CassandraCheck' :
+                                #request.requestURI.matches('.*/velocity/rcheck/?') and #request.getMethod().equals('POST') ? 'RedisCheck' :
                                 #request.requestURI.matches('.*/velocity/metrics/[?metric_type=\w+&amp;metric_value=\w+]?') and #request.getMethod().equals('GET') ? 'GetVelocityMetrics' :
                                 #request.requestURI.matches('.*/velocity/data_list/[?metric_type=\w+&amp;metric_value=\w+].*') and #request.getMethod().equals('GET') ? 'GetVelocityDataLog' :
                                 #request.requestURI.matches('.*/velocity/metric/[?metric_type=\w+&amp;metric_value=\w+]?') and #request.getMethod().equals('GET') ? 'GetVelocityMetric' :

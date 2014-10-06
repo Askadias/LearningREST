@@ -17,14 +17,17 @@
     <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
           p:hostName="localhost" p:port="6379"/>
 
+
+    <bean id="stringRedisSerializer"
+          class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+
     <bean id="redisTemplate"
-          class="org.springframework.data.redis.core.RedisTemplate"
+          class="org.springframework.data.redis.core.StringRedisTemplate"
           p:connectionFactory-ref="jedisConnectionFactory"/>
 
     <bean id="velocityDAO.impl.redis" class="fraud.db.dao.redis.VelocityDAO"
           autowire-candidate="false"
-          p:velocityData-ref="redisTemplate"
-          p:velocityMetrics-ref="redisTemplate"/>
+          p:redis-ref="redisTemplate"/>
 
 
     <!-- =========================================================================================
@@ -111,7 +114,7 @@
     <!-- ================================================================= -->
     <!-- Configuration Data update                                         -->
     <!-- ================================================================= -->
-    <bean id="operationalDataStorage" class="fraud.util.OperationalDataStorage"
+    <bean id="dbCache" class="fraud.util.DBCache"
           p:velocityConfigDAO-ref="velocityConfigDAO.impl.mongo"/>
 
     <bean id="configurationDataScheduler"
@@ -123,7 +126,7 @@
                   p:cronExpression="${mongoTemplate/scheduledConfigurationUpdateCronExpression}">
                 <property name="jobDetail">
                     <bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
-                          p:targetObject-ref="operationalDataStorage"
+                          p:targetObject-ref="dbCache"
                           p:targetMethod="invalidate"/>
                 </property>
             </bean>

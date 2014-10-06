@@ -1,0 +1,26 @@
+.view-content {
+  -webkit-transition: ease-in-out 0.1s;
+  -moz-transition: ease-in-out 0.1s;
+  -o-transition: ease-in-out 0.1s;
+  transition: ease-in-out 0.1s;
+}
+.view-content.ng-enter,
+.view-content.ng-leave-active,
+.ng-hide {
+  opacity: 0;
+  height: 0px;
+}
+.ng-enter-active,
+.ng-leave {
+  opacity: 1;
+}
+.fade-in {
+  background-color: transparent;
+  transition: background-color 600ms;
+}
+.nav-list li:hover .fade-in {
+  background-color: #dddddd;
+}
+.nav-list a:hover {
+  color: #ffffff;
+}
