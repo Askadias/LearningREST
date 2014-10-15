@@ -9,6 +9,6 @@ import groovy.transform.ToString
 @ToString
 @EqualsAndHashCode
 class AggregationConfig implements Serializable {
-    AggregationType type;
-    Long period;
+    Aggregation aggregation;
+    String secondaryMetric
 }

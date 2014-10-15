@@ -90,7 +90,7 @@
           p:databaseHost="${mongoTemplate/host}:${mongoTemplate/port}"/>
 
     <bean id="fraud.performance.logger.dao"
-          class="common.logging.writer.LogWriter" c:name="user.performance.dao"/>
+          class="common.logging.writer.LogWriter" c:name="fraud.performance.dao"/>
 
     <bean id="performance.dao.loggingInterceptor"
           class="common.logging.LoggingInterceptor"
@@ -142,6 +142,17 @@
         </property>
     </bean>
 
+    <bean id="velocityDAO.redis.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
+          autowire-candidate="false"
+          p:proxyInterfaces="fraud.db.dao.redis.IRedisVelocityDAO"
+          p:target-ref="velocityDAO.impl.redis">
+        <property name="interceptorNames">
+            <list>
+                <idref bean="performance.dao.loggingInterceptor"/>
+            </list>
+        </property>
+    </bean>
+
     <!-- ================= IMPLEMENTATION ========================================================================== -->
 
     <bean id="configuration.performance.impl" class="common.support.Configuration"
@@ -151,7 +162,7 @@
           class="common.logging.exceptions.ServiceExceptionHandler"/>
 
     <bean id="performance.logger.impl"
-          class="common.logging.writer.LogWriter" c:name="fraud.performance.velocity.impl"/>
+          class="common.logging.writer.LogWriter" c:name="fraud.performance.impl"/>
 
     <bean id="impl.loggingInterceptor"
           class="common.logging.LoggingInterceptor"

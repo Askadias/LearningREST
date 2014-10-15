@@ -10,17 +10,17 @@ angular.module('services.velocity', ['restangular'])
       page: function (query) {
         return Restangular.one('velocity_config').get(query);
       },
-      get: function (code) {
-        return Restangular.one('velocity_config', code).get();
+      get: function (id) {
+        return Restangular.one('velocity_config', id).get();
       },
       add: function (config) {
         return Restangular.all('velocity_config').post(config);
       },
-      save: function (config) {
-        return Restangular.one('velocity_config').put(config);
+      save: function (id, config) {
+        return Restangular.one('velocity_config', id).put(config);
       },
-      delete: function (config) {
-        return Restangular.one('velocity_config', config.metric_type).remove();
+      delete: function (id) {
+        return Restangular.one('velocity_config', id).remove();
       }
     }
   }])

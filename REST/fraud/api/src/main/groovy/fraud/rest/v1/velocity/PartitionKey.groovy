@@ -10,7 +10,7 @@ import javax.persistence.Column
  */
 @ToString
 @EqualsAndHashCode
-class VelocityPartitionKey implements Serializable {
+class PartitionKey implements Serializable {
     @Column(name = "metric_type")
     String metricType;
     @Column(name = "metric_value")

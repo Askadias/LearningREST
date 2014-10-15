@@ -1,6 +1,9 @@
 package fraud.db.dao.mongo
 
-import org.apache.commons.lang.StringUtils
+import common.status.pojo.ComponentStatus
+import common.status.pojo.StatusType
+import fraud.db.dao.IVelocityConfigDAO
+import fraud.rest.v1.velocity.VelocityConfig
 import org.apache.commons.lang.exception.ExceptionUtils
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
@@ -9,10 +12,6 @@ import org.springframework.data.domain.Sort
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
-import common.status.pojo.ComponentStatus
-import common.status.pojo.StatusType
-import fraud.db.dao.IVelocityConfigDAO
-import fraud.rest.v1.velocity.VelocityConfig
 
 /**
  * Mongo DB based data source for velocity configurations
@@ -38,14 +37,18 @@ class VelocityConfigDAO implements IVelocityConfigDAO {
     public Page<VelocityConfig> findAll(final Pageable pageable, final VelocityConfig filter) {
         Query query = Query.query(new Criteria()).with(pageable)
         if (filter != null) {
-            if (StringUtils.isNotEmpty(filter.getMetricType())) {
-                query.addCriteria(new Criteria('metricType').regex(filter.getMetricType(), 'i'))
+            if (filter.primaryMetrics) {
+                query.addCriteria(new Criteria('primaryMetrics').in(filter.primaryMetrics, 'i'))
             }
-            if (StringUtils.isNotEmpty(filter.getUpdatedBy())) {
-                query.addCriteria(new Criteria('updatedBy').regex(filter.getUpdatedBy(), 'i'))
+            if (filter.aggregationConfigs) {
+                query.addCriteria(new Criteria('aggregationConfigs.secondaryMetric')
+                        .in(filter.aggregationConfigs*.secondaryMetric, 'i'))
             }
-            if (StringUtils.isNotEmpty(filter.getCreatedBy())) {
-                query.addCriteria(new Criteria('createdBy').regex(filter.getCreatedBy(), 'i'))
+            if (filter.updatedBy) {
+                query.addCriteria(new Criteria('updatedBy').regex(filter.updatedBy, 'i'))
+            }
+            if (filter.createdBy) {
+                query.addCriteria(new Criteria('createdBy').regex(filter.createdBy, 'i'))
             }
         }
 
@@ -53,30 +56,19 @@ class VelocityConfigDAO implements IVelocityConfigDAO {
     }
 
     @Override
-    public <S extends VelocityConfig> S save(final S velocityConfig) {
+    public VelocityConfig save(final VelocityConfig velocityConfig) {
         mongoTemplate.save(velocityConfig)
         velocityConfig
     }
 
     @Override
-    public VelocityConfig saveConfig(final VelocityConfig velocityConfig) {
-        mongoTemplate.save(velocityConfig)
-        velocityConfig
+    public VelocityConfig findOne(final String id) {
+        mongoTemplate.findOne(Query.query(Criteria.where('id').is(id)), VelocityConfig.class)
     }
 
     @Override
-    public <S extends VelocityConfig> Iterable<S> save(final Iterable<S> velocityConfigs) {
-        throw null
-    }
-
-    @Override
-    public VelocityConfig findOne(final String metricType) {
-        mongoTemplate.findOne(Query.query(Criteria.where('metricType').is(metricType)), VelocityConfig.class)
-    }
-
-    @Override
-    public boolean exists(final String metricType) {
-        mongoTemplate.findOne(Query.query(Criteria.where('metricType').is(metricType)), VelocityConfig.class) != null
+    public boolean exists(final Set<String> primaryMetrics) {
+        mongoTemplate.findOne(Query.query(Criteria.where('primaryMetrics').all(primaryMetrics)), VelocityConfig.class) != null
     }
 
     @Override
@@ -85,35 +77,13 @@ class VelocityConfigDAO implements IVelocityConfigDAO {
     }
 
     @Override
-    public Iterable<VelocityConfig> findAll(final Iterable<String> metricTypes) {
-        mongoTemplate.find(Query.query(Criteria.where('metricType').in(metricTypes)), VelocityConfig.class)
+    public void delete(final String id) {
+        mongoTemplate.remove(Query.query(Criteria.where('id').is(id)), VelocityConfig.class)
     }
 
     @Override
-    public long count() {
+    Long count() {
         mongoTemplate.count(null, VelocityConfig.class)
-    }
-
-    @Override
-    public void delete(final String metricType) {
-        mongoTemplate.remove(Query.query(Criteria.where('metricType').is(metricType)), VelocityConfig.class)
-    }
-
-    @Override
-    public void delete(final VelocityConfig velocityConfig) {
-        mongoTemplate.remove(velocityConfig)
-    }
-
-    @Override
-    public void delete(final Iterable<? extends VelocityConfig> velocityConfigs) {
-        for (VelocityConfig velocityConfig : velocityConfigs) {
-            mongoTemplate.remove(velocityConfig)
-        }
-    }
-
-    @Override
-    public void deleteAll() {
-        mongoTemplate.remove(null, VelocityConfig.class)
     }
 
     void setMongoTemplate(final MongoTemplate mongoTemplate) {
@@ -149,5 +119,5 @@ class VelocityConfigDAO implements IVelocityConfigDAO {
                 responseTime, null, exceptionMessage, exceptionDetails)
     }
 
-    Object save(Object o){return o}
+    Object save(Object o) { return o }
 }

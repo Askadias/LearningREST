@@ -32,7 +32,7 @@ angular.module('fraudAdmin', [
         .state('blacklist', {
           abstract: true,
           templateUrl: 'views/layout.html',
-          controller: 'MainCtrl'
+          controller: 'AppCtrl'
         })
         .state('blacklist.list', {
           url: '/blacklist/',
@@ -42,12 +42,12 @@ angular.module('fraudAdmin', [
         .state('velocity', {
           abstract: true,
           templateUrl: 'views/layout.html',
-          controller: 'MainCtrl'
+          controller: 'AppCtrl'
         })
         .state('velocity.config', {
           abstract: true,
           templateUrl: 'views/velocity/stumb.html',
-          controller: 'MainCtrl'
+          controller: 'AppCtrl'
         })
         .state('velocity.config.list', {
           url: '/velocity/config/',
@@ -55,14 +55,14 @@ angular.module('fraudAdmin', [
           controller: 'VelocityConfigsListCtrl'
         })
         .state('velocity.config.details', {
-          url: '/velocity/config/:metric_type/:mode/',
+          url: '/velocity/config/:config_id/:mode/',
           templateUrl: 'views/velocity/config/details.html',
           controller: 'VelocityConfigDetailsCtrl'
         })
         .state('velocity.metrics', {
           abstract: true,
           templateUrl: 'views/velocity/stumb.html',
-          controller: 'MainCtrl'
+          controller: 'AppCtrl'
         })
         .state('velocity.metrics.list', {
           url: '/velocity/metrics/',
@@ -72,7 +72,7 @@ angular.module('fraudAdmin', [
         .state('velocity.data', {
           abstract: true,
           templateUrl: 'views/velocity/stumb.html',
-          controller: 'MainCtrl'
+          controller: 'AppCtrl'
         })
         .state('velocity.data.list', {
           url: '/velocity/data/',
@@ -82,7 +82,7 @@ angular.module('fraudAdmin', [
         .state('velocity.test', {
           abstract: true,
           templateUrl: 'views/velocity/stumb.html',
-          controller: 'MainCtrl'
+          controller: 'AppCtrl'
         })
         .state('velocity.test.check', {
           url: '/velocity/test/',

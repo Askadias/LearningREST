@@ -8,9 +8,9 @@ CREATE TABLE IF NOT EXISTS blacklist (
     type TEXT,
     value TEXT,
     is_active BOOLEAN,
-    create_date TIMESTAMP,
+    create_date TIMEUUID,
     created_by TEXT,
-    update_date TIMESTAMP,
+    update_date TIMEUUID,
     updated_by TEXT,
     PRIMARY KEY ((type, value))
 );
@@ -20,9 +20,9 @@ CREATE TABLE IF NOT EXISTS whitelist (
     type TEXT,
     value TEXT,
     is_active BOOLEAN,
-    create_date TIMESTAMP,
+    create_date TIMEUUID,
     created_by TEXT,
-    update_date TIMESTAMP,
+    update_date TIMEUUID,
     updated_by TEXT,
     PRIMARY KEY ((type, value))
 );
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS velocity_data (
     metric_type TEXT,
     metric_value TEXT,
     related_metric_type TEXT,
-    create_date TIMESTAMP,
+    create_date TIMEUUID,
     related_metric_value TEXT,
     PRIMARY KEY ((metric_type, metric_value), related_metric_type, create_date)
 );

@@ -1,76 +1,69 @@
 <div class="well well-sm">
-  <a ui-sref="velocity.config.details({metric_type: 'new', mode: 'new'})" class="btn btn-success">
+  <a ui-sref="velocity.config.details({config_id: 'new', mode: 'new'})" class="btn btn-success text-highlight">
     <i class="fa fa-plus-circle fa-lg"></i>
     Add Velocity Metric
   </a>
 </div>
-<table class="table table-striped">
-  <thead>
-  <tr>
-    <th ng-repeat="header in headers" nowrap>
-      <sort-by onsort="onSort" sortdir="filterCriteria.sort_dir" sortedby="filterCriteria.sorted_by"
-               sortvalue="{{header.value}}">{{header.title}}
-      </sort-by>
-    </th>
-    <th></th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr>
-    <td>
-      <input class="form-control" on-enter-blur placeholder="code"
-             on-blur-change="filterResult()" ng-model="filterCriteria.metric_type"></td>
-    <td>
+<div>
+  <div ng-repeat="config in configs" class="well well-sm">
+    <div class="panel-body row">
+      <div class="col-md-4">
+        <div class="well-highlight">
+          <a ui-sref="velocity.config.details({config_id: config.id, mode: 'edit'})">
+            <div class="text-highlight">
+              <div ng-repeat="primary_metric in config.primary_metrics">
+                {{primary_metric}}
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div ng-repeat="aggrigation_config in config.aggregation_configs" class="row">
+          <label class="col-md-6">{{aggrigation_config.secondary_metric}}: </label>
+          <span class="label label-default col-md-6">{{aggrigation_config.aggregation}}</span>
+        </div>
+      </div>
 
-    </td>
-    <td>
-      <input class="form-control" on-enter-blur placeholder="updater"
-             on-blur-change="filterResult()" ng-model="filterCriteria.updated_by">
-    </td>
-    <td>
-      <input class="form-control" on-enter-blur placeholder="creator"
-             on-blur-change="filterResult()" ng-model="filterCriteria.created_by">
-    </td>
-    <td></td>
-    <td></td>
-    <td></td>
-  </tr>
-  <tr ng-repeat="config in configs">
-    <td><a ui-sref="velocity.config.details({metric_type: config.metric_type, mode: 'edit'})">
-      {{config.metric_type}}
-    </a></td>
-    <td>{{config.time_to_live}}</td>
-    <td>{{config.updated_by}}</td>
-    <td>{{config.created_by}}</td>
-    <td>{{config.update_date}}</td>
-    <td>{{config.create_date}}</td>
-    <td>
-      <div class="btn-config" style="width: 100px">
-        <a ui-sref="velocity.config.details({metric_type: config.metric_type, mode: 'edit'})"
-           class="btn btn-default btn-sm">
-          <i class="fa fa-pencil"></i>
-        </a>
-        <button type="button" class="btn btn-danger btn-sm" ng-click="remove(config)">
+      <div class="col-md-3">
+        <div>
+          <div class="text-highlight well-highlight">
+            <i popover-animation="true" popover-trigger="mouseenter" class="fa fa-user fa-lg"
+               popover="last time updated by {{config.updated_by}}"></i>
+            {{config.updated_by || 'unknown'}}
+          </div>
+          <div class="text-highlight well-highlight">
+            <i popover-animation="true" popover-trigger="mouseenter" class="glyphicon glyphicon-calendar"
+               popover="last time updated on {{config.update_date | date:'medium'}}"></i>
+            {{config.update_date | date:'medium'}}
+          </div>
+          <div class="text-highlight well-highlight">
+            <i popover-animation="true" popover-trigger="mouseenter" class="glyphicon glyphicon-time"
+               popover="metrics period is {{config.period | period}}"></i>
+            {{config.period | period}}
+          </div>
+          <div class="text-highlight well-highlight">
+            <i popover-animation="true" popover-trigger="mouseenter" class="glyphicon glyphicon-fire"
+               popover="metric data will expire in {{config.expires_in | period}}"></i>
+            {{config.expires_in | period}}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-1">
+        <button type="button" class="btn btn-danger btn-lg text-highlight" ng-click="remove(config)"
+                style="margin-top: 10px">
           <i class="fa fa-trash-o"></i>
         </button>
+        <a ui-sref="velocity.config.details({config_id: config.id, mode: 'edit'})"
+           class="btn btn-danger btn-lg text-highlight" style="margin-top: 20px">
+          <i class="fa fa-pencil"></i>
+        </a>
       </div>
-    </td>
-  </tr>
-  <tr ng-show="!configs || configs.length == 0">
-    <td colspan="8">
-      <div class="alert alert-info">
-        No velocity configs found
-      </div>
-    </td>
-  </tr>
-  </tbody>
-</table>
-<div ng-show="totalPages > 1">
-  <pagination num-pages="totalPages" ng-model="filterCriteria.page" current-page="filterCriteria.page"
-              max-size="10" class="" boundary-links="true" on-select-page="selectPage(page)"></pagination>
+    </div>
+  </div>
 </div>
 <div class="well well-sm">
-  <a ui-sref="velocity.config.details({metric_type: 'new', mode: 'new'})" class="btn btn-success">
+  <a ui-sref="velocity.config.details({config_id: 'new', mode: 'new'})" class="btn btn-success text-highlight">
     <i class="fa fa-plus-circle fa-lg"></i>
     Add Velocity Metric
   </a>

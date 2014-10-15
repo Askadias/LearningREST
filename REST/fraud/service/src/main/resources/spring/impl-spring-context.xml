@@ -21,7 +21,7 @@
 
     <bean id="velocityManager.impl" class="fraud.logic.velocity.VelocityManager"
           p:velocityDAO-ref="velocityDAO.cassandra.perf"
-          p:redisVelocityDAO-ref="velocityDAO.impl.redis"
+          p:redisVelocityDAO-ref="velocityDAO.redis.perf"
           p:dbCache-ref="dbCache"/>
 
     <bean id="velocityConfigManager.impl" class="fraud.logic.velocity.VelocityConfigManager"

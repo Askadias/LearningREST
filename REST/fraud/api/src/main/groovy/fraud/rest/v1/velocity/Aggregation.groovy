@@ -2,14 +2,13 @@ package fraud.rest.v1.velocity
 /**
  * Aggregation function type for velocity metrics calculation
  */
-enum AggregationType {
+enum Aggregation implements Serializable {
     Max{
-        @Override
-        Double apply(List<VelocityData> data) {
+        Double apply(List<String> data) {
             Double max = Double.MIN_VALUE;
-            data.each { VelocityData metricData ->
+            data.each {
                 try {
-                    double value = Double.parseDouble(metricData.relatedMetricValue);
+                    double value = Double.parseDouble(it);
                     if (value > max) {
                         max = value;
                     }
@@ -21,12 +20,11 @@ enum AggregationType {
         }
     },
     Min{
-        @Override
-        Double apply(List<VelocityData> data) {
+        Double apply(List<String> data) {
             Double min = Double.MAX_VALUE;
-            data.each { VelocityData metricData ->
+            data.each {
                 try {
-                    double value = Double.parseDouble(metricData.relatedMetricValue);
+                    double value = Double.parseDouble(it);
                     if (value < min) {
                         min = value;
                     }
@@ -38,13 +36,12 @@ enum AggregationType {
         }
     },
     Avg{
-        @Override
-        Double apply(List<VelocityData> data) {
+        Double apply(List<String> data) {
             Double sum = 0.0;
             if (data.size() > 0) {
-                for (VelocityData metricData : data) {
+                data.each {
                     try {
-                        sum += Double.parseDouble(metricData.relatedMetricValue);
+                        sum += Double.parseDouble(it);
                     } catch (NumberFormatException ignored) {
                         return null;
                     }
@@ -56,12 +53,11 @@ enum AggregationType {
         }
     },
     Sum{
-        @Override
-        Double apply(List<VelocityData> data) {
+        Double apply(List<String> data) {
             Double sum = 0.0;
-            data.each { VelocityData metricData ->
+            data.each {
                 try {
-                    sum += Double.parseDouble(metricData.relatedMetricValue);
+                    sum += Double.parseDouble(it);
                 } catch (NumberFormatException ignored) {
                     return null;
                 }
@@ -70,21 +66,15 @@ enum AggregationType {
         }
     },
     Count{
-        @Override
-        Double apply(List<VelocityData> data) {
+        Double apply(List<String> data) {
             return (double) data.size();
         }
     },
     UniqueCount{
-        @Override
-        Double apply(List<VelocityData> data) {
-            Set<String> noDupSet = new HashSet<>();
-            data.each { VelocityData metricData ->
-                noDupSet.add(metricData.relatedMetricValue);
-            }
-            return (double) noDupSet.size();
+        Double apply(List<String> data) {
+            return (double) data.toSet().size();
         }
     };
 
-    abstract Double apply(List<VelocityData> data);
+    abstract Double apply(List<String> data);
 }

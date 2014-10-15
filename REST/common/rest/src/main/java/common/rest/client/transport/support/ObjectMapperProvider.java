@@ -70,6 +70,8 @@ public final class ObjectMapperProvider {
         mapper.setDeserializationConfig(dConfig);
         mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES,
                 config.isFailOnUnknownProperties());
+        mapper.configure(DeserializationConfig.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY,
+                config.isFailOnUnknownProperties());
 
         // Configure serialization
         SerializationConfig sConfig = mapper.getSerializationConfig();

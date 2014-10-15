@@ -1,17 +1,18 @@
 package fraud.db.dao.redis
 
-import fraud.rest.v1.velocity.redis.Aggregation
+import fraud.rest.v1.velocity.Aggregation
 
 /**
  * Velocity DAO vor redis DataSource
  */
 interface IRedisVelocityDAO {
 
-    void logData(String key, String relatedMetricData)
+    void logData(Map<String, String[]> newData)
 
-    List<String> getHistoricalData(String key, Long period)
+    Set<String> getHistoricalIDs(String key, Long period)
+    List<String> getHistoricalData(String dataType, Set<String> transactionIDs)
 
     void saveMetric(String key, Aggregation type, Double aggregatedValue)
 
-    Map<Aggregation, Double> getMetrics(String key)
+    Map<String, String> getMetrics(String key)
 }

@@ -11,11 +11,10 @@ class DBCache implements InitializingBean {
 
     IVelocityConfigDAO velocityConfigDAO
 
-    Map<String, VelocityConfig> velocityConfigs
+    List<VelocityConfig> configs
 
     void invalidate() {
-        velocityConfigs = new HashMap<String, VelocityConfig>()
-        velocityConfigDAO?.findAll()?.each { this.@velocityConfigs << [(it.metricType): it] }
+        configs = velocityConfigDAO?.findAll()?.asList()
     }
 
     @Override

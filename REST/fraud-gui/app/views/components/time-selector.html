@@ -1,0 +1,46 @@
+<div class="timeSelectorDirective">
+  <div class="section days" ng-show="showDays">
+    <div class="increase" ng-click="increaseDays()">
+      <i class="icon fa fa-caret-up"></i>
+    </div>
+    <div class="display">
+      {{displayDays()}}d
+    </div>
+    <div class="decrease" ng-click="decreaseDays()">
+      <i class="icon fa fa-caret-down"></i>
+    </div>
+  </div>
+  <div class="section hours" ng-show="showHours">
+    <div class="increase" ng-click="increaseHours()">
+      <i class="icon fa fa-caret-up"></i>
+    </div>
+    <div class="display">
+      {{displayHours()}}h
+    </div>
+    <div class="decrease" ng-click="decreaseHours()">
+      <i class="icon fa fa-caret-down"></i>
+    </div>
+  </div>
+  <div class="section minutes" ng-show="showMinutes">
+    <div class="increase" ng-click="increaseMinutes()">
+      <i class="icon fa fa-caret-up"></i>
+    </div>
+    <div class="display">
+      {{displayMinutes()}}m
+    </div>
+    <div class="decrease" ng-click="decreaseMinutes()">
+      <i class="icon fa fa-caret-down"></i>
+    </div>
+  </div>
+  <div class="section seconds" ng-show="showSeconds">
+    <div class="increase" ng-click="increaseSeconds()">
+      <i class="icon fa fa-caret-up"></i>
+    </div>
+    <div class="display">
+      {{displaySeconds()}}s
+    </div>
+    <div class="decrease" ng-click="decreaseSeconds()">
+      <i class="icon fa fa-caret-down"></i>
+    </div>
+  </div>
+</div>

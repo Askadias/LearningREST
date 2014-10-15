@@ -14,7 +14,7 @@ class VelocityEndpoint extends AbstractService {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    Response check(final Map<String, String> metrics,
+    Response check(final Map<String, String[]> metrics,
                    @Context final UriInfo uriInfo,
                    @Context final HttpHeaders headers) {
         //respondWith(velocityManager.checkSync(metrics), uriInfo, headers).build()
@@ -26,14 +26,14 @@ class VelocityEndpoint extends AbstractService {
     @POST
     @Path('/rcheck/')
     @Consumes(MediaType.APPLICATION_JSON)
-    Response rcheck(final Map<String, String> metrics,
+    Response rcheck(final Map<String, String[]> metrics,
                     @Context final UriInfo uriInfo,
                     @Context final HttpHeaders headers) {
         respondWith(velocityManager.checkRedisAsync(metrics), uriInfo, headers).build()
         //respondWith(velocityManager.checkRedisSync(metrics), uriInfo, headers).build()
     }
 
-    @GET
+    /*@GET
     @Path('/metrics/')
     Response getMetrics(@QueryParam('metric_type') final String metricType,
                         @QueryParam('metric_value') final String metricValue,
@@ -71,5 +71,5 @@ class VelocityEndpoint extends AbstractService {
                      @Context final UriInfo uriInfo,
                      @Context final HttpHeaders headers) {
         respondWith(velocityManager.getDataList(metricType, metricValue), uriInfo, headers).build()
-    }
+    }*/
 }

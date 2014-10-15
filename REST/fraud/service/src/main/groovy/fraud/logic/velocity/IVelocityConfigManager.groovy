@@ -14,11 +14,11 @@ interface IVelocityConfigManager {
     EntityPage<VelocityConfig> getVelocityConfigs(final Integer page, final Integer size, final SortDirection sortDirection,
                                                   final String sortedBy, final VelocityConfig filter)
 
-    VelocityConfig getVelocityConfig(final String velocityConfigID)
+    VelocityConfig getVelocityConfig(final String id)
 
-    void updateVelocityConfig(final VelocityConfig auth)
+    void updateVelocityConfig(final String id, final VelocityConfig velocityConfig)
 
-    void createVelocityConfig(final VelocityConfig auth)
+    void createVelocityConfig(final VelocityConfig velocityConfig)
 
-    void deleteVelocityConfig(final String velocityConfigID)
+    void deleteVelocityConfig(final String id)
 }

@@ -1,11 +1,8 @@
 package fraud.test.dvt
 
-import fraud.rest.v1.velocity.VelocityMetric
-import fraud.rest.v1.velocity.redis.VMetric
 import fraud.test.BaseFraudServiceTest
 import org.apache.commons.lang.RandomStringUtils
 import org.junit.Assert
-import org.junit.Ignore
 import org.junit.Test
 
 /**
@@ -20,11 +17,11 @@ class FraudServiceClientSuccessPathTest extends BaseFraudServiceTest {
         Assert.assertNotNull(fraudServiceClient)
         String transactionGUID = UUID.randomUUID().toString()
         def testData = [
-                'Email'     : 'aaa@mail.com',
-                'Amount'    : '500.00',
-                'CreditCard': '1111222233334444',
-        ]
-        List<VelocityMetric> metrics = fraudServiceClient.check(transactionGUID, testData)
+                'Email'     : ['aaa@mail.com'],
+                'Amount'    : ['500.00'],
+                'CreditCard': ['1111222233334444'],
+        ] as Map<String, String[]>
+        def metrics = fraudServiceClient.check(transactionGUID, testData)
         Assert.assertNotNull(metrics)
     }
 
@@ -33,11 +30,11 @@ class FraudServiceClientSuccessPathTest extends BaseFraudServiceTest {
         Assert.assertNotNull(fraudServiceClient)
         String transactionGUID = UUID.randomUUID().toString()
         def testData = [
-                'Email'     : 'aaa@mail.com',
-                'Amount'    : '500.00',
-                'CreditCard': '1111222233334444',
-        ]
-        List<VMetric> metrics = fraudServiceClient.rcheck(transactionGUID, testData)
+                'Email'     : ['aaa@mail.com'],
+                'Amount'    : ['500.00'],
+                'CreditCard': ['1111222233334444'],
+        ] as Map<String, String[]>
+        def metrics = fraudServiceClient.rcheck(transactionGUID, testData)
         Assert.assertNotNull(metrics)
     }
 
@@ -49,21 +46,22 @@ class FraudServiceClientSuccessPathTest extends BaseFraudServiceTest {
 
             String transactionGUID = UUID.randomUUID().toString()
             def testData = [
-                    'BillAddress': RandomStringUtils.randomAlphabetic(50),
-                    'Purchases'  : "${RAND.nextInt(5000)}.00".toString(),
-                    'CreditCard' : generateCC(),
-                    'TUID'       : UUID.randomUUID().toString(),
-                    'Email'      : "aaa${RAND.nextInt(10)}@gmail.com".toString(),
-                    'DeviceID'   : UUID.randomUUID().toString(),
-                    'IPAddress'  : generateIPAddress(),
-                    'PhoneNumber': generatePhoneNumber(),
-            ]
-            List<VMetric> redisMetrics = fraudServiceClient.rcheck(transactionGUID, testData)
+                    'BillAddress': [RandomStringUtils.randomAlphabetic(50)],
+                    'Purchases'  : ["${RAND.nextInt(5000)}.00".toString()],
+                    'CreditCard' : [generateCC(), generateCC()],
+                    'TUID'       : [UUID.randomUUID().toString()],
+                    'Email'      : ["aaa${RAND.nextInt(1000)}@gmail.com".toString()],
+                    'DeviceID'   : [UUID.randomUUID().toString()],
+                    'IPAddress'  : [generateIPAddress()],
+                    'PhoneNumber': [generatePhoneNumber()],
+            ] as Map<String, String[]>
+            def redisMetrics = fraudServiceClient.rcheck(transactionGUID, testData)
             Assert.assertNotNull(redisMetrics)
             //Assert.assertTrue(redisMetrics.size() > 0)
-            List<VelocityMetric> cassandraMetrics = fraudServiceClient.check(transactionGUID, testData)
+            def cassandraMetrics = fraudServiceClient.check(transactionGUID, testData)
             Assert.assertNotNull(cassandraMetrics)
             //Assert.assertTrue(cassandraMetrics.size() > 0)
+            Thread.sleep(200)
         }
     }
 

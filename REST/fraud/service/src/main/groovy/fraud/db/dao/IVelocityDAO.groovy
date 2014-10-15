@@ -8,28 +8,16 @@ import fraud.rest.v1.velocity.*
  */
 interface IVelocityDAO extends ISystemStatusComponent {
 
-    List<VelocityMetric> getMoreMetrics(final String metricType, final String metricValue, final int limit)
+    void logTransaction(final Transaction transaction)
 
-    List<VelocityData> getMoreData(final String metricType, final String metricValue,
-                                   final String relatedMetricType, final Date createDate, final int limit)
+    void logData(History historicalData)
 
-    List<VelocityMetric> getMetrics(final VelocityPartitionKey id)
+    Set<UUID> getHistoricalIDs(PartitionKey id, Long period)
 
-    List<VelocityData> getDataList(final VelocityPartitionKey id)
+    List<Transaction> getHistoricalData(Set<UUID> transactionIDs)
 
-    VelocityMetric getMetric(final VelocityMetricCompositeKey key)
+    void saveMetric(Metric metric)
 
-    VelocityData getData(final VelocityDataCompositeKey key)
-
-    List<VelocityData> getMetricDataForPeriod(final VelocityPartitionKey id, final String relatedMetricType,
-                                              final Long period)
-
-    void saveMetric(final VelocityMetric metric)
-
-    void saveBatchOfMetrics(final List<VelocityMetric> metrics)
-
-    void saveData(final VelocityData data)
-
-    void saveBatchOfData(final List<VelocityData> dataList)
+    List<Metric> getMetrics(PartitionKey id);
 }
 

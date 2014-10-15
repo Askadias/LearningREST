@@ -68,7 +68,7 @@ class VelocityService {
         }
     }
 
-    List<Velocity> getMetrics(Map<String, String[]> velocityRQ) {
+    def getMetrics(Map<String, String[]> velocityRQ) {
         def velocityMetrics = []
         withPool() {
             dbCache.configs.each { VelocityConfig config ->

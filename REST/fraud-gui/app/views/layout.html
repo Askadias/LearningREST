@@ -1,53 +1,78 @@
-<div role="navigation" class="navbar navbar-fixed-top">
-  <div class="navbar-header">
-    <a title="Fraud 2.0" ui-sref="blacklist" class="navbar-brand">Velocity</a>
+<div class="navbar-wrapper">
+  <div class="sidebar-header">
+    <div class="sidebar-brand">
+      <a title="Fraud 2.0" ui-sref="velocity.config.list">
+        <i class="fa fa-home"></i>
+        Velocity
+      </a>
+    </div>
+  </div>
+  <div class="navbar-header-wrapper">
+    <a ng-click="app.settings.asideFolded = !app.settings.asideFolded" class="btn no-shadow navbar-btn"
+       id="menu-toggle">
+      <span
+        ng-class="{ 'fa fa-fw fa-indent' : app.settings.asideFolded, 'fa fa-fw fa-dedent' : !app.settings.asideFolded }"></span>
+    </a>
   </div>
 </div>
+<div class="content-wrapper">
 
-<div class="wrapper container tab-content">
+  <!-- Sidebar -->
+  <div class="sidebar-wrapper">
+    <ul class="sidebar-nav">
+      <!--<li class="nav-header">Exclusions</li>
+      <li ng-class="{active: ('blacklist.list' | includedByState)}">
+        <a ui-sref="blacklist.list" class="fade-in">
+          Black List
+        </a>
+      </li>
+      <li ng-class="{active: ('whitelist.list' | includedByState)}">
+        <a ui-sref="whitelist.list" class="fade-in">
+          White List
+        </a>
+      </li>
+      <li class="divider"></li>-->
+      <!--<li class="nav-header">Velocity</li>-->
+      <li ng-class="{active: ('velocity.metrics.list' | includedByState)}">
+        <a ui-sref="velocity.metrics.list" class="fade-in">
+          <i class="fa fa-area-chart"></i>
+          Velocity Metrics
+        </a>
+      </li>
+      <li ng-class="{active: ('velocity.data.list' | includedByState)}">
+        <a ui-sref="velocity.data.list" class="fade-in">
+          <i class="fa fa-table"></i>
+          Velocity Data
+        </a>
+      </li>
+      <li ng-class="{active: ('velocity.config.list' | includedByState)}">
+        <a ui-sref="velocity.config.list" class="fade-in" ng-focus="focused = true" ng-blur="focused = false">
+          <i class="fa fa-gears"></i>
+          Velocity Config
+        </a>
+      </li>
+      <li ng-class="{active: ('velocity.test.check' | includedByState)}">
+        <a ui-sref="velocity.test.check" class="fade-in">
+          <i class="fa fa-magic"></i>
+          Velocity Test
+        </a>
+      </li>
+    </ul>
+  </div>
+  <!-- /#sidebar-wrapper -->
 
-  <div class="row">
-    <div class="col-md-2">
-      <div class="well sidebar-nav">
-        <ul class="nav nav-list">
-          <!--<li class="nav-header">Exclusions</li>
-          <li ng-class="{active: ('blacklist.list' | includedByState)}">
-            <a ui-sref="blacklist.list" class="fade-in">
-              Black List
-            </a>
-          </li>
-          <li ng-class="{active: ('whitelist.list' | includedByState)}">
-            <a ui-sref="whitelist.list" class="fade-in">
-              White List
-            </a>
-          </li>
-          <li class="divider"></li>-->
-          <li class="nav-header">Velocity</li>
-          <li ng-class="{active: ('velocity.metrics.list' | includedByState)}">
-            <a ui-sref="velocity.metrics.list" class="fade-in">
-              Velocity Metrics
-            </a>
-          </li>
-          <li ng-class="{active: ('velocity.data.list' | includedByState)}">
-            <a ui-sref="velocity.data.list" class="fade-in">
-              Velocity Data
-            </a>
-          </li>
-          <li ng-class="{active: ('velocity.config.list' | includedByState)}">
-            <a ui-sref="velocity.config.list" class="fade-in" ng-focus="focused = true" ng-blur="focused = false">
-              Velocity Config
-            </a>
-          </li>
-          <li ng-class="{active: ('velocity.test.check' | includedByState)}">
-            <a ui-sref="velocity.test.check" class="fade-in">
-              Velocity Test
-            </a>
-          </li>
-        </ul>
+  <!-- Page Content -->
+  <div class="page-content-wrapper">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="col-md-10">
+            <div ui-view class="view-content"></div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="col-md-10">
-      <div ui-view class="view-content"></div>
-    </div>
   </div>
+  <!-- /#page-content-wrapper -->
+
 </div>

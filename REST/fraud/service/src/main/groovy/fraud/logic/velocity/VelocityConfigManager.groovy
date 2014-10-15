@@ -1,14 +1,14 @@
 package fraud.logic.velocity
 
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Sort
 import common.exceptions.ServiceException
 import common.pojo.EntityPage
 import common.pojo.SortDirection
 import fraud.db.dao.IVelocityConfigDAO
 import fraud.exceptions.FraudServiceEventLogId
 import fraud.rest.v1.velocity.VelocityConfig
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 
 /**
  * Implementation class for VelocityConfigService business logic
@@ -44,39 +44,41 @@ class VelocityConfigManager implements IVelocityConfigManager {
     }
 
     @Override
-    VelocityConfig getVelocityConfig(final String velocityConfigID) {
-        VelocityConfig velocityConfig = velocityConfigDAO.findOne(velocityConfigID)
-        if (velocityConfig == null) {
-            throw new ServiceException(FraudServiceEventLogId.VelocityConfigNotFound, velocityConfigID)
+    VelocityConfig getVelocityConfig(final String id) {
+        VelocityConfig config = velocityConfigDAO.findOne(id)
+        if (config == null) {
+            throw new ServiceException(FraudServiceEventLogId.VelocityConfigNotFound, id)
         }
-        velocityConfig
+        config
     }
 
     @Override
-    void updateVelocityConfig(final VelocityConfig velocityConfig) {
-        if (velocityConfigDAO.exists(velocityConfig.getMetricType())) {
-            velocityConfigDAO.saveConfig(velocityConfig)
+    void updateVelocityConfig(final String id, final VelocityConfig config) {
+        VelocityConfig existingConfig = velocityConfigDAO.findOne(id)
+        if (existingConfig) {
+            config.id = id
+            velocityConfigDAO.save(config)
         } else {
-            throw new ServiceException(FraudServiceEventLogId.VelocityConfigNotFound, velocityConfig.getMetricType())
-        }
-    }
-
-    @Override
-    void createVelocityConfig(final VelocityConfig velocityConfig) {
-        velocityConfig.setCreateDate(new Date())
-        if (!velocityConfigDAO.exists(velocityConfig.getMetricType())) {
-            velocityConfigDAO.saveConfig(velocityConfig)
-        } else {
-            throw new ServiceException(FraudServiceEventLogId.VelocityConfigAlreadyExists, velocityConfig.getMetricType())
+            throw new ServiceException(FraudServiceEventLogId.VelocityConfigNotFound, id)
         }
     }
 
     @Override
-    void deleteVelocityConfig(final String velocityConfigID) {
-        if (velocityConfigDAO.exists(velocityConfigID)) {
-            velocityConfigDAO.delete(velocityConfigID)
+    void createVelocityConfig(final VelocityConfig config) {
+        config.setCreateDate(new Date())
+        if (!velocityConfigDAO.exists(config.primaryMetrics)) {
+            velocityConfigDAO.save(config)
         } else {
-            throw new ServiceException(FraudServiceEventLogId.VelocityConfigNotFound, velocityConfigID)
+            throw new ServiceException(FraudServiceEventLogId.VelocityConfigAlreadyExists, config.primaryMetrics)
+        }
+    }
+
+    @Override
+    void deleteVelocityConfig(final String id) {
+        if (velocityConfigDAO.findOne(id)) {
+            velocityConfigDAO.delete(id)
+        } else {
+            throw new ServiceException(FraudServiceEventLogId.VelocityConfigNotFound, id)
         }
     }
 }

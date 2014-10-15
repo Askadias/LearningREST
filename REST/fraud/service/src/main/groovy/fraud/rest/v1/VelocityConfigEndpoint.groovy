@@ -4,6 +4,7 @@ import common.pojo.SortDirection
 import common.pojo.StatusEntity
 import common.rest.AbstractService
 import fraud.logic.velocity.IVelocityConfigManager
+import fraud.rest.v1.velocity.AggregationConfig
 import fraud.rest.v1.velocity.VelocityConfig
 
 import javax.ws.rs.*
@@ -22,7 +23,8 @@ class VelocityConfigEndpoint extends AbstractService {
                                 @QueryParam('size') final Integer size,
                                 @QueryParam('sort_dir') final SortDirection sortDirection,
                                 @QueryParam('sorted_by') final String sortedBy,
-                                @QueryParam('metric_type') final String metricType,
+                                @QueryParam('primary_metrics') final Set<String> primaryMetrics,
+                                @QueryParam('secondary_metrics') final Set<String> secondaryMetrics,
                                 @QueryParam('updated_by') final String updatedByFilter,
                                 @QueryParam('created_by') final String createdByFilter,
                                 @Context final UriInfo uriInfo,
@@ -30,16 +32,26 @@ class VelocityConfigEndpoint extends AbstractService {
         respondWith(page == null && size == null ?
                 velocityConfigManager.allVelocityConfigs :
                 velocityConfigManager.getVelocityConfigs(page, size, sortDirection, sortedBy,
-                        new VelocityConfig(metricType: metricType, updatedBy: updatedByFilter, createdBy: createdByFilter)),
+                        new VelocityConfig(
+                                primaryMetrics: primaryMetrics,
+                                updatedBy: updatedByFilter,
+                                createdBy: createdByFilter,
+                                aggregationConfigs: secondaryMetrics?.collect {
+                                    new AggregationConfig(
+                                            secondaryMetric: it,
+                                            aggregation: null
+                                    )
+                                }?.toSet()
+                        )),
                 uriInfo, headers).build()
     }
 
     @GET
-    @Path('/{metric_type}/')
-    Response getVelocityConfig(@PathParam('metric_type') final String velocityConfigID,
+    @Path('/{id}/')
+    Response getVelocityConfig(@PathParam('id') final String id,
                                @Context final UriInfo uriInfo,
                                @Context final HttpHeaders headers) {
-        respondWith(velocityConfigManager.getVelocityConfig(velocityConfigID), uriInfo, headers).build()
+        respondWith(velocityConfigManager.getVelocityConfig(id), uriInfo, headers).build()
     }
 
     @POST
@@ -48,24 +60,26 @@ class VelocityConfigEndpoint extends AbstractService {
                                @Context final UriInfo uriInfo,
                                @Context final HttpHeaders headers) {
         velocityConfigManager.createVelocityConfig(velocityConfig)
-        ok(new StatusEntity('200', "$uriInfo.absolutePath/$velocityConfig.metricType")).build()
+        ok(new StatusEntity('200', "$uriInfo.absolutePath$velocityConfig.id")).build()
     }
 
     @PUT
+    @Path('/{id}/')
     @Consumes(MediaType.APPLICATION_JSON)
-    Response updateVelocityConfig(final VelocityConfig velocityConfig,
+    Response updateVelocityConfig(@PathParam('id') final String id,
+                                  final VelocityConfig velocityConfig,
                                   @Context final UriInfo uriInfo,
                                   @Context final HttpHeaders headers) {
-        velocityConfigManager.updateVelocityConfig(velocityConfig)
-        ok(new StatusEntity('200', "$uriInfo.absolutePath/$velocityConfig.metricType")).build()
+        velocityConfigManager.updateVelocityConfig(id, velocityConfig)
+        ok(new StatusEntity('200', "$uriInfo.absolutePath")).build()
     }
 
     @DELETE
-    @Path('/{metric_type}/')
-    Response deleteVelocityConfig(@PathParam('metric_type') final String velocityConfigID,
+    @Path('/{id}/')
+    Response deleteVelocityConfig(@PathParam('id') final String id,
                                   @Context final UriInfo uriInfo,
                                   @Context final HttpHeaders headers) {
-        velocityConfigManager.deleteVelocityConfig(velocityConfigID)
-        ok(new StatusEntity('200', "VelocityConfig for '$velocityConfigID' has been successfully removed")).build()
+        velocityConfigManager.deleteVelocityConfig(id)
+        ok(new StatusEntity('200', "VelocityConfig with ID='$id' has been successfully removed")).build()
     }
 }

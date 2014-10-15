@@ -8,12 +8,20 @@ angular.module('controllers.velocity', [])
       $scope.configsCount = 0;
       $scope.headers = [
         {
-          title: 'Metric Type',
-          value: 'metric_type'
+          title: 'ID',
+          value: 'id'
         },
         {
-          title: 'Time To Live',
-          value: 'time_to_live'
+          title: 'Primary Metrics',
+          value: 'primary_metrics'
+        },
+        {
+          title: 'Period',
+          value: 'period'
+        },
+        {
+          title: 'Expires In',
+          value: 'expires_in'
         },
         {
           title: 'Updated By',
@@ -78,10 +86,15 @@ angular.module('controllers.velocity', [])
         });
       };
       $scope.remove = function (velocity_config) {
-        VelocityConfig.delete(velocity_config).then(function (response) {
+        VelocityConfig.delete(velocity_config.id).then(function (response) {
           $scope.fetchResult();
         }, function (response) {
         });
+      };
+
+      $scope.expiresIn = function (ttl, create_date_str) {
+        var create_date_millis = new Date(create_date_str).getTime();
+        return Math.floor(create_date_millis + ttl - new Date().getTime());
       };
 
       //manually select a page to trigger an ajax request to populate the grid on page load
@@ -91,20 +104,22 @@ angular.module('controllers.velocity', [])
   .controller('VelocityConfigDetailsCtrl', ['$scope', '$state', '$stateParams', 'VelocityConfig',
     function ($scope, $state, $stateParams, VelocityConfig) {
       $scope.mode = $stateParams.mode;
-      $scope.configs = [];
+      $scope.metrics = [];
+      $scope.metricsAutocomplete = [];
 
       $scope.velocity_config = {
-        metric_type: '',
-        time_to_live: 7776000, // 90 days
-        metrics_aggregation_config: {}
+        primary_metrics: [],
+        period: 2592000000,       // 30 days in millis
+        expires_in: 7776000000, // 90 days in seconds
+        aggregation_configs: []
       };
       $scope.original = angular.copy($scope.velocity_config);
 
       if ($scope.mode === 'edit') {
-        VelocityConfig.get($stateParams.metric_type).then(function (response) {
+        VelocityConfig.get($stateParams.config_id).then(function (response) {
           if (response) {
             $scope.velocity_config = response;
-            $scope.velocity_config.metrics_aggregation_config = $scope.velocity_config.metrics_aggregation_config || {};
+            $scope.velocity_config.aggregation_configs = $scope.velocity_config.aggregation_configs || {};
             $scope.original = angular.copy($scope.velocity_config);
           }
         }, function () {
@@ -112,7 +127,23 @@ angular.module('controllers.velocity', [])
       }
 
       VelocityConfig.all().then(function (response) {
-        $scope.configs = response;
+        var configs = response;
+        for(var i = 0; i < configs.length; i++) {
+          for (var j = 0; j <  configs[i].primary_metrics.length; j++) {
+            var metric = configs[i].primary_metrics[j];
+            if (!($scope.metrics.indexOf(metric) > -1)) {
+              $scope.metrics.push(metric);
+              $scope.metricsAutocomplete.push({name: metric})
+            }
+          }
+          for (var j = 0; j <  configs[i].aggregation_configs.length; j++) {
+            var metric = configs[i].aggregation_configs[j].secondary_metric;
+            if (!($scope.metrics.indexOf(metric) > -1)) {
+              $scope.metrics.push(metric);
+              $scope.metricsAutocomplete.push({name: metric})
+            }
+          }
+        }
       }, function () {
       });
 
@@ -124,7 +155,7 @@ angular.module('controllers.velocity', [])
         $scope.original = angular.copy($scope.velocity_config);
         if ($scope.mode === 'new') {
           VelocityConfig.add($scope.velocity_config).then(function (response) {
-            $state.go('velocity.config.details', {metric_type: $scope.velocity_config.metric_type, mode: 'edit'});
+            $state.go('velocity.config.list');
           }, function (error) {
             error.data.messages.forEach(function (item) {
             });
@@ -135,7 +166,7 @@ angular.module('controllers.velocity', [])
       };
 
       $scope.removeMetric = function (metric) {
-        delete $scope.velocity_config.metrics_aggregation_config[metric];
+        delete $scope.velocity_config.aggregation_configs[metric];
       };
 
 
@@ -146,6 +177,9 @@ angular.module('controllers.velocity', [])
       $scope.isSaveDisabled = function () {
         return $scope.velocity_config_form.$invalid || angular.equals($scope.original, $scope.velocity_config);
       };
+      $scope.addNewMetric = function() {
+
+      }
     }])
 
   .controller('VelocityMetricsCtrl', ['$scope', '$modal', '$stateParams', 'Velocity',
@@ -210,14 +244,24 @@ angular.module('controllers.velocity', [])
   .controller('VelocityCheckCtrl', ['$scope', '$modal', '$stateParams', 'Velocity', 'VelocityConfig',
     function ($scope, $modal, $stateParams, Velocity, VelocityConfig) {
       $scope.test_data = {};
+      $scope.metrics = [];
+
 
       VelocityConfig.all().then(function (response) {
-        $scope.configs = response;
-        for (var conf in configs) {
-          $scope.test_data[conf.metric_type] = null;
+        var configs = response;
+        for(var i = 0; i < configs.length; i++) {
+          for (var j = 0; j <  configs[i].primary_metrics.length; j++) {
+            var metric = configs[i].primary_metrics[j];
+            if (!($scope.test_data[metric] != undefined)) $scope.test_data[metric] = null;
+            if (!($scope.metrics.indexOf(metric) > -1)) $scope.metrics.push(metric);
+          }
+          for (var j = 0; j <  configs[i].aggregation_configs.length; j++) {
+            var metric = configs[i].aggregation_configs[j].secondary_metric;
+            if (!($scope.test_data[metric] != undefined)) $scope.test_data[metric] = null;
+            if (!($scope.metrics.indexOf(metric) > -1)) $scope.metrics.push(metric);
+          }
         }
       }, function () {
-        $scope.configs = [];
       });
 
       $scope.check = function () {

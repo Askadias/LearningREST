@@ -1,6 +1,5 @@
 function msToTime(duration) {
-  var milliseconds = parseInt((duration%1000)/100)
-    , seconds = parseInt((duration/1000)%60)
+  var seconds = parseInt((duration/1000)%60)
     , minutes = parseInt((duration/(1000*60))%60)
     , hours = parseInt((duration/(1000*60*60))%24)
     , days = parseInt((duration/(1000*60*60*24)));
@@ -10,5 +9,6 @@ function msToTime(duration) {
   seconds = (seconds < 10) ? "0" + seconds : seconds;
   days = (days < 10) ? "0" + days : days;
 
-  return days + ' day(s) ' + hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+  return (days > 0 ? (days + (days % 10 == 1 ? ' day ' : ' days ')) : '')
+    + ((hours > 0 || minutes > 0 || seconds > 0) ? hours + ":" + minutes + ":" + seconds : '');
 }

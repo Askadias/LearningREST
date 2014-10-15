@@ -1,12 +1,12 @@
 <div class="well well-lg">
   <form class="form-horizontal">
-    <div class="control-group" ng-repeat="velocity_config in configs">
-      <label class="control-label" for="{{velocity_config.metric_type}}">{{velocity_config.metric_type}}</label>
+    <div class="control-group" ng-repeat="metric in metrics">
+      <label class="control-label" for="{{metric}}">{{metric}}</label>
 
       <div class="controls">
-        <input id="{{velocity_config.metric_type}}" name="{{velocity_config.metric_type}}"
+        <input id="{{metric}}" name="{{metric}}"
                type="text" class="form-control ng-pristine"
-               ng-model="test_data[velocity_config.metric_type]"/>
+               ng-model="test_data[metric]"/>
       </div>
     </div>
     <button class="btn btn-small btn-success" ng-click="check()">

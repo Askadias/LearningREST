@@ -30,12 +30,12 @@
           factory-method="createNiceMock"
           c:toMock="fraud.db.dao.IBlackListDAO"/>
 
-    <bean id="velocityDAO.impl.redis"
+    <bean id="velocityDAO.impl.redis.perf"
           class="org.easymock.EasyMock"
           factory-method="createNiceMock"
           c:toMock="fraud.db.dao.redis.IRedisVelocityDAO"/>
 
-    <bean id="velocityDAO.impl.cassandra"
+    <bean id="velocityDAO.impl.cassandra.perf"
           class="org.easymock.EasyMock"
           factory-method="createNiceMock"
           c:toMock="fraud.db.dao.IVelocityDAO"/>

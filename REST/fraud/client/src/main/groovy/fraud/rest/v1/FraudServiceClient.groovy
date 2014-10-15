@@ -1,8 +1,5 @@
 package fraud.rest.v1
 
-import org.apache.commons.io.IOUtils
-import org.apache.commons.lang.StringUtils
-import org.apache.http.client.methods.HttpPost
 import common.exceptions.ClientException
 import common.exceptions.HttpEventLogId
 import common.pojo.StatusEntity
@@ -10,8 +7,10 @@ import common.rest.client.RestServiceClientSupport
 import common.rest.client.transport.HttpClientSSLKeyStore
 import common.rest.client.transport.ITransport
 import common.rest.client.transport.support.ObjectMapperProvider
-import fraud.rest.v1.velocity.VelocityMetric
-import fraud.rest.v1.velocity.redis.VMetric
+import fraud.rest.v1.velocity.Aggregation
+import org.apache.commons.io.IOUtils
+import org.apache.commons.lang.StringUtils
+import org.apache.http.client.methods.HttpPost
 
 import javax.ws.rs.core.HttpHeaders
 import java.text.SimpleDateFormat
@@ -72,23 +71,25 @@ class FraudServiceClient extends RestServiceClientSupport implements IFraudServi
 
     @Override
     @SuppressWarnings(['rawtypes', 'unchecked'])
-    List<VelocityMetric> check(final String transactionGUID, final Map<String, String> metrics) {
+    Map<Map<String, String>, Map<Aggregation, Double>> check(
+            final String transactionGUID, final Map<String, String[]> velocityRQ) {
         final String confUrl = endpoint + 'velocity/';
 
-        final ITransport.Response<List, StatusEntity> response =
+        final ITransport.Response<Map, StatusEntity> response =
                 transport.performPost(confUrl, buildHeaders(transactionGUID, endpoint, HttpPost.METHOD_NAME),
-                        marshal(metrics), createResponseHandler(List.class));
+                        marshal(velocityRQ), createResponseHandler(Map.class));
         return checkForError(response);
     }
 
     @Override
     @SuppressWarnings(['rawtypes', 'unchecked'])
-    List<VMetric> rcheck(final String transactionGUID, final Map<String, String> metrics) {
+    Map<Map<String, String>, Map<Aggregation, Double>> rcheck(
+            final String transactionGUID, final Map<String, String[]> velocityRQ) {
         final String confUrl = endpoint + 'velocity/rcheck/';
 
-        final ITransport.Response<List, StatusEntity> response =
+        final ITransport.Response<Map, StatusEntity> response =
                 transport.performPost(confUrl, buildHeaders(transactionGUID, endpoint, HttpPost.METHOD_NAME),
-                        marshal(metrics), createResponseHandler(List.class));
+                        marshal(velocityRQ), createResponseHandler(Map.class));
         return checkForError(response);
     }
 

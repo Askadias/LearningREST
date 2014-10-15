@@ -25,7 +25,7 @@
           class="org.springframework.data.redis.core.StringRedisTemplate"
           p:connectionFactory-ref="jedisConnectionFactory"/>
 
-    <bean id="velocityDAO.impl.redis" class="fraud.db.dao.redis.VelocityDAO"
+    <bean id="velocityDAO.impl.redis" class="fraud.db.dao.redis.RedisVelocityDAO"
           autowire-candidate="false"
           p:redis-ref="redisTemplate"/>
 
