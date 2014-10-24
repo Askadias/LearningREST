@@ -1,6 +1,7 @@
 package fraud.db.dao.redis
 
 import fraud.rest.v1.velocity.Aggregation
+import fraud.rest.v1.velocity.Transaction
 import org.joda.time.DateTime
 import org.springframework.dao.DataAccessException
 import org.springframework.data.redis.connection.RedisConnection
@@ -20,14 +21,19 @@ class RedisVelocityDAO implements IRedisVelocityDAO {
     void logData(final Map<String, String[]> newData) {
         Long now = DateTime.now().millis
         Long transactionID = redis.opsForValue().increment('id:transactions', 1)
+        redis.opsForZSet().add('transactions:history', transactionID as String, now)
+        redis.opsForHash().put("transaction:$transactionID:details" as String, 'createDate', now as String)
+
         redis.executePipelined(new RedisCallback<Object>() {
             @Override
             Object doInRedis(final RedisConnection connection) throws DataAccessException {
                 StringRedisConnection c = connection as StringRedisConnection
                 newData.each { metricType, metricValues ->
-                    c.lPush("transaction:$transactionID:$metricType".toString(), metricValues as String[])
-                    metricValues?.each { metricValue ->
-                        c.zAdd("$metricType:$metricValue:history".toString(), now, transactionID as String)
+                    if (metricValues) {
+                        c.lPush("transaction:$transactionID:data:$metricType".toString(), metricValues as String[])
+                        metricValues?.each { metricValue ->
+                            c.zAdd("$metricType:$metricValue:history".toString(), now, transactionID as String)
+                        }
                     }
                 }
                 return null;
@@ -42,19 +48,42 @@ class RedisVelocityDAO implements IRedisVelocityDAO {
     }
 
     @Override
+    Set<String> getHistoricalIDs(final String key, final Long startDateMillis, final Long endDateMillis) {
+        return redis.boundZSetOps(key).rangeByScore(startDateMillis, endDateMillis)
+    }
+
+    @Override
     List<String> getHistoricalData(final String dataType, final Set<String> transactionIDs) {
         List<String> history = []
         transactionIDs.each {
-            history += redis.boundListOps("transaction:$it:$dataType".toString())range(0, -1);
+            history += redis.boundListOps("transaction:$it:data:$dataType" as String) range(0, -1);
         }
         return history
+    }
+
+    @Override
+    List<Transaction> getHistoricalData(final Set<String> transactionIDs) {
+        Map<String, Transaction> transactions = [:]
+        transactionIDs.each { id ->
+            Set<String> keys = redis.keys("transaction:$id:data:*".toString())
+            Long createDate = redis.opsForHash().get("transaction:$id:details" as String, 'createDate') as Long
+            transactions[(id)] = new Transaction(id: id, data: [:], createDate: (createDate ? new Date(createDate): null))
+            keys?.each {
+                transactions[(id)].data << [(it.tokenize(':')[-1]) : redis.boundListOps(it).range(0, -1)]
+            }
+        }
+        return transactions.values()?.toList() ?: []
     }
 
     void saveMetric(String key, Aggregation type, Double aggregatedValue) {
         redis.opsForHash().put(key, type as String, aggregatedValue as String)
     }
 
-    Map<String, String> getMetrics(String key) {
-        redis.opsForHash().entries(key)
+    Map<Aggregation, Double> getMetrics(String key) {
+        Map<Aggregation, Double> result = [:]
+        redis.opsForHash().entries(key).each { aggregation, value ->
+            result << [(aggregation as Aggregation): value as Double]
+        }
+        return result
     }
 }

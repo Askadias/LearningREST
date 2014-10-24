@@ -1,44 +1,50 @@
 <div class="well well-lg">
   <form class="form-horizontal">
-    <div class="control-group" ng-repeat="metric in metrics">
-      <label class="control-label" for="{{metric}}">{{metric}}</label>
+    <div class="control-group" ng-repeat="metric_type in metrics">
+      <label class="control-label">{{metric_type}}</label>
 
       <div class="controls">
-        <input id="{{metric}}" name="{{metric}}"
-               type="text" class="form-control ng-pristine"
-               ng-model="test_data[metric]"/>
+        <div class="form-control">
+          <ul class="list-inline list-unstyled">
+            <li ng-repeat="item in test_data[metric_type] track by $index" class="tag-item label label-default">
+              {{item}}
+              <div class="fa fa-remove" ng-click="test_data[metric_type].splice($index, 1)"></div>
+            </li>
+            <li class="tag-item input-tag">
+              <input name="{{metric_type}}" class="tag-input" autocomplete="on"
+                     placeholder="{{metric_type}}" type="text" ng-model="newData"
+                     on-tag-remove="test_data[metric_type].splice(test_data[metric_type].length-1, 1)"
+                     on-tag-add="test_data[metric_type].push(newData);newData=null;"/>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
-    <button class="btn btn-small btn-success" ng-click="check()">
+    <button class="btn btn-small btn-success text-highlight" type="submit" ng-click="check()">
       <i class="fa fa-magic fa-lg icon-white"></i>
       Check velocity
     </button>
   </form>
 </div>
-<table class="table table-striped" ng-show="!!metrics && metrics.length > 0">
-  <thead>
-  <tr>
-    <th>Metric Type</th>
-    <th>Metric Value</th>
-    <th>Related Metric</th>
-    <th>Aggregation Type</th>
-    <th>Aggregated Value</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr ng-repeat="metric in metrics">
-    <td>{{metric.key.id.metric_type}}</td>
-    <td>{{metric.key.id.metric_value}}</td>
-    <td>{{metric.key.related_metric_type}}</td>
-    <td>{{metric.key.aggregation_type}}</td>
-    <td>{{metric.aggregated_value}}</td>
-  </tr>
-  <tr ng-show="!metrics || metrics.length == 0">
-    <td colspan="5">
-      <div class="alert alert-info">
-        There are no any metrics yet
+<div ng-show="!!velocity_metrics && velocity_metrics.length > 0">
+  <div class="well well-sm row" ng-repeat="velocity in velocity_metrics">
+    <div class="col-md-4">
+      <div class="row" ng-repeat="(primary_metric, metric_value) in velocity.primary_metrics">
+        <strong class="col-md-6" style="text-align: right">{{primary_metric}}:</strong>
+
+        <div class="col-md-6" style="text-align: left">{{metric_value}}</div>
       </div>
-    </td>
-  </tr>
-  </tbody>
-</table>
+    </div>
+    <div class="col-md-8">
+      <div class="row" ng-repeat="(secondary_metric, metric_data) in velocity.aggregations">
+        <div class="col-md-6" style="text-align: right">
+          {{secondary_metric}}
+        </div>
+        <div class="col-md-6 row" ng-repeat="(aggregation, value) in metric_data">
+          <div class="col-md-9" style="text-align: right">{{aggregation}}:</div>
+          <div class="col-md-3" style="text-align: left">{{value | number:2}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

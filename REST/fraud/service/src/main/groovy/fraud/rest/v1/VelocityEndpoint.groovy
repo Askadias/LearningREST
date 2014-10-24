@@ -1,7 +1,8 @@
 package fraud.rest.v1
 
-import fraud.logic.velocity.IVelocityManager
 import common.rest.AbstractService
+import fraud.logic.velocity.IVelocityManager
+import org.joda.time.DateTime
 
 import javax.ws.rs.*
 import javax.ws.rs.core.*
@@ -13,63 +14,80 @@ class VelocityEndpoint extends AbstractService {
     IVelocityManager velocityManager
 
     @POST
+    @Path('/cassandra/check/')
     @Consumes(MediaType.APPLICATION_JSON)
-    Response check(final Map<String, String[]> metrics,
-                   @Context final UriInfo uriInfo,
-                   @Context final HttpHeaders headers) {
-        //respondWith(velocityManager.checkSync(metrics), uriInfo, headers).build()
-        //respondWith(velocityManager.checkFJP(metrics), uriInfo, headers).build()
-        //respondWith(velocityManager.checkGPars(metrics), uriInfo, headers).build()
-        respondWith(velocityManager.checkCassandraAsync(metrics), uriInfo, headers).build()
+    Response cassandraCheck(final Map<String, String[]> metrics,
+                            @Context final UriInfo uriInfo,
+                            @Context final HttpHeaders headers) {
+        respondWith(velocityManager.cassandraGetMetrics(metrics, true), uriInfo, headers).build()
     }
 
     @POST
-    @Path('/rcheck/')
+    @Path('/redis/check/')
     @Consumes(MediaType.APPLICATION_JSON)
-    Response rcheck(final Map<String, String[]> metrics,
-                    @Context final UriInfo uriInfo,
-                    @Context final HttpHeaders headers) {
-        respondWith(velocityManager.checkRedisAsync(metrics), uriInfo, headers).build()
-        //respondWith(velocityManager.checkRedisSync(metrics), uriInfo, headers).build()
-    }
-
-    /*@GET
-    @Path('/metrics/')
-    Response getMetrics(@QueryParam('metric_type') final String metricType,
-                        @QueryParam('metric_value') final String metricValue,
+    Response redisCheck(final Map<String, String[]> metrics,
                         @Context final UriInfo uriInfo,
                         @Context final HttpHeaders headers) {
-        respondWith(velocityManager.getMoreMetricsFrom(metricType, metricValue), uriInfo, headers).build()
+        respondWith(velocityManager.redisGetMetrics(metrics, true), uriInfo, headers).build()
     }
 
     @GET
-    @Path('/data_list/')
-    Response getDataList(@QueryParam('metric_type') final String metricType,
-                         @QueryParam('metric_value') final String metricValue,
-                         @QueryParam('related_metric_type') final String relatedMetricType,
-                         @QueryParam('create_date') final Long createDateMillis,
-                         @Context final UriInfo uriInfo,
-                         @Context final HttpHeaders headers) {
-        Date createDate = createDateMillis != null ? new Date(createDateMillis) : null
-        respondWith(velocityManager.getMoreDataFrom(metricType, metricValue, relatedMetricType, createDate),
-                uriInfo, headers).build()
+    @Path('/cassandra/metrics/')
+    Response getCassandraMetrics(@Context final UriInfo uriInfo,
+                                 @Context final HttpHeaders headers) {
+        respondWith(velocityManager.cassandraGetMetrics(toMetrics(uriInfo), false), uriInfo, headers).build()
     }
 
     @GET
-    @Path('/metric/')
-    Response getMetric(@QueryParam('metric_type') final String metricType,
-                       @QueryParam('metric_value') final String metricValue,
-                       @Context final UriInfo uriInfo,
-                       @Context final HttpHeaders headers) {
-        respondWith(velocityManager.getMetrics(metricType, metricValue), uriInfo, headers).build()
+    @Path('/redis/metrics/')
+    Response getRedisMetrics(@Context final UriInfo uriInfo,
+                             @Context final HttpHeaders headers) {
+        respondWith(velocityManager.redisGetMetrics(toMetrics(uriInfo), false), uriInfo, headers).build()
     }
 
     @GET
-    @Path('/data/')
-    Response getData(@QueryParam('metric_type') final String metricType,
-                     @QueryParam('metric_value') final String metricValue,
-                     @Context final UriInfo uriInfo,
-                     @Context final HttpHeaders headers) {
-        respondWith(velocityManager.getDataList(metricType, metricValue), uriInfo, headers).build()
-    }*/
+    @Path('/cassandra/history/')
+    Response getCassandraHistoricalData(@QueryParam('start_date') String startDate,
+                                        @QueryParam('end_date') String endDate,
+                                        @Context final UriInfo uriInfo,
+                                        @Context final HttpHeaders headers) {
+        respondWith(velocityManager.cassandraGetHistory(
+                toMetricsFilter(uriInfo),
+                startDate ? DateTime.parse(startDate) : null,
+                endDate ? DateTime.parse(endDate) : null
+        ), uriInfo, headers).build()
+    }
+
+    @GET
+    @Path('/redis/history/')
+    Response getRedisHistoricalData(@QueryParam('start_date') String startDate,
+                                    @QueryParam('end_date') String endDate,
+                                    @Context final UriInfo uriInfo,
+                                    @Context final HttpHeaders headers) {
+        respondWith(velocityManager.redisGetHistory(
+                toMetricsFilter(uriInfo),
+                startDate ? DateTime.parse(startDate) : null,
+                endDate ? DateTime.parse(endDate) : null
+        ), uriInfo, headers).build()
+    }
+
+    private static Map<String, String[]> toMetrics(UriInfo uriInfo) {
+        def metrics = [:]
+        uriInfo.getQueryParameters()?.each { metric, values ->
+            if (metric != 'start_date' && metric != 'end_date') {
+                metrics << [(metric): values.toArray()]
+            }
+        }
+        return metrics
+    }
+
+    private static Map<String, String> toMetricsFilter(UriInfo uriInfo) {
+        def filter = [:]
+        uriInfo.getQueryParameters()?.each { metric, values ->
+            if (values.size() > 0 && metric != 'start_date' && metric != 'end_date') {
+                filter << [(metric): values.first()]
+            }
+        }
+        return filter
+    }
 }

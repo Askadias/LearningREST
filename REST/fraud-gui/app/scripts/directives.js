@@ -188,4 +188,157 @@ angular.module('directives', [])
         }
       });
     };
+  })
+  .directive('datePagination', function () {
+    return {
+      restrict: 'E',
+      templateUrl: 'views/components/date-pagination.html',
+      scope: {
+        //dpDate: '=',
+        startDate: '=',
+        endDate: '=',
+        currentDate: '=',
+        onRangeChange: '&onRangeChange',
+        onDateChange: '&onDateChange'
+      },
+      replace: true,
+      link: function ($scope, elem, attr) {
+
+        $scope.openDatePicker = function () {
+          var el = angular.element('#page-date-picker');
+          el.datepicker({
+            autoclose: true,
+            format: 'yyyy-mm-dd'
+          });
+          el.datepicker('update', moment($scope.currentDate).format("YYYY-MM-DD"));
+          el.bind('changeDate', function ($event) {
+            $scope.$apply(function () {
+              $scope.currentDate = $event.date || $scope.currentDate;
+            });
+          });
+          el.datepicker('show');
+        };
+
+
+        $scope.updateDates = function () {
+          $scope.days = [];
+          var cur = moment($scope.currentDate).subtract(8, 'd')._d;
+          for (var i = 0; i < 17; i++) {
+            $scope.days.push(moment(cur).add(i, 'd')._d);
+          }
+          $scope.onDateChange()
+        };
+
+
+        /*scope.$watch(scope.dpDate, function (value) {
+         scope.currentDate = value
+         });*/
+
+        /*scope.$watch(scope.currentDate, function (value) {
+         scope.updateDates();
+         });*/
+
+        $scope.$watch(function () {
+          return $scope.currentDate;
+        }, function () {
+          $scope.updateDates();
+        }, true);
+
+        /*scope.$watch(scope.startDate, function (value) {
+         if (scope.endDate) {
+         scope.makeRange(value, scope.endDate);
+         }
+         });
+         scope.$watch(scope.endDate, function (value) {
+         if (scope.startDate) {
+         scope.makeRange(scope.startDate, value);
+         }
+         });*/
+
+        $scope.setCurrent = function (date) {
+          $scope.currentDate = date;
+        };
+
+        $scope.prevNDay = function (num) {
+          $scope.currentDate = moment($scope.currentDate).subtract(num, 'd')._d;
+        };
+
+        $scope.nextNDay = function (num) {
+          $scope.currentDate = moment($scope.currentDate).add(num, 'd')._d;
+        };
+
+        $scope.isCurrent = function (day) {
+          //return day == scope.currentDate
+          return $scope.currentDate.getDate() == day.getDate();
+        };
+
+        $scope.isWeekend = function (day) {
+          return moment(day).weekday() == 0 || moment(day).weekday() == 6;
+        };
+
+        $scope.format = function (date, format) {
+          return moment(date).format(format)
+        };
+
+        $scope.scroll = function ($event, $delta, $deltaX, $deltaY) {
+          $event.preventDefault();
+          if ($deltaY > 0) {
+            $scope.prevNDay(Math.floor($deltaY / 10) || 1);
+          }
+          if ($deltaY < 0) {
+            $scope.nextNDay(Math.floor(-$deltaY / 10) || 1);
+          }
+        }
+      }
+    }
+  })
+
+  .directive('onTagRemove', function () {
+    return function (scope, element, attrs) {
+      element.bind("keydown keypress", function (event) {
+        if (event.which === 8 && !this.value) {
+          scope.$apply(function () {
+            scope.$eval(attrs.onTagRemove);
+          });
+
+          event.preventDefault();
+        }
+      });
+    };
+  })
+  .directive('dateRangePicker', function () {
+    return {
+      restrict: 'E',
+      templateUrl: 'views/components/date-range-picker.html',
+      scope: {
+        startDate: '=',
+        endDate: '=',
+        onRangeChange: '&onRangeChange'
+      },
+      replace: true,
+      link: function ($scope, elem, attr) {
+
+        elem.datepicker({
+          autoclose: true,
+          format: 'yyyy-mm-dd'
+        });
+        elem.datepicker().on('hide', function($event){
+          $scope.$apply(function () {
+            $scope.startDate = new Date(angular.element('#date-range-start').val());
+            $scope.endDate = new Date(angular.element('#date-range-end').val());
+          });
+        });
+
+        $scope.$watch(function () {
+          return $scope.startDate;
+        }, function () {
+          $scope.onRangeChange();
+        }, true);
+        $scope.$watch(function () {
+          return $scope.endDate;
+        }, function () {
+          $scope.onRangeChange();
+        }, true);
+      }
+    }
   });

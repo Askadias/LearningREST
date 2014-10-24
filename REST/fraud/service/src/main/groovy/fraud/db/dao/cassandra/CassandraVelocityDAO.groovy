@@ -6,11 +6,11 @@ import com.datastax.driver.mapping.EntityTypeParser
 import com.datastax.driver.mapping.meta.EntityFieldMetaData
 import com.datastax.driver.mapping.meta.EntityTypeMetadata
 import common.status.pojo.ComponentStatus
-import fraud.db.dao.IVelocityDAO
+import fraud.db.dao.ICassandraVelocityDAO
 import fraud.rest.v1.velocity.History
 import fraud.rest.v1.velocity.Metric
 import fraud.rest.v1.velocity.PartitionKey
-import fraud.rest.v1.velocity.Transaction
+import fraud.rest.v1.velocity.TransactionData
 import org.joda.time.DateTime
 
 import static com.datastax.driver.core.querybuilder.QueryBuilder.*
@@ -18,11 +18,20 @@ import static com.datastax.driver.core.querybuilder.QueryBuilder.*
 /**
  * BlackLists DAO implementation
  */
-class VelocityDAO extends BaseCassandraDAO implements IVelocityDAO {
+class CassandraVelocityDAO extends BaseCassandraDAO implements ICassandraVelocityDAO {
 
     @Override
-    void logTransaction(final Transaction transaction) {
+    void logTransaction(final TransactionData transaction) {
         mappingSession.save(transaction)
+        mappingSession.save(new History(
+                key: new History.HistoryCompositeKey(
+                        id: new PartitionKey(
+                                metricType: 'ServiceInfo',
+                                metricValue: 'History'
+                        ),
+                        transactionID: transaction.key.transactionID
+                )
+        ))
     }
 
     @Override
@@ -40,15 +49,29 @@ class VelocityDAO extends BaseCassandraDAO implements IVelocityDAO {
                 .where(eq(typeMeta.columnName, id.metricType))
                 .and(eq(valueMeta.columnName, id.metricValue))
                 .and(gt(tranMeta.columnName, UUIDs.startOf(DateTime.now().millis - period))))
-                .collect{it.getUUID(tranMeta.columnName)}.toSet();
+                .collect { it.getUUID(tranMeta.columnName) }.toSet();
     }
 
     @Override
-    List<Transaction> getHistoricalData(final Set<UUID> transactionIDs) {
-        EntityTypeMetadata emeta = EntityTypeParser.getEntityMetadata(Transaction.class)
+    Set<UUID> getHistoricalIDs(final PartitionKey id, final Long dateStart, final Long dateEnd) {
+        EntityTypeMetadata emeta = EntityTypeParser.getEntityMetadata(History.class)
+        EntityFieldMetaData typeMeta = emeta.getFieldMetadata('metricType')
+        EntityFieldMetaData valueMeta = emeta.getFieldMetadata('metricValue')
+        EntityFieldMetaData tranMeta = emeta.getFieldMetadata('transactionID')
+        return mappingSession.session.execute(select().column(tranMeta.columnName).from(mappingSession.keyspace, emeta.tableName)
+                .where(eq(typeMeta.columnName, id.metricType))
+                .and(eq(valueMeta.columnName, id.metricValue))
+                .and(gt(tranMeta.columnName, UUIDs.startOf(dateStart)))
+                .and(lt(tranMeta.columnName, UUIDs.endOf(dateEnd))))
+                .collect { it.getUUID(tranMeta.columnName) }.toSet();
+    }
+
+    @Override
+    List<TransactionData> getHistoricalData(final Set<UUID> transactionIDs) {
+        EntityTypeMetadata emeta = EntityTypeParser.getEntityMetadata(TransactionData.class)
         EntityFieldMetaData idMeta = emeta.getFieldMetadata('transactionID')
         //noinspection UnnecessaryQualifiedReference
-        return mappingSession.getByQuery(Transaction.class,
+        return mappingSession.getByQuery(TransactionData.class,
                 select().all().from(mappingSession.keyspace, emeta.tableName)
                         .where(QueryBuilder.in(idMeta.columnName, transactionIDs.toArray())))
     }

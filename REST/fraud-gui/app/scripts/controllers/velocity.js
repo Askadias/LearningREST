@@ -119,7 +119,7 @@ angular.module('controllers.velocity', [])
         VelocityConfig.get($stateParams.config_id).then(function (response) {
           if (response) {
             $scope.velocity_config = response;
-            $scope.velocity_config.aggregation_configs = $scope.velocity_config.aggregation_configs || {};
+            $scope.velocity_config.aggregation_configs = $scope.velocity_config.aggregation_configs || [];
             $scope.original = angular.copy($scope.velocity_config);
           }
         }, function () {
@@ -128,15 +128,15 @@ angular.module('controllers.velocity', [])
 
       VelocityConfig.all().then(function (response) {
         var configs = response;
-        for(var i = 0; i < configs.length; i++) {
-          for (var j = 0; j <  configs[i].primary_metrics.length; j++) {
+        for (var i = 0; i < configs.length; i++) {
+          for (var j = 0; j < configs[i].primary_metrics.length; j++) {
             var metric = configs[i].primary_metrics[j];
             if (!($scope.metrics.indexOf(metric) > -1)) {
               $scope.metrics.push(metric);
               $scope.metricsAutocomplete.push({name: metric})
             }
           }
-          for (var j = 0; j <  configs[i].aggregation_configs.length; j++) {
+          for (var j = 0; j < configs[i].aggregation_configs.length; j++) {
             var metric = configs[i].aggregation_configs[j].secondary_metric;
             if (!($scope.metrics.indexOf(metric) > -1)) {
               $scope.metrics.push(metric);
@@ -152,8 +152,11 @@ angular.module('controllers.velocity', [])
       };
 
       $scope.save = function () {
-        $scope.original = angular.copy($scope.velocity_config);
+        $scope.velocity_config.updated_by = 'admin';
+        $scope.velocity_config.update_date = new Date();
         if ($scope.mode === 'new') {
+          $scope.velocity_config.created_by = 'admin';
+          $scope.velocity_config.create_date = new Date();
           VelocityConfig.add($scope.velocity_config).then(function (response) {
             $state.go('velocity.config.list');
           }, function (error) {
@@ -162,6 +165,7 @@ angular.module('controllers.velocity', [])
           });
         } else if ($scope.mode === 'edit') {
           $scope.velocity_config.save();
+          $state.go('velocity.config.list');
         }
       };
 
@@ -177,98 +181,130 @@ angular.module('controllers.velocity', [])
       $scope.isSaveDisabled = function () {
         return $scope.velocity_config_form.$invalid || angular.equals($scope.original, $scope.velocity_config);
       };
-      $scope.addNewMetric = function() {
+      $scope.addNewMetric = function () {
 
       }
     }])
 
-  .controller('VelocityMetricsCtrl', ['$scope', '$modal', '$stateParams', 'Velocity',
-    function ($scope, $modal, $stateParams, Velocity) {
-      $scope.startFrom = {metric_type: null, metric_value: null};
-      $scope.metrics = [];
-
-      $scope.loadFrom = function (startFrom) {
-        Velocity.metricsPage(startFrom).then(function (response) {
-          $scope.metrics.push.apply($scope.metrics, response);
-        }, function () {
-          $scope.metrics = [];
-        });
-      };
-
-      $scope.loadFrom($scope.startFrom);
-    }])
-
-  .controller('VelocityDataCtrl', ['$scope', '$modal', '$stateParams', 'Velocity', 'VelocityConfig',
+  .controller('VelocityMetricsCtrl', ['$scope', '$modal', '$stateParams', 'Velocity', 'VelocityConfig',
     function ($scope, $modal, $stateParams, Velocity, VelocityConfig) {
-      $scope.startFrom = {
-        key: {
-          id: {metric_type: null, metric_value: null},
-          related_metric_type: null,
-          create_date: null
-        }
-      };
-      $scope.data_list = [];
-      $scope.configs = {};
+      $scope.filter = {};
+      $scope.metrics = [];
+      $scope.velocity_metrics = null;
 
       VelocityConfig.all().then(function (response) {
-        var configs_list = response;
-        for (var i in configs_list) {
-          $scope.configs[configs_list[i].metric_type] = configs_list[i];
+        var configs = response;
+        for (var i = 0; i < configs.length; i++) {
+          for (var j = 0; j < configs[i].primary_metrics.length; j++) {
+            var metric = configs[i].primary_metrics[j];
+            if (!($scope.filter[metric] != undefined)) $scope.filter[metric] = null;
+            if (!($scope.metrics.indexOf(metric) > -1)) $scope.metrics.push(metric);
+          }
+          for (var j = 0; j < configs[i].aggregation_configs.length; j++) {
+            var metric = configs[i].aggregation_configs[j].secondary_metric;
+            if (!($scope.filter[metric] != undefined)) $scope.filter[metric] = null;
+            if (!($scope.metrics.indexOf(metric) > -1)) $scope.metrics.push(metric);
+          }
         }
       }, function () {
-        $scope.configs = {};
       });
 
-      $scope.loadFrom = function (startFrom) {
-        Velocity.dataPage({
-          metric_type : startFrom.key.id.metric_type,
-          metric_value : startFrom.key.id.metric_value,
-          related_metric_type : startFrom.key.related_metric_type,
-          create_date : !startFrom.key.create_date ? null : new Date(startFrom.key.create_date).getTime()
-        }).then(function (response) {
-          $scope.data_list.push.apply($scope.data_list, response);
-        }, function (error) {
-          $scope.data_list = [];
-        });
-      };
-      $scope.expiresIn = function (date, metric_type) {
-        var ttl_sec = $scope.configs[metric_type].time_to_live;
-        var now_millis = new Date().getTime();
-        var create_date_millis = new Date(date).getTime();
-        return msToTime(Math.floor(create_date_millis + (ttl_sec * 1000) - now_millis));
+      $scope.isMetric = function (data) {
+        return data instanceof Object;
       };
 
-      $scope.loadFrom($scope.startFrom);
+      $scope.search = function () {
+        Velocity.metrics($scope.filter).then(function (response) {
+          $scope.velocity_metrics = response
+        }, function () {
+          $scope.velocity_metrics = null;
+        });
+      };
+    }])
+
+  .controller('VelocityDataCtrl', ['$scope', '$modal', '$stateParams', 'Velocity', 'VelocityConfig', '$state',
+    function ($scope, $modal, $stateParams, Velocity, VelocityConfig, $state) {
+      $scope.filter = {};
+      $scope.metrics = [];
+      $scope.transactions = null;
+      $scope.currentDate = $stateParams.start_date ? new Date($stateParams.start_date) : new Date();
+      $scope.dates = {startDate: $scope.currentDate, endDate: null};
+
+      VelocityConfig.all().then(function (response) {
+        var configs = response;
+        for (var i = 0; i < configs.length; i++) {
+          for (var j = 0; j < configs[i].primary_metrics.length; j++) {
+            var metric = configs[i].primary_metrics[j];
+            if (!($scope.filter[metric] != undefined)) $scope.filter[metric] = null;
+            if (!($scope.metrics.indexOf(metric) > -1)) $scope.metrics.push(metric);
+          }
+          for (var j = 0; j < configs[i].aggregation_configs.length; j++) {
+            var metric = configs[i].aggregation_configs[j].secondary_metric;
+            if (!($scope.filter[metric] != undefined)) $scope.filter[metric] = null;
+            if (!($scope.metrics.indexOf(metric) > -1)) $scope.metrics.push(metric);
+          }
+        }
+      }, function () {
+      });
+
+      $scope.search = function () {
+        if ($scope.dates.startDate && $scope.dates.endDate) {
+          $scope.filter['start_date'] = $scope.dates.startDate;
+          $scope.filter['end_date'] = $scope.dates.endDate;
+        }
+        Velocity.history($scope.filter).then(function (response) {
+          $scope.transactions = response
+        }, function () {
+          $scope.transactions = null;
+        });
+      };
+
+      $scope.openPage = function (day) {
+        $scope.openRange(day, moment(day).add(1, 'd')._d);
+      };
+
+      $scope.openRange = function (startDate, endDate) {
+        $scope.dates.startDate = startDate;
+        $scope.dates.endDate = endDate;
+        $scope.search();
+      };
+
+      $scope.openPage($scope.currentDate)
     }])
 
   .controller('VelocityCheckCtrl', ['$scope', '$modal', '$stateParams', 'Velocity', 'VelocityConfig',
     function ($scope, $modal, $stateParams, Velocity, VelocityConfig) {
       $scope.test_data = {};
       $scope.metrics = [];
+      $scope.velocity_metrics = null;
 
 
       VelocityConfig.all().then(function (response) {
         var configs = response;
-        for(var i = 0; i < configs.length; i++) {
-          for (var j = 0; j <  configs[i].primary_metrics.length; j++) {
+        for (var i = 0; i < configs.length; i++) {
+          for (var j = 0; j < configs[i].primary_metrics.length; j++) {
             var metric = configs[i].primary_metrics[j];
-            if (!($scope.test_data[metric] != undefined)) $scope.test_data[metric] = null;
+            if (!($scope.test_data[metric] != undefined)) $scope.test_data[metric] = [];
             if (!($scope.metrics.indexOf(metric) > -1)) $scope.metrics.push(metric);
           }
-          for (var j = 0; j <  configs[i].aggregation_configs.length; j++) {
+          for (var j = 0; j < configs[i].aggregation_configs.length; j++) {
             var metric = configs[i].aggregation_configs[j].secondary_metric;
-            if (!($scope.test_data[metric] != undefined)) $scope.test_data[metric] = null;
+            if (!($scope.test_data[metric] != undefined)) $scope.test_data[metric] = [];
             if (!($scope.metrics.indexOf(metric) > -1)) $scope.metrics.push(metric);
           }
         }
       }, function () {
       });
 
+      $scope.isMetric = function (data) {
+        return data instanceof Object;
+      };
+
       $scope.check = function () {
         Velocity.check($scope.test_data).then(function (response) {
-          $scope.metrics = response
+          $scope.velocity_metrics = response
         }, function () {
-          $scope.metrics = null;
+          $scope.velocity_metrics = null;
         });
       };
     }]);

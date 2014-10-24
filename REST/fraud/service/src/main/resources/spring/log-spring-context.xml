@@ -133,7 +133,7 @@
 
     <bean id="velocityDAO.cassandra.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
           autowire-candidate="false"
-          p:proxyInterfaces="fraud.db.dao.IVelocityDAO"
+          p:proxyInterfaces="fraud.db.dao.ICassandraVelocityDAO"
           p:target-ref="velocityDAO.impl.cassandra">
         <property name="interceptorNames">
             <list>

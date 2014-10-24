@@ -24,12 +24,6 @@
             <li ng-repeat="metric in velocity_config.primary_metrics track by $index" class="tag-item label label-default">
               {{metric}}
               <div class="fa fa-remove" ng-click="velocity_config.primary_metrics.splice($index, 1)"></div>
-              <!--<span class="input-group-btn">
-                <button class="button ">
-                  <a href="" class="btn  fa fa-minus-circle fa-lg"
-                     ng-click="velocity_config.primary_metrics.splice($index, 1)"></a>
-                </button>
-              </span>-->
             </li>
             <li class="tag-item input-tag">
               <input id="primary_metric" name="primary_metric" class="tag-input" autocomplete="off"
@@ -37,9 +31,6 @@
                      on-tag-remove="velocity_config.primary_metrics.splice(velocity_config.primary_metrics.length-1, 1)"
                      on-tag-add="velocity_config.primary_metrics.push(newMetric);newMetric=null;"
                      typeahead="primary_metric for primary_metric in metrics | filter:$viewValue | limitTo:8"/>
-
-              <!--<a href="" class="btn fa fa-plus-circle fa-lg" style="color: #5cb85c"
-                 ng-click="velocity_config.primary_metrics.push(newMetric)"></a>-->
             </li>
           </ul>
         </div>

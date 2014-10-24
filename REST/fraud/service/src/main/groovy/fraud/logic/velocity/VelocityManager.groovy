@@ -1,7 +1,7 @@
 package fraud.logic.velocity
 
 import com.datastax.driver.core.utils.UUIDs
-import fraud.db.dao.IVelocityDAO
+import fraud.db.dao.ICassandraVelocityDAO
 import fraud.db.dao.redis.IRedisVelocityDAO
 import fraud.rest.v1.velocity.*
 import fraud.util.DBCache
@@ -10,8 +10,7 @@ import jsr166y.ForkJoinPool
 import org.joda.time.DateTime
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-import java.util.concurrent.ConcurrentHashMap
+import org.springframework.data.convert.JodaTimeConverters
 
 import static groovyx.gpars.GParsPool.withExistingPool
 import static groovyx.gpars.GParsPool.withPool
@@ -25,14 +24,14 @@ class VelocityManager implements IVelocityManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VelocityManager.class)
 
-    IVelocityDAO velocityDAO
-    IRedisVelocityDAO redisVelocityDAO;
+    ICassandraVelocityDAO cassandraDAO
+    IRedisVelocityDAO redisDAO;
     DBCache dbCache
     private final static java.util.concurrent.ForkJoinPool FJP = new java.util.concurrent.ForkJoinPool(2)
 
     @Override
-    def checkCassandraAsync(final Map<String, String[]> velocityRQ) {
-        def velocityMetrics = new ConcurrentHashMap<Map<String, String>, Map<Aggregation, Double>>()
+    def cassandraGetMetrics(final Map<String, String[]> velocityRQ, final boolean asyncUpdate) {
+        def velocityMetrics = []
         withPool { ForkJoinPool pool ->
             dbCache.configs.collectParallel { VelocityConfig config ->
                 withExistingPool(pool) {
@@ -51,7 +50,7 @@ class VelocityManager implements IVelocityManager {
                                     } else {
                                         def velocityKey = key.clone()
                                         metrics << [(velocityKey): [:]]
-                                        List<Metric> metricsLst = velocityDAO.getMetrics(new PartitionKey(
+                                        List<Metric> metricsLst = cassandraDAO.getMetrics(new PartitionKey(
                                                 metricType: fullKeyType, metricValue: fullKeyValue))
                                         metricsLst.each {
                                             if (!metrics[velocityKey][(it.key.secondaryMetric)]) {
@@ -72,18 +71,18 @@ class VelocityManager implements IVelocityManager {
                     }
                 }
             }.each {
-                velocityMetrics += it
+                it.each { key, value ->
+                    velocityMetrics += new Velocity(primaryMetrics: key, aggregations: value)
+                }
             }
         }
-        FJP.submit(new Runnable() {
-            void run() {
-                updateMetricsCassandra(velocityRQ)
-            }
-        })
-        /*withPool() {
-            Closure updateMetricsFn = { updateMetricsCassandra(velocityRQ) }
-            updateMetricsFn.callAsync()
-        }*/
+        if (asyncUpdate) {
+            FJP.submit(new Runnable() {
+                void run() {
+                    updateMetricsCassandra(velocityRQ)
+                }
+            })
+        }
         return velocityMetrics
     }
 
@@ -100,7 +99,7 @@ class VelocityManager implements IVelocityManager {
                                     String fullKeyType = keyType ? "$keyType:$metric" : metric
                                     String fullKeyValue = keyValue ? "$keyValue:$it" : it
 
-                                    Set<UUID> newIds = velocityDAO.getHistoricalIDs(
+                                    Set<UUID> newIds = cassandraDAO.getHistoricalIDs(
                                             new PartitionKey(metricType: metric, metricValue: it), config.period)
                                     Set<UUID> tranIDsIntersection = tranIds ? tranIds.intersect(newIds) : newIds
 
@@ -108,13 +107,13 @@ class VelocityManager implements IVelocityManager {
                                         forkOffChild(config, primaryMetrics, index + 1, tranIDsIntersection,
                                                 fullKeyType, fullKeyValue, rq)
                                     } else {
-                                        def transactions = velocityDAO.getHistoricalData(tranIDsIntersection)
+                                        def transactions = cassandraDAO.getHistoricalData(tranIDsIntersection)
                                         config.aggregationConfigs?.each { AggregationConfig aggConf ->
 
                                             List<String> history = transactions.collect {
                                                 it.key.dataType == aggConf.secondaryMetric ? it.data : []
                                             }.flatten()
-                                            velocityDAO.saveMetric(new Metric(
+                                            cassandraDAO.saveMetric(new Metric(
                                                     key: new Metric.MetricCompositeKey(
                                                             id: new PartitionKey(
                                                                     metricType: fullKeyType,
@@ -137,15 +136,15 @@ class VelocityManager implements IVelocityManager {
     void logCassandraData(final Map<String, String[]> velocityRQ) {
         UUID transactionID = UUIDs.startOf(DateTime.now().millis)
         velocityRQ.each { metricType, metricValues ->
-            velocityDAO.logTransaction(new Transaction(
-                    key: new Transaction.TransactionCompositeKey(
+            cassandraDAO.logTransaction(new TransactionData(
+                    key: new TransactionData.TransactionCompositeKey(
                             transactionID: transactionID,
                             dataType: metricType
                     ),
                     data: metricValues
             ))
             metricValues?.each { metricValue ->
-                velocityDAO.logData(new History(
+                cassandraDAO.logData(new History(
                         key: new History.HistoryCompositeKey(
                                 id: new PartitionKey(metricType: metricType, metricValue: metricValue),
                                 transactionID: transactionID
@@ -156,8 +155,8 @@ class VelocityManager implements IVelocityManager {
     }
 
     @Override
-    def checkRedisAsync(Map<String, String[]> velocityRQ) {
-        def velocityMetrics = [:]
+    def redisGetMetrics(Map<String, String[]> velocityRQ, final boolean asyncUpdate) {
+        def velocityMetrics = []
         withPool { ForkJoinPool pool ->
             dbCache.configs.collectParallel { VelocityConfig config ->
                 withExistingPool(pool) {
@@ -178,8 +177,8 @@ class VelocityManager implements IVelocityManager {
                                         metrics << [(velocityKey): [:]]
                                         conf.aggregationConfigs.each {
                                             metrics[velocityKey] <<
-                                                    [(it.secondaryMetric): redisVelocityDAO.getMetrics(
-                                                            "$fullKey:metrics:$it.secondaryMetric".toString())]
+                                                    [(it.secondaryMetric): redisDAO.getMetrics(
+                                                            "metrics:$fullKey:$it.secondaryMetric".toString())]
                                         }
                                     }
                                 }
@@ -191,23 +190,23 @@ class VelocityManager implements IVelocityManager {
                     }
                 }
             }.each {
-                velocityMetrics += it
+                it.each { key, value ->
+                    velocityMetrics += new Velocity(primaryMetrics: key, aggregations: value)
+                }
             }
         }
-        /*withPool() {
-            Closure updateMetricsFn = { updateMetricsRedis(velocityRQ) }
-            updateMetricsFn.callAsync()
-        }*/
-        FJP.submit(new Runnable() {
-            void run() {
-                updateMetricsRedis(velocityRQ)
-            }
-        })
+        if (asyncUpdate) {
+            FJP.submit(new Runnable() {
+                void run() {
+                    updateMetricsRedis(velocityRQ)
+                }
+            })
+        }
         return velocityMetrics
     }
 
     void updateMetricsRedis(Map<String, String[]> velocityRQ) {
-        redisVelocityDAO.logData(velocityRQ)
+        redisDAO.logData(velocityRQ)
         withPool() { ForkJoinPool pool ->
             dbCache.configs?.eachParallel { VelocityConfig config ->
                 withExistingPool(pool) {
@@ -220,17 +219,17 @@ class VelocityManager implements IVelocityManager {
                                     String fullKey = key ? "$key:$newKey" : newKey
 
                                     Set<String> tranIDsIntersection = []
-                                    Set<String> newIds = redisVelocityDAO.getHistoricalIDs("$newKey:history", config.period)
+                                    Set<String> newIds = redisDAO.getHistoricalIDs("$newKey:history", config.period)
                                     tranIDsIntersection = tranIds ? tranIds.intersect(newIds) : newIds
 
                                     if (index + 1 < primaryMetrics.size()) {
                                         forkOffChild(config, primaryMetrics, index + 1, tranIDsIntersection, fullKey, rq)
                                     } else {
                                         config.aggregationConfigs?.each { AggregationConfig aggConf ->
-                                            List<String> history = redisVelocityDAO.getHistoricalData(
+                                            List<String> history = redisDAO.getHistoricalData(
                                                     aggConf.secondaryMetric, tranIDsIntersection)
-                                            redisVelocityDAO.saveMetric(
-                                                    "$fullKey:metrics:$aggConf.secondaryMetric".toString(),
+                                            redisDAO.saveMetric(
+                                                    "metrics:$fullKey:$aggConf.secondaryMetric".toString(),
                                                     aggConf.aggregation, aggConf.aggregation.apply(history))
                                         }
                                     }
@@ -240,5 +239,44 @@ class VelocityManager implements IVelocityManager {
                 }
             }
         }
+    }
+
+    @Override
+    def cassandraGetHistory(final Map<String, String> filter, final DateTime startDate, final DateTime endDate) {
+        Long finish = endDate?.millis ?: startDate ? startDate.plusDays(1).withTimeAtStartOfDay().millis : DateTime.now().millis
+        Long start = startDate?.millis ?: DateTime.now().withTimeAtStartOfDay().millis
+        def history = []
+        Set<UUID> tranIDs = cassandraDAO.getHistoricalIDs(
+                new PartitionKey(metricType: 'ServiceInfo', metricValue: 'History'), start, finish)
+        filter?.each { metricType, metricValue ->
+            if (metricValue) {
+                tranIDs = tranIDs.intersect(cassandraDAO.getHistoricalIDs(
+                        new PartitionKey(metricType: metricType, metricValue: metricValue), start, finish))
+            }
+        }
+        cassandraDAO.getHistoricalData(tranIDs)
+                .groupBy { it.key.transactionID }
+                .each { id, transactionDataList ->
+            def transaction = new Transaction(id: id, createDate: new Date(UUIDs.unixTimestamp(id)), data: [:])
+            transactionDataList.each {
+                transaction.data << [(it.key.dataType): it.data]
+            }
+            history << transaction
+        }
+        return history?.size() > DEFAULT_PAGE_SIZE ? history?.subList(0, DEFAULT_PAGE_SIZE) : history
+    }
+
+    @Override
+    def redisGetHistory(final Map<String, String> filter, final DateTime startDate, final DateTime endDate) {
+        Long finish = endDate?.millis ?: startDate ? startDate.plusDays(1).withTimeAtStartOfDay().millis : DateTime.now().millis
+        Long start = startDate?.millis ?: DateTime.now().withTimeAtStartOfDay().millis
+        Set<String> tranIDs = redisDAO.getHistoricalIDs('transactions:history', start, finish)
+        filter?.each { metricType, metricValue ->
+            if (metricValue) {
+                tranIDs = tranIDs.intersect(redisDAO.getHistoricalIDs("$metricType:$metricValue:history", start, finish))
+            }
+        }
+        def history = redisDAO.getHistoricalData(tranIDs)
+        return history?.size() > DEFAULT_PAGE_SIZE ? history?.subList(0, DEFAULT_PAGE_SIZE) : history
     }
 }

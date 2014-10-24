@@ -27,14 +27,14 @@ angular.module('services.velocity', ['restangular'])
 
   .factory('Velocity', ['Restangular', function (Restangular) {
     return {
-      metricsPage: function (startFrom) {
-        return Restangular.all('velocity/metrics').getList(startFrom);
+      metrics: function (filter) {
+        return Restangular.all('velocity/redis/metrics').getList(filter);
       },
-      dataPage: function (startFrom) {
-        return Restangular.all('velocity/data_list').getList(startFrom);
+      history: function (filter) {
+        return Restangular.all('velocity/redis/history').getList(filter);
       },
       check: function (metrics) {
-        return Restangular.all('velocity').post(metrics);
+        return Restangular.all('velocity/redis/check').post(metrics);
       }
     }
   }]);

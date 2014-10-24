@@ -14,7 +14,11 @@ angular.module('fraudAdmin', [
   'services.blacklist',
   'services.velocity',
   'directives',
-  'filters'
+  'filters',
+  'daterangepicker',
+  'monospaced.mousewheel',
+  'sf.virtualScroll'
+  //'mgcrea.ngStrap'
 ])
   .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'RestangularProvider', 'config',
     function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, RestangularProvider, config) {
@@ -26,7 +30,7 @@ angular.module('fraudAdmin', [
 
       RestangularProvider.setBaseUrl(config.fraudEndpoint);
 
-      $urlRouterProvider.otherwise('/blacklist/');
+      $urlRouterProvider.otherwise('/velocity/config/');
 
       $stateProvider
         .state('blacklist', {
@@ -75,7 +79,7 @@ angular.module('fraudAdmin', [
           controller: 'AppCtrl'
         })
         .state('velocity.data.list', {
-          url: '/velocity/data/',
+          url: '/velocity/data/:start_date/',
           templateUrl: 'views/velocity/data/list.html',
           controller: 'VelocityDataCtrl'
         })

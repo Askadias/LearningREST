@@ -1,32 +1,58 @@
-<table class="table table-striped">
-  <thead>
-  <tr>
-    <th>Metric Type</th>
-    <th>Metric Value</th>
-    <th>Related Metric</th>
-    <th>Create Date</th>
-    <th>Data Value</th>
-    <th>Expires In</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr ng-repeat="metric in data_list">
-    <td>{{metric.key.id.metric_type}}</td>
-    <td>{{metric.key.id.metric_value}}</td>
-    <td>{{metric.key.related_metric_type}}</td>
-    <td>{{metric.key.create_date}}</td>
-    <td>{{metric.related_metric_value}}</td>
-    <td>{{expiresIn(metric.key.create_date, metric.key.id.metric_type)}}</td>
-  </tr>
-  <tr ng-show="!data_list || data_list.length == 0">
-    <td colspan="5">
-      <div class="alert alert-info">
-        There is no any velocity data yet
+<date-pagination current-date="currentDate" on-date-change="openPage(currentDate)"></date-pagination>
+
+<div ng-show="!!transactions && transactions.length > 0">
+  <div class="panel panel-default" ng-repeat="transaction in transactions">
+    <div class="panel-heading">
+      {{transaction.id}}
+    </div>
+    <div class="panel-body row">
+      <div class="col-md-2" ng-repeat="(data_type, data_values) in transaction.data">
+        <strong>{{data_type}}</strong>
+
+        <div ng-repeat="data_value in data_values">
+          {{data_value}}
+        </div>
       </div>
-    </td>
-  </tr>
-  </tbody>
-</table>
-<button class="btn btn-small btn-default" ng-click="loadFrom(data_list[data_list.length - 1])">
-  More
-</button>
+    </div>
+  </div>
+</div>
+
+<div class="alert alert-info" ng-show="!transactions || transactions.length == 0">
+  There are no transactions to display. Please use search panel at the <strong>right</strong>.
+</div>
+
+<form class="filter-aside panel panel-default" ng-class="{'folded' : app.settings.velocity.dataSearch.filterFolded}">
+  <!-- metrics search -->
+  <a ng-click="app.settings.velocity.dataSearch.filterFolded = !app.settings.velocity.dataSearch.filterFolded"
+     class="btn btn-default no-shadow filter-btn">
+    <i class="fa fa-fw fa-filter"></i>
+  </a>
+
+  <div class="panel-heading">
+    Metrics Search
+  </div>
+  <div class="panel-body">
+    <div class="form-horizontal">
+      <div class="control-group">
+        <date-range-picker start-date="dates.startDate" end-date="dates.endDate"
+                           on-range-change="openRange(dates.startDate, dates.endDate)"></date-range-picker>
+      </div>
+
+      <div class="control-group" ng-repeat="metric_type in metrics">
+        <label class="control-label">{{metric_type}}</label>
+
+        <div class="controls">
+          <input id="{{metric_type}}" name="{{metric_type}}" class="tag-input form-control" autocomplete="on"
+                 placeholder="{{metric_type}}" type="text" ng-model="filter[metric_type]"/>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel-footer">
+    <button class="btn btn-small btn-success text-highlight" type="submit" ng-click="search()">
+      <i class="fa fa-search fa-lg icon-white"></i>
+      Search
+    </button>
+  </div>
+  <!-- /metrics search -->
+</form>

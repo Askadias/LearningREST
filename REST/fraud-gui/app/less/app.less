@@ -1,5 +1,6 @@
 @import "../bower_components/bootstrap/less/bootstrap.less";
 @import "../bower_components/bootstrap-additions/src/bootstrap-additions.less";
+@import "../bower_components/bootstrap-datepicker/less/datepicker3.less";
 @import "../bower_components/font-awesome/less/font-awesome.less";
 @import "../bower_components/angular-motion/src/fade/fade.less";
 @import "../bower_components/angular-motion/src/fade-and-slide/fade-and-slide.less";
@@ -39,6 +40,7 @@ body {
   }
 
   .navbar-wrapper {
+    z-index: 3000;
     padding-left: 0;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
@@ -49,7 +51,7 @@ body {
     .sidebar-header {
       position: fixed;
       width: @sidebar-width;
-      height: 100%;
+      height: 50px;
       background: @sidebar-color;
       overflow-y: auto;
       -webkit-transition: all 0.5s ease;
@@ -58,10 +60,11 @@ body {
       transition: all 0.5s ease;
 
       .sidebar-brand {
-        height: 65px;
+        height: 50px;
         font-size: 18px;
         line-height: 60px;
         padding-left: 15px;
+        position: fixed;
         a {
           color: #999999;
           &:hover {
@@ -158,33 +161,34 @@ body {
       margin-left: @sidebar-width;
     }
   }
+}
 
-  /*@media (min-width: 768px) {
-    .sidebar-wrapper {
-      width: @sidebar-width;
-    }
-
-    .page-content-wrapper {
-      padding: 20px;
-    }
-
-    .content-wrapper {
-      padding-top: 50px;
-      padding-left: @sidebar-width;
-      &.app-aside-folded {
-        padding-left: 0;
-
-        .sidebar-wrapper {
-          width: 0;
-        }
-
-        .page-content-wrapper {
-          position: relative;
-          margin-right: 0;
-        }
-      }
-    }
-  }*/
+.filter-aside {
+  position: fixed;
+  right: -1px;
+  top: 80px;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  width: 440px;
+  z-index: 1050;
+  .filter-btn {
+    background: none repeat scroll 0 0 #f6f8f8 !important;
+    border-color: #dee5e7;
+    border-right-width: 0;
+    left: -42px;
+    padding: 10px 15px;
+    position: absolute;
+    top: -1px;
+  }
+  &.folded {
+    right: -440px;
+  }
+  .panel-body {
+    overflow: auto;
+    height: 550px;
+  }
 }
 
 .scopes ul {
@@ -381,7 +385,6 @@ legend + .control-group {
   }
 }
 
-
 .well-highlight {
   -webkit-box-shadow: inset 0 1px 1px rgba(3, 3, 3, 0.05);
   box-shadow: inset 0 1px 1px rgba(3, 3, 3, 0.05);
@@ -401,8 +404,7 @@ legend + .control-group {
   }
   a {
     text-decoration: none;
-    &:hover, &:visited, &:link, &:active
-    {
+    &:hover, &:visited, &:link, &:active {
       text-decoration: none;
     }
   }
@@ -435,3 +437,52 @@ legend + .control-group {
     }
   }
 }
+
+.daterangepicker {
+  width: 500px;
+  position: fixed;
+  &.opensright {
+    &:before {
+      left: 250px;
+    }
+    &:after {
+      left: 251px;
+    }
+  }
+}
+
+.date-pagination {
+  > li > a {
+    height: 60px;
+    margin: 0 !important;
+    text-align: center;
+    padding: 13px 0 !important;
+    width: 40px;
+    border-left-style: hidden !important;
+    &.weekend {
+      background-color: #f0f0f0 !important;
+    }
+    &.active {
+      background-color: @brand-primary;
+      color: #fff !important;
+      width: 140px;
+      i {
+        position: absolute;
+        left: 120px;
+        top: 12px;
+      }
+    }
+  }
+
+  > li:first-child > a {
+    width: 20px;
+    border-left-style: solid !important;
+  }
+
+  > li:last-child > a {
+    width: 20px;
+    border-left-style: hidden !important;
+  }
+}
+
+

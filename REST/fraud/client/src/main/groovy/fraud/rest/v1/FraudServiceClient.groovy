@@ -8,6 +8,7 @@ import common.rest.client.transport.HttpClientSSLKeyStore
 import common.rest.client.transport.ITransport
 import common.rest.client.transport.support.ObjectMapperProvider
 import fraud.rest.v1.velocity.Aggregation
+import fraud.rest.v1.velocity.Velocity
 import org.apache.commons.io.IOUtils
 import org.apache.commons.lang.StringUtils
 import org.apache.http.client.methods.HttpPost
@@ -71,25 +72,21 @@ class FraudServiceClient extends RestServiceClientSupport implements IFraudServi
 
     @Override
     @SuppressWarnings(['rawtypes', 'unchecked'])
-    Map<Map<String, String>, Map<Aggregation, Double>> check(
-            final String transactionGUID, final Map<String, String[]> velocityRQ) {
-        final String confUrl = endpoint + 'velocity/';
-
-        final ITransport.Response<Map, StatusEntity> response =
+    List<Velocity> check(final String transactionGUID, final Map<String, String[]> velocityRQ) {
+        final String confUrl = endpoint + 'velocity/cassandra/check/';
+        final ITransport.Response<List, StatusEntity> response =
                 transport.performPost(confUrl, buildHeaders(transactionGUID, endpoint, HttpPost.METHOD_NAME),
-                        marshal(velocityRQ), createResponseHandler(Map.class));
+                        marshal(velocityRQ), createResponseHandler(List.class));
         return checkForError(response);
     }
 
     @Override
     @SuppressWarnings(['rawtypes', 'unchecked'])
-    Map<Map<String, String>, Map<Aggregation, Double>> rcheck(
-            final String transactionGUID, final Map<String, String[]> velocityRQ) {
-        final String confUrl = endpoint + 'velocity/rcheck/';
-
-        final ITransport.Response<Map, StatusEntity> response =
+    List<Velocity> rcheck(final String transactionGUID, final Map<String, String[]> velocityRQ) {
+        final String confUrl = endpoint + 'velocity/redis/check/';
+        final ITransport.Response<List, StatusEntity> response =
                 transport.performPost(confUrl, buildHeaders(transactionGUID, endpoint, HttpPost.METHOD_NAME),
-                        marshal(velocityRQ), createResponseHandler(Map.class));
+                        marshal(velocityRQ), createResponseHandler(List.class));
         return checkForError(response);
     }
 

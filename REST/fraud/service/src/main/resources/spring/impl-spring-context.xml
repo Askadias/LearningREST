@@ -20,8 +20,8 @@
           p:blackListDAO-ref="blackListDAO.cassandra.perf"/>
 
     <bean id="velocityManager.impl" class="fraud.logic.velocity.VelocityManager"
-          p:velocityDAO-ref="velocityDAO.cassandra.perf"
-          p:redisVelocityDAO-ref="velocityDAO.redis.perf"
+          p:cassandraDAO-ref="velocityDAO.cassandra.perf"
+          p:redisDAO-ref="velocityDAO.redis.perf"
           p:dbCache-ref="dbCache"/>
 
     <bean id="velocityConfigManager.impl" class="fraud.logic.velocity.VelocityConfigManager"

@@ -4,12 +4,11 @@ import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 
 /**
- * External POGO for transaction data
+ * Created by Tiger on 15.10.14.
  */
 @ToString
 @EqualsAndHashCode
-class Transaction {
-    String id
-    Date createDate
-    Map<String, List<String>> data
+class Velocity {
+    Map<String, String> primaryMetrics
+    Map<String, Map<Aggregation, Double>> aggregations
 }

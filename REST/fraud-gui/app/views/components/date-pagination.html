@@ -1,0 +1,23 @@
+<ul class="date-pagination pagination" msd-wheel="scroll($event, $delta, $deltaX, $deltaY)">
+  <li>
+    <a href ng-click="prevNDay(1)">
+      <i class="fa fa-fw fa-angle-left"></i>
+    </a>
+  </li>
+  <li ng-repeat="day in days">
+    <a href id="page-date-picker" class="active " ng-if="isCurrent(day)" ng-click="openDatePicker()">
+      {{day | date:'EEEE'}}<br>
+      {{format(day, 'Do, MMMM gggg')}}
+      <i class="fa fa-calendar"></i>
+    </a>
+    <a href ng-click="setCurrent(day)" ng-if="!isCurrent(day)" ng-class="{'weekend' : isWeekend(day)}">
+      {{day | date:'EEE'}}<br>
+      {{format(day, 'Do')}}
+    </a>
+  </li>
+  <li>
+    <a href ng-click="nextNDay(1)">
+      <i class="fa fa-fw fa-angle-right"></i>
+    </a>
+  </li>
+</ul>

@@ -159,7 +159,7 @@
     <bean id="blackListDAO.impl.cassandra" class="fraud.db.dao.cassandra.BlackListDAO"
           p:mappingSession-ref="mappingSession"/>
 
-    <bean id="velocityDAO.impl.cassandra" class="fraud.db.dao.cassandra.VelocityDAO"
+    <bean id="velocityDAO.impl.cassandra" class="fraud.db.dao.cassandra.CassandraVelocityDAO"
           p:mappingSession-ref="mappingSession"/>
 
 </beans>

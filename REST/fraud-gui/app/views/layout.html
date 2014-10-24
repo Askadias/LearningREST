@@ -40,7 +40,7 @@
         </a>
       </li>
       <li ng-class="{active: ('velocity.data.list' | includedByState)}">
-        <a ui-sref="velocity.data.list" class="fade-in">
+        <a ui-sref="velocity.data.list({start_date: '{{now | date:'yyyy-MM-dd'}}'})" class="fade-in">
           <i class="fa fa-table"></i>
           Velocity Data
         </a>
