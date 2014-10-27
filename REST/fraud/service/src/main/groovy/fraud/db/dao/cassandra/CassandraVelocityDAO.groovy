@@ -54,6 +54,12 @@ class CassandraVelocityDAO extends BaseCassandraDAO implements ICassandraVelocit
 
     @Override
     Set<UUID> getHistoricalIDs(final PartitionKey id, final Long dateStart, final Long dateEnd) {
+        return getHistoricalIDs(id, dateStart, dateEnd, null, null)
+    }
+
+    @Override
+    Set<UUID> getHistoricalIDs(final PartitionKey id, final Long dateStart, final Long dateEnd,
+                               final UUID startID, final UUID endID) {
         EntityTypeMetadata emeta = EntityTypeParser.getEntityMetadata(History.class)
         EntityFieldMetaData typeMeta = emeta.getFieldMetadata('metricType')
         EntityFieldMetaData valueMeta = emeta.getFieldMetadata('metricValue')
@@ -61,8 +67,8 @@ class CassandraVelocityDAO extends BaseCassandraDAO implements ICassandraVelocit
         return mappingSession.session.execute(select().column(tranMeta.columnName).from(mappingSession.keyspace, emeta.tableName)
                 .where(eq(typeMeta.columnName, id.metricType))
                 .and(eq(valueMeta.columnName, id.metricValue))
-                .and(gt(tranMeta.columnName, UUIDs.startOf(dateStart)))
-                .and(lt(tranMeta.columnName, UUIDs.endOf(dateEnd))))
+                .and(gt(tranMeta.columnName, startID || UUIDs.startOf(dateStart)))
+                .and(lt(tranMeta.columnName, endID || UUIDs.endOf(dateEnd))))
                 .collect { it.getUUID(tranMeta.columnName) }.toSet();
     }
 

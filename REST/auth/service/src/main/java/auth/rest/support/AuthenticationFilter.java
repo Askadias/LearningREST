@@ -5,8 +5,8 @@ import com.nimbusds.jose.JWSObject;
 import net.minidev.json.JSONObject;
 import org.apache.cxf.common.security.SimplePrincipal;
 import org.codehaus.jackson.map.ObjectMapper;
-import auth.logic.IGroupManager;
-import auth.logic.IUserManager;
+import auth.logic.IGroupService;
+import auth.logic.IUserService;
 import auth.rest.v1.pojo.Group;
 import auth.rest.v1.pojo.User;
 import auth.security.IJWTManager;
@@ -43,9 +43,9 @@ public class AuthenticationFilter implements ContainerRequestFilter {
     @Context
     private ResourceInfo resourceInfo;
 
-    private IUserManager userManager;
+    private IUserService userManager;
 
-    private IGroupManager groupManager;
+    private IGroupService groupManager;
 
     private IJWTManager jwtManager;
 
@@ -154,11 +154,11 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         //return Response.status(301).header("location", "/AuthService/app/login").build();
     }
 
-    public void setUserManager(IUserManager userManager) {
+    public void setUserManager(IUserService userManager) {
         this.userManager = userManager;
     }
 
-    public void setGroupManager(IGroupManager groupManager) {
+    public void setGroupManager(IGroupService groupManager) {
         this.groupManager = groupManager;
     }
 

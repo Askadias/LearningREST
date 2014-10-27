@@ -16,7 +16,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import auth.db.dao.IUserDAO;
 import auth.exceptions.AuthServiceEventLogId;
-import auth.rest.v1.UserServiceEndpoint;
+import auth.rest.v1.UserController;
 import auth.rest.v1.pojo.User;
 import auth.test.BaseUserServiceTest;
 import common.exceptions.ServiceException;
@@ -38,7 +38,7 @@ public class UserServiceImplTest extends BaseUserServiceTest {
     private static final String TEST_USER_EMAIL = "kast.askadias@gmail.com";
 
     @Autowired
-    UserServiceEndpoint userService;
+    UserController userService;
 
     @Autowired
     @Qualifier("userDAO.impl.mongo")

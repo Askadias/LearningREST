@@ -81,8 +81,8 @@
     </jaxrs:server>-->
 
     <bean id="authenticationFilter" class="auth.rest.support.AuthenticationFilter"
-          p:groupManager-ref="groupManager.perf"
-          p:userManager-ref="userManager.perf"
+          p:groupManager-ref="groupService.perf"
+          p:userManager-ref="userService.perf"
           p:jwtManager-ref="jwtManager.perf">
         <property name="exclude">
             <util:list>
@@ -104,11 +104,11 @@
 
     <jaxrs:server id="authService.rest" address="/">
         <jaxrs:serviceBeans>
-            <ref bean="userServiceEndpoint"/>
-            <ref bean="authServiceEndpoint"/>
-            <ref bean="tokenGrantServiceEndpoint"/>
-            <ref bean="clientServiceEndpoint"/>
-            <ref bean="groupServiceEndpoint"/>
+            <ref bean="userController"/>
+            <ref bean="authController"/>
+            <ref bean="tokenController"/>
+            <ref bean="clientController"/>
+            <ref bean="groupController"/>
         </jaxrs:serviceBeans>
         <!--<jaxrs:inInterceptors>
             <ref bean="usersAuthorizationInterceptor"/>
@@ -126,6 +126,5 @@
             <ref bean="runtimeExceptionMapper"/>
         </jaxrs:providers>
     </jaxrs:server>
-
 
 </beans>

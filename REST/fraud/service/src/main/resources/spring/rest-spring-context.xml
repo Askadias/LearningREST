@@ -33,11 +33,11 @@
 
     <jaxrs:server id="fraudService.rest" address="/rest/v1">
         <jaxrs:serviceBeans>
-            <ref bean="systemStatusServiceEndpoint"/>
-            <ref bean="fraudServiceEndpoint"/>
-            <ref bean="blackListsEndpoint"/>
-            <ref bean="velocityEndpoint"/>
-            <ref bean="velocityConfigEndpoint"/>
+            <ref bean="systemStatusController"/>
+            <ref bean="fraudServiceController"/>
+            <ref bean="derogController"/>
+            <ref bean="velocityController"/>
+            <ref bean="velocityConfigController"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <bean class="common.web.JSONValidationProvider">

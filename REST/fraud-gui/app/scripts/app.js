@@ -13,11 +13,21 @@ angular.module('fraudAdmin', [
   'services.config',
   'services.blacklist',
   'services.velocity',
-  'directives',
+  'directives.date-pagination',
+  'directives.date-time-picker',
+  'directives.date-range-picker',
+  'directives.form-auto-fill-fix',
+  'directives.on-blur-change',
+  'directives.on-enter-blur',
+  'directives.sort-by',
+  'directives.tags-support',
+  'directives.time-selector',
+  'directives.on-scroll',
   'filters',
   'daterangepicker',
   'monospaced.mousewheel',
-  'sf.virtualScroll'
+  'sf.virtualScroll',
+  'infinite-scroll'
   //'mgcrea.ngStrap'
 ])
   .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'RestangularProvider', 'config',

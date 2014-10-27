@@ -41,8 +41,6 @@ public class JWTManager implements IJWTManager, InitializingBean {
 
     JWSVerifier rsaVerifier;
 
-    private KeyPairGenerator keyGenerator;
-
     @Override
     public String toJWT(User user) throws JOSEException {
         JWTClaimsSet jwtClaims = new JWTClaimsSet();
@@ -75,7 +73,7 @@ public class JWTManager implements IJWTManager, InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        keyGenerator = KeyPairGenerator.getInstance("RSA");
+        final KeyPairGenerator keyGenerator = KeyPairGenerator.getInstance("RSA");
         keyGenerator.initialize(1024);
 
         KeyPair kp = keyGenerator.genKeyPair();

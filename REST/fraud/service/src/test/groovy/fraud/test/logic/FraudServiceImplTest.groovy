@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import fraud.db.dao.ITransactionDAO
-import fraud.rest.v1.FraudServiceEndpoint
+import fraud.rest.v1.FraudCheckController
 import fraud.rest.v1.check.Transaction
 import fraud.test.BaseFraudServiceTest
 
@@ -24,7 +24,7 @@ class FraudServiceImplTest extends BaseFraudServiceTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(FraudServiceImplTest.class)
 
     @Autowired
-    FraudServiceEndpoint fraudService
+    FraudCheckController fraudService
 
     @Autowired
     @Qualifier('transactionDAO.mongo.perf')

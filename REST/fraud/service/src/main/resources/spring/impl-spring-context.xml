@@ -5,39 +5,39 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!-- System Status component-->
-    <bean id="systemStatusFacade" class="fraud.logic.SystemStatusFacade"
+    <bean id="systemStatusService" class="fraud.logic.SystemStatusService"
           p:transactionDAO-ref="transactionDAO.mongo.perf"/>
 
-    <bean id="systemStatusServiceEndpoint" class="common.rest.SystemStatusServiceEndpoint"
-          p:systemStatusFacade-ref="systemStatusFacade"/>
+    <bean id="systemStatusController" class="common.rest.SystemStatusController"
+          p:systemStatusService-ref="systemStatusService"/>
 
     <!-- business logic component-->
 
-    <bean id="fraudServiceFacade.impl" class="fraud.logic.FraudServiceFacade"
+    <bean id="fraudCheckService.impl" class="fraud.logic.FraudCheckService"
           p:transactionDAO-ref="transactionDAO.mongo.perf"/>
 
-    <bean id="blackListManager.impl" class="fraud.logic.blacklist.BlackListManager"
-          p:blackListDAO-ref="blackListDAO.cassandra.perf"/>
+    <bean id="derogService.impl" class="fraud.logic.derog.DerogService"
+          p:blackListDAO-ref="derogDAO.cassandra.perf"/>
 
-    <bean id="velocityManager.impl" class="fraud.logic.velocity.VelocityManager"
+    <bean id="velocityService.impl" class="fraud.logic.velocity.VelocityService"
           p:cassandraDAO-ref="velocityDAO.cassandra.perf"
           p:redisDAO-ref="velocityDAO.redis.perf"
           p:dbCache-ref="dbCache"/>
 
-    <bean id="velocityConfigManager.impl" class="fraud.logic.velocity.VelocityConfigManager"
+    <bean id="velocityConfigService.impl" class="fraud.logic.velocity.VelocityConfigService"
           p:velocityConfigDAO-ref="velocityConfigDAO.mongo.perf"/>
 
     <!-- service endpoints definitions-->
-    <bean id="fraudServiceEndpoint" class="fraud.rest.v1.FraudServiceEndpoint"
-          p:fraudServiceFacade-ref="fraudServiceFacade.perf"/>
+    <bean id="fraudServiceController" class="fraud.rest.v1.FraudCheckController"
+          p:fraudCheckService-ref="fraudCheckService.perf"/>
 
-    <bean id="blackListsEndpoint" class="fraud.rest.v1.BlackListsEndpoint"
-          p:blackListManager-ref="blackListManager.perf"/>
+    <bean id="derogController" class="fraud.rest.v1.DerogController"
+          p:blackListManager-ref="derogService.perf"/>
 
-    <bean id="velocityEndpoint" class="fraud.rest.v1.VelocityEndpoint"
-          p:velocityManager-ref="velocityManager.perf"/>
+    <bean id="velocityController" class="fraud.rest.v1.VelocityController"
+          p:velocityManager-ref="velocityService.perf"/>
 
-    <bean id="velocityConfigEndpoint" class="fraud.rest.v1.VelocityConfigEndpoint"
-          p:velocityConfigManager-ref="velocityConfigManager.perf"/>
+    <bean id="velocityConfigController" class="fraud.rest.v1.VelocityConfigController"
+          p:velocityConfigManager-ref="velocityConfigService.perf"/>
 
 </beans>

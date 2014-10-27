@@ -17,16 +17,12 @@
     <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
           p:hostName="localhost" p:port="6379"/>
 
+    <bean id="stringRedisSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
 
-    <bean id="stringRedisSerializer"
-          class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
-
-    <bean id="redisTemplate"
-          class="org.springframework.data.redis.core.StringRedisTemplate"
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate"
           p:connectionFactory-ref="jedisConnectionFactory"/>
 
-    <bean id="velocityDAO.impl.redis" class="fraud.db.dao.redis.RedisVelocityDAO"
-          autowire-candidate="false"
+    <bean id="velocityDAO.impl.redis" class="fraud.db.dao.redis.RedisVelocityDAO" autowire-candidate="false"
           p:redis-ref="redisTemplate"/>
 
 
@@ -86,11 +82,10 @@
           autowire-candidate="false"
           p:mongoTemplate-ref="mongoTemplate"/>
 
-    <!-- ================================================================= -->
-    <!-- Currency Exchange Rate update                                     -->
-    <!-- ================================================================= -->
-    <bean id="currencyExchangeScheduler"
-          class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+    <!-- =================================================================
+                              Currency Exchange Rate update
+    ================================================================= -->
+    <bean id="currencyExchangeScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
           p:autoStartup="true">
         <property name="triggers">
             <bean class="org.springframework.scheduling.quartz.CronTriggerFactoryBean"
@@ -111,14 +106,13 @@
         </property>
     </bean>
 
-    <!-- ================================================================= -->
-    <!-- Configuration Data update                                         -->
-    <!-- ================================================================= -->
+    <!-- =================================================================
+                               Configuration Data update
+    ====================================================================== -->
     <bean id="dbCache" class="fraud.util.DBCache"
           p:velocityConfigDAO-ref="velocityConfigDAO.impl.mongo"/>
 
-    <bean id="configurationDataScheduler"
-          class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+    <bean id="configurationDataScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
           p:autoStartup="true">
         <property name="triggers">
             <bean class="org.springframework.scheduling.quartz.CronTriggerFactoryBean"
@@ -141,7 +135,7 @@
 
 
     <!-- =========================================================================================
-                                   Cassandra Data Source
+                              Cassandra Data Source
     ========================================================================================== -->
 
     <bean id="cassandraClusterBuilder" class="com.datastax.driver.core.Cluster" factory-method="builder"/>
@@ -153,10 +147,9 @@
     <bean id="cassandraSession" factory-bean="cassandraCluster" factory-method="connect"/>
 
     <bean id="mappingSession" class="com.datastax.driver.mapping.MappingSession"
-          c:keyspace="${cassandra.keyspace}"
-          c:session-ref="cassandraSession"/>
+          c:keyspace="${cassandra.keyspace}" c:session-ref="cassandraSession"/>
 
-    <bean id="blackListDAO.impl.cassandra" class="fraud.db.dao.cassandra.BlackListDAO"
+    <bean id="derogDAO.impl.cassandra" class="fraud.db.dao.cassandra.DerogDAO"
           p:mappingSession-ref="mappingSession"/>
 
     <bean id="velocityDAO.impl.cassandra" class="fraud.db.dao.cassandra.CassandraVelocityDAO"

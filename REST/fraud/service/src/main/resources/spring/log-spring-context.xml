@@ -120,10 +120,10 @@
         </property>
     </bean>
 
-    <bean id="blackListDAO.cassandra.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
+    <bean id="derogDAO.cassandra.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
           autowire-candidate="false"
-          p:proxyInterfaces="fraud.db.dao.IBlackListDAO"
-          p:target-ref="blackListDAO.impl.cassandra">
+          p:proxyInterfaces="fraud.db.dao.IDerogDAO"
+          p:target-ref="derogDAO.impl.cassandra">
         <property name="interceptorNames">
             <list>
                 <idref bean="performance.dao.loggingInterceptor"/>
@@ -170,10 +170,10 @@
           p:responseWriter-ref="performance.logger.impl"
           p:exceptionHandler-ref="serviceExceptionHandler"/>
 
-    <bean id="fraudServiceFacade.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
+    <bean id="fraudCheckService.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
           autowire-candidate="false"
-          p:proxyInterfaces="fraud.logic.IFraudServiceFacade"
-          p:target-ref="fraudServiceFacade.impl">
+          p:proxyInterfaces="fraud.logic.IFraudCheckService"
+          p:target-ref="fraudCheckService.impl">
         <property name="interceptorNames">
             <list>
                 <idref bean="impl.loggingInterceptor"/>
@@ -181,10 +181,10 @@
         </property>
     </bean>
 
-    <bean id="blackListManager.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
+    <bean id="derogService.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
           autowire-candidate="false"
-          p:proxyInterfaces="fraud.logic.blacklist.IBlackListManager"
-          p:target-ref="blackListManager.impl">
+          p:proxyInterfaces="fraud.logic.derog.IDerogService"
+          p:target-ref="derogService.impl">
         <property name="interceptorNames">
             <list>
                 <idref bean="impl.loggingInterceptor"/>
@@ -192,10 +192,10 @@
         </property>
     </bean>
 
-    <bean id="velocityManager.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
+    <bean id="velocityService.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
           autowire-candidate="false"
-          p:proxyInterfaces="fraud.logic.velocity.IVelocityManager"
-          p:target-ref="velocityManager.impl">
+          p:proxyInterfaces="fraud.logic.velocity.IVelocityService"
+          p:target-ref="velocityService.impl">
         <property name="interceptorNames">
             <list>
                 <idref bean="impl.loggingInterceptor"/>
@@ -203,10 +203,10 @@
         </property>
     </bean>
 
-    <bean id="velocityConfigManager.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
+    <bean id="velocityConfigService.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
           autowire-candidate="false"
-          p:proxyInterfaces="fraud.logic.velocity.IVelocityConfigManager"
-          p:target-ref="velocityConfigManager.impl">
+          p:proxyInterfaces="fraud.logic.velocity.IVelocityConfigService"
+          p:target-ref="velocityConfigService.impl">
         <property name="interceptorNames">
             <list>
                 <idref bean="impl.loggingInterceptor"/>

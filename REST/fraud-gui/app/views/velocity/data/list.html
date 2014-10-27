@@ -1,6 +1,6 @@
 <date-pagination current-date="currentDate" on-date-change="openPage(currentDate)"></date-pagination>
 
-<div ng-show="!!transactions && transactions.length > 0">
+<div ng-show="!!transactions && transactions.length > 0" infinite-scroll="moreData()" infinite-scroll-disabled="loading">
   <div class="panel panel-default" ng-repeat="transaction in transactions">
     <div class="panel-heading">
       {{transaction.id}}

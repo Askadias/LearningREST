@@ -229,6 +229,7 @@ angular.module('controllers.velocity', [])
       $scope.transactions = null;
       $scope.currentDate = $stateParams.start_date ? new Date($stateParams.start_date) : new Date();
       $scope.dates = {startDate: $scope.currentDate, endDate: null};
+      $scope.loading = false;
 
       VelocityConfig.all().then(function (response) {
         var configs = response;
@@ -267,6 +268,25 @@ angular.module('controllers.velocity', [])
         $scope.dates.startDate = startDate;
         $scope.dates.endDate = endDate;
         $scope.search();
+      };
+
+      $scope.moreData = function() {
+        if ($scope.transactions) {
+          var lastTransaction = $scope.transactions[$scope.transactions.length - 1];
+          var filterExt = angular.copy($scope.filter);
+          filterExt['start_date'] = lastTransaction.create_date;
+          filterExt['start_id'] = lastTransaction.id;
+          $scope.loading = true;
+
+          Velocity.history(filterExt).then(function (response) {
+            if (response && response.length > 0) {
+              $scope.transactions = $scope.transactions.concat(response)
+            }
+            $scope.loading = false;
+          }, function () {
+            $scope.loading = false;
+          });
+        }
       };
 
       $scope.openPage($scope.currentDate)

@@ -9,56 +9,56 @@
     <bean id="jwtManager.impl" class="auth.security.JWTManager"/>
 
     <!-- System Status component-->
-    <bean id="systemStatusFacade" class="auth.logic.SystemStatusFacade"
+    <bean id="systemStatusService" class="auth.logic.SystemStatusService"
           p:userDAO-ref="userDAO.mongo.perf"/>
 
-    <bean id="systemStatusServiceEndpoint" class="common.rest.SystemStatusServiceEndpoint"
-          p:systemStatusFacade-ref="systemStatusFacade"/>
+    <bean id="systemStatusServiceEndpoint" class="common.rest.SystemStatusController"
+          p:systemStatusService-ref="systemStatusService"/>
 
     <!-- business logic component-->
-    <bean id="userManager.impl" class="auth.logic.UserManager"
+    <bean id="userService.impl" class="auth.logic.UserService"
           p:userDAO-ref="userDAO.mongo.perf"
           p:passwordEncoder-ref="passwordEncoder"/>
 
-    <bean id="authenticationManager.impl" class="auth.logic.AuthenticationManager"
+    <bean id="authenticationService.impl" class="auth.logic.AuthenticationService"
           p:profileDAO-ref="profileDAO.mongo.perf"
           p:userDAO-ref="userDAO.mongo.perf"
           p:passwordEncoder-ref="passwordEncoder"
           p:jwtManager-ref="jwtManager.perf"/>
 
-    <bean id="clientManager.impl" class="auth.logic.ClientManager"
+    <bean id="clientService.impl" class="auth.logic.ClientService"
           p:clientDAO-ref="clientDAO.mongo.perf"
           p:passwordEncoder-ref="passwordEncoder"/>
 
-    <bean id="groupManager.impl" class="auth.logic.GroupManager"
+    <bean id="groupService.impl" class="auth.logic.GroupService"
           p:groupDAO-ref="groupDAO.mongo.perf"/>
 
-    <bean id="tokenManager.impl" class="auth.logic.TokenManager"
+    <bean id="tokenService.impl" class="auth.logic.TokenService"
           p:tokenDAO-ref="tokenDAO.mongo.perf"/>
 
     <!-- service endpoints definitions-->
-    <bean id="userServiceEndpoint" class="auth.rest.v1.UserServiceEndpoint"
-          p:userManager-ref="userManager.perf"/>
+    <bean id="userController" class="auth.rest.v1.UserController"
+          p:userService-ref="userService.perf"/>
 
     <bean id="discoveryInfo" class="auth.rest.v1.pojo.DiscoveryInfo"
           p:jwksUri="http://localhost:11080/AuthService/service/rest/v1/auth/cert">
     </bean>
 
-    <bean id="authServiceEndpoint" class="auth.rest.v1.AuthServiceEndpoint"
-          p:authenticationManager-ref="authenticationManager.perf"
+    <bean id="authController" class="auth.rest.v1.AuthController"
+          p:authenticationService-ref="authenticationService.perf"
           p:discoveryInfo-ref="discoveryInfo"/>
 
-    <bean id="tokenGrantServiceEndpoint" class="auth.rest.v1.TokenGrantServiceEndpoint"
-          p:tokenManager-ref="tokenManager.perf"/>
+    <bean id="tokenController" class="auth.rest.v1.TokenController"
+          p:tokenService-ref="tokenService.perf"/>
 
-    <bean id="clientServiceEndpoint" class="auth.rest.v1.ClientServiceEndpoint"
-          p:clientManager-ref="clientManager.perf"/>
+    <bean id="clientController" class="auth.rest.v1.ClientController"
+          p:clientService-ref="clientService.perf"/>
 
-    <bean id="groupServiceEndpoint" class="auth.rest.v1.GroupServiceEndpoint"
-          p:groupManager-ref="groupManager.perf"/>
+    <bean id="groupController" class="auth.rest.v1.GroupController"
+          p:groupService-ref="groupService.perf"/>
 
     <!-- OAuth business logic component-->
     <!--<bean id="oauthProvider" class="auth.logic.OAuthManager"
-          p:clientManager-ref="clientManager.impl"
+          p:clientService-ref="clientService.impl"
           p:tokenManager-ref="tokenManager.impl"/>-->
 </beans>

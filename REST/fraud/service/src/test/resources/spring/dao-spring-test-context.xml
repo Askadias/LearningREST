@@ -25,17 +25,17 @@
           factory-method="createNiceMock"
           c:toMock="fraud.db.dao.ITransactionDAO"/>
 
-    <bean id="blackListDAO.impl.cassandra"
+    <bean id="derogDAO.impl.cassandra"
           class="org.easymock.EasyMock"
           factory-method="createNiceMock"
-          c:toMock="fraud.db.dao.IBlackListDAO"/>
+          c:toMock="fraud.db.dao.IDerogDAO"/>
 
-    <bean id="velocityDAO.impl.redis.perf"
+    <bean id="velocityDAO.impl.redis"
           class="org.easymock.EasyMock"
           factory-method="createNiceMock"
           c:toMock="fraud.db.dao.redis.IRedisVelocityDAO"/>
 
-    <bean id="velocityDAO.impl.cassandra.perf"
+    <bean id="velocityDAO.impl.cassandra"
           class="org.easymock.EasyMock"
           factory-method="createNiceMock"
           c:toMock="fraud.db.dao.ICassandraVelocityDAO"/>
