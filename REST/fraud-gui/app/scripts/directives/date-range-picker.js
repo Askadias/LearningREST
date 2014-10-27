@@ -14,7 +14,7 @@ angular.module('directives.date-range-picker', [])
       replace: true,
       link: function ($scope, elem, attr) {
 
-        elem.datepicker({
+        /*elem.datepicker({
           autoclose: true,
           format: 'yyyy-mm-dd'
         });
@@ -23,16 +23,17 @@ angular.module('directives.date-range-picker', [])
             $scope.startDate = new Date(angular.element('#date-range-start').val());
             $scope.endDate = new Date(angular.element('#date-range-end').val());
           });
-        });
-
-        /*elem.datetimepicker({
-        });
-        elem.datetimepicker().on('dp.hide', function($event){
-          $scope.$apply(function () {
-            $scope.startDate = new Date(angular.element('#date-range-start').val());
-            $scope.endDate = new Date(angular.element('#date-range-end').val());
-          });
         });*/
+        angular.element('#date-range-start').datetimepicker();
+        angular.element('#date-range-end').datetimepicker();
+        angular.element('#date-range-start').on("dp.change",function (e) {
+          angular.element('#date-range-end').data("DateTimePicker").setMinDate(e.date);
+          $scope.startDate = new Date(e.date);
+        });
+        angular.element('#date-range-end').on("dp.change",function (e) {
+          angular.element('#date-range-start').data("DateTimePicker").setMaxDate(e.date);
+          $scope.endDate = new Date(e.date);
+        });
 
         $scope.$watch(function () {
           return $scope.startDate;
@@ -44,6 +45,10 @@ angular.module('directives.date-range-picker', [])
         }, function () {
           $scope.onRangeChange();
         }, true);
+
+        $scope.openDateRangePicker = function() {
+
+        }
       }
     }
   });

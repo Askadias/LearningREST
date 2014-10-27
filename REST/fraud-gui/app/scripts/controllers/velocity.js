@@ -271,7 +271,7 @@ angular.module('controllers.velocity', [])
       };
 
       $scope.moreData = function() {
-        if ($scope.transactions) {
+        if ($scope.transactions && $scope.transactions.length > 0) {
           var lastTransaction = $scope.transactions[$scope.transactions.length - 1];
           var filterExt = angular.copy($scope.filter);
           filterExt['start_date'] = lastTransaction.create_date;
