@@ -1,15 +1,15 @@
 package fraud.test.utils.data
 
 import common.testutils.gen.AbstractGenerator
-import fraud.rest.v1.check.Transaction
-import fraud.rest.v1.check.payment.Amount
-import fraud.rest.v1.check.payment.Payment
-import fraud.rest.v1.check.person.Account
-import fraud.rest.v1.check.person.Person
-import fraud.rest.v1.check.person.Telephone
-import fraud.rest.v1.check.person.Traveler
-import fraud.rest.v1.check.product.Product
-import fraud.rest.v1.check.product.travel.TravelProduct
+import fraud.controller.v1.check.Transaction
+import fraud.controller.v1.check.payment.Amount
+import fraud.controller.v1.check.payment.Payment
+import fraud.controller.v1.check.person.Account
+import fraud.controller.v1.check.person.Person
+import fraud.controller.v1.check.person.Telephone
+import fraud.controller.v1.check.person.Traveler
+import fraud.controller.v1.check.product.Product
+import fraud.controller.v1.check.product.travel.TravelProduct
 
 import static common.testutils.gen.DateGenerator.generateDateInFuture
 import static common.testutils.gen.FinanceGenerator.generateCurrencyCode

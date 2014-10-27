@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import fraud.db.dao.ITransactionDAO
-import fraud.rest.v1.FraudCheckController
-import fraud.rest.v1.check.Transaction
+import fraud.controller.v1.FraudCheckController
+import fraud.controller.v1.check.Transaction
 import fraud.test.BaseFraudServiceTest
 
 import javax.ws.rs.core.HttpHeaders

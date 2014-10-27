@@ -1,8 +1,8 @@
 package fraud.db.dao
 
 import common.status.ISystemStatusComponent
-import fraud.rest.v1.derog.BlackListItem
-import fraud.rest.v1.derog.ListPartitionKey
+import fraud.controller.v1.derog.BlackListItem
+import fraud.controller.v1.derog.ListPartitionKey
 
 /**
  * Data Access Object for fraud database to manipulate BlackLists.

@@ -133,7 +133,7 @@
 
     <bean id="velocityDAO.cassandra.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
           autowire-candidate="false"
-          p:proxyInterfaces="fraud.db.dao.ICassandraVelocityDAO"
+          p:proxyInterfaces="fraud.db.dao.cassandra.ICassandraVelocityDAO"
           p:target-ref="velocityDAO.impl.cassandra">
         <property name="interceptorNames">
             <list>
@@ -172,7 +172,7 @@
 
     <bean id="fraudCheckService.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
           autowire-candidate="false"
-          p:proxyInterfaces="fraud.logic.IFraudCheckService"
+          p:proxyInterfaces="fraud.service.IFraudCheckService"
           p:target-ref="fraudCheckService.impl">
         <property name="interceptorNames">
             <list>
@@ -183,7 +183,7 @@
 
     <bean id="derogService.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
           autowire-candidate="false"
-          p:proxyInterfaces="fraud.logic.derog.IDerogService"
+          p:proxyInterfaces="fraud.service.derog.IDerogService"
           p:target-ref="derogService.impl">
         <property name="interceptorNames">
             <list>
@@ -194,7 +194,7 @@
 
     <bean id="velocityService.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
           autowire-candidate="false"
-          p:proxyInterfaces="fraud.logic.velocity.IVelocityService"
+          p:proxyInterfaces="fraud.service.velocity.IVelocityService"
           p:target-ref="velocityService.impl">
         <property name="interceptorNames">
             <list>
@@ -205,7 +205,7 @@
 
     <bean id="velocityConfigService.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
           autowire-candidate="false"
-          p:proxyInterfaces="fraud.logic.velocity.IVelocityConfigService"
+          p:proxyInterfaces="fraud.service.velocity.IVelocityConfigService"
           p:target-ref="velocityConfigService.impl">
         <property name="interceptorNames">
             <list>

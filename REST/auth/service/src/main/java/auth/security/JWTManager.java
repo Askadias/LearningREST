@@ -12,7 +12,7 @@ import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.InitializingBean;
-import auth.rest.v1.pojo.User;
+import auth.controller.v1.pojo.User;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;

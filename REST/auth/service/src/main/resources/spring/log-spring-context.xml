@@ -184,7 +184,7 @@
 
     <bean id="userService.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
           autowire-candidate="false"
-          p:proxyInterfaces="auth.logic.IUserService"
+          p:proxyInterfaces="auth.service.IUserService"
           p:target-ref="userService.impl">
         <property name="interceptorNames">
             <list>
@@ -206,7 +206,7 @@
 
     <bean id="authenticationService.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
           autowire-candidate="false"
-          p:proxyInterfaces="auth.logic.IAuthenticationService"
+          p:proxyInterfaces="auth.service.IAuthenticationService"
           p:target-ref="authenticationService.impl">
         <property name="interceptorNames">
             <list>
@@ -217,7 +217,7 @@
 
     <bean id="clientService.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
           autowire-candidate="false"
-          p:proxyInterfaces="auth.logic.IClientService"
+          p:proxyInterfaces="auth.service.IClientService"
           p:target-ref="clientService.impl">
         <property name="interceptorNames">
             <list>
@@ -228,7 +228,7 @@
 
     <bean id="groupService.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
           autowire-candidate="false"
-          p:proxyInterfaces="auth.logic.IGroupService"
+          p:proxyInterfaces="auth.service.IGroupService"
           p:target-ref="groupService.impl">
         <property name="interceptorNames">
             <list>
@@ -239,7 +239,7 @@
 
     <bean id="tokenService.perf" class="org.springframework.aop.framework.ProxyFactoryBean"
           autowire-candidate="false"
-          p:proxyInterfaces="auth.logic.ITokenService"
+          p:proxyInterfaces="auth.service.ITokenService"
           p:target-ref="tokenService.impl">
         <property name="interceptorNames">
             <list>

@@ -3,7 +3,7 @@ package auth.db.dao;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import auth.rest.v1.pojo.Group;
+import auth.controller.v1.pojo.Group;
 import common.status.ISystemStatusComponent;
 
 import java.util.List;

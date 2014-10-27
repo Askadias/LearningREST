@@ -3,7 +3,7 @@ package fraud.db.dao.mongo
 import common.status.pojo.ComponentStatus
 import common.status.pojo.StatusType
 import fraud.db.dao.IVelocityConfigDAO
-import fraud.rest.v1.velocity.VelocityConfig
+import fraud.controller.v1.velocity.VelocityConfig
 import org.apache.commons.lang.exception.ExceptionUtils
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl

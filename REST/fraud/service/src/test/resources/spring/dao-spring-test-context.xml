@@ -38,7 +38,7 @@
     <bean id="velocityDAO.impl.cassandra"
           class="org.easymock.EasyMock"
           factory-method="createNiceMock"
-          c:toMock="fraud.db.dao.ICassandraVelocityDAO"/>
+          c:toMock="fraud.db.dao.cassandra.ICassandraVelocityDAO"/>
 
     <bean id="dbCache"
           class="org.easymock.EasyMock"

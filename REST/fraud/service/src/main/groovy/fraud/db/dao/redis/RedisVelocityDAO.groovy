@@ -1,7 +1,7 @@
 package fraud.db.dao.redis
 
-import fraud.rest.v1.velocity.Aggregation
-import fraud.rest.v1.velocity.Transaction
+import fraud.controller.v1.velocity.Aggregation
+import fraud.controller.v1.velocity.Transaction
 import org.joda.time.DateTime
 import org.springframework.dao.DataAccessException
 import org.springframework.data.redis.connection.RedisConnection

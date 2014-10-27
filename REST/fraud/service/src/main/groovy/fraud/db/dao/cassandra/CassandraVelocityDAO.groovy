@@ -6,11 +6,10 @@ import com.datastax.driver.mapping.EntityTypeParser
 import com.datastax.driver.mapping.meta.EntityFieldMetaData
 import com.datastax.driver.mapping.meta.EntityTypeMetadata
 import common.status.pojo.ComponentStatus
-import fraud.db.dao.ICassandraVelocityDAO
-import fraud.rest.v1.velocity.History
-import fraud.rest.v1.velocity.Metric
-import fraud.rest.v1.velocity.PartitionKey
-import fraud.rest.v1.velocity.TransactionData
+import fraud.controller.v1.velocity.History
+import fraud.controller.v1.velocity.Metric
+import fraud.controller.v1.velocity.PartitionKey
+import fraud.controller.v1.velocity.TransactionData
 import org.joda.time.DateTime
 
 import static com.datastax.driver.core.querybuilder.QueryBuilder.*

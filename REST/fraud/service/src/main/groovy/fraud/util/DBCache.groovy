@@ -2,7 +2,7 @@ package fraud.util
 
 import org.springframework.beans.factory.InitializingBean
 import fraud.db.dao.IVelocityConfigDAO
-import fraud.rest.v1.velocity.VelocityConfig
+import fraud.controller.v1.velocity.VelocityConfig
 
 /**
  * Shared storage for operational data

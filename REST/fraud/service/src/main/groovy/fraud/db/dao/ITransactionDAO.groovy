@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.PagingAndSortingRepository
 import common.status.ISystemStatusComponent
-import fraud.rest.v1.check.Transaction
+import fraud.controller.v1.check.Transaction
 
 /**
  * Data Access Object for Fraud database to manipulate Frauds.

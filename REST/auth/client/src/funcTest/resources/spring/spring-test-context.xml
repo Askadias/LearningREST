@@ -23,7 +23,7 @@
         <constructor-arg index="0" ref="sslKeystore"/>
     </bean>
 
-    <bean id="authServiceClient" class="auth.rest.v1.AuthServiceClient">
+    <bean id="authServiceClient" class="auth.controller.v1.AuthServiceClient">
         <constructor-arg index="0" value="${ru.forxuy.authServiceClient/endpoint}"/>
         <constructor-arg index="1" value="${ru.forxuy.authServiceClient/clientId}"/>
         <constructor-arg index="2" ref="httpTransport"/>

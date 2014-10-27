@@ -80,7 +80,7 @@
         </jaxrs:providers>
     </jaxrs:server>-->
 
-    <bean id="authenticationFilter" class="auth.rest.support.AuthenticationFilter"
+    <bean id="authenticationFilter" class="auth.controller.support.AuthenticationFilter"
           p:groupManager-ref="groupService.perf"
           p:userManager-ref="userService.perf"
           p:jwtManager-ref="jwtManager.perf">

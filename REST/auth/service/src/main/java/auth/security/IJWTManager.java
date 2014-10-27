@@ -3,7 +3,7 @@ package auth.security;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSObject;
 import net.minidev.json.JSONObject;
-import auth.rest.v1.pojo.User;
+import auth.controller.v1.pojo.User;
 
 import java.text.ParseException;
 

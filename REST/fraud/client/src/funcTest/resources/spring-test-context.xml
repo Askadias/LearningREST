@@ -23,7 +23,7 @@
         <!--<constructor-arg index="0" ref="sslKeystore"/>-->
     </bean>
 
-    <bean id="authServiceClient" class="fraud.rest.v1.FraudServiceClient">
+    <bean id="authServiceClient" class="fraud.controller.v1.FraudServiceClient">
         <constructor-arg index="0" value="${fraudServiceClient/endpoint}"/>
         <constructor-arg index="1" value="${fraudServiceClient/clientId}"/>
         <constructor-arg index="2" ref="httpTransport"/>
