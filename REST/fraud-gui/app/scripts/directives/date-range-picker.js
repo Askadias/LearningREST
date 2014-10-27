@@ -14,16 +14,6 @@ angular.module('directives.date-range-picker', [])
       replace: true,
       link: function ($scope, elem, attr) {
 
-        /*elem.datepicker({
-          autoclose: true,
-          format: 'yyyy-mm-dd'
-        });
-        elem.datepicker().on('hide', function($event){
-          $scope.$apply(function () {
-            $scope.startDate = new Date(angular.element('#date-range-start').val());
-            $scope.endDate = new Date(angular.element('#date-range-end').val());
-          });
-        });*/
         angular.element('#date-range-start').datetimepicker();
         angular.element('#date-range-end').datetimepicker();
         angular.element('#date-range-start').on("dp.change",function (e) {
