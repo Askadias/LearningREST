@@ -29,7 +29,7 @@ import redis.clients.jedis.JedisPubSub
 import java.util.concurrent.LinkedBlockingQueue
 
 /**
- * Created by Tiger on 28.10.14.
+ * Velocity Data reader
  */
 class RedisTranSubscriberSpout extends BaseRichSpout {
 

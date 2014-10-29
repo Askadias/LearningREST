@@ -17,7 +17,7 @@ import redis.clients.jedis.JedisPoolConfig
 import java.util.concurrent.ForkJoinPool
 
 /**
- * Created by Tiger on 29.10.14.
+ * Velocity Metrics updater
  */
 class MetricsUpdateBolt extends BaseRichBolt {
 
