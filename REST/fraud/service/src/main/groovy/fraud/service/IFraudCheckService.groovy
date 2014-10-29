@@ -2,7 +2,7 @@ package fraud.service
 
 import common.pojo.EntityPage
 import common.pojo.SortDirection
-import fraud.controller.v1.check.Transaction
+import fraud.api.v1.check.Transaction
 
 /**
  * Entry point into fraud service business logic

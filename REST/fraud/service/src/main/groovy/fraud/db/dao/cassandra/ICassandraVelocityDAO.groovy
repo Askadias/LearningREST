@@ -1,10 +1,10 @@
 package fraud.db.dao.cassandra
 
 import common.status.ISystemStatusComponent
-import fraud.controller.v1.velocity.History
-import fraud.controller.v1.velocity.Metric
-import fraud.controller.v1.velocity.PartitionKey
-import fraud.controller.v1.velocity.TransactionData
+import fraud.api.v1.velocity.History
+import fraud.api.v1.velocity.Metric
+import fraud.api.v1.velocity.PartitionKey
+import fraud.api.v1.velocity.TransactionData
 
 /**
  * Data Access Object for fraud database to manipulate BlackLists.

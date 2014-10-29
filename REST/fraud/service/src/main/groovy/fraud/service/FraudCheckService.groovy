@@ -8,7 +8,7 @@ import common.pojo.EntityPage
 import common.pojo.SortDirection
 import fraud.db.dao.ITransactionDAO
 import fraud.exceptions.FraudServiceEventLogId
-import fraud.controller.v1.check.Transaction
+import fraud.api.v1.check.Transaction
 
 /**
  * Implementation class for FraudService business logic

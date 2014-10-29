@@ -3,8 +3,8 @@ package fraud.service.derog
 import common.exceptions.ServiceException
 import fraud.db.dao.IDerogDAO
 import fraud.exceptions.FraudServiceEventLogId
-import fraud.controller.v1.derog.BlackListItem
-import fraud.controller.v1.derog.ListPartitionKey
+import fraud.api.v1.derog.BlackListItem
+import fraud.api.v1.derog.ListPartitionKey
 
 /**
  * Implementation class for BlackListService business logic

@@ -8,10 +8,10 @@ import java.util.HashMap;
 import java.lang.Integer;
 import java.lang.Double;
 import org.slf4j.LoggerFactory
-import fraud.controller.v1.check.payment.Amount
-import fraud.controller.v1.check.payment.Payment
-import fraud.controller.v1.check.Transaction
-import fraud.controller.v1.check.product.travel.TravelProduct
+import fraud.api.v1.check.payment.Amount
+import fraud.api.v1.check.payment.Payment
+import fraud.api.v1.check.Transaction
+import fraud.api.v1.check.product.travel.TravelProduct
 import fraud.service.rules.RulesProcessor
 import fraud.test.logic.rules.RulesProcessorTest
 import fraud.db.dao.mongo.CurrencyExchangeDAO

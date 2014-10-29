@@ -3,7 +3,7 @@ package fraud.controller.v1
 import common.pojo.SortDirection
 import common.rest.AbstractService
 import fraud.service.IFraudCheckService
-import fraud.controller.v1.check.Transaction
+import fraud.api.v1.check.Transaction
 
 import javax.ws.rs.*
 import javax.ws.rs.core.*

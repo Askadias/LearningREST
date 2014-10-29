@@ -5,7 +5,7 @@ import common.pojo.EntityPage
 import common.pojo.SortDirection
 import fraud.db.dao.IVelocityConfigDAO
 import fraud.exceptions.FraudServiceEventLogId
-import fraud.controller.v1.velocity.VelocityConfig
+import fraud.api.v1.velocity.VelocityConfig
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort

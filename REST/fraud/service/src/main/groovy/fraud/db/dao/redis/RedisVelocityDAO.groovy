@@ -1,7 +1,7 @@
 package fraud.db.dao.redis
 
-import fraud.controller.v1.velocity.Aggregation
-import fraud.controller.v1.velocity.Transaction
+import fraud.api.v1.velocity.Aggregation
+import fraud.api.v1.velocity.Transaction
 import org.joda.time.DateTime
 import org.springframework.dao.DataAccessException
 import org.springframework.data.redis.connection.RedisConnection
@@ -39,6 +39,7 @@ class RedisVelocityDAO implements IRedisVelocityDAO {
                 return null;
             }
         })
+        redis.convertAndSend(Transaction.SUBSCRIPTION_PATTERN, transactionID as String);
     }
 
     @Override

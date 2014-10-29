@@ -2,7 +2,7 @@ package fraud.service.velocity
 
 import common.pojo.EntityPage
 import common.pojo.SortDirection
-import fraud.controller.v1.velocity.VelocityConfig
+import fraud.api.v1.velocity.VelocityConfig
 
 /**
  * Entry point into auth service business logic

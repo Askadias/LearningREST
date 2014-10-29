@@ -21,7 +21,7 @@ class FraudServiceClientSuccessPathTest extends BaseFraudServiceTest {
                 'Amount'    : ['500.00'],
                 'CreditCard': ['1111222233334444'],
         ] as Map<String, String[]>
-        def metrics = fraudServiceClient.check(transactionGUID, testData)
+        def metrics = fraudServiceClient.cassandraCheck(transactionGUID, testData)
         Assert.assertNotNull(metrics)
     }
 
@@ -34,7 +34,7 @@ class FraudServiceClientSuccessPathTest extends BaseFraudServiceTest {
                 'Amount'    : ['500.00'],
                 'CreditCard': ['1111222233334444'],
         ] as Map<String, String[]>
-        def metrics = fraudServiceClient.rcheck(transactionGUID, testData)
+        def metrics = fraudServiceClient.redisCheck(transactionGUID, testData)
         Assert.assertNotNull(metrics)
     }
 
@@ -55,10 +55,10 @@ class FraudServiceClientSuccessPathTest extends BaseFraudServiceTest {
                     'IPAddress'  : [generateIPAddress()],
                     'PhoneNumber': [generatePhoneNumber()],
             ] as Map<String, String[]>
-            def redisMetrics = fraudServiceClient.rcheck(transactionGUID, testData)
+            def redisMetrics = fraudServiceClient.redisCheck(transactionGUID, testData)
             Assert.assertNotNull(redisMetrics)
             //Assert.assertTrue(redisMetrics.size() > 0)
-            def cassandraMetrics = fraudServiceClient.check(transactionGUID, testData)
+            def cassandraMetrics = fraudServiceClient.cassandraCheck(transactionGUID, testData)
             Assert.assertNotNull(cassandraMetrics)
             //Assert.assertTrue(cassandraMetrics.size() > 0)
             Thread.sleep(200)

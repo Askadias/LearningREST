@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import common.status.ISystemStatusComponent
-import fraud.controller.v1.velocity.VelocityConfig
+import fraud.api.v1.velocity.VelocityConfig
 
 /**
  * Data Access Object for Forxy database to manipulate VelocityConfigs.

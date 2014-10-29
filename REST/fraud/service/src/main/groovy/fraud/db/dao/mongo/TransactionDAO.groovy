@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.query.Query
 import common.status.pojo.ComponentStatus
 import common.status.pojo.StatusType
 import fraud.db.dao.ITransactionDAO
-import fraud.controller.v1.check.Transaction
+import fraud.api.v1.check.Transaction
 
 /**
  * Mongo DB based data source for auths

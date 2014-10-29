@@ -1,17 +1,9 @@
 package fraud.service.velocity
 
 import com.datastax.driver.core.utils.UUIDs
-import fraud.controller.v1.velocity.AggregationConfig
-import fraud.controller.v1.velocity.History
-import fraud.controller.v1.velocity.Metric
-import fraud.controller.v1.velocity.PartitionKey
-import fraud.controller.v1.velocity.Transaction
-import fraud.controller.v1.velocity.TransactionData
-import fraud.controller.v1.velocity.Velocity
-import fraud.controller.v1.velocity.VelocityConfig
+import fraud.api.v1.velocity.*
 import fraud.db.dao.cassandra.ICassandraVelocityDAO
 import fraud.db.dao.redis.IRedisVelocityDAO
-import fraud.rest.v1.velocity.*
 import fraud.util.DBCache
 import groovyx.gpars.GParsPool
 import jsr166y.ForkJoinPool
@@ -214,7 +206,7 @@ class VelocityService implements IVelocityService {
 
     void updateMetricsRedis(Map<String, String[]> velocityRQ) {
         redisDAO.logData(velocityRQ)
-        withPool() { ForkJoinPool pool ->
+        /*withPool() { ForkJoinPool pool ->
             dbCache.configs?.eachParallel { VelocityConfig config ->
                 withExistingPool(pool) {
                     GParsPool.runForkJoin(config, config.primaryMetrics.asList(), 0, null, null, velocityRQ) {
@@ -245,7 +237,7 @@ class VelocityService implements IVelocityService {
                     }
                 }
             }
-        }
+        }*/
     }
 
     @Override
@@ -281,8 +273,8 @@ class VelocityService implements IVelocityService {
         Long finish = endDate?.millis ?: startDate ? startDate.plusDays(1).withTimeAtStartOfDay().millis : DateTime.now().millis
         Long start = startDate?.millis ?: DateTime.now().withTimeAtStartOfDay().millis
         Set<String> tranIDs = redisDAO.getHistoricalIDs('transactions:history', start, finish)
-        if (startID) tranIDs.removeAll {(it as Long) <= (startID as Long)}
-        if (endID) tranIDs.removeAll {(it as Long) >= (endID as Long)}
+        if (startID) tranIDs.removeAll { (it as Long) <= (startID as Long) }
+        if (endID) tranIDs.removeAll { (it as Long) >= (endID as Long) }
         filter?.each { metricType, metricValue ->
             if (metricValue) {
                 tranIDs = tranIDs.intersect(redisDAO.getHistoricalIDs("$metricType:$metricValue:history", start, finish))

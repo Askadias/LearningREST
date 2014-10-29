@@ -6,8 +6,8 @@ import com.datastax.driver.mapping.meta.EntityFieldMetaData
 import com.datastax.driver.mapping.meta.EntityTypeMetadata
 import common.status.pojo.ComponentStatus
 import fraud.db.dao.IDerogDAO
-import fraud.controller.v1.derog.BlackListItem
-import fraud.controller.v1.derog.ListPartitionKey
+import fraud.api.v1.derog.BlackListItem
+import fraud.api.v1.derog.ListPartitionKey
 
 import static com.datastax.driver.core.querybuilder.QueryBuilder.gt
 import static com.datastax.driver.core.querybuilder.QueryBuilder.token

@@ -6,7 +6,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import fraud.db.dao.mongo.CurrencyExchangeDAO
-import fraud.controller.v1.check.Transaction
+import fraud.api.v1.check.Transaction
 import fraud.test.BaseFraudServiceTest
 import fraud.test.utils.data.TravelDataGenerator
 

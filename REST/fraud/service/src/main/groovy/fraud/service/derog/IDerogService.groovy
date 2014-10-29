@@ -1,6 +1,6 @@
 package fraud.service.derog
 
-import fraud.controller.v1.derog.BlackListItem
+import fraud.api.v1.derog.BlackListItem
 
 /**
  * Black lists manipulation logic API

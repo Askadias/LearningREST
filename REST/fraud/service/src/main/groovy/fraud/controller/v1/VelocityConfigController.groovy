@@ -4,8 +4,8 @@ import common.pojo.SortDirection
 import common.pojo.StatusEntity
 import common.rest.AbstractService
 import fraud.service.velocity.IVelocityConfigService
-import fraud.controller.v1.velocity.AggregationConfig
-import fraud.controller.v1.velocity.VelocityConfig
+import fraud.api.v1.velocity.AggregationConfig
+import fraud.api.v1.velocity.VelocityConfig
 
 import javax.ws.rs.*
 import javax.ws.rs.core.*

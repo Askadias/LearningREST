@@ -1,7 +1,7 @@
 package fraud.db.dao.redis
 
-import fraud.controller.v1.velocity.Aggregation
-import fraud.controller.v1.velocity.Transaction
+import fraud.api.v1.velocity.Aggregation
+import fraud.api.v1.velocity.Transaction
 
 /**
  * Velocity DAO vor redis DataSource

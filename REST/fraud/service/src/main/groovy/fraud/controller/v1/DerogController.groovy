@@ -3,7 +3,7 @@ package fraud.controller.v1
 import common.pojo.StatusEntity
 import common.rest.AbstractService
 import fraud.service.derog.IDerogService
-import fraud.controller.v1.derog.BlackListItem
+import fraud.api.v1.derog.BlackListItem
 
 import javax.ws.rs.*
 import javax.ws.rs.core.*
