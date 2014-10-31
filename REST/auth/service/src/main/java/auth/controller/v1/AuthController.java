@@ -1,8 +1,8 @@
 package auth.controller.v1;
 
 import auth.service.IAuthenticationService;
-import auth.controller.v1.pojo.Credentials;
-import auth.controller.v1.pojo.DiscoveryInfo;
+import auth.api.v1.pojo.Credentials;
+import auth.api.v1.pojo.DiscoveryInfo;
 import common.rest.AbstractService;
 
 import javax.annotation.security.RolesAllowed;

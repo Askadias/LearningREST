@@ -92,7 +92,7 @@
           p:databaseHost="${mongoTemplate/host}:${mongoTemplate/port}"/>
 
     <bean id="auth.performance.logger.dao"
-          class="common.logging.writer.LogWriter" c:name="user.performance.dao"/>
+          class="common.logging.writer.LogWriter" c:name="auth.performance.dao"/>
 
     <bean id="performance.dao.loggingInterceptor"
           class="common.logging.LoggingInterceptor"
@@ -174,7 +174,7 @@
           class="common.logging.exceptions.ServiceExceptionHandler"/>
 
     <bean id="performance.logger.impl"
-          class="common.logging.writer.LogWriter" c:name="auth.performance.velocity.impl"/>
+          class="common.logging.writer.LogWriter" c:name="auth.performance.impl"/>
 
     <bean id="impl.loggingInterceptor"
           class="common.logging.LoggingInterceptor"

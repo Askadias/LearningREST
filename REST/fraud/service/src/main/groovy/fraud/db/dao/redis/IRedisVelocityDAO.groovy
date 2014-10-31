@@ -14,9 +14,13 @@ interface IRedisVelocityDAO {
 
     Set<String> getHistoricalIDs(final String key, final Long startDateMillis, final Long endDateMillis)
 
-    List<String> getHistoricalData(String dataType, Set<String> transactionIDs)
+    Set<String> getHistoricalIDs(final String key, final Long startDateMillis, final Long endDateMillis, final Long limit)
 
-    List<Transaction> getHistoricalData(Set<String> transactionIDs)
+    List<String> getHistoricalData(String dataType, Collection<String> transactionIDs)
+
+    List<Transaction> getHistoricalData(Collection<String> transactionIDs)
+
+    Long getTransactionCreateDateTime(String transactionID)
 
     void saveMetric(String key, Aggregation type, Double aggregatedValue)
 

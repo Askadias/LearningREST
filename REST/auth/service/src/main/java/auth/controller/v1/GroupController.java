@@ -1,7 +1,7 @@
 package auth.controller.v1;
 
 import auth.service.IGroupService;
-import auth.controller.v1.pojo.Group;
+import auth.api.v1.pojo.Group;
 import common.pojo.SortDirection;
 import common.pojo.StatusEntity;
 import common.rest.AbstractService;

@@ -19,7 +19,7 @@ import static groovyx.gpars.GParsPool.withPool
  */
 class VelocityService implements IVelocityService {
 
-    private static final int DEFAULT_PAGE_SIZE = 30
+    private static final int DEFAULT_PAGE_SIZE = 50
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VelocityService.class)
 
@@ -272,15 +272,27 @@ class VelocityService implements IVelocityService {
                         final String startID, final String endID) {
         Long finish = endDate?.millis ?: startDate ? startDate.plusDays(1).withTimeAtStartOfDay().millis : DateTime.now().millis
         Long start = startDate?.millis ?: DateTime.now().withTimeAtStartOfDay().millis
-        Set<String> tranIDs = redisDAO.getHistoricalIDs('transactions:history', start, finish)
-        if (startID) tranIDs.removeAll { (it as Long) <= (startID as Long) }
-        if (endID) tranIDs.removeAll { (it as Long) >= (endID as Long) }
-        filter?.each { metricType, metricValue ->
-            if (metricValue) {
-                tranIDs = tranIDs.intersect(redisDAO.getHistoricalIDs("$metricType:$metricValue:history", start, finish))
+        if (startID) start = redisDAO.getTransactionCreateDateTime(startID)
+        if (endID) finish = redisDAO.getTransactionCreateDateTime(endID)
+        Collection<String> tranIDs = []
+        if (filter) {
+            filter.each { metricType, metricValue ->
+                if (metricType && metricValue) {
+                    if (!tranIDs) {
+                        tranIDs = redisDAO.getHistoricalIDs("$metricType:$metricValue:history", start, finish)
+                    } else {
+                        tranIDs = tranIDs.intersect(
+                                redisDAO.getHistoricalIDs("$metricType:$metricValue:history", start, finish))
+                    }
+                }
             }
+            tranIDs = tranIDs?.size() > DEFAULT_PAGE_SIZE ? tranIDs?.toList()?.subList(0, DEFAULT_PAGE_SIZE) : tranIDs
+        } else {
+            tranIDs = redisDAO.getHistoricalIDs('transactions:history', start, finish, DEFAULT_PAGE_SIZE)
+
         }
-        def history = redisDAO.getHistoricalData(tranIDs)
-        return history?.size() > DEFAULT_PAGE_SIZE ? history?.subList(0, DEFAULT_PAGE_SIZE) : history
+        if (startID) tranIDs.removeAll { Long.valueOf(it) <= Long.valueOf(startID) }
+        if (endID) tranIDs.removeAll { Long.valueOf(it) >= Long.valueOf(endID) }
+        return redisDAO.getHistoricalData(tranIDs)?.sort {it.id}
     }
 }

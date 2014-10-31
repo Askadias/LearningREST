@@ -9,12 +9,11 @@ import fraud.api.v1.velocity.AggregationConfig
 import fraud.api.v1.velocity.Transaction
 import fraud.api.v1.velocity.VelocityConfig
 import groovyx.gpars.GParsPool
+import jsr166y.ForkJoinPool
 import org.joda.time.DateTime
 import redis.clients.jedis.Jedis
 import redis.clients.jedis.JedisPool
 import redis.clients.jedis.JedisPoolConfig
-
-import java.util.concurrent.ForkJoinPool
 
 /**
  * Velocity Metrics updater
@@ -24,7 +23,7 @@ class MetricsUpdateBolt extends BaseRichBolt {
     private OutputCollector collector;
     final String host;
     final int port;
-    JedisPool pool;
+    JedisPool jedisPool;
 
     public MetricsUpdateBolt(String host, int port) {
         this.host = host;
@@ -34,28 +33,29 @@ class MetricsUpdateBolt extends BaseRichBolt {
     @Override
     public void prepare(Map conf, TopologyContext context, OutputCollector collector) {
         this.collector = collector;
-        pool = new JedisPool(new JedisPoolConfig(), host, port);
+        jedisPool = new JedisPool(new JedisPoolConfig(), host, port);
     }
 
     @Override
     void execute(final Tuple tuple) {
         List<VelocityConfig> configs = tuple.getValue(0) as List<VelocityConfig>
         Transaction transaction = tuple.getValue(1) as Transaction;
-        Long now = DateTime.now().millis
-        Jedis jedis = pool.getResource()
-        try {
-            withPool { ForkJoinPool pool ->
-                configs?.eachParallel { VelocityConfig config ->
-                    withExistingPool(pool) {
-                        GParsPool.runForkJoin(config, config.primaryMetrics.asList(), 0, null, null, transaction) {
-                            conf, List<String> primaryMetrics, int index, Set<String> tranIds, String key, tran ->
-                                if (index < primaryMetrics.size()) {
-                                    String metric = primaryMetrics[index]
-                                    tran.data[metric].each {
-                                        String newKey = "$metric:$it"
-                                        String fullKey = key ? "$key:$newKey" : newKey
+        final Long now = DateTime.now().millis
+        GParsPool.withPool { ForkJoinPool forkJoinPool ->
+            configs?.eachParallel { VelocityConfig config ->
+                GParsPool.withExistingPool(forkJoinPool) {
+                    GParsPool.runForkJoin(config, config.primaryMetrics.asList(), 0, null, null, transaction) {
+                        conf, List<String> primaryMetrics, int index, Set<String> tranIds, String key, tran ->
+                            if (index < primaryMetrics.size()) {
+                                String metric = primaryMetrics[index]
+                                tran.data[metric].each {
+                                    String newKey = "$metric:$it"
+                                    String fullKey = key ? "$key:$newKey" : newKey
 
-                                        Set<String> tranIDsIntersection = []
+                                    Set<String> tranIDsIntersection = []
+
+                                    final Jedis jedis = jedisPool.getResource()
+                                    try {
                                         Set<String> newIds =
                                                 jedis.zrangeByScore("$newKey:history", now - config.period, now)
                                         tranIDsIntersection = tranIds ? tranIds.intersect(newIds) : newIds
@@ -75,14 +75,14 @@ class MetricsUpdateBolt extends BaseRichBolt {
                                                         aggConf.aggregation.apply(history) as String)
                                             }
                                         }
+                                    } finally {
+                                        jedisPool.returnResource(jedis)
                                     }
                                 }
-                        }
+                            }
                     }
                 }
             }
-        } finally {
-            pool.returnResource(jedis)
         }
         collector.ack(tuple);
     }

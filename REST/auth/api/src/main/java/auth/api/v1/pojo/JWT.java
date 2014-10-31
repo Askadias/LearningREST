@@ -1,4 +1,4 @@
-package auth.controller.v1.pojo;
+package auth.api.v1.pojo;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 

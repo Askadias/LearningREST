@@ -8,7 +8,7 @@ import common.status.pojo.ComponentStatus;
 import common.status.pojo.StatusType;
 import auth.db.dao.IUserDAO;
 import auth.db.dao.cassandra.client.ICassandraClient;
-import auth.controller.v1.pojo.User;
+import auth.api.v1.pojo.User;
 
 import java.util.Date;
 import java.util.List;

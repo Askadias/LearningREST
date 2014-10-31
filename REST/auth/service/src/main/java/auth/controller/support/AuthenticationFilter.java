@@ -7,8 +7,8 @@ import org.apache.cxf.common.security.SimplePrincipal;
 import org.codehaus.jackson.map.ObjectMapper;
 import auth.service.IGroupService;
 import auth.service.IUserService;
-import auth.controller.v1.pojo.Group;
-import auth.controller.v1.pojo.User;
+import auth.api.v1.pojo.Group;
+import auth.api.v1.pojo.User;
 import auth.security.IJWTManager;
 import common.rest.client.transport.support.ObjectMapperProvider;
 

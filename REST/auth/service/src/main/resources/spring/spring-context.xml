@@ -25,8 +25,8 @@
           p:nullValue="{null}">
         <property name="locations">
             <list>
-                <value>file:${config.dir}/AuthService/appconfig/base/auth.properties</value>
-                <value>file:${config.dir}/AuthService/appconfig/env/${env}/auth.properties</value>
+                <value>file:${config.dir}/auth/appconfig/base/auth.properties</value>
+                <value>file:${config.dir}/auth/appconfig/env/${env}/auth.properties</value>
             </list>
         </property>
     </bean>

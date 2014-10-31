@@ -1,8 +1,8 @@
 package auth.controller.v1;
 
 import auth.service.IUserService;
-import auth.controller.v1.pojo.Gender;
-import auth.controller.v1.pojo.User;
+import auth.api.v1.pojo.Gender;
+import auth.api.v1.pojo.User;
 import common.pojo.SortDirection;
 import common.pojo.StatusEntity;
 import common.rest.AbstractService;

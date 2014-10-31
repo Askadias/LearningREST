@@ -253,10 +253,13 @@ angular.module('controllers.velocity', [])
           $scope.filter['start_date'] = $scope.dates.startDate;
           $scope.filter['end_date'] = $scope.dates.endDate;
         }
+        $scope.loading = true;
         Velocity.history($scope.filter).then(function (response) {
-          $scope.transactions = response
+          $scope.transactions = response;
+          $scope.loading = false;
         }, function () {
           $scope.transactions = null;
+          $scope.loading = false;
         });
       };
 
@@ -271,7 +274,7 @@ angular.module('controllers.velocity', [])
       };
 
       $scope.moreData = function() {
-        if ($scope.transactions && $scope.transactions.length > 0) {
+        if (!$scope.loading && $scope.transactions && $scope.transactions.length > 0) {
           var lastTransaction = $scope.transactions[$scope.transactions.length - 1];
           var filterExt = angular.copy($scope.filter);
           filterExt['start_date'] = lastTransaction.create_date;
@@ -286,6 +289,14 @@ angular.module('controllers.velocity', [])
           }, function () {
             $scope.loading = false;
           });
+        }
+      };
+
+      $scope.getDate = function(dateMs) {
+        if ($scope.currentDate.getDate() == new Date(dateMs).getDate()) {
+          return moment(dateMs).format('hh:mm:ss a');
+        } else {
+          return moment(dateMs).format('Do MMMM GGGG, hh:mm:ss a');
         }
       };
 

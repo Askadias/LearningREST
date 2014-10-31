@@ -95,6 +95,7 @@ module.exports = function (grunt) {
       },
       server: {
         options: {
+
           middleware: function(connect, options) {
             return [
               // Serve static files
@@ -114,7 +115,7 @@ module.exports = function (grunt) {
             return [
               // CORS support
               corsMiddleware,
-              modRewrite(['!\\.html|\\.js|\\.svg|\\.css|\\.png$ /index.html [L]']),
+              modRewrite(['!\\.html|\\.js|\\.svg|\\.css|\\.png|\\.otf|\\.ttc|\\.ttf|\\.woff$ /index.html [L]']),
               connect.static('.tmp'),
 
               connect().use(

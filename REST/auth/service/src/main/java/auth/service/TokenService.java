@@ -5,7 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import auth.db.dao.ITokenDAO;
 import auth.exceptions.AuthServiceEventLogId;
-import auth.controller.v1.pojo.Token;
+import auth.api.v1.pojo.Token;
 import common.exceptions.ServiceException;
 import common.pojo.EntityPage;
 import common.pojo.SortDirection;

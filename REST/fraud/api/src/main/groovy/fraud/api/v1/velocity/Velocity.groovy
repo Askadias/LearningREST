@@ -8,7 +8,7 @@ import groovy.transform.ToString
  */
 @ToString
 @EqualsAndHashCode
-class Velocity {
+class Velocity implements Serializable {
     Map<String, String> primaryMetrics
     Map<String, Map<Aggregation, Double>> aggregations
 }

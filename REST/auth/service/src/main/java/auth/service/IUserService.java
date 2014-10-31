@@ -2,7 +2,7 @@ package auth.service;
 
 import common.pojo.EntityPage;
 import common.pojo.SortDirection;
-import auth.controller.v1.pojo.User;
+import auth.api.v1.pojo.User;
 
 /**
  * Entry point into user service business logic

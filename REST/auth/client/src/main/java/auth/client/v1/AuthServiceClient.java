@@ -1,9 +1,9 @@
-package auth.controller.v1;
+package auth.client.v1;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.methods.HttpGet;
-import auth.controller.v1.pojo.Client;
+import auth.api.v1.pojo.Client;
 import common.exceptions.ClientException;
 import common.exceptions.HttpEventLogId;
 import common.pojo.EntityPage;

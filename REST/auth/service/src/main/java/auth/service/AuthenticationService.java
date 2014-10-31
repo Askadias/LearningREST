@@ -5,9 +5,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import auth.db.dao.IProfileDAO;
 import auth.db.dao.IUserDAO;
 import auth.exceptions.AuthServiceEventLogId;
-import auth.controller.v1.pojo.Credentials;
-import auth.controller.v1.pojo.Profile;
-import auth.controller.v1.pojo.User;
+import auth.api.v1.pojo.Credentials;
+import auth.api.v1.pojo.Profile;
+import auth.api.v1.pojo.User;
 import auth.security.IJWTManager;
 import common.exceptions.ServiceException;
 

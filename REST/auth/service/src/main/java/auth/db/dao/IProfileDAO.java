@@ -1,7 +1,7 @@
 package auth.db.dao;
 
 import org.springframework.data.repository.CrudRepository;
-import auth.controller.v1.pojo.Profile;
+import auth.api.v1.pojo.Profile;
 import common.status.ISystemStatusComponent;
 
 /**

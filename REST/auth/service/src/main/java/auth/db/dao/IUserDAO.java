@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import common.status.ISystemStatusComponent;
-import auth.controller.v1.pojo.User;
+import auth.api.v1.pojo.User;
 
 import java.util.List;
 

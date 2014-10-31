@@ -54,7 +54,15 @@ class RedisVelocityDAO implements IRedisVelocityDAO {
     }
 
     @Override
-    List<String> getHistoricalData(final String dataType, final Set<String> transactionIDs) {
+    Set<String> getHistoricalIDs(final String key, final Long startDateMillis, final Long endDateMillis, final Long limit) {
+        Set<String> tranIDs = redis.boundZSetOps(key).rangeByScore(startDateMillis, endDateMillis)
+        return tranIDs?.size() > limit ? tranIDs?.toList()?.subList(0, limit as Integer) : tranIDs
+        /*return redis.connectionFactory.connection.zRangeByScore(key.bytes, startDateMillis, endDateMillis, 0, limit)
+                .collect { new String(it) }*/
+    }
+
+    @Override
+    List<String> getHistoricalData(final String dataType, final Collection<String> transactionIDs) {
         List<String> history = []
         transactionIDs.each {
             history += redis.boundListOps("transaction:$it:data:$dataType" as String) range(0, -1);
@@ -63,17 +71,22 @@ class RedisVelocityDAO implements IRedisVelocityDAO {
     }
 
     @Override
-    List<Transaction> getHistoricalData(final Set<String> transactionIDs) {
+    List<Transaction> getHistoricalData(final Collection<String> transactionIDs) {
         Map<String, Transaction> transactions = [:]
         transactionIDs.each { id ->
             Set<String> keys = redis.keys("transaction:$id:data:*".toString())
             Long createDate = redis.opsForHash().get("transaction:$id:details" as String, 'createDate') as Long
-            transactions[(id)] = new Transaction(id: id, data: [:], createDate: (createDate ? new Date(createDate): null))
+            transactions[(id)] = new Transaction(id: Long.valueOf(id), data: [:], createDate: (createDate ? new Date(createDate) : null))
             keys?.each {
-                transactions[(id)].data << [(it.tokenize(':')[-1]) : redis.boundListOps(it).range(0, -1)]
+                transactions[(id)].data << [(it.tokenize(':')[-1]): redis.boundListOps(it).range(0, -1)]
             }
         }
         return transactions.values()?.toList() ?: []
+    }
+
+    @Override
+    Long getTransactionCreateDateTime(final String transactionID) {
+        return redis.opsForHash().get("transaction:$transactionID:details" as String, 'createDate') as Long
     }
 
     void saveMetric(String key, Aggregation type, Double aggregatedValue) {

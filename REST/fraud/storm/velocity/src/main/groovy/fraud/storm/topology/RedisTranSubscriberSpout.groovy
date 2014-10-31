@@ -127,12 +127,11 @@ class RedisTranSubscriberSpout extends BaseRichSpout {
 
         configs = readConfigs()
 
-        SchedulerFactory schedulerFactory = new StdSchedulerFactory();
-        scheduler = schedulerFactory.getScheduler();
-        JobDetail jobDetail = new JobDetailImpl('configUpdater', ConfigsUpdater.class)
-        CronTrigger trigger = new CronTriggerImpl('configUpdateTrigger', '0 0/1 * * * ?')
-        scheduler.scheduleJob(jobDetail, trigger);
+        scheduler = StdSchedulerFactory.getDefaultScheduler();
         scheduler.start();
+        JobDetail jobDetail = new JobDetailImpl('configUpdater', 'velocity', ConfigsUpdater.class)
+        CronTrigger trigger = new CronTriggerImpl('configUpdateTrigger', 'velocity', '0 0/1 * * * ?')
+        scheduler.scheduleJob(jobDetail, trigger);
 
         ListenerThread listener = new ListenerThread(queue, pool, mongoTemplate)
         listener.start()
@@ -161,7 +160,7 @@ class RedisTranSubscriberSpout extends BaseRichSpout {
         try {
             Set<String> keys = jedis.keys("transaction:$id:data:*".toString())
             Long createDate = jedis.hget("transaction:$id:details" as String, 'createDate') as Long
-            transaction = new Transaction(id: id, data: [:], createDate: (createDate ? new Date(createDate) : null))
+            transaction = new Transaction(id: Long.valueOf(id), data: [:], createDate: (createDate ? new Date(createDate) : null))
             keys?.each {
                 transaction.data << [(it.tokenize(':')[-1]): jedis.lrange(it, 0, -1)]
             }
@@ -178,6 +177,6 @@ class RedisTranSubscriberSpout extends BaseRichSpout {
     }
 
     void declareOutputFields(OutputFieldsDeclarer declarer) {
-        declarer.declare(new Fields("transaction"))
+        declarer.declare(new Fields('configs', 'transaction'))
     }
 }

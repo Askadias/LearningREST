@@ -17,7 +17,7 @@ import org.springframework.data.domain.Pageable;
 import auth.db.dao.IUserDAO;
 import auth.exceptions.AuthServiceEventLogId;
 import auth.controller.v1.UserController;
-import auth.controller.v1.pojo.User;
+import auth.api.v1.pojo.User;
 import auth.test.BaseUserServiceTest;
 import common.exceptions.ServiceException;
 import common.pojo.EntityPage;

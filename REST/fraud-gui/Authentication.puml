@@ -1,0 +1,53 @@
+@startuml
+skinparam backgroundColor #444444
+
+skinparam sequence {
+	ArrowColor DeepSkyBlue
+	ArrowFontColor white
+	ActorBorderColor DeepSkyBlue
+	LifeLineBorderColor white
+	LifeLineBackgroundColor white
+
+	ParticipantBorderColor DeepSkyBlue
+	ParticipantBackgroundColor DodgerBlue
+	ParticipantFontName Verdana
+	ParticipantFontSize 17
+	ParticipantFontColor black
+
+	ActorBackgroundColor aqua
+	ActorFontColor DeepSkyBlue
+	ActorFontSize 17
+	ActorFontName Verdana
+}
+
+actor User
+participant "Velocity GUI\n AngularJS MVC" as VelocityGUI
+participant "Velocity Service" as VelocitySvc
+participant "Auth GUI\n AngularJS MVC" as AuthGUI
+participant "Auth Service" as AuthSvc
+
+==Start==
+User -> VelocityGUI: open <font color=red>/velocity/config</font>
+VelocityGUI -> VelocitySvc: GET <font color=red>/fraud/rest/v1/velocity_config</font>
+VelocityGUI <- VelocitySvc: 401 (no Authorization header)
+==Authentication==
+VelocityGUI -> AuthGUI: GET <font color=red>/auth</font>\n?client_id=velocity_client_id\n&scope=openid profile velocity_config\n&state={random}_config\n&response_type=token\n&redirect_uri=/velocity/oauth2callback
+AuthGUI <- AuthGUI: 302 <font color=yellow>/login</font>\n?continue=/auth?client_id...
+User -> AuthGUI: enter login:password
+AuthGUI -> AuthSvc: POST <font color=red>/login</font>
+AuthGUI <- AuthSvc: jwt (JSON Web Token)
+AuthGUI -> AuthGUI: save jwt to browser storage \nas user session info
+AuthGUI -> AuthGUI: 302 <font color=yellow>/auth</font>\n?client_id=velocity_client_id\n&scope=openid profile velocity_config\n&state={random}_config\n&response_type=token\n&redirect_uri=/velocity/oauth2callback
+User -> AuthGUI: approve authorization
+AuthGUI -> AuthSvc: POST <font color=red>/auth</font>\n?client_id=velocity_client_id\n&scope=openid profile velocity_config\n&state={random}_profile\n&response_type=token\n&redirect_uri=/velocity/oauth2callback\nAuthorization: Bearer {jwt}
+AuthGUI <- AuthSvc: 200 SUCCESS
+VelocityGUI <- AuthGUI: 302 <font color=yellow>/velocity/oauth2callback</font>\n?state={random}_config\n&access_token={token}\n&token_type=Bearer\n&expires_in=3600
+VelocityGUI -> VelocityGUI: save access_token to browser storage
+VelocityGUI -> VelocityGUI: 302 <font color=yellow>/velocity/config</font>
+==Continue==
+VelocityGUI -> VelocitySvc: GET <font color=red>/fraud/rest/v1/velocity_config</font>\nAuthorization: Bearer token
+VelocitySvc -> AuthSvc: GET <font color=red>/tokeninfo</font>\n?access_token=token
+VelocitySvc <- AuthSvc: {\n  "audience": "velocity",\n  "user_id": {user_id},\n  "scope": "openid profile velocity_config",\n  "expires_in": 436\n}
+VelocityGUI <- VelocitySvc: JSON data
+
+@enduml

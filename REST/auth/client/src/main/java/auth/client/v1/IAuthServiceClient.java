@@ -1,6 +1,6 @@
-package auth.controller.v1;
+package auth.client.v1;
 
-import auth.controller.v1.pojo.Client;
+import auth.api.v1.pojo.Client;
 import common.pojo.EntityPage;
 import common.pojo.StatusEntity;
 

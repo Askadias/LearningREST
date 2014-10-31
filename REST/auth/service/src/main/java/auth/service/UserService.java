@@ -9,7 +9,7 @@ import common.pojo.EntityPage;
 import common.pojo.SortDirection;
 import auth.db.dao.IUserDAO;
 import auth.exceptions.AuthServiceEventLogId;
-import auth.controller.v1.pojo.User;
+import auth.api.v1.pojo.User;
 
 import java.util.LinkedList;
 import java.util.List;

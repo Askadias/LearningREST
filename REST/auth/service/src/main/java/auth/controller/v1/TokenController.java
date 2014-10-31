@@ -1,7 +1,7 @@
 package auth.controller.v1;
 
 import auth.service.ITokenService;
-import auth.controller.v1.pojo.Token;
+import auth.api.v1.pojo.Token;
 import common.pojo.SortDirection;
 import common.pojo.StatusEntity;
 import common.rest.AbstractService;

@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import auth.db.dao.IProfileDAO;
-import auth.controller.v1.pojo.Profile;
+import auth.api.v1.pojo.Profile;
 import common.status.pojo.ComponentStatus;
 import common.status.pojo.StatusType;
 

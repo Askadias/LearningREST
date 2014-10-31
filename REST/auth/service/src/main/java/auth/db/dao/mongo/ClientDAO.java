@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import common.status.pojo.ComponentStatus;
 import common.status.pojo.StatusType;
 import auth.db.dao.IClientDAO;
-import auth.controller.v1.pojo.Client;
+import auth.api.v1.pojo.Client;
 
 import java.util.Date;
 

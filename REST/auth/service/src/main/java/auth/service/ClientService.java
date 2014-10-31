@@ -6,7 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import auth.db.dao.IClientDAO;
 import auth.exceptions.AuthServiceEventLogId;
-import auth.controller.v1.pojo.Client;
+import auth.api.v1.pojo.Client;
 import common.exceptions.ServiceException;
 import common.pojo.EntityPage;
 import common.pojo.SortDirection;

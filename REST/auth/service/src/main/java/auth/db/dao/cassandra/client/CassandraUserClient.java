@@ -5,8 +5,8 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import org.springframework.beans.factory.InitializingBean;
-import auth.controller.v1.pojo.Gender;
-import auth.controller.v1.pojo.User;
+import auth.api.v1.pojo.Gender;
+import auth.api.v1.pojo.User;
 
 import java.util.ArrayList;
 import java.util.Date;

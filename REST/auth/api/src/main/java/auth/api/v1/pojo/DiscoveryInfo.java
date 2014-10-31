@@ -1,4 +1,4 @@
-package auth.controller.v1.pojo;
+package auth.api.v1.pojo;
 
 import java.io.Serializable;
 import java.util.List;

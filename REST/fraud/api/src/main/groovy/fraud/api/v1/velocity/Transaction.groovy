@@ -8,9 +8,9 @@ import groovy.transform.ToString
  */
 @ToString
 @EqualsAndHashCode
-class Transaction {
+class Transaction implements Serializable {
     static final String SUBSCRIPTION_PATTERN = 'new_transaction'
-    String id
+    Long id
     Date createDate
     Map<String, List<String>> data
 }

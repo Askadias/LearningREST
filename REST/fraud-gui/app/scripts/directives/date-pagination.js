@@ -31,8 +31,8 @@ angular.module('directives.date-pagination', [])
 
         $scope.updateDates = function () {
           $scope.days = [];
-          var cur = moment($scope.currentDate).subtract(8, 'd')._d;
-          for (var i = 0; i < 17; i++) {
+          var cur = moment($scope.currentDate).subtract(9, 'd')._d;
+          for (var i = 0; i < 19; i++) {
             $scope.days.push(moment(cur).add(i, 'd')._d);
           }
           $scope.onDateChange()
