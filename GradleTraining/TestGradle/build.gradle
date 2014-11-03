@@ -1,0 +1,29 @@
+import com.epam.training.MailTask
+
+apply plugin: 'java'
+apply plugin: 'groovy'
+
+repositories {
+    jcenter()
+}
+
+task sendMail(type: MailTask) {
+    to = 'askadias@mail.ru'
+    subject = "Here is some subject from $project.name"
+    content = 'This is simple test notification'
+    from = emailUsername
+    password = emailPassword
+}
+
+//build.dependsOn.remove check
+//sendMail.dependsOn test
+//build.dependsOn sendMail
+
+test {
+    testLogging.showStandardStreams = true
+}
+
+dependencies {
+    //compile project(":buildSrc")
+    testCompile 'junit:junit:4.11'
+}

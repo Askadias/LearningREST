@@ -1,0 +1,10 @@
+apply plugin: 'groovy'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    //compile gradleApi()
+    compile 'javax.mail:mail:1.4.7'
+}
