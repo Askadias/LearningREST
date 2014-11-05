@@ -1,0 +1,15 @@
+<script type="text/javascript">
+  if (window.opener) {
+    window.opener.focus();
+
+    var state = 'success';
+    var user = JSON.stringify(user);
+    if (window.opener.app &&
+      window.opener.app.authState) {
+
+      window.opener.app.authState(state, user);
+    }
+  }
+  window.close();
+</script>
+<h1>Authentication succeeded</h1>

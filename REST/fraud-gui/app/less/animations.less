@@ -22,3 +22,48 @@
 .nav-list a:hover {
   color: #ffffff;
 }
+
+
+
+.text-highlight {
+  color: #333;
+  background-color: #eee;
+  i {
+    margin-right: 5px;
+  }
+  &:hover {
+    text-decoration: none;
+    color: #888;
+    background-color: #fff;
+    -webkit-transition: 500ms ease-out all;
+    -moz-transition: 500ms ease-out all;
+    -ms-transition: 500ms ease-out all;
+    -o-transition: 500ms ease-out all;
+    transition: 500ms ease-out all;
+  }
+}
+
+.well-highlight {
+  -webkit-box-shadow: inset 0 1px 1px rgba(3, 3, 3, 0.05);
+  box-shadow: inset 0 1px 1px rgba(3, 3, 3, 0.05);
+  border: 1px solid #e3e3e3;
+  padding: 2px;
+  margin: 4px;
+  border-radius: 3px;
+  &:hover {
+    -webkit-transition: 500ms ease-out all;
+    -moz-transition: 500ms ease-out all;
+    -ms-transition: 500ms ease-out all;
+    -o-transition: 500ms ease-out all;
+    transition: 500ms ease-out all;
+    border: 1px solid #fff;
+    -webkit-box-shadow: inset 0 1px 1px rgba(8, 8, 8, 0.05);
+    box-shadow: inset 0 1px 1px rgba(8, 8, 8, 0.05);
+  }
+  a {
+    text-decoration: none;
+    &:hover, &:visited, &:link, &:active {
+      text-decoration: none;
+    }
+  }
+}

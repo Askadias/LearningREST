@@ -8,10 +8,15 @@ angular.module('authServiceAdmin', [
   'ui.bootstrap',
   'ui.router',
   'controllers.common',
+  'controllers.auth',
   'controllers.user',
   'controllers.client',
   'controllers.group',
   'controllers.token',
+  'directives.form-auto-fill-fix',
+  'directives.on-blur-change',
+  'directives.on-enter-blur',
+  'directives.sort-by',
   'services.common',
   'services.user',
   'services.client',
@@ -19,7 +24,6 @@ angular.module('authServiceAdmin', [
   'services.token',
   'services.auth',
   'services.config',
-  'directives',
   'filters'
 ])
   .config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', 'RestangularProvider', 'OAuthProvider', 'config',
@@ -48,55 +52,35 @@ angular.module('authServiceAdmin', [
 
       $stateProvider
         .state('login', {
-          url: '/login/?redirect_url',
+          url: '/login/?continue',
           templateUrl: 'views/login.html',
           controller: 'LoginCtrl',
           data: {
             access: access.public
           }
         })
-        .state('authorize', {
-          url: '/authorize/',
-          templateUrl: 'views/authorization.html',
-          controller: 'AuthController',
-          data: {
-            access: access.user
-          }
-        })
         .state('auth', {
-          abstract: true,
-          url: '/auth/',
+          url: '/auth/?client_id',
           templateUrl: 'views/auth.html',
-          controller: 'AuthController',
+          controller: 'AuthCtrl',
           data: {
-            access: access.user
+            access: access.public
           }
         })
-        .state('auth.success', {
-          url: '/auth/success/',
-          templateUrl: 'views/auth/success.html',
-          controller: 'AuthController',
-          data: {
-            access: access.user
-          }
-        })
-        .state('auth.failure', {
-          url: '/auth/failure/',
-          templateUrl: 'views/auth/failure.html',
-          controller: 'AuthController',
-          data: {
-            access: access.user
-          }
-        })
-        .state('users', {
+        .state('config', {
           abstract: true,
           templateUrl: 'views/layout.html',
+          controller: 'MainCtrl'
+        })
+        .state('config.users', {
+          abstract: true,
+          templateUrl: 'views/config.stump.html',
           controller: 'MainCtrl',
           data: {
             access: access.public
           }
         })
-        .state('users.list', {
+        .state('config.users.list', {
           url: '/users/',
           templateUrl: 'views/users/list.html',
           controller: 'UsersListCtrl',
@@ -104,7 +88,7 @@ angular.module('authServiceAdmin', [
             access: access.user
           }
         })
-        .state('users.details', {
+        .state('config.users.details', {
           url: '/users/:login/:mode/',
           templateUrl: 'views/users/details.html',
           controller: 'UserDetailsCtrl',
@@ -112,15 +96,15 @@ angular.module('authServiceAdmin', [
             access: access.admin
           }
         })
-        .state('clients', {
+        .state('config.clients', {
           abstract: true,
-          templateUrl: 'views/layout.html',
+          templateUrl: 'views/config.stump.html',
           controller: 'MainCtrl',
           data: {
             access: access.user
           }
         })
-        .state('clients.list', {
+        .state('config.clients.list', {
           url: '/clients/',
           templateUrl: 'views/clients/list.html',
           controller: 'ClientsListCtrl',
@@ -128,7 +112,7 @@ angular.module('authServiceAdmin', [
             access: access.user
           }
         })
-        .state('clients.details', {
+        .state('config.clients.details', {
           url: '/clients/:client_id/:mode/',
           templateUrl: 'views/clients/details.html',
           controller: 'ClientDetailsCtrl',
@@ -136,15 +120,15 @@ angular.module('authServiceAdmin', [
             access: access.admin
           }
         })
-        .state('groups', {
+        .state('config.groups', {
           abstract: true,
-          templateUrl: 'views/layout.html',
+          templateUrl: 'views/config.stump.html',
           controller: 'MainCtrl',
           data: {
             access: access.user
           }
         })
-        .state('groups.list', {
+        .state('config.groups.list', {
           url: '/groups/',
           templateUrl: 'views/groups/list.html',
           controller: 'GroupsListCtrl',
@@ -152,7 +136,7 @@ angular.module('authServiceAdmin', [
             access: access.user
           }
         })
-        .state('groups.details', {
+        .state('config.groups.details', {
           url: '/groups/:code/:mode/',
           templateUrl: 'views/groups/details.html',
           controller: 'GroupDetailsCtrl',
@@ -160,15 +144,15 @@ angular.module('authServiceAdmin', [
             access: access.admin
           }
         })
-        .state('tokens', {
+        .state('config.tokens', {
           abstract: true,
-          templateUrl: 'views/layout.html',
+          templateUrl: 'views/config.stump.html',
           controller: 'MainCtrl',
           data: {
             access: access.user
           }
         })
-        .state('tokens.list', {
+        .state('config.tokens.list', {
           url: '/tokens/',
           templateUrl: 'views/tokens/list.html',
           controller: 'TokensListCtrl',
@@ -176,7 +160,7 @@ angular.module('authServiceAdmin', [
             access: access.user
           }
         })
-        .state('tokens.details', {
+        .state('config.tokens.details', {
           url: '/tokens/:token_key/:mode/',
           templateUrl: 'views/tokens/details.html',
           controller: 'TokenDetailsCtrl',

@@ -1,25 +1,18 @@
-<div role="navigation" class="navbar navbar-fixed-top" ng-controller="LoginCtrl">
-  <div class="navbar-header">
-    <a title="Auth Service admin tool" ui-sref="users.list" class="navbar-brand">AuthService Admin Tool</a>
+<div class="navbar-wrapper" ng-controller="LoginCtrl">
+  <div class="sidebar-header">
+    <div class="sidebar-brand">
+      <a title="Auth Admin" ui-sref="config.users.list">
+        <i class="fa fa-home"></i>
+        Auth Admin
+      </a>
+    </div>
   </div>
-
-  <div class="collapse navbar-collapse navbar-ex1-collapse">
-    <ul class="nav navbar-nav">
-      <li ng-class="{active: ('users' | includedByState)}">
-        <a ui-sref="users.list">Users</a>
-      </li>
-      <li ng-class="{active: ('clients' | includedByState)}">
-        <a ui-sref="clients.list">Applications</a>
-      </li>
-      <li ng-class="{active: ('tokens' | includedByState)}">
-        <a ui-sref="tokens.list">Tokens</a>
-      </li>
-      <!--<li>
-          <div ng-controller="AuthCtrl">
-              <button ng-click="authorize()">Authorize</button>
-          </div>
-      </li>-->
-    </ul>
+  <div class="navbar-header-wrapper">
+    <a ng-click="app.settings.asideFolded = !app.settings.asideFolded" class="btn no-shadow navbar-btn"
+       id="menu-toggle">
+      <span
+        ng-class="{ 'fa fa-fw fa-indent' : app.settings.asideFolded, 'fa fa-fw fa-dedent' : !app.settings.asideFolded }"></span>
+    </a>
 
     <form class="navbar-form navbar-right">
       <div class="form-group">
@@ -51,45 +44,53 @@
         <span class="label label-default">guest</span>
       </div>
     </div>
-
   </div>
 </div>
+<div class="content-wrapper">
 
-<div class="wrapper container tab-content">
+  <!-- Sidebar -->
+  <div class="sidebar-wrapper">
+    <ul class="sidebar-nav">
+      <li ng-class="{active: ('config.users' | includedByState)}">
+        <a ui-sref="config.users.list" class="fade-in">
+          <i class="fa fa-user"></i>
+          Users
+        </a>
+      </li>
+      <li ng-class="{active: ('config.groups' | includedByState)}">
+        <a ui-sref="config.groups.list" class="fade-in">
+          <i class="fa fa-group"></i>
+          Groups
+        </a>
+      </li>
+      <li ng-class="{active: ('config.clients' | includedByState)}">
+        <a ui-sref="config.clients.list" class="fade-in" ng-focus="focused = true" ng-blur="focused = false">
+          <i class="fa fa-puzzle-piece"></i>
+          Clients
+        </a>
+      </li>
+      <li ng-class="{active: ('config.tokens' | includedByState)}">
+        <a ui-sref="config.tokens.list" class="fade-in">
+          <i class="fa fa-ticket"></i>
+          Tokens
+        </a>
+      </li>
+    </ul>
+  </div>
+  <!-- /#sidebar-wrapper -->
 
-  <div class="row">
-    <div class="col-md-2">
-      <div class="well sidebar-nav">
-        <ul class="nav nav-list">
-          <li class="nav-header">Users</li>
-          <li ng-class="{active: ('users.list' | includedByState)}">
-            <a ui-sref="users.list">
-              Manage Users
-            </a>
-          </li>
-          <li ng-class="{active: ('groups.list' | includedByState)}">
-            <a ui-sref="groups.list">
-              Manage Groups
-            </a>
-          </li>
-          <li class="divider"></li>
-
-          <li class="nav-header">Clients</li>
-          <li ng-class="{active: ('clients.list' | includedByState)}">
-            <a ui-sref="clients.list">
-              Manage Clients
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              View Tokens
-            </a>
-          </li>
-        </ul>
+  <!-- Page Content -->
+  <div class="page-content-wrapper">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="col-md-10">
+            <div ui-view class="view-content"></div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="col-md-10">
-      <div ui-view class="view-content"></div>
-    </div>
   </div>
+  <!-- /#page-content-wrapper -->
+
 </div>

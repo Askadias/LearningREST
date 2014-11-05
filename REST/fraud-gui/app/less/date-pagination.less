@@ -1,0 +1,33 @@
+.date-pagination {
+  > li > a {
+    height: 60px;
+    margin: 0 !important;
+    text-align: center;
+    padding: 13px 0 !important;
+    width: 40px;
+    border-left-style: hidden !important;
+    &.weekend {
+      background-color: #f0f0f0 !important;
+    }
+    &.active {
+      background-color: @brand-primary;
+      color: #fff !important;
+      width: 140px;
+      i {
+        position: absolute;
+        left: 120px;
+        top: 12px;
+      }
+    }
+  }
+
+  > li:first-child > a {
+    width: 20px;
+    border-left-style: solid !important;
+  }
+
+  > li:last-child > a {
+    width: 20px;
+    border-left-style: hidden !important;
+  }
+}

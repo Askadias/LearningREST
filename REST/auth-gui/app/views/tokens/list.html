@@ -43,7 +43,7 @@
       </tr>
       <tr ng-repeat="token in tokens">
         <td>{{$index + 1}}</td>
-        <td><a ui-sref="tokens.details({tokenKey: token.token_key, mode : 'view'})">
+        <td><a ui-sref="config.tokens.details({tokenKey: token.token_key, mode : 'view'})">
           {{token.tokenKey}}
         </a></td>
         <td>{{token.clientID}}</td>
@@ -54,7 +54,7 @@
         <td>{{token.issuedAt}}</td>
         <td>
           <div class="btn-group" style="width: 100px">
-            <a ui-sref="tokens.details({tokenKey: token.token_key, mode : 'edit'})"
+            <a ui-sref="config.tokens.details({tokenKey: token.token_key, mode : 'edit'})"
                class="btn btn-default btn-sm">
               <i class="fa fa-eye"></i>
             </a>

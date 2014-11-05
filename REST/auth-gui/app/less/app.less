@@ -1,22 +1,104 @@
 @import "../bower_components/bootstrap/less/bootstrap.less";
 @import "../bower_components/bootstrap-additions/src/bootstrap-additions.less";
+@import "../bower_components/bootstrap-datepicker/less/datepicker3.less";
 @import "../bower_components/font-awesome/less/font-awesome.less";
 @import "../bower_components/angular-motion/src/fade/fade.less";
 @import "../bower_components/angular-motion/src/fade-and-slide/fade-and-slide.less";
 @import "../bower_components/angular-motion/src/fade-and-scale/fade-and-scale.less";
 @import "../bower_components/angular-motion/src/flip/flip.less";
 @import "../bower_components/angular-motion/src/slide/slide.less";
+@import "../bower_components/eonasdan-bootstrap-datetimepicker/src/less/bootstrap-datetimepicker.less";
 @import "animations.less";
+@import "login.less";
 @import "variables.less";
+
+@sidebar-width: 200px;
+@sidebar-color: #555;
 
 p {
   margin: 20px 0;
 }
 
 body {
-  .wrapper {
 
-    padding-top: 80px;
+  .app-aside-folded > {
+
+    .navbar-wrapper {
+      .sidebar-header {
+        width: 0px;
+      }
+      .navbar-header-wrapper {
+        margin-left: 0;
+      }
+    }
+    .content-wrapper {
+      .sidebar-wrapper {
+        width: 0px;
+      }
+      .page-content-wrapper {
+        margin-left: 0;
+      }
+    }
+  }
+
+  .navbar-wrapper {
+    z-index: 3000;
+    padding-left: 0;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    position: fixed;
+
+    .sidebar-header {
+      position: fixed;
+      width: @sidebar-width;
+      height: 50px;
+      background: @sidebar-color;
+      overflow-y: auto;
+      -webkit-transition: all 0.5s ease;
+      -moz-transition: all 0.5s ease;
+      -o-transition: all 0.5s ease;
+      transition: all 0.5s ease;
+
+      .sidebar-brand {
+        height: 50px;
+        font-size: 18px;
+        line-height: 60px;
+        padding-left: 15px;
+        position: fixed;
+        a {
+          color: #999999;
+          &:hover {
+            color: #fff;
+            background: none;
+          }
+        }
+      }
+    }
+
+    .navbar-header-wrapper {
+      -webkit-transition: all 0.5s ease;
+      -moz-transition: all 0.5s ease;
+      -o-transition: all 0.5s ease;
+      transition: all 0.5s ease;
+      -webkit-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+      -moz-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+      background-color: #fafafa;
+      width: 100%;
+      margin-left: @sidebar-width;
+      position: fixed;
+      z-index: 10000;
+    }
+  }
+
+  .content-wrapper {
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+    padding-top: 50px;
 
     .heading h1 {
       text-transform: uppercase;
@@ -32,6 +114,82 @@ body {
         }
       }
     }
+
+    .sidebar-wrapper {
+      position: fixed;
+      width: @sidebar-width;
+      height: 100%;
+      background: @sidebar-color;
+      overflow-y: auto;
+      -webkit-transition: all 0.5s ease;
+      -moz-transition: all 0.5s ease;
+      -o-transition: all 0.5s ease;
+      transition: all 0.5s ease;
+
+      .sidebar-nav {
+        z-index: 2000;
+        position: absolute;
+        top: 0;
+        width: @sidebar-width;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        li {
+          text-indent: 20px;
+          line-height: 40px;
+          a {
+            display: block;
+            text-decoration: none;
+            color: #999999;
+            &:hover {
+              text-decoration: none;
+              color: #fff;
+              background: rgba(255, 255, 255, 0.2);
+            }
+            &:active, &:focus {
+              text-decoration: none;
+            }
+          }
+        }
+      }
+    }
+
+    .page-content-wrapper {
+      -webkit-transition: all 0.5s ease;
+      -moz-transition: all 0.5s ease;
+      -o-transition: all 0.5s ease;
+      transition: all 0.5s ease;
+      padding: 15px;
+      margin-left: @sidebar-width;
+    }
+  }
+}
+
+.filter-aside {
+  position: fixed;
+  right: -1px;
+  top: 80px;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  width: 440px;
+  z-index: 1050;
+  .filter-btn {
+    background: none repeat scroll 0 0 #f6f8f8 !important;
+    border-color: #dee5e7;
+    border-right-width: 0;
+    left: -42px;
+    padding: 10px 15px;
+    position: absolute;
+    top: -1px;
+  }
+  &.folded {
+    right: -440px;
+  }
+  .panel-body {
+    overflow: auto;
+    height: 550px;
   }
 }
 
@@ -92,54 +250,8 @@ textarea {
 .nav-list > .active > a,
 .nav-list > .active > a:hover,
 .nav-list > .active > a:focus {
-  background-color: #eeeeee;
+  background-color: #dddddd;
 }
-/*
-.anim.ng-enter {
-  transition: opacity 1s;
-  opacity: 0.0;
-}
-
-.anim.ng-enter-active {
-  opacity: 1.0;
-}
-
-.anim.ng-leave {
-  display: none;
-}*/
-
-.login-form {
-  max-width: 500px;
-  _width: 500px;
-  padding: 30px 50px 20px;
-  border: 1px solid #b3b3b3;
-  border-radius: 4px;
-  margin: 150px auto 0;
-  box-shadow: 0 1px 10px #a7a7a7, inset 0 1px 0 #fff;
-  background: #fcfcfc;
-}
-
-.login {
-  -webkit-perspective: 600px;
-  -moz-perspective: 600px;
-  perspective: 600px;
-  -webkit-transform-style: preserve-3d;
-  -moz-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-}
-
-/*
-.alert-list {
-  position: absolute;
-  left: 50%;
-  z-index: 10000;
-  width: 600px;
-}
-
-.alert-pupup {
-  position: relative;
-  left: -50%;
-}*/
 
 .alert {
   margin-top: 30px;
@@ -149,10 +261,35 @@ textarea {
   padding: 10px;
 }
 
-/*th a, .nav li a {
-  font-size: 1.1vw;
-  white-space: nowrap;
-}*/
+.sidebar-nav > .nav > li > a {
+  margin: 0 -10px;
+}
+
+.nav-list .nav-header {
+  margin-right: -15px;
+  margin-left: -15px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.nav-header {
+  display: block;
+  padding: 3px 15px;
+  font-size: 1.2vw;
+  font-weight: bold;
+  line-height: 20px;
+  color: #999999;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+}
+
+.alert {
+  margin-top: 30px;
+}
+
+.sidebar-nav {
+  padding: 10px;
+}
+
 
 .sidebar-nav > .nav > li > a {
   margin: 0 -10px;

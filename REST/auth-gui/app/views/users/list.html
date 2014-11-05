@@ -1,5 +1,5 @@
 <div class="well well-sm">
-  <a ui-sref="users.details({login: 'new', mode: 'new'})" class="btn btn-success">
+  <a ui-sref="config.users.details({login: 'new', mode: 'new'})" class="btn btn-success text-highlight">
     <i class="fa fa-plus-circle fa-lg"></i>
     Add User
   </a>
@@ -45,7 +45,7 @@
     <td></td>
   </tr>
   <tr ng-repeat="user in users">
-    <td><a ui-sref="users.details({login: user.email, mode : 'edit'})">
+    <td><a ui-sref="config.users.details({login: user.email, mode : 'edit'})">
       {{user.email}}
     </a></td>
     <td>{{user.login}}</td>
@@ -56,11 +56,11 @@
     <td>{{user.create_date}}</td>
     <td>
       <div class="btn-group" style="width: 100px">
-        <a ui-sref="users.details({login: user.email, mode : 'view'})"
+        <a ui-sref="config.users.details({login: user.email, mode : 'view'})"
            class="btn btn-default btn-sm">
           <i class="fa fa-eye"></i>
         </a>
-        <a ui-sref="users.details({login: user.email, mode : 'edit'})"
+        <a ui-sref="config.users.details({login: user.email, mode : 'edit'})"
            class="btn btn-default btn-sm">
           <i class="fa fa-pencil"></i>
         </a>
@@ -84,7 +84,7 @@
               max-size="10" class="" boundary-links="true" on-select-page="selectPage(page)"></pagination>
 </div>
 <div class="well well-sm">
-  <a ui-sref="users.details({login: 'new', mode: 'new'})" class="btn btn-success">
+  <a ui-sref="config.users.details({login: 'new', mode: 'new'})" class="btn btn-success text-highlight">
     <i class="fa fa-plus-circle fa-lg"></i>
     Add User
   </a>
